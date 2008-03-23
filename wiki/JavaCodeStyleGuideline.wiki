@@ -63,9 +63,9 @@ All properties are sorted by thier visibility using this direction: `private`, `
  # Imports
  # Class comment (javadoc)
  # Class
- ## Static and final properties
- ## Normal properties
- ## Constructor
- ## Methods
- ## Inner classes
+  # Static and final properties
+  # Normal properties
+  # Constructor
+  # Methods
+  # Inner classes
  # EOF

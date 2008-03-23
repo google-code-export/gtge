@@ -5,5 +5,67 @@
 
 This document shows what code convetions are used by the GTGE project. 
 
-== Details ==
-To be filled
+== Naming ==
+
+ * Pick short and pregnant names that describe the use and semantic. Use commen names for common use (e.g. `i` or `j` for counters).
+ * Don't use pre- or suffixes. Package and class hirarchie is thought for deviding namespace not the name itself.
+ * Type names are written in camel case with the first letter upper case. They should only contain nouns.
+ * Package name are complete lower case and should not contain more the 10 characters.
+ * Method names are written in camel case with the first letter lower case. They should begin with a verb. Use java common verb for beginning method names (e.g. get, set, is, has, add, remove, create).
+ * Variable names are written in camle case with the first letter lower case. There is no naming difference between member and local variables.
+ * Static final variable names are written only in upper case letters, deviding words with a underscore.
+ 
+== Layout & Style ==
+
+ * Only one statement per line. If needed splite the statement into multiple lines.
+ * Lines should never be much longer then 80 characters.
+ * Non-static members are allways accessed with the `this` reference.
+ * Static members are accessed using the class name. Static final members don't have to be accessed like that, but it should be prefered.
+ * Access members with their getters and setters, if they have them.
+ * Allways use absolute imports.
+ * Don't use magic numbers, prefre defining static finals or local finals.
+ * Use minimal visibility to ensure encapsulation (`private`, `package`, `protected`, `public`).
+ * Visibility is allways the first word of a declaration.
+ * The beginning braket of a block is within the same line as the statement it belongs to. The ending braket gets its own line.
+ * Allways chose the smallest scope to declare a variable.
+ * Group imports that import classes of the same package by dividing them from the other imports with a free line.
+ 
+== Comments ==
+
+ * *Every* class member and the class itseld has an own javadoc comment describing it.
+ * Javadoc comments allways contain all required tags (At least all needed `@param` and `@return`).
+ * Use the common javadoc style: 
+ {{{
+/**
+ * Comment
+ */
+}}}
+
+== Indentation ==
+
+ * Indentation is done with space, where one indentation level consists of four spaces.
+ * A new indentation level is inserted within every block.
+ * If a statment is broken up into multiple lines, each new line of the statement is idented twice.
+ * Statments beneth a switch case are indented as if they were within a block.
+
+== Whitespaces ==
+
+ * The beginning braket of a block is seperated from its statement through a space.
+ * Operators are seperated from their operands by a space. A exception of this rule are the following operators: semicolon, comma, brakets, dot.
+ * Commas are whitespaced as in normal grammer. No space before, but one space after a comma.
+ 
+== File Structure ==
+
+All properties are sorted by thier visibility using this direction: `private`, `package`, `protected`, `public`
+
+ # File comment and license (non javadoc)
+ # Package statement
+ # Imports
+ # Class comment (javadoc)
+ # Class
+ ## Static and final properties
+ ## Normal properties
+ ## Constructor
+ ## Methods
+ ## Inner classes
+ # EOF

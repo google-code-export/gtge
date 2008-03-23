@@ -32,7 +32,7 @@ This document shows what code convetions are used by the GTGE project.
  
 == Comments ==
 
- * *Every* class member and the class itseld has an own javadoc comment describing it.
+ * *Every* class member and the class itself has an own javadoc comment describing it.
  * Javadoc comments allways contain all required tags (At least all needed `@param` and `@return`).
  * Use the common javadoc style: 
  {{{

@@ -33,7 +33,7 @@ This document shows what code convetions are used by the GTGE project.
 == Comments ==
 
  * *Every* class member and the class itself has an own javadoc comment describing it.
- * Javadoc comments allways contain all required tags (At least all needed `@param` and `@return`).
+ * Javadoc comments always contain all required tags (At least all needed `@param` and `@return`).
  * Use the common javadoc style: 
  {{{
 /**
@@ -69,3 +69,134 @@ All properties are sorted by thier visibility using this direction: `private`, `
   # Methods
   # Inner classes
  # EOF
+
+{{{
+// 1. File comment and license (non javadoc)
+/*
+ * JOrbisOggRenderer.java
+ *
+ * Created on May 10, 2003, 1:04 PM
+ *
+ *
+ * Copyright (c) 2008 Golden T Studios.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+// 2. Package statement
+package com.golden.gamedev.engine.audio;
+
+// 3. Imports (separate different libraries with free line)
+// JFC
+import java.io.InputStream;
+import java.net.URL;
+
+// JORBIS
+import com.jcraft.jogg.SyncState;
+import com.jcraft.jorbis.StreamState;
+
+// GTGE
+import com.golden.gamedev.engine.BaseAudioRenderer;
+
+
+// 4. Class comment (javadoc)
+/**
+ * Play Ogg sound (*.ogg) using JOrbis library, <br>
+ * JOrbis library is available to download at
+ * <a href="http://www.jcraft.com/jorbis/" target="_blank">
+ * http://www.jcraft.com/jorbis/</a>. <p>
+ *
+ * Make sure the downloaded library is included into your game classpath
+ * before using this audio renderer. <p>
+ *
+ * How-to-use <code>JOrbisRenderer</code> in GTGE Frame Work :
+ * <pre>
+ *    public class YourGame extends Game {
+ *
+ *       protected void initEngine() {
+ *          super.initEngine();
+ *
+ *          // set sound effect to use ogg
+ *          bsSound.setSampleRenderer(new JOrbisRenderer());
+ *
+ *          // set music to use ogg
+ *          bsMusic.setSampleRenderer(new JOrbisRenderer());
+ *       }
+ *
+ *    }
+ * </pre>
+ *
+ * @author Paulus Tuerah
+ */
+// 5. Class
+public class JOrbisOggRenderer extends BaseAudioRenderer {
+
+    // 5.1 Static and final properties
+    // Final properties use UPPER_CASE
+    // Start from public, protected, package, private modifiers
+    // Every public, protected modifiers need javadoc
+    /**
+     * Audio renderer status indicates that the audio is currently playing.
+     */
+    public static final int     PLAYING      = 1;
+
+    private static final int    BUFSIZE      = 4096*2;  
+
+    private static int          convsize     = BUFSIZE*2;
+    private static byte[]       convbuffer   = new byte[convsize];
+
+    // 5.2 Normal properties
+    /**
+     * The audio renderer status. <p>
+     *
+     * Use this to manage renderer's {@link #END_OF_SOUND} status when the audio
+     * has finished played or {@link #ERROR} status if the audio is failed to
+     * play in {@link #playSound(URL)} method.
+     */
+    protected int               status;
+
+    private int                 format;
+    private int                 rate;
+    private int                 channels;
+
+
+    // 5.3 Constructor
+    // Every public, protected modifiers need javadoc.
+    // Use complete javadoc style with `@param` tags.
+    /**
+     * Creates a new instance of <code>JOrbisOggRenderer</code>.
+     */
+    public JOrbisOggRenderer() {
+    }
+
+
+    // 5.4 Methods
+    // Every public, protected modifiers need javadoc.
+    // Use complete javadoc style with `@param` and `@return` tags.
+    /**
+     * Plays sound with specified audio file.
+     *
+     * @param audiofile The audio file to play.
+     */
+    protected void playSound(URL audiofile) {
+    }
+
+
+    // 5.5 Inner classes
+    private class OggPlayer extends Thread {
+    }
+
+// 6. EOF
+}
+}}}

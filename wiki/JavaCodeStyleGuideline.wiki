@@ -56,7 +56,7 @@ This document shows what code convetions are used by the GTGE project.
  
 == File Structure ==
 
-All properties are sorted by thier visibility using this direction: `private`, `package`, `protected`, `public`
+All properties are sorted by thier visibility using this direction: `public`, `protected`, `package`, `private`
 
  # File comment and license (non javadoc)
  # Package statement
@@ -69,6 +69,8 @@ All properties are sorted by thier visibility using this direction: `private`, `
   # Methods
   # Inner classes
  # EOF
+
+=== Example ===
 
 {{{
 // 1. File comment and license (non javadoc)

@@ -7,32 +7,119 @@ This document shows what code convetions are used by the GTGE project.
 
 == Naming ==
 
- * Pick short and pregnant names that describe the use and semantic. Use commen names for common use (e.g. `i` or `j` for counters).
+ * Pick short and concisely names that describe the use and semantic. Use commen names for common use (e.g. `i` or `j` for counters).
  * Don't use pre- or suffixes. Package and class hirarchie is thought for deviding namespace not the name itself.
  * Type names are written in camel case with the first letter upper case. They should only contain nouns.
  * Package name are complete lower case and should not contain more the 10 characters.
  * Method names are written in camel case with the first letter lower case. They should begin with a verb. Use java common verb for beginning method names (e.g. get, set, is, has, add, remove, create).
  * Variable names are written in camle case with the first letter lower case. There is no naming difference between member and local variables.
  * Static final variable names are written only in upper case letters, deviding words with a underscore.
- 
+
+=== Example === 
+
+{{{
+// Packages a only lower case and don't contain more the 10 characters.
+package some.example.package;
+
+// Type names are camel case.
+class NamingExample {
+    
+    // Static finals only contain upper case and underscrores to differ words.
+    public static final int A_CONSTANT_VALUE = 5;
+    
+    // Members are named like normal variables. They are camel case 
+    // with first character lower case.
+    private int[] myArray = {
+            1, 2, 3, 4, 5, 6
+    };
+                      
+    private   int    theInt     = 1;
+    protected String someString = "Hello";
+    protected double aDouble    = 3.0;
+    
+    // Methods are named camel case with first character lower case. First 
+    // word is a verb.
+    public void doSomething(int a, int b, int c, int d, int e, int f) {
+        switch(a) {
+            case 0:
+                Other.doFoo();
+                break;
+            default:
+                Other.doBaz();
+        }
+        
+        for(int i = 0; i < 10; i++) {
+            System.out.println(i + c + b);
+        }
+    }
+}
+}}}
+
 == Layout & Style ==
 
  * Only one statement per line. If needed splite the statement into multiple lines.
  * Lines should never be much longer then 80 characters.
  * Non-static members are allways accessed with the `this` reference.
+ {{{
+ // Do it like this:
+ this.member = "Hello!";
+ // Not like this:
+ member = "Hello!";
+ }}}
  * Static members are accessed using the class name. Static final members don't have to be accessed like that, but it should be prefered.
+ {{{
+ // Do it like this:
+ ExampleClass.staticMember = 0;
+ // Not like this:
+ this.staticMember = 0;
+ staticMember = 0;
+ }}}
  * Access members with their getters and setters, if they have them.
  * Allways use absolute imports.
+ {{{
+ // Do it like this:
+ import java.util.Arrays;
+ // Not like this:
+ import java.awt.*;
+ }}}
  * Don't use magic numbers, prefre defining static finals or local finals.
  * Use minimal visibility to ensure encapsulation (`private`, `package`, `protected`, `public`).
  * Visibility is allways the first word of a declaration.
+ {{{
+ // Do it like this:
+ public static void doSomething();
+ // Not like this:
+ static public void doSomething();
+ }}}
  * The beginning braket of a block is within the same line as the statement it belongs to. The ending braket gets its own line.
- * Allways chose the smallest scope to declare a variable.
+ {{{
+ // Do it like this:
+ if(true) {
+     // ...
+ }
+ // Not like this:
+ if(true) 
+ {
+     // ...
+ }
+ if(true) { /* ... */ }
+ }}}
+ * Allways chose the smallest scope to declare a variable. Example: If a variable is only needed within one method, declare it there, not in class or somewhere else.
  * Group imports that import classes of the same package by dividing them from the other imports with a free line.
+ {{{
+ import java.awt.Window;
+ import java.awt.Frame;
+ 
+ import java.util.List;
+ import java.util.Map;
+ 
+ import org.w3c.Element;
+ import org.w3c.Node;
+ }}}
  
 == Comments ==
 
- * *Every* class member and the class itself has an own javadoc comment describing it.
+ * *Every* class member and the class itself has an own javadoc comment describing it (Even if this is not done within the examples here).
  * Javadoc comments always contain all required tags (At least all needed `@param` and `@return`).
  * Use the common javadoc style: 
  {{{
@@ -48,11 +135,63 @@ This document shows what code convetions are used by the GTGE project.
  * If a statment is broken up into multiple lines, each new line of the statement is idented twice.
  * Statments beneth a switch case are indented as if they were within a block.
 
+=== Example ===
+
+{{{
+// The content of every block is indented.
+class IndentationExample {
+    
+    void foo(int a) {
+        switch(a) {
+            case 0:
+                // Statements beneth a switch case are indented.
+                Other.doFoo();
+                break;
+            default:
+                Other.doBaz();
+        }
+        
+        // Wrap to long calls. Everything that belongs to the call is 
+        // indented twice.
+        this.someString = new StringBuffer()
+                .append("Humans ")
+                .append("are ")
+                .append("intelligent ")
+                .append("apes.");
+        
+        this.someString = "Humans "
+                + "are "
+                + "intelligent "
+                + "Apes.";
+    }
+    
+    void bar(List listOfNumbers) {
+        for(int i = 0; i < 10; i++) {
+            listOfNumbers.add(new Integer(i));
+        }
+    }
+}
+}}}
+
 == Whitespaces ==
 
  * The beginning braket of a block is seperated from its statement through a space.
  * Operators are seperated from their operands by a space. A exception of this rule are the following operators: semicolon, comma, brakets, dot.
  * Commas are whitespaced as in normal grammer. No space before, but one space after a comma.
+ 
+=== Example ===
+
+{{{
+    // Beginning block braket is separated form its statement by a space.
+    if(true) {
+        // ...
+    }
+    
+    // The operators (= + * / -) are separated from the operands bby a space.
+    // Comma, brakets and semicolon are not affected by this rule.
+    // Comma is spaced as in normal grammer.
+    float = a + i * (4 / Math.pow(0.5, x)) - 45.0f;
+}}}
  
 == File Structure ==
 
@@ -192,11 +331,13 @@ public class JOrbisOggRenderer extends BaseAudioRenderer {
      * @param audiofile The audio file to play.
      */
     protected void playSound(URL audiofile) {
+    
     }
-
+    
 
     // 5.5 Inner classes
     private class OggPlayer extends Thread {
+    
     }
 
 // 6. EOF

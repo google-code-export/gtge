@@ -40,7 +40,7 @@ class NamingExample {
     // Methods are named camel case with first character lower case. First 
     // word is a verb.
     public void doSomething(int a, int b, int c, int d, int e, int f) {
-        switch(a) {
+        switch (a) {
             case 0:
                 Other.doFoo();
                 break;
@@ -48,7 +48,7 @@ class NamingExample {
                 Other.doBaz();
         }
         
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             System.out.println(i + c + b);
         }
     }
@@ -74,7 +74,6 @@ class NamingExample {
  this.staticMember = 0;
  staticMember = 0;
  }}}
- * Access members with their getters and setters, if they have them.
  * Allways use absolute imports.
  {{{
  // Do it like this:
@@ -94,15 +93,15 @@ class NamingExample {
  * The beginning braket of a block is within the same line as the statement it belongs to. The ending braket gets its own line.
  {{{
  // Do it like this:
- if(true) {
+ if (true) {
      // ...
  }
  // Not like this:
- if(true) 
+ if (true) 
  {
      // ...
  }
- if(true) { /* ... */ }
+ if (true) { /* ... */ }
  }}}
  * Allways chose the smallest scope to declare a variable. Example: If a variable is only needed within one method, declare it there, not in class or somewhere else.
  * Group imports that import classes of the same package by dividing them from the other imports with a free line.
@@ -123,10 +122,10 @@ class NamingExample {
  * Javadoc comments always contain all required tags (At least all needed `@param` and `@return`).
  * Use the common javadoc style: 
  {{{
-/**
- * Comment
- */
-}}}
+ /**
+  * Comment
+  */
+ }}}
 
 == Indentation ==
 
@@ -142,7 +141,7 @@ class NamingExample {
 class IndentationExample {
     
     void foo(int a) {
-        switch(a) {
+        switch (a) {
             case 0:
                 // Statements beneth a switch case are indented.
                 Other.doFoo();
@@ -166,7 +165,7 @@ class IndentationExample {
     }
     
     void bar(List listOfNumbers) {
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             listOfNumbers.add(new Integer(i));
         }
     }
@@ -176,23 +175,31 @@ class IndentationExample {
 == Whitespaces ==
 
  * The beginning braket of a block is seperated from its statement through a space.
+ {{{
+ // Beginning block braket is separated form its statement by a space.
+ if (true) {
+     // ...
+ }
+ }}}
  * Operators are seperated from their operands by a space. A exception of this rule are the following operators: semicolon, comma, brakets, dot.
- * Commas are whitespaced as in normal grammer. No space before, but one space after a comma.
- 
-=== Example ===
+ {{{
+ float var = a + i * (4 / Math.pow(0.5, x)) - 45.0f;
+ }}}
+ * Commas and semicolons are whitespaced as in normal grammer. No space before, but one space after a comma.
+ {{{
+ ExampleClass.exampleMethode(0, "Hello!", ExampleClass.CONSTANT);
+ }}}
+ * A space is inserted between every statement and its parameter brakets if it has such.
+ {{{
+ if (someBoolean) {
+     // ...
+ }
 
-{{{
-    // Beginning block braket is separated form its statement by a space.
-    if(true) {
-        // ...
-    }
-    
-    // The operators (= + * / -) are separated from the operands by a space.
-    // Comma, brakets and semicolon are not affected by this rule.
-    // Comma is spaced as in normal grammer.
-    float = a + i * (4 / Math.pow(0.5, x)) - 45.0f;
-}}}
- 
+ for (int i = 0; i < 10; i++) {
+     // ... (You can see whitespacing of semicolons in this example too)
+ }
+ }}}
+
 == File Structure ==
 
 All properties are sorted by thier visibility using this direction: `public`, `protected`, `package`, `private`
@@ -290,12 +297,12 @@ public class JOrbisOggRenderer extends BaseAudioRenderer {
     /**
      * Audio renderer status indicates that the audio is currently playing.
      */
-    public static final int     PLAYING    = 1;
+    public static final int  PLAYING = 1;
 
-    private static final int    BUFSIZE    = 4096 * 2;  
+    private static final int BUFSIZE = 4096 * 2;  
 
-    private static int          convsize   = BUFSIZE * 2;
-    private static byte[]       convbuffer = new byte[convsize];
+    private static int    convsize   = BUFSIZE * 2;
+    private static byte[] convbuffer = new byte[convsize];
 
     // 5.2 Normal properties
     /**

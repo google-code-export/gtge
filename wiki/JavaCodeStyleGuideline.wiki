@@ -187,7 +187,7 @@ class IndentationExample {
         // ...
     }
     
-    // The operators (= + * / -) are separated from the operands bby a space.
+    // The operators (= + * / -) are separated from the operands by a space.
     // Comma, brakets and semicolon are not affected by this rule.
     // Comma is spaced as in normal grammer.
     float = a + i * (4 / Math.pow(0.5, x)) - 45.0f;
@@ -290,12 +290,12 @@ public class JOrbisOggRenderer extends BaseAudioRenderer {
     /**
      * Audio renderer status indicates that the audio is currently playing.
      */
-    public static final int     PLAYING      = 1;
+    public static final int     PLAYING    = 1;
 
-    private static final int    BUFSIZE      = 4096*2;  
+    private static final int    BUFSIZE    = 4096 * 2;  
 
-    private static int          convsize     = BUFSIZE*2;
-    private static byte[]       convbuffer   = new byte[convsize];
+    private static int          convsize   = BUFSIZE * 2;
+    private static byte[]       convbuffer = new byte[convsize];
 
     // 5.2 Normal properties
     /**
@@ -305,11 +305,11 @@ public class JOrbisOggRenderer extends BaseAudioRenderer {
      * has finished played or {@link #ERROR} status if the audio is failed to
      * play in {@link #playSound(URL)} method.
      */
-    protected int               status;
+    protected int status;
 
-    private int                 format;
-    private int                 rate;
-    private int                 channels;
+    private int   format;
+    private int   rate;
+    private int   channels;
 
 
     // 5.3 Constructor

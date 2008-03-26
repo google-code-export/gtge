@@ -130,7 +130,7 @@ class NamingExample {
 
 == Indentation ==
 
- * Indentation is done with space, where one indentation level consists of four spaces.
+ * Indentation is done with tabs, where one indentation level consists of one tab.
  * A new indentation level is inserted within every block.
  * If a statment is broken up into multiple lines, each new line of the statement is idented twice.
  * Statments beneth a switch case are indented as if they were within a block.

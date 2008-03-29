@@ -28,13 +28,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.Transparency;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.net.URL;
 
 import com.golden.gamedev.engine.BaseAudio;
@@ -645,17 +643,6 @@ public abstract class Game extends BaseGame {
 	public abstract void initResources();
 	
 	/**
-	 * Renders game to the screen.
-	 * 
-	 * @param g backbuffer graphics context
-	 */
-	public abstract void render(Graphics2D g);
-	
-	/** ************************************************************************* */
-	/** ********************* EXIT/ERROR NOTIFICATION *************************** */
-	/** ************************************************************************* */
-	
-	/**
 	 * Notified when the game is about to quit. By default this method is
 	 * calling <code>System.exit()</code> to ensure everything is properly
 	 * shut down.
@@ -1112,51 +1099,6 @@ public abstract class Game extends BaseGame {
 	// INTERNATIONALIZATION UTILITY
 	// public Locale getLocale() { return locale; }
 	// public void setLocale(Locale locale) { this.locale = locale; }
-	
-	/** ************************************************************************* */
-	/** ************************* GRAPHICS UTILITY ****************************** */
-	/** ************************************************************************* */
-	// -> com.golden.gamedev.engine.BaseGraphics
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
-	 * bsGraphics.getSize().width}.
-	 */
-	public int getWidth() {
-		return this.bsGraphics.getSize().width;
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
-	 * bsGraphics.getSize().height}.
-	 */
-	public int getHeight() {
-		return this.bsGraphics.getSize().height;
-	}
-	
-	/**
-	 * Returns a new created buffered image which the current game state is
-	 * rendered into it.
-	 */
-	public BufferedImage takeScreenShot() {
-		BufferedImage screen = ImageUtil.createImage(this.getWidth(), this
-		        .getHeight(), Transparency.OPAQUE);
-		Graphics2D g = screen.createGraphics();
-		this.render(g);
-		g.dispose();
-		
-		return screen;
-	}
-	
-	/**
-	 * Captures current game screen into specified file.
-	 * 
-	 * @see #takeScreenShot()
-	 */
-	public void takeScreenShot(File f) {
-		ImageUtil.saveImage(this.takeScreenShot(), f);
-	}
 	
 	/** ************************************************************************* */
 	/** ************************** AUDIO UTILITY ******************************** */

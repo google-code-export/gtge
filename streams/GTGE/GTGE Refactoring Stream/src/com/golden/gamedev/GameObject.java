@@ -20,15 +20,12 @@ package com.golden.gamedev;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Transparency;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
 import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.GameFont;
 import com.golden.gamedev.object.Sprite;
-import com.golden.gamedev.util.ImageUtil;
 import com.golden.gamedev.util.Utility;
 
 /**
@@ -216,24 +213,6 @@ public abstract class GameObject extends BaseGame {
 	 */
 	public abstract void initResources();
 	
-	/**
-	 * Renders game to the screen.
-	 * 
-	 * @param g backbuffer graphics context
-	 */
-	public abstract void render(Graphics2D g);
-	
-	// for debugging that this game object is properly disposed
-	// protected void finalize() throws Throwable {
-	// System.out.println("Finalization " + this + " GameObject");
-	// super.finalize();
-	// }
-	
-	/** ************************************************************************* */
-	/** ***************** BELOW THIS LINE IS ENGINES UTILIZE ******************** */
-	/** ***************** (PASTED FROM GAME CLASS) ******************** */
-	/** ************************************************************************* */
-	
 	/** ************************************************************************* */
 	/** *********************** ESSENTIAL GAME UTILITY ************************** */
 	/** ************************************************************************* */
@@ -250,51 +229,6 @@ public abstract class GameObject extends BaseGame {
 	// INTERNATIONALIZATION UTILITY
 	// public Locale getLocale() { return locale; }
 	// public void setLocale(Locale locale) { this.locale = locale; }
-	
-	/** ************************************************************************* */
-	/** ************************* GRAPHICS UTILITY ****************************** */
-	/** ************************************************************************* */
-	// -> com.golden.gamedev.engine.BaseGraphics
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
-	 * bsGraphics.getSize().width}.
-	 */
-	public int getWidth() {
-		return this.bsGraphics.getSize().width;
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
-	 * bsGraphics.getSize().height}.
-	 */
-	public int getHeight() {
-		return this.bsGraphics.getSize().height;
-	}
-	
-	/**
-	 * Returns a new created buffered image which the current game state is
-	 * rendered into it.
-	 */
-	public BufferedImage takeScreenShot() {
-		BufferedImage screen = ImageUtil.createImage(this.getWidth(), this
-		        .getHeight(), Transparency.OPAQUE);
-		Graphics2D g = screen.createGraphics();
-		this.render(g);
-		g.dispose();
-		
-		return screen;
-	}
-	
-	/**
-	 * Captures current game screen into specified file.
-	 * 
-	 * @see #takeScreenShot()
-	 */
-	public void takeScreenShot(File f) {
-		ImageUtil.saveImage(this.takeScreenShot(), f);
-	}
 	
 	/** ************************************************************************* */
 	/** ************************** AUDIO UTILITY ******************************** */

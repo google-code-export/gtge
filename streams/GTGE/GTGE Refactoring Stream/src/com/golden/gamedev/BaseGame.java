@@ -3,6 +3,11 @@
  */
 package com.golden.gamedev;
 
+import java.awt.Graphics2D;
+import java.awt.Transparency;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
 import com.golden.gamedev.engine.BaseAudio;
 import com.golden.gamedev.engine.BaseGraphics;
 import com.golden.gamedev.engine.BaseIO;
@@ -10,6 +15,7 @@ import com.golden.gamedev.engine.BaseInput;
 import com.golden.gamedev.engine.BaseLoader;
 import com.golden.gamedev.engine.BaseTimer;
 import com.golden.gamedev.object.GameFontManager;
+import com.golden.gamedev.util.ImageUtil;
 
 /**
  * The <tt>BaseGame</tt> class provides an abstract class with common
@@ -68,5 +74,48 @@ public abstract class BaseGame {
      */
     public boolean keyPressed(int keyCode) {
     	return this.bsInput.isKeyPressed(keyCode);
+    }
+	/**
+     * Renders game to the screen.
+     * 
+     * @param g backbuffer graphics context
+     */
+    public abstract void render(Graphics2D g);
+	/**
+     * Effectively equivalent to the call
+     * {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
+     * bsGraphics.getSize().width}.
+     */
+    public int getWidth() {
+    	return this.bsGraphics.getSize().width;
+    }
+	/**
+     * Effectively equivalent to the call
+     * {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
+     * bsGraphics.getSize().height}.
+     */
+    public int getHeight() {
+    	return this.bsGraphics.getSize().height;
+    }
+	/**
+     * Returns a new created buffered image which the current game state is
+     * rendered into it.
+     */
+    public BufferedImage takeScreenShot() {
+    	BufferedImage screen = ImageUtil.createImage(this.getWidth(), this
+    	        .getHeight(), Transparency.OPAQUE);
+    	Graphics2D g = screen.createGraphics();
+    	this.render(g);
+    	g.dispose();
+    	
+    	return screen;
+    }
+	/**
+     * Captures current game screen into specified file.
+     * 
+     * @see #takeScreenShot()
+     */
+    public void takeScreenShot(File f) {
+    	ImageUtil.saveImage(this.takeScreenShot(), f);
     }
 }

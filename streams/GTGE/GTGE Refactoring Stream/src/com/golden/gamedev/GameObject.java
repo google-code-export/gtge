@@ -25,15 +25,8 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-import com.golden.gamedev.engine.BaseAudio;
-import com.golden.gamedev.engine.BaseGraphics;
-import com.golden.gamedev.engine.BaseIO;
-import com.golden.gamedev.engine.BaseInput;
-import com.golden.gamedev.engine.BaseLoader;
-import com.golden.gamedev.engine.BaseTimer;
 import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.GameFont;
-import com.golden.gamedev.object.GameFontManager;
 import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.util.ImageUtil;
 import com.golden.gamedev.util.Utility;
@@ -55,7 +48,7 @@ import com.golden.gamedev.util.Utility;
  * @see com.golden.gamedev.GameEngine
  * @see com.golden.gamedev.Game
  */
-public abstract class GameObject {
+public abstract class GameObject extends BaseGame {
 	
 	/** **************************** MASTER ENGINE ****************************** */
 	
@@ -65,24 +58,6 @@ public abstract class GameObject {
 	public final GameEngine parent;
 	
 	/** **************************** GAME ENGINE ******************************** */
-	
-	/** Graphics engine. */
-	public BaseGraphics bsGraphics;
-	/** I/O file engine. */
-	public BaseIO bsIO;
-	/** Image loader engine. */
-	public BaseLoader bsLoader;
-	/** Input engine. */
-	public BaseInput bsInput;
-	/** Timer engine. */
-	public BaseTimer bsTimer;
-	/** Audio engine for music. */
-	public BaseAudio bsMusic;
-	/** Audio engine for sound. */
-	public BaseAudio bsSound;
-	
-	/** Font manager. */
-	public GameFontManager fontManager;
 	
 	/** ************************* OTHER PROPERTIES ****************************** */
 	

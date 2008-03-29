@@ -38,11 +38,9 @@ import java.io.File;
 import java.net.URL;
 
 import com.golden.gamedev.engine.BaseAudio;
-import com.golden.gamedev.engine.BaseGraphics;
 import com.golden.gamedev.engine.BaseIO;
 import com.golden.gamedev.engine.BaseInput;
 import com.golden.gamedev.engine.BaseLoader;
-import com.golden.gamedev.engine.BaseTimer;
 import com.golden.gamedev.engine.audio.MidiRenderer;
 import com.golden.gamedev.engine.audio.WaveRenderer;
 import com.golden.gamedev.engine.input.AWTInput;
@@ -143,7 +141,7 @@ import com.golden.gamedev.util.Utility;
  * @see com.golden.gamedev.GameLoader
  * @see #initEngine()
  */
-public abstract class Game {
+public abstract class Game extends BaseGame {
 	
 	/**
 	 * Current GTGE version.
@@ -153,24 +151,6 @@ public abstract class Game {
 	private static final int DEFAULT_FPS = 100;
 	
 	/** ***************************** GAME ENGINES ****************************** */
-	
-	/** Graphics engine. */
-	public BaseGraphics bsGraphics;
-	/** I/O file engine. */
-	public BaseIO bsIO;
-	/** Image loader engine. */
-	public BaseLoader bsLoader;
-	/** Input engine. */
-	public BaseInput bsInput;
-	/** Timer engine. */
-	public BaseTimer bsTimer;
-	/** Audio engine for music. */
-	public BaseAudio bsMusic;
-	/** Audio engine for sound. */
-	public BaseAudio bsSound;
-	
-	/** Font manager. */
-	public GameFontManager fontManager;
 	
 	/** **************************** GAME VARIABLES ***************************** */
 	

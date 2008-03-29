@@ -258,19 +258,6 @@ public abstract class GameObject extends BaseGame {
 		return this.bsSound.play(audiofile);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** TIMER UTILITY ******************************** */
-	/** ************************************************************************* */
-	// -> com.golden.gamedev.engine.BaseTimer
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseTimer#setFPS(int)
-	 * bsTimer.setFPS(int)}.
-	 */
-	public void setFPS(int fps) {
-		this.bsTimer.setFPS(fps);
-	}
-	
 	/**
 	 * Effectively equivalent to the call
 	 * {@linkplain com.golden.gamedev.engine.BaseTimer#getCurrentFPS()
@@ -375,42 +362,11 @@ public abstract class GameObject extends BaseGame {
 	
 	/**
 	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
-	 * bsInput.isMousePressed(java.awt.event.MouseEvent.BUTTON3)}.
-	 */
-	public boolean rightClick() {
-		return this.bsInput.isMousePressed(MouseEvent.BUTTON3);
-	}
-	
-	/**
-	 * Effectively equivalent to the call
 	 * {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
 	 * bsInput.setMouseVisible(false)}.
 	 */
 	public void hideCursor() {
 		this.bsInput.setMouseVisible(false);
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
-	 * bsInput.setMouseVisible(true)}.
-	 */
-	public void showCursor() {
-		this.bsInput.setMouseVisible(true);
-	}
-	
-	/** ************************************************************************* */
-	/** ************************** IMAGE UTILITY ******************************** */
-	/** ************************************************************************* */
-	// com.golden.gamedev.engine.BaseLoader
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#setMaskColor(Color)
-	 * bsLoader.setMaskColor(java.awt.Color)}.
-	 */
-	public void setMaskColor(Color c) {
-		this.bsLoader.setMaskColor(c);
 	}
 	
 	/**

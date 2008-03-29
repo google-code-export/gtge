@@ -3,8 +3,10 @@
  */
 package com.golden.gamedev;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Transparency;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
@@ -117,5 +119,37 @@ public abstract class BaseGame {
      */
     public void takeScreenShot(File f) {
     	ImageUtil.saveImage(this.takeScreenShot(), f);
+    }
+	/**
+     * Effectively equivalent to the call
+     * {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
+     * bsInput.setMouseVisible(true)}.
+     */
+    public void showCursor() {
+    	this.bsInput.setMouseVisible(true);
+    }
+	/**
+     * Effectively equivalent to the call
+     * {@linkplain com.golden.gamedev.engine.BaseLoader#setMaskColor(Color)
+     * bsLoader.setMaskColor(java.awt.Color)}.
+     */
+    public void setMaskColor(Color c) {
+    	this.bsLoader.setMaskColor(c);
+    }
+	/**
+     * Effectively equivalent to the call
+     * {@linkplain com.golden.gamedev.engine.BaseTimer#setFPS(int)
+     * bsTimer.setFPS(int)}.
+     */
+    public void setFPS(int fps) {
+    	this.bsTimer.setFPS(fps);
+    }
+	/**
+     * Effectively equivalent to the call
+     * {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
+     * bsInput.isMousePressed(java.awt.event.MouseEvent.BUTTON3)}.
+     */
+    public boolean rightClick() {
+    	return this.bsInput.isMousePressed(MouseEvent.BUTTON3);
     }
 }

@@ -42,12 +42,6 @@ public class CollisionRect implements CollisionShape {
 	 */
 	public int height;
 	
-	private int x1, x2; // optimization, for intersects method
-	        
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
-	
 	/**
 	 * Creates new <code>CollisionRect</code>.
 	 */

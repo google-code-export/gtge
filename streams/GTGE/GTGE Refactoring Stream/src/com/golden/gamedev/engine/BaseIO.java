@@ -127,7 +127,7 @@ public class BaseIO {
 				case WORKING_DIRECTORY:
 					File f = new File(path);
 					if (f.exists()) {
-						url = f.toURL();
+						url = f.toURI().toURL();
 					}
 					break;
 				
@@ -212,7 +212,7 @@ public class BaseIO {
 					break;
 				
 				case WORKING_DIRECTORY:
-					stream = new File(path).toURL().openStream();
+					stream = new File(path).toURI().toURL().openStream();
 					break;
 				
 				case CLASS_LOADER:

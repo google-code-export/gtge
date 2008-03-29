@@ -151,7 +151,7 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 				
 				this.collisionSide = 0;
 				
-				Sprite spriteToMove, otherSprite;
+				Sprite spriteToMove;
 				
 				if (speedX1 == 0 && speedY1 == 0 && speedX2 == 0
 				        && speedY2 == 0) {// both
@@ -177,11 +177,9 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 						// 1
 						// faster
 						spriteToMove = s1;
-						otherSprite = s2;
 					}
 					else {
 						spriteToMove = s2;
-						otherSprite = s1;
 					}
 					if (this.log) {
 						System.out.print(spriteToMove + "-->");

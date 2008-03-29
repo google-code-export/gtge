@@ -264,7 +264,7 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 			else { // no collision at old location
 			
 				double tHoriz = 999999.0, tVert = 999999.0; // garbage values
-															// that
+				// that
 				// should not be
 				// achieved
 				int xCollision = -1, yCollision = -1;

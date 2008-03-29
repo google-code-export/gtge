@@ -645,14 +645,6 @@ public abstract class Game extends BaseGame {
 	public abstract void initResources();
 	
 	/**
-	 * Updates game variables.
-	 * 
-	 * @see #keyDown(int)
-	 * @see #keyPressed(int)
-	 */
-	public abstract void update(long elapsedTime);
-	
-	/**
 	 * Renders game to the screen.
 	 * 
 	 * @param g backbuffer graphics context
@@ -1360,24 +1352,6 @@ public abstract class Game extends BaseGame {
 	 */
 	public boolean rightClick() {
 		return this.bsInput.isMousePressed(MouseEvent.BUTTON3);
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#isKeyDown(int)
-	 * bsInput.isKeyDown(int)}.
-	 */
-	public boolean keyDown(int keyCode) {
-		return this.bsInput.isKeyDown(keyCode);
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#isKeyPressed(int)
-	 * bsInput.isKeyPressed(int)}.
-	 */
-	public boolean keyPressed(int keyCode) {
-		return this.bsInput.isKeyPressed(keyCode);
 	}
 	
 	/**

@@ -48,7 +48,7 @@ public class PlayField {
 	
 	/** ************************** SORT RENDERING ******************************* */
 	
-	private Sprite[] cacheSprite;
+	private BaseSprite[] cacheSprite;
 	private Comparator comparator;
 	
 	/** ************************************************************************* */
@@ -69,7 +69,7 @@ public class PlayField {
 		this.groups[0] = extra;
 		
 		this.collisions = new CollisionManager[0];
-		this.cacheSprite = new Sprite[0];
+		this.cacheSprite = new BaseSprite[0];
 	}
 	
 	/**
@@ -96,7 +96,7 @@ public class PlayField {
 	 * The sprite is inserted to 'extra group' and all sprites on extra group
 	 * will always on top of other sprites.
 	 */
-	public void add(Sprite extra) {
+	public void add(BaseSprite extra) {
 		this.groups[this.groups.length - 1].add(extra);
 	}
 	
@@ -401,7 +401,7 @@ public class PlayField {
 		
 		if (len == 0) {
 			// sprite cache initialization
-			this.cacheSprite = new Sprite[100];
+			this.cacheSprite = new BaseSprite[100];
 			len = this.cacheSprite.length;
 		}
 		
@@ -410,7 +410,7 @@ public class PlayField {
 				continue;
 			}
 			
-			Sprite[] member = this.groups[i].getSprites();
+			BaseSprite[] member = this.groups[i].getSprites();
 			int size = this.groups[i].getSize();
 			
 			for (int j = 0; j < size; j++) {
@@ -419,7 +419,7 @@ public class PlayField {
 				
 					if (num >= len) {
 						// expand sprite storage
-						this.cacheSprite = (Sprite[]) Utility.expand(
+						this.cacheSprite = (BaseSprite[]) Utility.expand(
 						        this.cacheSprite, 20);
 						len = this.cacheSprite.length;
 					}
@@ -456,7 +456,7 @@ public class PlayField {
 	 */
 	public void clearCache() {
 		this.cacheSprite = null;
-		this.cacheSprite = new Sprite[0];
+		this.cacheSprite = new BaseSprite[0];
 	}
 	
 	/** ************************************************************************* */

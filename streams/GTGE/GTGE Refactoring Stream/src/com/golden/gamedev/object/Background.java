@@ -223,7 +223,7 @@ public class Background implements Serializable {
 	/**
 	 * Sets specified sprite as the center of the background's viewport.
 	 */
-	public void setToCenter(Sprite centered) {
+	public void setToCenter(BaseSprite centered) {
 		this.setToCenter((int) centered.getX(), (int) centered.getY(), centered
 		        .getWidth(), centered.getHeight());
 	}

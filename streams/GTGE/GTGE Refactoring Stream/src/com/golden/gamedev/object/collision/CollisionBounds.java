@@ -20,6 +20,7 @@ package com.golden.gamedev.object.collision;
 import java.awt.Rectangle;
 
 import com.golden.gamedev.object.Background;
+import com.golden.gamedev.object.BaseSprite;
 import com.golden.gamedev.object.CollisionManager;
 import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
@@ -57,7 +58,7 @@ public abstract class CollisionBounds extends CollisionManager {
 	
 	private final Rectangle boundary = new Rectangle();
 	
-	private Sprite sprite1;
+	private BaseSprite sprite1;
 	private int collisionSide;
 	private int collisionX1, collisionY1;
 	
@@ -101,7 +102,7 @@ public abstract class CollisionBounds extends CollisionManager {
 			return;
 		}
 		
-		Sprite[] member1 = group1.getSprites();
+		BaseSprite[] member1 = group1.getSprites();
 		int size1 = group1.getSize();
 		
 		CollisionShape shape1;
@@ -173,7 +174,7 @@ public abstract class CollisionBounds extends CollisionManager {
 	 * @return false, to skip collision check.
 	 * @see CollisionRect#intersects(CollisionShape)
 	 */
-	public CollisionShape getCollisionShape1(Sprite s1) {
+	public CollisionShape getCollisionShape1(BaseSprite s1) {
 		this.rect1.setBounds(s1.getX(), s1.getY(), s1.getWidth(), s1
 		        .getHeight());
 		
@@ -205,6 +206,6 @@ public abstract class CollisionBounds extends CollisionManager {
 	 * Sprite <code>sprite</code> hit collision boundary, perform collided
 	 * implementation.
 	 */
-	public abstract void collided(Sprite sprite);
+	public abstract void collided(BaseSprite sprite);
 	
 }

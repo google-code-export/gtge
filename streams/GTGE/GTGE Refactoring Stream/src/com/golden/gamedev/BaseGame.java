@@ -17,8 +17,8 @@ import com.golden.gamedev.engine.BaseInput;
 import com.golden.gamedev.engine.BaseLoader;
 import com.golden.gamedev.engine.BaseTimer;
 import com.golden.gamedev.object.Background;
+import com.golden.gamedev.object.BaseSprite;
 import com.golden.gamedev.object.GameFontManager;
-import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.util.ImageUtil;
 import com.golden.gamedev.util.Utility;
 
@@ -44,6 +44,7 @@ import com.golden.gamedev.util.Utility;
  */
 public abstract class BaseGame {
 	
+	// GTGE-provided game-related engines to use with game classes.
 	/** Graphics engine. */
 	public BaseGraphics bsGraphics;
 	
@@ -69,13 +70,95 @@ public abstract class BaseGame {
 	public GameFontManager fontManager;
 	
 	/**
-	 * Updates game variables.
-	 * 
-	 * @see #keyDown(int)
-	 * @see #keyPressed(int)
+	 * Creates a new <tt>BaseGame</tt> instance.
 	 */
-	public abstract void update(long elapsedTime);
+    public BaseGame() {
+    }
+    
+    // Input-specific methods.
 	
+	/**
+     * Effectively equivalent to the call
+     * {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
+     * bsInput.isMousePressed(java.awt.event.MouseEvent.BUTTON1)}.
+     */
+    public boolean click() {
+    	return this.bsInput.isMousePressed(MouseEvent.BUTTON1);
+    }
+
+	/**
+     * Returns whether the mouse pointer is inside specified sprite boundary.
+     * 
+     * @param sprite sprite to check its intersection with mouse pointer
+     * @param pixelCheck true, checking the sprite image with pixel precision
+     */
+    public boolean checkPosMouse(BaseSprite sprite, boolean pixelCheck) {
+    	Background bg = sprite.getBackground();
+    	
+    	// check whether the mouse is in background clip area
+    	if (this.getMouseX() < bg.getClip().x
+    	        || this.getMouseY() < bg.getClip().y
+    	        || this.getMouseX() > bg.getClip().x + bg.getClip().width
+    	        || this.getMouseY() > bg.getClip().y + bg.getClip().height) {
+    		return false;
+    	}
+    	
+    	double mosx = this.getMouseX() + bg.getX() - bg.getClip().x;
+    	double mosy = this.getMouseY() + bg.getY() - bg.getClip().y;
+    	
+    	if (pixelCheck) {
+    		try {
+    			return ((sprite.getImage().getRGB((int) (mosx - sprite.getX()),
+    			        (int) (mosy - sprite.getY())) & 0xFF000000) != 0x00);
+    		}
+    		catch (Exception e) {
+    			return false;
+    		}
+    		
+    	}
+    	else {
+    		return (mosx >= sprite.getX() && mosy >= sprite.getY()
+    		        && mosx <= sprite.getX() + sprite.getWidth() && mosy <= sprite
+    		        .getY()
+    		        + sprite.getHeight());
+    	}
+    }
+
+	/**
+     * Returns whether the mouse pointer is inside specified screen boundary.
+     */
+    public boolean checkPosMouse(int x1, int y1, int x2, int y2) {
+    	return (this.getMouseX() >= x1 && this.getMouseY() >= y1
+    	        && this.getMouseX() <= x2 && this.getMouseY() <= y2);
+    }
+
+	/**
+     * Effectively equivalent to the call
+     * {@linkplain com.golden.gamedev.engine.BaseInput#getMouseX()
+     * bsInput.getMouseX()}.
+     */
+    public int getMouseX() {
+    	return this.bsInput.getMouseX();
+    }
+
+	/**
+     * Effectively equivalent to the call
+     * {@linkplain com.golden.gamedev.engine.BaseInput#getMouseY()
+     * bsInput.getMouseY()}.
+     */
+    public int getMouseY() {
+    	return this.bsInput.getMouseY();
+    }
+
+	/**
+     * Effectively equivalent to the call
+     * {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
+     * bsInput.setMouseVisible(false)}.
+     */
+    public void hideCursor() {
+    	this.bsInput.setMouseVisible(false);
+    }
+
 	/**
 	 * Effectively equivalent to the call
 	 * {@linkplain com.golden.gamedev.engine.BaseInput#isKeyDown(int)
@@ -95,12 +178,25 @@ public abstract class BaseGame {
 	}
 	
 	/**
-	 * Renders game to the screen.
-	 * 
-	 * @param g backbuffer graphics context
-	 */
-	public abstract void render(Graphics2D g);
-	
+     * Effectively equivalent to the call
+     * {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
+     * bsInput.isMousePressed(java.awt.event.MouseEvent.BUTTON3)}.
+     */
+    public boolean rightClick() {
+    	return this.bsInput.isMousePressed(MouseEvent.BUTTON3);
+    }
+    
+    // Display methods
+
+	/**
+     * Effectively equivalent to the call
+     * {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
+     * bsInput.setMouseVisible(true)}.
+     */
+    public void showCursor() {
+    	this.bsInput.setMouseVisible(true);
+    }
+
 	/**
 	 * Effectively equivalent to the call
 	 * {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
@@ -144,15 +240,6 @@ public abstract class BaseGame {
 	
 	/**
 	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
-	 * bsInput.setMouseVisible(true)}.
-	 */
-	public void showCursor() {
-		this.bsInput.setMouseVisible(true);
-	}
-	
-	/**
-	 * Effectively equivalent to the call
 	 * {@linkplain com.golden.gamedev.engine.BaseLoader#setMaskColor(Color)
 	 * bsLoader.setMaskColor(java.awt.Color)}.
 	 */
@@ -161,23 +248,48 @@ public abstract class BaseGame {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseTimer#setFPS(int)
-	 * bsTimer.setFPS(int)}.
-	 */
-	public void setFPS(int fps) {
-		this.bsTimer.setFPS(fps);
-	}
-	
+     * Effectively equivalent to the call
+     * {@linkplain com.golden.gamedev.engine.BaseTimer#setFPS(int)
+     * bsTimer.setFPS(int)}.
+     */
+    public void setFPS(int fps) {
+    	this.bsTimer.setFPS(fps);
+    }
+
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
-	 * bsInput.isMousePressed(java.awt.event.MouseEvent.BUTTON3)}.
-	 */
-	public boolean rightClick() {
-		return this.bsInput.isMousePressed(MouseEvent.BUTTON3);
-	}
-	
+     * Draws game frame-per-second (FPS) to specified location.
+     */
+    public void drawFPS(Graphics2D g, int x, int y) {
+    	this.fontManager.getFont("FPS Font").drawString(g,
+    	        "FPS = " + this.getCurrentFPS() + "/" + this.getFPS(), x, y);
+    }
+
+	/**
+     * Effectively equivalent to the call
+     * {@linkplain com.golden.gamedev.engine.BaseTimer#getCurrentFPS()
+     * bsTimer.getCurrentFPS()}.
+     */
+    public int getCurrentFPS() {
+    	return this.bsTimer.getCurrentFPS();
+    }
+
+	/**
+     * Effectively equivalent to the call
+     * {@linkplain com.golden.gamedev.engine.BaseTimer#getFPS()}.
+     */
+    public int getFPS() {
+    	return this.bsTimer.getFPS();
+    }
+
+	/**
+     * Renders game to the screen.
+     * 
+     * @param g backbuffer graphics context
+     */
+    public abstract void render(Graphics2D g);
+
+    // Image retrieval methods.
+    
 	/**
 	 * Effectively equivalent to the call
 	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImage(String, boolean)
@@ -312,6 +424,17 @@ public abstract class BaseGame {
 		return this.getImages(imagefile, col, row, true, start, end);
 	}
 	
+	// Game helper methods
+    
+    /**
+     * Effectively equivalent to the call
+     * {@linkplain com.golden.gamedev.util.Utility#getRandom(int, int)
+     * Utility.getRandom(int, int)}
+     */
+    public int getRandom(int low, int hi) {
+    	return Utility.getRandom(low, hi);
+    }
+
 	/**
 	 * Effectively equivalent to the call
 	 * {@linkplain com.golden.gamedev.engine.BaseAudio#play(String)
@@ -336,6 +459,8 @@ public abstract class BaseGame {
 		return this.bsSound.play(audiofile);
 	}
 	
+	// Game lifecycle methods
+	
 	/**
 	 * All game resources initialization, everything that usually goes to
 	 * constructor should be put in here.
@@ -353,118 +478,10 @@ public abstract class BaseGame {
 	public abstract void initResources();
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
-	 * bsInput.setMouseVisible(false)}.
-	 */
-	public void hideCursor() {
-		this.bsInput.setMouseVisible(false);
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.util.Utility#getRandom(int, int)
-	 * Utility.getRandom(int, int)}
-	 */
-	public int getRandom(int low, int hi) {
-		return Utility.getRandom(low, hi);
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#getMouseY()
-	 * bsInput.getMouseY()}.
-	 */
-	public int getMouseY() {
-		return this.bsInput.getMouseY();
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#getMouseX()
-	 * bsInput.getMouseX()}.
-	 */
-	public int getMouseX() {
-		return this.bsInput.getMouseX();
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseTimer#getCurrentFPS()
-	 * bsTimer.getCurrentFPS()}.
-	 */
-	public int getCurrentFPS() {
-		return this.bsTimer.getCurrentFPS();
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseTimer#getFPS()}.
-	 */
-	public int getFPS() {
-		return this.bsTimer.getFPS();
-	}
-	
-	/**
-	 * Draws game frame-per-second (FPS) to specified location.
-	 */
-	public void drawFPS(Graphics2D g, int x, int y) {
-		this.fontManager.getFont("FPS Font").drawString(g,
-		        "FPS = " + this.getCurrentFPS() + "/" + this.getFPS(), x, y);
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
-	 * bsInput.isMousePressed(java.awt.event.MouseEvent.BUTTON1)}.
-	 */
-	public boolean click() {
-		return this.bsInput.isMousePressed(MouseEvent.BUTTON1);
-	}
-	
-	/**
-	 * Returns whether the mouse pointer is inside specified screen boundary.
-	 */
-	public boolean checkPosMouse(int x1, int y1, int x2, int y2) {
-		return (this.getMouseX() >= x1 && this.getMouseY() >= y1
-		        && this.getMouseX() <= x2 && this.getMouseY() <= y2);
-	}
-	
-	/**
-	 * Returns whether the mouse pointer is inside specified sprite boundary.
-	 * 
-	 * @param sprite sprite to check its intersection with mouse pointer
-	 * @param pixelCheck true, checking the sprite image with pixel precision
-	 */
-	public boolean checkPosMouse(Sprite sprite, boolean pixelCheck) {
-		Background bg = sprite.getBackground();
-		
-		// check whether the mouse is in background clip area
-		if (this.getMouseX() < bg.getClip().x
-		        || this.getMouseY() < bg.getClip().y
-		        || this.getMouseX() > bg.getClip().x + bg.getClip().width
-		        || this.getMouseY() > bg.getClip().y + bg.getClip().height) {
-			return false;
-		}
-		
-		double mosx = this.getMouseX() + bg.getX() - bg.getClip().x;
-		double mosy = this.getMouseY() + bg.getY() - bg.getClip().y;
-		
-		if (pixelCheck) {
-			try {
-				return ((sprite.getImage().getRGB((int) (mosx - sprite.getX()),
-				        (int) (mosy - sprite.getY())) & 0xFF000000) != 0x00);
-			}
-			catch (Exception e) {
-				return false;
-			}
-			
-		}
-		else {
-			return (mosx >= sprite.getX() && mosy >= sprite.getY()
-			        && mosx <= sprite.getX() + sprite.getWidth() && mosy <= sprite
-			        .getY()
-			        + sprite.getHeight());
-		}
-	}
+     * Updates game variables.
+     * 
+     * @see #keyDown(int)
+     * @see #keyPressed(int)
+     */
+    public abstract void update(long elapsedTime);
 }

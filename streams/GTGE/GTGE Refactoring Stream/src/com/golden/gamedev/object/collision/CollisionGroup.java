@@ -17,9 +17,9 @@
 package com.golden.gamedev.object.collision;
 
 // GTGE
+import com.golden.gamedev.object.BaseSprite;
 import com.golden.gamedev.object.CollisionManager;
 import com.golden.gamedev.object.PlayField;
-import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
 
 /**
@@ -74,12 +74,12 @@ public abstract class CollisionGroup extends BasicCollisionGroup {
 	/**
 	 * The sprite from group 1 in current collision.
 	 */
-	protected Sprite sprite1;
+	protected BaseSprite sprite1;
 	
 	/**
 	 * The sprite from group 2 in current collision.
 	 */
-	protected Sprite sprite2;
+	protected BaseSprite sprite2;
 	
 	/**
 	 * The collision side of current collision.
@@ -152,7 +152,7 @@ public abstract class CollisionGroup extends BasicCollisionGroup {
 	 * @see #collisionY1
 	 * @see #revertPosition1()
 	 */
-	public boolean isCollide(Sprite s1, Sprite s2, CollisionShape shape1, CollisionShape shape2) {
+	public boolean isCollide(BaseSprite s1, BaseSprite s2, CollisionShape shape1, CollisionShape shape2) {
 		if (super.isCollide(s1, s2, shape1, shape2)) {
 			// collide!!
 			this.sprite1 = s1;
@@ -265,14 +265,14 @@ public abstract class CollisionGroup extends BasicCollisionGroup {
 	/**
 	 * Returns the sprite of current collision from group 1.
 	 */
-	public Sprite getSprite1() {
+	public BaseSprite getSprite1() {
 		return this.sprite1;
 	}
 	
 	/**
 	 * Returns the sprite of current collision from group 2.
 	 */
-	public Sprite getSprite2() {
+	public BaseSprite getSprite2() {
 		return this.sprite2;
 	}
 	

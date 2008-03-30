@@ -19,6 +19,7 @@ package com.golden.gamedev.object.sprite;
 // JFC
 import java.awt.Graphics2D;
 
+import com.golden.gamedev.object.BaseSprite;
 import com.golden.gamedev.object.Sprite;
 
 /**
@@ -43,7 +44,7 @@ public class PatternSprite extends Sprite {
 	 * 
 	 */
 	private static final long serialVersionUID = 1246202800220501766L;
-	private Sprite pattern;
+	private BaseSprite pattern;
 	
 	/** ************************************************************************* */
 	/** ***************************** CONSTRUCTOR ******************************* */
@@ -53,7 +54,7 @@ public class PatternSprite extends Sprite {
 	 * Creates new <code>PatternSprite</code> with specified pattern and
 	 * coordinate.
 	 */
-	public PatternSprite(Sprite pattern, double x, double y) {
+	public PatternSprite(BaseSprite pattern, double x, double y) {
 		super(pattern.getImage(), x, y);
 		
 		this.pattern = pattern;
@@ -62,7 +63,7 @@ public class PatternSprite extends Sprite {
 	/**
 	 * Creates new <code>PatternSprite</code> with specified pattern.
 	 */
-	public PatternSprite(Sprite pattern) {
+	public PatternSprite(BaseSprite pattern) {
 		super(pattern.getImage(), 0, 0);
 		
 		this.pattern = pattern;
@@ -83,14 +84,14 @@ public class PatternSprite extends Sprite {
 	/**
 	 * Returns the pattern sprite associates with this sprite.
 	 */
-	public Sprite getPattern() {
+	public BaseSprite getPattern() {
 		return this.pattern;
 	}
 	
 	/**
 	 * Sets the pattern of this sprite.
 	 */
-	public void setPattern(Sprite pattern) {
+	public void setPattern(BaseSprite pattern) {
 		this.pattern = pattern;
 	}
 	

@@ -85,7 +85,7 @@ public class SpriteGroup {
 	
 	/** ****************** SPRITES THAT BELONG TO THIS GROUP ******************** */
 	
-	private Sprite[] sprites; // member of this group
+	private BaseSprite[] sprites; // member of this group
 	private int size; // all non-null sprites (active + inactive)
 	
 	/** ************************************************************************* */
@@ -100,7 +100,7 @@ public class SpriteGroup {
 		this.name = name;
 		this.background = Background.getDefaultBackground();
 		
-		this.sprites = new Sprite[this.expandFactor];
+		this.sprites = new BaseSprite[this.expandFactor];
 	}
 	
 	/** ************************************************************************* */
@@ -116,13 +116,13 @@ public class SpriteGroup {
 	 * 
 	 * @see #add(int, Sprite)
 	 */
-	public void add(Sprite member) {
+	public void add(BaseSprite member) {
 		this.sprites[this.size] = member;
 		member.setBackground(this.background);
 		
 		if (++this.size >= this.sprites.length) {
 			// time to enlarge sprite storage
-			this.sprites = (Sprite[]) Utility.expand(this.sprites,
+			this.sprites = (BaseSprite[]) Utility.expand(this.sprites,
 			        this.expandFactor);
 		}
 	}
@@ -137,7 +137,7 @@ public class SpriteGroup {
 	 * Sprite at the last index (index = {@linkplain #getSize() size}-1) is
 	 * rendered on top of other sprites (last rendered).
 	 */
-	public void add(int index, Sprite member) {
+	public void add(int index, BaseSprite member) {
 		if (index > this.size) {
 			index = this.size;
 		}
@@ -158,7 +158,7 @@ public class SpriteGroup {
 			
 			if (++this.size >= this.sprites.length) {
 				// time to enlarge sprite storage
-				this.sprites = (Sprite[]) Utility.expand(this.sprites,
+				this.sprites = (BaseSprite[]) Utility.expand(this.sprites,
 				        this.expandFactor);
 			}
 		}
@@ -182,8 +182,8 @@ public class SpriteGroup {
 	 * @see com.golden.gamedev.object.Sprite#setActive(boolean)
 	 * @see #getScanFrequence()
 	 */
-	public Sprite remove(int index) {
-		Sprite removedSprite = this.sprites[index];
+	public BaseSprite remove(int index) {
+		BaseSprite removedSprite = this.sprites[index];
 		
 		int numMoved = this.size - index - 1;
 		if (numMoved > 0) {
@@ -215,7 +215,7 @@ public class SpriteGroup {
 	 * @see com.golden.gamedev.object.Sprite#setActive(boolean)
 	 * @see #getScanFrequence()
 	 */
-	public boolean remove(Sprite s) {
+	public boolean remove(BaseSprite s) {
 		for (int i = 0; i < this.size; i++) {
 			if (this.sprites[i] == s) {
 				this.remove(i);
@@ -264,7 +264,7 @@ public class SpriteGroup {
 	 */
 	public void reset() {
 		this.sprites = null;
-		this.sprites = new Sprite[this.expandFactor];
+		this.sprites = new BaseSprite[this.expandFactor];
 		this.size = 0;
 	}
 	
@@ -354,7 +354,7 @@ public class SpriteGroup {
 		
 		if (this.sprites.length > this.size + (this.expandFactor * 2)) {
 			// shrink sprite array
-			Sprite[] dest = new Sprite[this.size + this.expandFactor];
+			BaseSprite[] dest = new BaseSprite[this.size + this.expandFactor];
 			System.arraycopy(this.sprites, 0, dest, 0, this.size);
 			this.sprites = dest;
 		}
@@ -556,7 +556,7 @@ public class SpriteGroup {
 	 *         sprite in this group.
 	 * @see com.golden.gamedev.object.Sprite#setActive(boolean)
 	 */
-	public Sprite getActiveSprite() {
+	public BaseSprite getActiveSprite() {
 		for (int i = 0; i < this.size; i++) {
 			if (this.sprites[i].isActive()) {
 				return this.sprites[i];
@@ -629,7 +629,7 @@ public class SpriteGroup {
 	 *         sprite in this group.
 	 * @see com.golden.gamedev.object.Sprite#setImmutable(boolean)
 	 */
-	public Sprite getInactiveSprite() {
+	public BaseSprite getInactiveSprite() {
 		for (int i = 0; i < this.size; i++) {
 			if (this.sprites[i].isActive() == false) {
 				this.sprites[i].setActive(true);
@@ -665,7 +665,7 @@ public class SpriteGroup {
 	 * 
 	 * @see #getSize()
 	 */
-	public Sprite[] getSprites() {
+	public BaseSprite[] getSprites() {
 		return this.sprites;
 	}
 	

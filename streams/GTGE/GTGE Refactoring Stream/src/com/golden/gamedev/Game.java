@@ -45,10 +45,10 @@ import com.golden.gamedev.engine.input.AWTInput;
 import com.golden.gamedev.engine.timer.SystemTimer;
 import com.golden.gamedev.funbox.ErrorNotificationDialog;
 import com.golden.gamedev.object.Background;
+import com.golden.gamedev.object.BaseSprite;
 import com.golden.gamedev.object.GameFont;
 import com.golden.gamedev.object.GameFontManager;
 import com.golden.gamedev.object.PlayField;
-import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
 import com.golden.gamedev.util.ImageUtil;
 
@@ -1073,8 +1073,8 @@ public abstract class Game extends BaseGame {
 	 * @param field playfield to check its intersection with mouse pointer
 	 * @param pixelCheck true, checking the sprite image with pixel precision
 	 */
-	public Sprite checkPosMouse(SpriteGroup group, boolean pixelCheck) {
-		Sprite[] sprites = group.getSprites();
+	public BaseSprite checkPosMouse(SpriteGroup group, boolean pixelCheck) {
+		BaseSprite[] sprites = group.getSprites();
 		int size = group.getSize();
 		
 		for (int i = 0; i < size; i++) {
@@ -1094,13 +1094,13 @@ public abstract class Game extends BaseGame {
 	 * @param field playfield to check its intersection with mouse pointer
 	 * @param pixelCheck true, checking the sprite image with pixel precision
 	 */
-	public Sprite checkPosMouse(PlayField field, boolean pixelCheck) {
+	public BaseSprite checkPosMouse(PlayField field, boolean pixelCheck) {
 		SpriteGroup[] groups = field.getGroups();
 		int size = groups.length;
 		
 		for (int i = 0; i < size; i++) {
 			if (groups[i].isActive()) {
-				Sprite s = this.checkPosMouse(groups[i], pixelCheck);
+				BaseSprite s = this.checkPosMouse(groups[i], pixelCheck);
 				if (s != null) {
 					return s;
 				}

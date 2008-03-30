@@ -17,9 +17,9 @@
 package com.golden.gamedev.object.collision;
 
 // GTGE
+import com.golden.gamedev.object.BaseSprite;
 import com.golden.gamedev.object.CollisionManager;
 import com.golden.gamedev.object.PlayField;
-import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
 
 /**
@@ -105,7 +105,7 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 	 * @param shape2 bounding box of sprite 2
 	 * @return <code>true</code> if the sprites is collided one another.
 	 */
-	public boolean isCollide(Sprite s1, Sprite s2, CollisionShape shape1, CollisionShape shape2) {
+	public boolean isCollide(BaseSprite s1, BaseSprite s2, CollisionShape shape1, CollisionShape shape2) {
 		
 		// if (shape1.intersects(shape2)) {
 		if ((this.pixelPerfectCollision && CollisionManager.isPixelCollide(s1
@@ -151,7 +151,7 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 				
 				this.collisionSide = 0;
 				
-				Sprite spriteToMove;
+				BaseSprite spriteToMove;
 				
 				if (speedX1 == 0 && speedY1 == 0 && speedX2 == 0
 				        && speedY2 == 0) {// both
@@ -483,7 +483,7 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 	} // end of method
 	
 	// This checks for an overlap
-	protected boolean checkCollisionHelper(Sprite s1, Sprite s2, double x1, double y1, double x2, double y2, boolean includePixelPerfect) {
+	protected boolean checkCollisionHelper(BaseSprite s1, BaseSprite s2, double x1, double y1, double x2, double y2, boolean includePixelPerfect) {
 		
 		if (includePixelPerfect && this.pixelPerfectCollision) {
 			return CollisionManager.isPixelCollide(x1, y1, s1.getImage(), x2,
@@ -499,7 +499,7 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 	}
 	
 	// This checks for adjacency
-	protected boolean checkAdjacencyHelper(Sprite s1, Sprite s2, double x1, double y1, double x2, double y2, double dx1, double dy1, double dx2, double dy2, boolean includePixelPerfect) {
+	protected boolean checkAdjacencyHelper(BaseSprite s1, BaseSprite s2, double x1, double y1, double x2, double y2, double dx1, double dy1, double dx2, double dy2, boolean includePixelPerfect) {
 		
 		// set up offsets for adjacency
 		double dx = 0, dy = 0;
@@ -534,7 +534,7 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 	
 	// iterates to find the just pre-collision position.
 	
-	protected boolean iterativeMethod(Sprite s1, Sprite s2, double lowerT, double higherT, double oldX1, double oldY1, double oldX2, double oldY2, double speedX1, double speedY1, double speedX2, double speedY2) {
+	protected boolean iterativeMethod(BaseSprite s1, BaseSprite s2, double lowerT, double higherT, double oldX1, double oldY1, double oldX2, double oldY2, double speedX1, double speedY1, double speedX2, double speedY2) {
 		// set up working t
 		double workingT = (lowerT + higherT) / 2;
 		

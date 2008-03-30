@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.golden.gamedev.object.BaseSprite;
 import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
 import com.golden.gamedev.util.Utility;
@@ -53,7 +54,7 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 	
 	private final Map storage = new HashMap();
 	
-	private Sprite source;
+	private BaseSprite source;
 	
 	/** ************************************************************************* */
 	/** ***************************** CONSTRUCTOR ******************************* */
@@ -80,12 +81,12 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 			return;
 		}
 		
-		Sprite[] member1 = group1.getSprites(), // members group one
+		BaseSprite[] member1 = group1.getSprites(), // members group one
 		member2 = group2.getSprites();
 		int size1 = group1.getSize(), // total non-null members
 		size2 = group2.getSize();
 		
-		Sprite sprite1, sprite2; // sprite reference
+		BaseSprite sprite1, sprite2; // sprite reference
 		CollisionShape shape1, shape2; // sprite collision rect
 		
 		// sprite 1, 2 collision rectangle -> rect1, rect2
@@ -114,9 +115,9 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 					// our storage object
 					
 					// store sprites collided with sprite1
-					Sprite[] other = (Sprite[]) this.storage.get(sprite1);
+					BaseSprite[] other = (BaseSprite[]) this.storage.get(sprite1);
 					
-					other = (Sprite[]) Utility.expand(other, 1, true,
+					other = (BaseSprite[]) Utility.expand(other, 1, true,
 					        Sprite.class);
 					other[other.length - 1] = sprite2;
 					
@@ -129,8 +130,8 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 		Iterator key = this.storage.keySet().iterator();
 		
 		while (key.hasNext()) {
-			Sprite s1 = (Sprite) key.next();
-			Sprite[] s2 = (Sprite[]) this.storage.get(s1);
+			BaseSprite s1 = (BaseSprite) key.next();
+			BaseSprite[] s2 = (BaseSprite[]) this.storage.get(s1);
 			
 			if (s2.length == 1) {
 				// sprite s1 collide with only 'one' other sprite
@@ -191,7 +192,7 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 	 *         collision.
 	 * @see #compare(Object, Object)
 	 */
-	protected boolean sort(Sprite source) {
+	protected boolean sort(BaseSprite source) {
 		return true;
 	}
 	
@@ -207,7 +208,7 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 	 * by greater y at top.
 	 */
 	public int compare(Object o1, Object o2) {
-		Sprite s1 = (Sprite) o1, s2 = (Sprite) o2;
+		BaseSprite s1 = (BaseSprite) o1, s2 = (BaseSprite) o2;
 		
 		if (this.source.getHorizontalSpeed() != 0 && s1.getX() != s2.getX()) {
 			// source not stationary and s1 x the same as s2 x
@@ -237,7 +238,7 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 	 * Source sprite is the sprite from group 1 that will be checked its actual
 	 * collision with sprite from group 2.
 	 */
-	protected Sprite getSourceSprite() {
+	protected BaseSprite getSourceSprite() {
 		return this.source;
 	}
 	

@@ -99,7 +99,7 @@ public class AdvanceSpriteGroup extends SpriteGroup {
 		this.ONSCREEN_GROUP.clear();
 		
 		// scanning on screen sprites
-		Sprite[] s = this.getGroupSprites();
+		BaseSprite[] s = this.getGroupSprites();
 		int size = this.getGroupSize();
 		
 		for (int i = 0; i < size; i++) {
@@ -158,8 +158,8 @@ public class AdvanceSpriteGroup extends SpriteGroup {
 	/** ************************* REMOVAL OPERATION ***************************** */
 	/** ************************************************************************* */
 	
-	public Sprite remove(int index) {
-		Sprite s = super.remove(index);
+	public BaseSprite remove(int index) {
+		BaseSprite s = super.remove(index);
 		
 		if (s != null) {
 			this.ONSCREEN_GROUP.remove(s);
@@ -168,7 +168,7 @@ public class AdvanceSpriteGroup extends SpriteGroup {
 		return s;
 	}
 	
-	public boolean remove(Sprite s) {
+	public boolean remove(BaseSprite s) {
 		this.ONSCREEN_GROUP.remove(s);
 		
 		return super.remove(s);
@@ -196,7 +196,7 @@ public class AdvanceSpriteGroup extends SpriteGroup {
 	 * 
 	 * @see #getSize()
 	 */
-	public Sprite[] getSprites() {
+	public BaseSprite[] getSprites() {
 		return this.ONSCREEN_GROUP.getSprites();
 	}
 	
@@ -218,7 +218,7 @@ public class AdvanceSpriteGroup extends SpriteGroup {
 	 * 
 	 * @see #getGroupSize()
 	 */
-	public Sprite[] getGroupSprites() {
+	public BaseSprite[] getGroupSprites() {
 		return super.getSprites();
 	}
 	

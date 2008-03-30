@@ -17,6 +17,7 @@
 package com.golden.gamedev.object.collision;
 
 // GTGE
+import com.golden.gamedev.object.BaseSprite;
 import com.golden.gamedev.object.CollisionManager;
 import com.golden.gamedev.object.PlayField;
 import com.golden.gamedev.object.Sprite;
@@ -116,7 +117,7 @@ public abstract class BasicCollisionGroup extends CollisionManager {
 	 * @see #getCollisionShape2(Sprite)
 	 * @see CollisionShape#intersects(CollisionShape)
 	 */
-	public CollisionShape getCollisionShape1(Sprite s1) {
+	public CollisionShape getCollisionShape1(BaseSprite s1) {
 		this.rect1.setBounds(s1.getX(), s1.getY(), s1.getWidth(), s1
 		        .getHeight());
 		
@@ -145,7 +146,7 @@ public abstract class BasicCollisionGroup extends CollisionManager {
 	 * @see #getCollisionShape1(Sprite)
 	 * @see CollisionRect#intersects(CollisionShape)
 	 */
-	public CollisionShape getCollisionShape2(Sprite s2) {
+	public CollisionShape getCollisionShape2(BaseSprite s2) {
 		this.rect2.setBounds(s2.getX(), s2.getY(), s2.getWidth(), s2
 		        .getHeight());
 		
@@ -163,12 +164,12 @@ public abstract class BasicCollisionGroup extends CollisionManager {
 			return;
 		}
 		
-		Sprite[] member1 = group1.getSprites(), // group one members
+		BaseSprite[] member1 = group1.getSprites(), // group one members
 		member2 = group2.getSprites();
 		int size1 = group1.getSize(), // size of non-null members
 		size2 = group2.getSize();
 		
-		Sprite sprite1, sprite2; // sprite reference
+		BaseSprite sprite1, sprite2; // sprite reference
 		CollisionShape shape1, shape2; // sprite collision rect
 		
 		for (int i = 0; i < size1; i++) {
@@ -220,7 +221,7 @@ public abstract class BasicCollisionGroup extends CollisionManager {
 	 * @param shape2 bounding box of sprite 2
 	 * @return true, if the sprites is collided one another.
 	 */
-	public boolean isCollide(Sprite s1, Sprite s2, CollisionShape shape1, CollisionShape shape2) {
+	public boolean isCollide(BaseSprite s1, BaseSprite s2, CollisionShape shape1, CollisionShape shape2) {
 		if (!this.pixelPerfectCollision) {
 			return (shape1.intersects(shape2));
 			
@@ -242,6 +243,6 @@ public abstract class BasicCollisionGroup extends CollisionManager {
 	 * @param s1 sprite from group 1
 	 * @param s2 sprite from group 2
 	 */
-	public abstract void collided(Sprite s1, Sprite s2);
+	public abstract void collided(BaseSprite s1, BaseSprite s2);
 	
 }

@@ -101,16 +101,30 @@ public class Utility {
 	/** ************************************************************************* */
 	
 	/**
-	 * Cuts an array of object from specified position.
-	 * <p>
+	 * Cuts an element out of an array residing at the specified (index)
+	 * position, with side-effects on the source array, returning the shortened
+	 * array. <b><i>WARNING: THIS METHOD HAS SIDE-EFFECTS ON THE SOURCE ARRAY!</i></b>.
 	 * 
-	 * The original array is not changed, this method creates and returns a new
-	 * shrinked array.
+	 * Use cut when you don't care when the method has side effects, such as
+	 * array replacement, or the array is a temporary array going out of scope
+	 * immediately after the call to cut. For instance, this code will not cause
+	 * noticeable side effects, since the source array is replaced with the cut
+	 * array:
 	 * 
-	 * @param src the array to be cut, could be an array of primitive or an
-	 *        array of Object
-	 * @param position index position to be cut
-	 * @return The shrinked array.
+	 * <pre>
+	 * this.array = Utility.cut(array, position);
+	 * </pre>
+	 * 
+	 * When side effects should not occur on the source array, use
+	 * {@link #safeCut(Object, int)} instead. It is a slower method but it
+	 * preserves the integrity of its argument.
+	 * 
+	 * @param src The array to be cut (which may be composed of either
+	 *        primitives or {@link Object} types).
+	 * @param position The (index) position in the array to be cut.
+	 * @return The array with the element at the specified (index) position
+	 *         removed.
+	 * @see #safeCut(Object, int)
 	 */
 	public static Object cut(Object src, int position) {
 		int size = Array.getLength(src);
@@ -134,12 +148,35 @@ public class Utility {
 	}
 	
 	/**
+	 * Same as {@link #cut(Object, int)}, but with no side-effects on its
+	 * argument. However, if the variable storing the returned array is the
+	 * source array, it is recommended to use {@link #cut(Object, int)} instead,
+	 * as it will be faster.
+	 * 
+	 * @param src The array to be cut (which may be composed of either
+	 *        primitives or {@link Object} types).
+	 * @param position The (index) position in the array to be cut.
+	 * @return The array with the element at the specified (index) position
+	 *         removed.
+	 * @see Utility#cut(Object, int)
+	 */
+	public static Object safeCut(Object src, int position) {
+		if (src == null) {
+			return null;
+		}
+		Object source = Array.newInstance(src.getClass().getComponentType(),
+		        Array.getLength(src));
+		System.arraycopy(src, 0, source, 0, Array.getLength(src));
+		return cut(source, position);
+	}
+	
+	/**
 	 * Shuffles elements in an array.
 	 * 
 	 * @param src the array to be mixed, could be an array of primitive or an
 	 *        array of Object
 	 */
-	public static void mixElements(Object src) {
+	public static void shuffle(Object src) {
 		// size of the array
 		int size = Array.getLength(src);
 		
@@ -203,6 +240,11 @@ public class Utility {
 	 * 
 	 * @param s an array of String to be compacted.
 	 * @return Compacted String.
+	 * @deprecated This method doesn't add any value and will be removed in a
+	 *             future version. Effectively equivalent to copying the given
+	 *             String array and returning it. If that is desired, use
+	 *             {@link System#arraycopy(Object, int, Object, int, int)}
+	 *             instead.
 	 */
 	public static String[] compactStrings(String[] s) {
 		String[] result = new String[s.length];

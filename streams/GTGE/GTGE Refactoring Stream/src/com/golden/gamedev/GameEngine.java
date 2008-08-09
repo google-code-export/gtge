@@ -130,11 +130,11 @@ public abstract class GameEngine extends Game {
 	
 	void startGameLoop() {
 		// start the timer
-		this.bsTimer.startTimer();
+		this.getBsTimer().startTimer();
 		
 		while (this.isRunning()) {
 			// refresh global game state
-			this.bsInput.refresh();
+			this.getBsInput().refresh();
 			this.refresh();
 			
 			// validate game to be played next
@@ -172,12 +172,12 @@ public abstract class GameEngine extends Game {
 		}
 		
 		// dispose everything
-		this.bsTimer.stopTimer();
-		this.bsSound.stopAll();
-		this.bsMusic.stopAll();
+		this.getBsTimer().stopTimer();
+		this.getBsSound().stopAll();
+		this.getBsMusic().stopAll();
 		
 		if (this.isFinish()) {
-			this.bsGraphics.cleanup();
+			this.getBsGraphics().cleanup();
 			this.notifyExit();
 		}
 	}

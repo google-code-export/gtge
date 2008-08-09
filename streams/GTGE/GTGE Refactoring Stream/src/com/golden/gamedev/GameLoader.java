@@ -269,7 +269,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 				}
 				
 				this.gfx = this;
-				this.game.bsGraphics = this.gfx;
+				this.game.setBsGraphics(this.gfx);
 			}
 			
 			// initialization of applet mode graphics engine
@@ -435,7 +435,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 			}
 			
 			this.game = game;
-			this.game.bsGraphics = this.gfx;
+			this.game.setBsGraphics(this.gfx);
 			
 		}
 		catch (Throwable e) {

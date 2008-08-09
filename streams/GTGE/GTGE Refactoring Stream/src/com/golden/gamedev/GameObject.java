@@ -75,15 +75,15 @@ public abstract class GameObject extends BaseGame {
 	}
 	
 	private void grabEngines() {
-		this.bsGraphics = this.parent.bsGraphics;
-		this.bsIO = this.parent.bsIO;
-		this.bsLoader = this.parent.bsLoader;
-		this.bsInput = this.parent.bsInput;
-		this.bsTimer = this.parent.bsTimer;
-		this.bsMusic = this.parent.bsMusic;
-		this.bsSound = this.parent.bsSound;
+		this.setBsGraphics(this.parent.getBsGraphics());
+		this.setBsIO(this.parent.getBsIO());
+		this.setBsLoader(this.parent.getBsLoader());
+		this.setBsInput(this.parent.getBsInput());
+		this.setBsTimer(this.parent.getBsTimer());
+		this.setBsMusic(this.parent.getBsMusic());
+		this.setBsSound(this.parent.getBsSound());
 		
-		this.fontManager = this.parent.fontManager;
+		this.setFontManager(this.parent.getFontManager());
 	}
 	
 	/**
@@ -107,8 +107,8 @@ public abstract class GameObject extends BaseGame {
 		System.gc();
 		System.runFinalization();
 		
-		this.bsInput.refresh();
-		this.bsTimer.refresh();
+		this.getBsInput().refresh();
+		this.getBsTimer().refresh();
 		
 		long elapsedTime = 0;
 		out: while (true) {
@@ -116,7 +116,7 @@ public abstract class GameObject extends BaseGame {
 				// update game
 				this.update(elapsedTime);
 				this.parent.update(elapsedTime); // update common variables
-				this.bsInput.update(elapsedTime);
+				this.getBsInput().update(elapsedTime);
 				
 			}
 			else {
@@ -135,7 +135,7 @@ public abstract class GameObject extends BaseGame {
 				}
 				
 				// graphics operation
-				Graphics2D g = this.bsGraphics.getBackBuffer();
+				Graphics2D g = this.getBsGraphics().getBackBuffer();
 				
 				this.render(g); // render game
 				this.parent.render(g); // render global game
@@ -165,9 +165,9 @@ public abstract class GameObject extends BaseGame {
 					this.parent.renderLostFocus(g);
 				}
 				
-			} while (this.bsGraphics.flip() == false);
+			} while (this.getBsGraphics().flip() == false);
 			
-			elapsedTime = this.bsTimer.sleep();
+			elapsedTime = this.getBsTimer().sleep();
 			
 			if (elapsedTime > 100) {
 				// can't lower than 10 fps (1000/100)

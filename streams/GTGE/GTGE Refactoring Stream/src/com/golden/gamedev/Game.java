@@ -35,7 +35,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 
-import com.golden.gamedev.engine.BaseAudio;
+import com.golden.gamedev.engine.DefaultBaseAudio;
 import com.golden.gamedev.engine.BaseIO;
 import com.golden.gamedev.engine.BaseInput;
 import com.golden.gamedev.engine.BaseLoader;
@@ -46,7 +46,7 @@ import com.golden.gamedev.engine.timer.SystemTimer;
 import com.golden.gamedev.funbox.ErrorNotificationDialog;
 import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.GameFont;
-import com.golden.gamedev.object.GameFontManager;
+import com.golden.gamedev.object.DefaultGameFontManager;
 import com.golden.gamedev.object.PlayField;
 import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
@@ -324,7 +324,7 @@ public abstract class Game extends BaseGame {
 	}
 	
 	private void initialize() {
-		if (this.bsGraphics instanceof Applet) {
+		if (this.getBsGraphics() instanceof Applet) {
 			// applet game need to make sure that the applet is being focused
 			// when playing the game
 			// this makes the players can browse on the net while playing
@@ -335,7 +335,7 @@ public abstract class Game extends BaseGame {
 		this.initEngine();
 		
 		try {
-			this.bsGraphics.getComponent().addFocusListener(
+			this.getBsGraphics().getComponent().addFocusListener(
 			        new FocusListener() {
 				        
 				        public void focusGained(FocusEvent e) {
@@ -362,9 +362,9 @@ public abstract class Game extends BaseGame {
 			URL fontURL = com.golden.gamedev.Game.class.getResource("Game.fnt");
 			BufferedImage fpsImage = ImageUtil.getImage(fontURL);
 			
-			this.fpsFont = this.fontManager.getFont(fpsImage);
-			this.fontManager.removeFont(fpsImage); // unload the image
-			this.fontManager.putFont("FPS Font", this.fpsFont);
+			this.fpsFont = this.getFontManager().getFont(fpsImage);
+			this.getFontManager().removeFont(fpsImage); // unload the image
+			this.getFontManager().putFont("FPS Font", this.fpsFont);
 			
 			if (this.development == false) {
 				// if splash screen is shown (distribute = true)
@@ -399,15 +399,15 @@ public abstract class Game extends BaseGame {
 		System.runFinalization();
 		
 		// start the timer
-		this.bsTimer.startTimer();
-		this.bsTimer.refresh();
+		this.getBsTimer().startTimer();
+		this.getBsTimer().refresh();
 		
 		long elapsedTime = 0;
 		out: while (true) {
 			if (this.inFocus) {
 				// update game
 				this.update(elapsedTime);
-				this.bsInput.update(elapsedTime); // update input
+				this.getBsInput().update(elapsedTime); // update input
 				
 			}
 			else {
@@ -426,7 +426,7 @@ public abstract class Game extends BaseGame {
 				}
 				
 				// graphics operation
-				Graphics2D g = this.bsGraphics.getBackBuffer();
+				Graphics2D g = this.getBsGraphics().getBackBuffer();
 				
 				this.render(g); // render game
 				
@@ -445,9 +445,9 @@ public abstract class Game extends BaseGame {
 					this.renderLostFocus(g);
 				}
 				
-			} while (this.bsGraphics.flip() == false);
+			} while (this.getBsGraphics().flip() == false);
 			
-			elapsedTime = this.bsTimer.sleep();
+			elapsedTime = this.getBsTimer().sleep();
 			
 			if (elapsedTime > 100) {
 				// the elapsedTime can't be lower than 100 (10 fps)
@@ -457,12 +457,12 @@ public abstract class Game extends BaseGame {
 		}
 		
 		// stop the timer
-		this.bsTimer.stopTimer();
-		this.bsSound.stopAll();
-		this.bsMusic.stopAll();
+		this.getBsTimer().stopTimer();
+		this.getBsSound().stopAll();
+		this.getBsMusic().stopAll();
 		
 		if (this.finish) {
-			this.bsGraphics.cleanup();
+			this.getBsGraphics().cleanup();
 			this.notifyExit();
 		}
 	}
@@ -584,38 +584,38 @@ public abstract class Game extends BaseGame {
 	 */
 	protected void initEngine() {
 		// game engine initilialization
-		if (this.bsTimer == null) {
-			this.bsTimer = new SystemTimer(); // GageTimer(); // LoraxTimer();
+		if (this.getBsTimer() == null) {
+			this.setBsTimer(new SystemTimer()); // GageTimer(); // LoraxTimer();
 			// //
 		}
-		if (this.bsIO == null) {
-			this.bsIO = new BaseIO(this.getClass());
+		if (this.getBsIO() == null) {
+			this.setBsIO(new BaseIO(this.getClass()));
 		}
-		if (this.bsLoader == null) {
-			this.bsLoader = new BaseLoader(this.bsIO, Color.MAGENTA);
+		if (this.getBsLoader() == null) {
+			this.setBsLoader(new BaseLoader(this.getBsIO(), Color.MAGENTA));
 		}
-		if (this.bsInput == null) {
-			this.bsInput = new AWTInput(this.bsGraphics.getComponent());
+		if (this.getBsInput() == null) {
+			this.setBsInput(new AWTInput(this.getBsGraphics().getComponent()));
 		}
-		if (this.bsMusic == null) {
-			this.bsMusic = new BaseAudio(this.bsIO, new MidiRenderer());
-			this.bsMusic.setExclusive(true);
-			this.bsMusic.setLoop(true);
+		if (this.getBsMusic() == null) {
+			this.setBsMusic(new DefaultBaseAudio(this.getBsIO(), new MidiRenderer()));
+			this.getBsMusic().setExclusive(true);
+			this.getBsMusic().setLoop(true);
 		}
-		if (this.bsSound == null) {
-			this.bsSound = new BaseAudio(this.bsIO, new WaveRenderer());
+		if (this.getBsSound() == null) {
+			this.setBsSound(new DefaultBaseAudio(this.getBsIO(), new WaveRenderer()));
 		}
 		
 		// miscellanous
 		// set default fps
-		this.bsTimer.setFPS(Game.DEFAULT_FPS);
+		this.getBsTimer().setFPS(Game.DEFAULT_FPS);
 		
 		// set background screen size
-		Background.screen = this.bsGraphics.getSize();
+		Background.screen = this.getBsGraphics().getSize();
 		
 		// creates font manager
-		if (this.fontManager == null) {
-			this.fontManager = new GameFontManager();
+		if (this.getFontManager() == null) {
+			this.setFontManager(new DefaultGameFontManager());
 		}
 		
 		// locale = Locale.getDefault();
@@ -635,7 +635,7 @@ public abstract class Game extends BaseGame {
 	 * <code>System.exit()</code> at the end.
 	 */
 	protected void notifyExit() {
-		if ((this.bsGraphics instanceof Applet) == false) {
+		if ((this.getBsGraphics() instanceof Applet) == false) {
 			// non-applet game should call System.exit(0);
 			try {
 				System.exit(0);
@@ -647,7 +647,7 @@ public abstract class Game extends BaseGame {
 		else {
 			// applet game should display to the user
 			// that the game has been ended
-			final Applet applet = (Applet) this.bsGraphics;
+			final Applet applet = (Applet) this.getBsGraphics();
 			BufferedImage src = ImageUtil.createImage(this.getWidth(), this
 			        .getHeight());
 			Graphics2D g = src.createGraphics();
@@ -785,8 +785,8 @@ public abstract class Game extends BaseGame {
 	 * @see com.golden.gamedev.funbox.ErrorNotificationDialog
 	 */
 	protected void notifyError(Throwable error) {
-		new ErrorNotificationDialog(error, this.bsGraphics, this.getClass()
-		        .getName(), null);
+		new ErrorNotificationDialog(error, this.getBsGraphics(), this
+		        .getClass().getName(), null);
 	}
 	
 	/**
@@ -817,7 +817,7 @@ public abstract class Game extends BaseGame {
 		this.hideCursor();
 		SystemTimer dummyTimer = new SystemTimer();
 		dummyTimer.setFPS(20);
-		this.bsInput.refresh();
+		this.getBsInput().refresh();
 		
 		// loading GTGE logo for splash screen
 		BufferedImage logo = null;
@@ -848,11 +848,11 @@ public abstract class Game extends BaseGame {
 		if (!this.inFocus) {
 			while (!this.inFocus) {
 				// the game is not in focus!
-				Graphics2D g = this.bsGraphics.getBackBuffer();
+				Graphics2D g = this.getBsGraphics().getBackBuffer();
 				g.setColor(Color.BLACK);
 				g.fillRect(0, 0, this.getWidth(), this.getHeight());
 				this.renderLostFocus(g);
-				this.bsGraphics.flip();
+				this.getBsGraphics().flip();
 				
 				try {
 					Thread.sleep(200);
@@ -861,7 +861,7 @@ public abstract class Game extends BaseGame {
 				}
 			}
 			
-			this.bsInput.refresh();
+			this.getBsInput().refresh();
 			
 			try {
 				Thread.sleep(1000);
@@ -879,7 +879,7 @@ public abstract class Game extends BaseGame {
 				if (!this.running) {
 					return;
 				}
-				Graphics2D g = this.bsGraphics.getBackBuffer();
+				Graphics2D g = this.getBsGraphics().getBackBuffer();
 				
 				g.setColor(Color.BLACK);
 				g.fillRect(0, 0, this.getWidth(), this.getHeight());
@@ -888,7 +888,7 @@ public abstract class Game extends BaseGame {
 				        AlphaComposite.SRC_OVER, alpha));
 				g.drawImage(logo, 0, 0, null);
 				g.setComposite(old);
-			} while (this.bsGraphics.flip() == false);
+			} while (this.getBsGraphics().flip() == false);
 			
 			if (firstTime) {
 				// workaround for OpenGL mode
@@ -916,10 +916,10 @@ public abstract class Game extends BaseGame {
 			if (!this.running) {
 				return;
 			}
-			Graphics2D g = this.bsGraphics.getBackBuffer();
+			Graphics2D g = this.getBsGraphics().getBackBuffer();
 			
 			g.drawImage(logo, 0, 0, null);
-		} while (this.bsGraphics.flip() == false);
+		} while (this.getBsGraphics().flip() == false);
 		
 		int i = 0;
 		while (i++ < 50) { // 50 x 50 = 2500
@@ -949,7 +949,7 @@ public abstract class Game extends BaseGame {
 				if (!this.running) {
 					return;
 				}
-				Graphics2D g = this.bsGraphics.getBackBuffer();
+				Graphics2D g = this.getBsGraphics().getBackBuffer();
 				
 				g.setColor(Color.BLACK);
 				g.fillRect(0, 0, this.getWidth(), this.getHeight());
@@ -958,7 +958,7 @@ public abstract class Game extends BaseGame {
 				        AlphaComposite.SRC_OVER, alpha));
 				g.drawImage(logo, 0, 0, null);
 				g.setComposite(old);
-			} while (this.bsGraphics.flip() == false);
+			} while (this.getBsGraphics().flip() == false);
 			
 			long elapsedTime = dummyTimer.sleep();
 			double decrement = 0.00055 * elapsedTime;
@@ -990,23 +990,23 @@ public abstract class Game extends BaseGame {
 	}
 	
 	private boolean isSkip(long elapsedTime) {
-		boolean skip = (this.bsInput.getKeyPressed() != BaseInput.NO_KEY || this.bsInput
-		        .getMousePressed() != BaseInput.NO_BUTTON);
-		this.bsInput.update(elapsedTime);
+		boolean skip = (this.getBsInput().getKeyPressed() != BaseInput.NO_KEY || this
+		        .getBsInput().getMousePressed() != BaseInput.NO_BUTTON);
+		this.getBsInput().update(elapsedTime);
 		
 		return skip;
 	}
 	
 	private void clearScreen(Color col) {
-		Graphics2D g = this.bsGraphics.getBackBuffer();
+		Graphics2D g = this.getBsGraphics().getBackBuffer();
 		g.setColor(col);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
-		this.bsGraphics.flip();
+		this.getBsGraphics().flip();
 		
-		g = this.bsGraphics.getBackBuffer();
+		g = this.getBsGraphics().getBackBuffer();
 		g.setColor(col);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
-		this.bsGraphics.flip();
+		this.getBsGraphics().flip();
 	}
 	
 	/** ************************************************************************* */
@@ -1018,12 +1018,12 @@ public abstract class Game extends BaseGame {
 			URL fontURL = com.golden.gamedev.Game.class.getResource("Game.fnt");
 			BufferedImage fpsImage = ImageUtil.getImage(fontURL);
 			
-			this.fontManager = new GameFontManager();
-			GameFont font = this.fontManager.getFont(fpsImage);
+			this.setFontManager(new DefaultGameFontManager());
+			GameFont font = this.getFontManager().getFont(fpsImage);
 			
 			// clear background with red color
 			// and write cracked version!
-			Graphics2D g = this.bsGraphics.getBackBuffer();
+			Graphics2D g = this.getBsGraphics().getBackBuffer();
 			
 			g.setColor(Color.RED.darker());
 			g.fillRect(0, 0, this.getWidth(), this.getHeight());
@@ -1033,10 +1033,10 @@ public abstract class Game extends BaseGame {
 			font.drawString(g, "WWW.GOLDENSTUDIOS.OR.ID", 10, 70);
 			font.drawString(g, "THANK YOU....", 10, 105);
 			
-			this.bsGraphics.flip();
+			this.getBsGraphics().flip();
 			
 			// wait for 8 seconds
-			this.bsInput = new AWTInput(this.bsGraphics.getComponent());
+			this.setBsInput(new AWTInput(this.getBsGraphics().getComponent()));
 			try {
 				int i = 0;
 				do {

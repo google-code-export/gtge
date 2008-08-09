@@ -47,14 +47,14 @@ public class LibInfo extends Game {
 		this.setFPS(10);
 		this.showCursor();
 		
-		this.font1 = this.fontManager
-		        .getFont(new Font("Verdana", Font.BOLD, 32));
-		this.font2 = this.fontManager
-		        .getFont(new Font("Verdana", Font.BOLD, 18));
-		this.font3 = this.fontManager
-		        .getFont(new Font("Verdana", Font.BOLD, 15));
-		this.font4 = this.fontManager.getFont(new Font("Verdana", Font.PLAIN,
-		        15));
+		this.font1 = this.getFontManager().getFont(
+		        new Font("Verdana", Font.BOLD, 32));
+		this.font2 = this.getFontManager().getFont(
+		        new Font("Verdana", Font.BOLD, 18));
+		this.font3 = this.getFontManager().getFont(
+		        new Font("Verdana", Font.BOLD, 15));
+		this.font4 = this.getFontManager().getFont(
+		        new Font("Verdana", Font.PLAIN, 15));
 	}
 	
 	public void update(long elapsedTime) {

@@ -167,7 +167,7 @@ public class Utility {
 		Object source = Array.newInstance(src.getClass().getComponentType(),
 		        Array.getLength(src));
 		System.arraycopy(src, 0, source, 0, Array.getLength(src));
-		return cut(source, position);
+		return Utility.cut(source, position);
 	}
 	
 	/**

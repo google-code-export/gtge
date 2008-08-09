@@ -39,7 +39,7 @@ public class FontUtil {
 	 * Creates java.awt.Font from specified True Type Font URL (*.ttf).
 	 * 
 	 * @see com.golden.gamedev.engine.BaseIO#getURL(String)
-	 * @see com.golden.gamedev.object.GameFontManager#getFont(Font)
+	 * @see com.golden.gamedev.object.DefaultGameFontManager#getFont(Font)
 	 */
 	public static Font createTrueTypeFont(URL url, int style, float size) {
 		Font f = null;
@@ -71,7 +71,7 @@ public class FontUtil {
 	 * @return Font images using standard Bitmap Font Writer technique.
 	 * 
 	 * @see com.golden.gamedev.object.font.AdvanceBitmapFont
-	 * @see com.golden.gamedev.object.GameFontManager#getFont(BufferedImage)
+	 * @see com.golden.gamedev.object.DefaultGameFontManager#getFont(BufferedImage)
 	 */
 	public static BufferedImage createBitmapFont(Font f, Color col) {
 		Graphics2D g = ImageUtil.createImage(1, 1).createGraphics();

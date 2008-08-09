@@ -45,28 +45,28 @@ import com.golden.gamedev.util.Utility;
 public abstract class BaseGame {
 	
 	/** Graphics engine. */
-	public BaseGraphics bsGraphics;
+	private BaseGraphics bsGraphics;
 	
 	/** Input engine. */
-	public BaseInput bsInput;
+	private BaseInput bsInput;
 	
 	/** I/O file engine. */
-	public BaseIO bsIO;
+	private BaseIO bsIO;
 	
 	/** Image loader engine. */
-	public BaseLoader bsLoader;
+	private BaseLoader bsLoader;
 	
 	/** Audio engine for music. */
-	public BaseAudio bsMusic;
+	private BaseAudio bsMusic;
 	
 	/** Audio engine for sound. */
-	public BaseAudio bsSound;
+	private BaseAudio bsSound;
 	
 	/** Timer engine. */
-	public BaseTimer bsTimer;
+	private BaseTimer bsTimer;
 	
 	/** Font manager. */
-	public GameFontManager fontManager;
+	private GameFontManager fontManager;
 	
 	/**
 	 * Returns whether the mouse pointer is inside specified screen boundary.
@@ -120,14 +120,14 @@ public abstract class BaseGame {
 	 * bsInput.isMousePressed(java.awt.event.MouseEvent.BUTTON1)}.
 	 */
 	public boolean click() {
-		return this.bsInput.isMousePressed(MouseEvent.BUTTON1);
+		return this.getBsInput().isMousePressed(MouseEvent.BUTTON1);
 	}
 	
 	/**
 	 * Draws game frame-per-second (FPS) to specified location.
 	 */
 	public void drawFPS(Graphics2D g, int x, int y) {
-		this.fontManager.getFont("FPS Font").drawString(g,
+		this.getFontManager().getFont("FPS Font").drawString(g,
 		        "FPS = " + this.getCurrentFPS() + "/" + this.getFPS(), x, y);
 	}
 	
@@ -137,7 +137,7 @@ public abstract class BaseGame {
 	 * bsTimer.getCurrentFPS()}.
 	 */
 	public int getCurrentFPS() {
-		return this.bsTimer.getCurrentFPS();
+		return this.getBsTimer().getCurrentFPS();
 	}
 	
 	/**
@@ -146,7 +146,7 @@ public abstract class BaseGame {
 	 * bsGraphics.getSize().height}.
 	 */
 	public int getHeight() {
-		return this.bsGraphics.getSize().height;
+		return this.getBsGraphics().getSize().height;
 	}
 	
 	/**
@@ -155,7 +155,7 @@ public abstract class BaseGame {
 	 * bsLoader.getImage(String)}.
 	 */
 	public BufferedImage getImage(String imagefile) {
-		return this.bsLoader.getImage(imagefile);
+		return this.getBsLoader().getImage(imagefile);
 	}
 	
 	/**
@@ -164,7 +164,7 @@ public abstract class BaseGame {
 	 * bsLoader.getImage(String, boolean)}.
 	 */
 	public BufferedImage getImage(String imagefile, boolean useMask) {
-		return this.bsLoader.getImage(imagefile, useMask);
+		return this.getBsLoader().getImage(imagefile, useMask);
 	}
 	
 	/**
@@ -173,7 +173,7 @@ public abstract class BaseGame {
 	 * bsLoader.getImages(String, int, int)}.
 	 */
 	public BufferedImage[] getImages(String imagefile, int col, int row) {
-		return this.bsLoader.getImages(imagefile, col, row);
+		return this.getBsLoader().getImages(imagefile, col, row);
 	}
 	
 	/**
@@ -182,7 +182,7 @@ public abstract class BaseGame {
 	 * bsLoader.getImages(String, int, int, boolean)}.
 	 */
 	public BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask) {
-		return this.bsLoader.getImages(imagefile, col, row, useMask);
+		return this.getBsLoader().getImages(imagefile, col, row, useMask);
 	}
 	
 	/**
@@ -206,7 +206,7 @@ public abstract class BaseGame {
 	 */
 	public BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask, int start, int end) {
 		String mapping = start + imagefile + end;
-		BufferedImage[] image = this.bsLoader.getStoredImages(mapping);
+		BufferedImage[] image = this.getBsLoader().getStoredImages(mapping);
 		
 		if (image == null) {
 			BufferedImage[] src = this.getImages(imagefile, col, row, useMask);
@@ -215,7 +215,7 @@ public abstract class BaseGame {
 			for (int i = 0; i < count; i++) {
 				image[i] = src[start + i];
 			}
-			this.bsLoader.storeImages(mapping, image);
+			this.getBsLoader().storeImages(mapping, image);
 		}
 		
 		return image;
@@ -249,7 +249,7 @@ public abstract class BaseGame {
 	 */
 	public BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask, String sequence, int digit) {
 		String mapping = imagefile + sequence + digit;
-		BufferedImage[] image = this.bsLoader.getStoredImages(mapping);
+		BufferedImage[] image = this.getBsLoader().getStoredImages(mapping);
 		
 		if (image == null) {
 			BufferedImage[] src = this.getImages(imagefile, col, row, useMask);
@@ -259,7 +259,7 @@ public abstract class BaseGame {
 				image[i] = src[Integer.parseInt(sequence.substring(i * digit,
 				        ((i + 1) * digit)))];
 			}
-			this.bsLoader.storeImages(mapping, image);
+			this.getBsLoader().storeImages(mapping, image);
 		}
 		
 		return image;
@@ -289,7 +289,7 @@ public abstract class BaseGame {
 	 * bsInput.getMouseX()}.
 	 */
 	public int getMouseX() {
-		return this.bsInput.getMouseX();
+		return this.getBsInput().getMouseX();
 	}
 	
 	/**
@@ -298,7 +298,7 @@ public abstract class BaseGame {
 	 * bsInput.getMouseY()}.
 	 */
 	public int getMouseY() {
-		return this.bsInput.getMouseY();
+		return this.getBsInput().getMouseY();
 	}
 	
 	/**
@@ -316,7 +316,7 @@ public abstract class BaseGame {
 	 * bsGraphics.getSize().width}.
 	 */
 	public int getWidth() {
-		return this.bsGraphics.getSize().width;
+		return this.getBsGraphics().getSize().width;
 	}
 	
 	/**
@@ -325,7 +325,7 @@ public abstract class BaseGame {
 	 * bsInput.setMouseVisible(false)}.
 	 */
 	public void hideCursor() {
-		this.bsInput.setMouseVisible(false);
+		this.getBsInput().setMouseVisible(false);
 	}
 	
 	/**
@@ -350,7 +350,7 @@ public abstract class BaseGame {
 	 * bsInput.isKeyDown(int)}.
 	 */
 	public boolean keyDown(int keyCode) {
-		return this.bsInput.isKeyDown(keyCode);
+		return this.getBsInput().isKeyDown(keyCode);
 	}
 	
 	/**
@@ -359,7 +359,7 @@ public abstract class BaseGame {
 	 * bsInput.isKeyPressed(int)}.
 	 */
 	public boolean keyPressed(int keyCode) {
-		return this.bsInput.isKeyPressed(keyCode);
+		return this.getBsInput().isKeyPressed(keyCode);
 	}
 	
 	/**
@@ -371,7 +371,7 @@ public abstract class BaseGame {
 	 * @see com.golden.gamedev.engine.audio
 	 */
 	public int playMusic(String audiofile) {
-		return this.bsMusic.play(audiofile);
+		return this.getBsMusic().play(audiofile);
 	}
 	
 	/**
@@ -383,7 +383,7 @@ public abstract class BaseGame {
 	 * @see com.golden.gamedev.engine.audio
 	 */
 	public int playSound(String audiofile) {
-		return this.bsSound.play(audiofile);
+		return this.getBsSound().play(audiofile);
 	}
 	
 	/**
@@ -399,7 +399,7 @@ public abstract class BaseGame {
 	 * bsInput.isMousePressed(java.awt.event.MouseEvent.BUTTON3)}.
 	 */
 	public boolean rightClick() {
-		return this.bsInput.isMousePressed(MouseEvent.BUTTON3);
+		return this.getBsInput().isMousePressed(MouseEvent.BUTTON3);
 	}
 	
 	/**
@@ -408,7 +408,7 @@ public abstract class BaseGame {
 	 * bsLoader.setMaskColor(java.awt.Color)}.
 	 */
 	public void setMaskColor(Color c) {
-		this.bsLoader.setMaskColor(c);
+		this.getBsLoader().setMaskColor(c);
 	}
 	
 	/**
@@ -417,7 +417,7 @@ public abstract class BaseGame {
 	 * bsInput.setMouseVisible(true)}.
 	 */
 	public void showCursor() {
-		this.bsInput.setMouseVisible(true);
+		this.getBsInput().setMouseVisible(true);
 	}
 	
 	/**
@@ -456,7 +456,7 @@ public abstract class BaseGame {
 	 * {@linkplain com.golden.gamedev.engine.BaseTimer#getFPS()}.
 	 */
 	public int getFPS() {
-		return this.bsTimer.getFPS();
+		return this.getBsTimer().getFPS();
 	}
 	
 	/**
@@ -465,6 +465,70 @@ public abstract class BaseGame {
 	 * bsTimer.setFPS(int)}.
 	 */
 	public void setFPS(int fps) {
-		this.bsTimer.setFPS(fps);
+		this.getBsTimer().setFPS(fps);
+	}
+	
+	public void setBsGraphics(BaseGraphics bsGraphics) {
+		this.bsGraphics = bsGraphics;
+	}
+	
+	public BaseGraphics getBsGraphics() {
+		return this.bsGraphics;
+	}
+	
+	public void setBsInput(BaseInput bsInput) {
+		this.bsInput = bsInput;
+	}
+	
+	public BaseInput getBsInput() {
+		return this.bsInput;
+	}
+	
+	public void setBsIO(BaseIO bsIO) {
+		this.bsIO = bsIO;
+	}
+	
+	public BaseIO getBsIO() {
+		return this.bsIO;
+	}
+	
+	public void setBsLoader(BaseLoader bsLoader) {
+		this.bsLoader = bsLoader;
+	}
+	
+	public BaseLoader getBsLoader() {
+		return this.bsLoader;
+	}
+	
+	public void setBsMusic(BaseAudio bsMusic) {
+		this.bsMusic = bsMusic;
+	}
+	
+	public BaseAudio getBsMusic() {
+		return this.bsMusic;
+	}
+	
+	public void setBsSound(BaseAudio bsSound) {
+		this.bsSound = bsSound;
+	}
+	
+	public BaseAudio getBsSound() {
+		return this.bsSound;
+	}
+	
+	public void setBsTimer(BaseTimer bsTimer) {
+		this.bsTimer = bsTimer;
+	}
+	
+	public BaseTimer getBsTimer() {
+		return this.bsTimer;
+	}
+	
+	public void setFontManager(GameFontManager fontManager) {
+		this.fontManager = fontManager;
+	}
+	
+	public GameFontManager getFontManager() {
+		return this.fontManager;
 	}
 }

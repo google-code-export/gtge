@@ -36,9 +36,9 @@ import java.awt.image.BufferedImage;
 import java.net.URL;
 
 import com.golden.gamedev.engine.DefaultBaseAudio;
-import com.golden.gamedev.engine.BaseIO;
+import com.golden.gamedev.engine.DefaultBaseIO;
 import com.golden.gamedev.engine.BaseInput;
-import com.golden.gamedev.engine.BaseLoader;
+import com.golden.gamedev.engine.DefaultBaseLoader;
 import com.golden.gamedev.engine.audio.MidiRenderer;
 import com.golden.gamedev.engine.audio.WaveRenderer;
 import com.golden.gamedev.engine.input.AWTInput;
@@ -555,8 +555,8 @@ public abstract class Game extends BaseGame {
 	 * {@link com.golden.gamedev.engine.audio.MidiRenderer}</li>
 	 * <li> Sound Engine : uses
 	 * {@link com.golden.gamedev.engine.audio.WaveRenderer}</li>
-	 * <li> I/O Engine : uses {@link com.golden.gamedev.engine.BaseIO}</li>
-	 * <li> Image Engine : uses {@link com.golden.gamedev.engine.BaseLoader}</li>
+	 * <li> I/O Engine : uses {@link com.golden.gamedev.engine.DefaultBaseIO}</li>
+	 * <li> Image Engine : uses {@link com.golden.gamedev.engine.DefaultBaseLoader}</li>
 	 * </ul>
 	 * <p>
 	 * 
@@ -589,10 +589,10 @@ public abstract class Game extends BaseGame {
 			// //
 		}
 		if (this.getBsIO() == null) {
-			this.setBsIO(new BaseIO(this.getClass()));
+			this.setBsIO(new DefaultBaseIO(this.getClass()));
 		}
 		if (this.getBsLoader() == null) {
-			this.setBsLoader(new BaseLoader(this.getBsIO(), Color.MAGENTA));
+			this.setBsLoader(new DefaultBaseLoader(this.getBsIO(), Color.MAGENTA));
 		}
 		if (this.getBsInput() == null) {
 			this.setBsInput(new AWTInput(this.getBsGraphics().getComponent()));

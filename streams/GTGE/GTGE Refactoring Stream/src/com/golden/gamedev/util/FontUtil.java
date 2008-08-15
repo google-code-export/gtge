@@ -38,7 +38,7 @@ public class FontUtil {
 	/**
 	 * Creates java.awt.Font from specified True Type Font URL (*.ttf).
 	 * 
-	 * @see com.golden.gamedev.engine.BaseIO#getURL(String)
+	 * @see com.golden.gamedev.engine.DefaultBaseIO#getURL(String)
 	 * @see com.golden.gamedev.object.DefaultGameFontManager#getFont(Font)
 	 */
 	public static Font createTrueTypeFont(URL url, int style, float size) {

@@ -151,7 +151,7 @@ public abstract class BaseGame {
 	
 	/**
 	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImage(String)
+	 * {@linkplain com.golden.gamedev.engine.DefaultBaseLoader#getImage(String)
 	 * bsLoader.getImage(String)}.
 	 */
 	public BufferedImage getImage(String imagefile) {
@@ -160,7 +160,7 @@ public abstract class BaseGame {
 	
 	/**
 	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImage(String, boolean)
+	 * {@linkplain com.golden.gamedev.engine.DefaultBaseLoader#getImage(String, boolean)
 	 * bsLoader.getImage(String, boolean)}.
 	 */
 	public BufferedImage getImage(String imagefile, boolean useMask) {
@@ -169,7 +169,7 @@ public abstract class BaseGame {
 	
 	/**
 	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImages(String, int, int)
+	 * {@linkplain com.golden.gamedev.engine.DefaultBaseLoader#getImages(String, int, int)
 	 * bsLoader.getImages(String, int, int)}.
 	 */
 	public BufferedImage[] getImages(String imagefile, int col, int row) {
@@ -178,7 +178,7 @@ public abstract class BaseGame {
 	
 	/**
 	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImages(String, int, int, boolean)
+	 * {@linkplain com.golden.gamedev.engine.DefaultBaseLoader#getImages(String, int, int, boolean)
 	 * bsLoader.getImages(String, int, int, boolean)}.
 	 */
 	public BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask) {
@@ -191,7 +191,7 @@ public abstract class BaseGame {
 	 * 
 	 * First the image is stripped by column and row, and then the images is
 	 * arranged with specified series sequence order. The images then stored
-	 * into cache ({@linkplain com.golden.gamedev.engine.BaseLoader bsLoader}
+	 * into cache ({@linkplain com.golden.gamedev.engine.DefaultBaseLoader bsLoader}
 	 * with key as followed: start sequence + the image file + end sequence.
 	 * <p>
 	 * 
@@ -226,7 +226,7 @@ public abstract class BaseGame {
 	 * <p>
 	 * 
 	 * First the image is stripped by column and row, and then the images is
-	 * arranged with specified sequence order. The images then stored into cache ({@linkplain com.golden.gamedev.engine.BaseLoader bsLoader})
+	 * arranged with specified sequence order. The images then stored into cache ({@linkplain com.golden.gamedev.engine.DefaultBaseLoader bsLoader})
 	 * with key as followed: the image file + sequence + digit.
 	 * <p>
 	 * 
@@ -404,7 +404,7 @@ public abstract class BaseGame {
 	
 	/**
 	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#setMaskColor(Color)
+	 * {@linkplain com.golden.gamedev.engine.DefaultBaseLoader#setMaskColor(Color)
 	 * bsLoader.setMaskColor(java.awt.Color)}.
 	 */
 	public void setMaskColor(Color c) {

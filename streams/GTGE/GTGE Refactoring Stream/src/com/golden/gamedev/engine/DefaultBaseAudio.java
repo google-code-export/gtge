@@ -34,7 +34,7 @@ import com.golden.gamedev.util.Utility;
  * Audio manager also take care any idle renderer and looping audio renderer.
  * <p>
  * 
- * This class is using {@link BaseIO} to get the external resources.
+ * This class is using {@link DefaultBaseIO} to get the external resources.
  */
 public class DefaultBaseAudio implements BaseAudio, Runnable {
 	

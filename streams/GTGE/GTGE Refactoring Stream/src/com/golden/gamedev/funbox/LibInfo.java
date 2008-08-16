@@ -134,7 +134,7 @@ public class LibInfo extends Game {
 	}
 	
 	{
-		this.distribute = true;
+		this.setDistribute(true);
 	}
 	
 }

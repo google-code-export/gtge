@@ -128,7 +128,7 @@ public abstract class GameEngine extends Game {
 	/** ************************ GAME LOOP THREAD ******************************* */
 	/** ************************************************************************* */
 	
-	void startGameLoop() {
+	protected void runGame() {
 		// start the timer
 		this.getBsTimer().startTimer();
 		

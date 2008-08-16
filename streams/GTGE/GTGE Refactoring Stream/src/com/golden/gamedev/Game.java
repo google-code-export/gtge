@@ -35,6 +35,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 
+import com.golden.gamedev.engine.BaseGraphics;
 import com.golden.gamedev.engine.DefaultBaseAudio;
 import com.golden.gamedev.engine.DefaultBaseIO;
 import com.golden.gamedev.engine.BaseInput;
@@ -140,21 +141,28 @@ import com.golden.gamedev.util.ImageUtil;
  */
 public abstract class Game extends BaseGame {
 	
-	/**
-	 * Current GTGE version.
-	 */
-	public static final String GTGE_VERSION = "0.2.4";
+	public static final String GAME_FOCUS_MESSAGE_LINE_2 = "CLICK HERE TO GET THE FOCUS BACK";
 	
-	private static final int DEFAULT_FPS = 100;
+	public static final String GAME_FOCUS_MESSAGE_LINE_1 = "GAME IS NOT IN FOCUS";
+	
+	/**
+	 * The default frames per second count of a <tt>Game</tt> instance (100).
+	 */
+	public static final int DEFAULT_FPS = 100;
 	
 	/** ***************************** GAME ENGINES ****************************** */
 	
 	/** **************************** GAME VARIABLES ***************************** */
 	
-	private boolean running; // true, indicates the game is currently
-	// running/playing
-	private boolean finish; // true, indicates the game has been ended
-	// an ended game can't be played anymore
+	/**
+	 * Whether or not this <tt>Game</tt> instance is currently running.
+	 */
+	private boolean running;
+	
+	/**
+	 * Whether or not this <tt>Game</tt> instance has ended.
+	 */
+	private boolean finish;
 	
 	/**
 	 * Indicates whether this game is finished and ready to distribute or still
@@ -182,17 +190,28 @@ public abstract class Game extends BaseGame {
 	 * 
 	 * @see #notifyError(Throwable)
 	 */
-	protected boolean distribute;
+	private boolean distribute;
 	
-	GameFont fpsFont;
-	private boolean development; // to avoid developer hack 'distribute'
-	// value
-	private boolean initialized; // true, indicates the game has been
-	// initialized
-	// used when the game is stopped and played again
-	// to avoid multiple initialization
-	boolean inFocus = true;
-	private boolean inFocusBlink;
+	private GameFont fpsFont;
+	
+	/**
+	 * Whether or not this <tt>Game</tt> instance has been initialized.
+	 */
+	private boolean initialized;
+	
+	/**
+	 * Whether or not this <tt>Game</tt> instance has the "focus" of the
+	 * operating system (i.e. it is occupying the whole window, or the user has
+	 * clicked on the window/applet containing this <tt>Game</tt> instance).
+	 */
+	private boolean inFocus = true;
+	
+	/**
+	 * Whether or not this <tt>Game</tt> instance's focus message is enabled
+	 * and should be displayed on the screen.
+	 */
+	private boolean gameFocusMessageEnabled = true;
+	
 	private boolean pauseOnLostFocus = false;
 	
 	/** ************************************************************************* */
@@ -234,7 +253,7 @@ public abstract class Game extends BaseGame {
 	 * @see #finish()
 	 */
 	public void stop() {
-		this.running = false;
+		this.setRunning(false);
 	}
 	
 	/**
@@ -248,7 +267,7 @@ public abstract class Game extends BaseGame {
 	 * @see #stop()
 	 */
 	public void finish() {
-		this.finish = true;
+		this.setFinish(true);
 		this.stop();
 	}
 	
@@ -286,27 +305,22 @@ public abstract class Game extends BaseGame {
 	 * @see #notifyExit()
 	 */
 	public final void start() {
-		if (this.running || this.finish) {
+		if (this.isRunning() || this.isFinish()) {
 			return;
 		}
-		this.running = true;
+		this.setRunning(true);
 		
-		if (this.initialized == false) {
-			// mark distribute state
-			this.development = !this.distribute;
-		}
-		
-		if (this.development == false) {
+		if (this.isDistribute()) {
 			// the game has been distributed
 			// catch any unexpected/uncaught exception!
 			// the logo is shown in initialize() method
 			try {
-				if (this.initialized == false) {
-					this.initialized = true;
+				if (this.isInitialized() == false) {
 					this.initialize();
+					this.setInitialized(true);
 				}
 				
-				this.startGameLoop();
+				this.runGame();
 			}
 			catch (Throwable e) {
 				this.notifyError(e);
@@ -314,12 +328,12 @@ public abstract class Game extends BaseGame {
 			
 		}
 		else { // still in development
-			if (this.initialized == false) {
-				this.initialized = true;
+			if (this.isInitialized() == false) {
+				this.setInitialized(true);
 				this.initialize();
 			}
 			
-			this.startGameLoop();
+			this.runGame();
 		}
 	}
 	
@@ -339,12 +353,12 @@ public abstract class Game extends BaseGame {
 			        new FocusListener() {
 				        
 				        public void focusGained(FocusEvent e) {
-					        Game.this.inFocus = true;
+					        Game.this.setInFocus(true);
 				        }
 				        
 				        public void focusLost(FocusEvent e) {
-					        if (Game.this.pauseOnLostFocus) {
-						        Game.this.inFocus = false;
+					        if (Game.this.isPauseOnLostFocus()) {
+						        Game.this.setInFocus(false);
 					        }
 				        }
 			        });
@@ -352,7 +366,7 @@ public abstract class Game extends BaseGame {
 		catch (Exception e) {
 		}
 		
-		if (this.development == false) {
+		if (isDistribute()) {
 			// show GTGE splash screen :-)
 			this.showLogo();
 		}
@@ -362,17 +376,17 @@ public abstract class Game extends BaseGame {
 			URL fontURL = com.golden.gamedev.Game.class.getResource("Game.fnt");
 			BufferedImage fpsImage = ImageUtil.getImage(fontURL);
 			
-			this.fpsFont = this.getFontManager().getFont(fpsImage);
+			this.setFpsFont(this.getFontManager().getFont(fpsImage));
 			this.getFontManager().removeFont(fpsImage); // unload the image
-			this.getFontManager().putFont("FPS Font", this.fpsFont);
+			this.getFontManager().putFont("FPS Font", this.getFpsFont());
 			
-			if (this.development == false) {
+			if (isDistribute()) {
 				// if splash screen is shown (distribute = true)
 				// fps font is not used anymore
 				// remove the reference!
 				// however the font still exists via fontManager.getFont("FPS
 				// Font");
-				this.fpsFont = null;
+				this.setFpsFont(null);
 			}
 			
 		}
@@ -393,7 +407,84 @@ public abstract class Game extends BaseGame {
 	/** ************************ GAME LOOP THREAD ******************************* */
 	/** ************************************************************************* */
 	
-	void startGameLoop() {
+	protected void runGame() {
+		executeBeforeGameLoop();
+		
+		executeGameLoop();
+		
+		executeAfterGameLoop();
+	}
+	
+	protected void executeAfterGameLoop() {
+		// stop the timer
+		this.getBsTimer().stopTimer();
+		this.getBsSound().stopAll();
+		this.getBsMusic().stopAll();
+		
+		if (this.isFinish()) {
+			this.getBsGraphics().cleanup();
+			this.notifyExit();
+		}
+	}
+	
+	protected void executeGameLoop() {
+		long elapsedTime = 0;
+		while (true) {
+			if (this.isInFocus()) {
+				gameUpdate(elapsedTime);
+				
+			}
+			else {
+				freezeGameNotInFocus();
+			}
+			
+			while (this.isRunning()) {
+				
+				// graphics operation
+				Graphics2D g = this.getBsGraphics().getBackBuffer();
+				
+				this.render(g); // render game
+				
+				if (!this.isInFocus()) {
+					this.renderLostFocus(g);
+				}
+				
+				if (this.getBsGraphics().flip()) {
+					break;
+				}
+				
+			}
+			if (this.isRunning()) {
+				elapsedTime = this.getBsTimer().sleep();
+				
+				if (elapsedTime > 100) {
+					// the elapsedTime can't be lower than 100 (10 fps)
+					// it's a workaround so the movement is not too jumpy
+					elapsedTime = 100;
+				}
+			}
+			else {
+				break;
+			}
+		}
+	}
+	
+	protected void gameUpdate(long elapsedTime) {
+		// update game
+		this.update(elapsedTime);
+		this.getBsInput().update(elapsedTime); // update input
+	}
+	
+	protected void freezeGameNotInFocus() {
+		// the game is not in focus!
+		try {
+			Thread.sleep(300);
+		}
+		catch (InterruptedException e) {
+		}
+	}
+	
+	protected void executeBeforeGameLoop() {
 		// before play, runs garbage collector to clear unused memory
 		System.gc();
 		System.runFinalization();
@@ -401,70 +492,6 @@ public abstract class Game extends BaseGame {
 		// start the timer
 		this.getBsTimer().startTimer();
 		this.getBsTimer().refresh();
-		
-		long elapsedTime = 0;
-		out: while (true) {
-			if (this.inFocus) {
-				// update game
-				this.update(elapsedTime);
-				this.getBsInput().update(elapsedTime); // update input
-				
-			}
-			else {
-				// the game is not in focus!
-				try {
-					Thread.sleep(300);
-				}
-				catch (InterruptedException e) {
-				}
-			}
-			
-			do {
-				if (!this.running) {
-					// if not running, quit this game
-					break out;
-				}
-				
-				// graphics operation
-				Graphics2D g = this.getBsGraphics().getBackBuffer();
-				
-				this.render(g); // render game
-				
-				// if (development) {
-				// // if the game is still under development
-				// // draw game FPS and other stuff
-				//
-				// fpsFont.drawString(g,
-				// "FPS = " + getCurrentFPS() + "/" + getFPS(),
-				// 9, getHeight()-21);
-				//
-				// fpsFont.drawString(g, "GTGE", getWidth()-65, 9);
-				// }
-				
-				if (!this.inFocus) {
-					this.renderLostFocus(g);
-				}
-				
-			} while (this.getBsGraphics().flip() == false);
-			
-			elapsedTime = this.getBsTimer().sleep();
-			
-			if (elapsedTime > 100) {
-				// the elapsedTime can't be lower than 100 (10 fps)
-				// it's a workaround so the movement is not too jumpy
-				elapsedTime = 100;
-			}
-		}
-		
-		// stop the timer
-		this.getBsTimer().stopTimer();
-		this.getBsSound().stopAll();
-		this.getBsMusic().stopAll();
-		
-		if (this.finish) {
-			this.getBsGraphics().cleanup();
-			this.notifyExit();
-		}
 	}
 	
 	/**
@@ -473,15 +500,15 @@ public abstract class Game extends BaseGame {
 	 * @see #setPauseOnLostFocus(boolean)
 	 */
 	protected void renderLostFocus(Graphics2D g) {
-		String st1 = "GAME IS NOT IN FOCUSED", st2 = "CLICK HERE TO GET THE FOCUS BACK";
-		
 		g.setFont(new Font("Dialog", Font.BOLD, 15));
 		FontMetrics fm = g.getFontMetrics();
 		
 		int posy = (this.getHeight() / 2) - ((fm.getHeight() + 10) * (2 / 2));
 		
-		int x = (this.getWidth() / 2) - (fm.stringWidth(st2) / 2) - 20, y = posy - 25, width = fm
-		        .stringWidth(st2) + 40, height = fm.getHeight()
+		int x = (this.getWidth() / 2)
+		        - (fm.stringWidth(GAME_FOCUS_MESSAGE_LINE_2) / 2) - 20, y = posy - 25, width = fm
+		        .stringWidth(GAME_FOCUS_MESSAGE_LINE_2) + 40, height = fm
+		        .getHeight()
 		        + fm.getHeight() + 30;
 		
 		g.setColor(Color.BLACK);
@@ -489,24 +516,23 @@ public abstract class Game extends BaseGame {
 		g.setColor(Color.RED);
 		g.drawRect(x, y, width - 1, height - 1);
 		
-		this.inFocusBlink = !this.inFocusBlink;
+		this.setGameFocusMessageEnabled(!this.isGameFocusMessageEnabled());
 		
-		if (!this.inFocusBlink) {
+		if (this.isGameFocusMessageEnabled()) {
 			try {
 				// for smoooth text :)
-				((Graphics2D) g).setRenderingHint(
-				        RenderingHints.KEY_TEXT_ANTIALIASING,
+				g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
 				        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 			}
 			catch (Exception e) {
 			}
 			
 			g.setColor(Color.RED);
-			g.drawString(st1,
-			        (this.getWidth() / 2) - (fm.stringWidth(st1) / 2), posy);
+			g.drawString(GAME_FOCUS_MESSAGE_LINE_1, (this.getWidth() / 2)
+			        - (fm.stringWidth(GAME_FOCUS_MESSAGE_LINE_1) / 2), posy);
 			posy += fm.getHeight() + 10;
-			g.drawString(st2,
-			        (this.getWidth() / 2) - (fm.stringWidth(st2) / 2), posy);
+			g.drawString(GAME_FOCUS_MESSAGE_LINE_2, (this.getWidth() / 2)
+			        - (fm.stringWidth(GAME_FOCUS_MESSAGE_LINE_2) / 2), posy);
 		}
 	}
 	
@@ -522,7 +548,7 @@ public abstract class Game extends BaseGame {
 		
 		if (this.pauseOnLostFocus == false) {
 			// if not paused on lost focus, make sure the game is in focus
-			this.inFocus = true;
+			this.setInFocus(true);
 		}
 	}
 	
@@ -556,7 +582,8 @@ public abstract class Game extends BaseGame {
 	 * <li> Sound Engine : uses
 	 * {@link com.golden.gamedev.engine.audio.WaveRenderer}</li>
 	 * <li> I/O Engine : uses {@link com.golden.gamedev.engine.DefaultBaseIO}</li>
-	 * <li> Image Engine : uses {@link com.golden.gamedev.engine.DefaultBaseLoader}</li>
+	 * <li> Image Engine : uses
+	 * {@link com.golden.gamedev.engine.DefaultBaseLoader}</li>
 	 * </ul>
 	 * <p>
 	 * 
@@ -592,18 +619,21 @@ public abstract class Game extends BaseGame {
 			this.setBsIO(new DefaultBaseIO(this.getClass()));
 		}
 		if (this.getBsLoader() == null) {
-			this.setBsLoader(new DefaultBaseLoader(this.getBsIO(), Color.MAGENTA));
+			this.setBsLoader(new DefaultBaseLoader(this.getBsIO(),
+			        Color.MAGENTA));
 		}
 		if (this.getBsInput() == null) {
 			this.setBsInput(new AWTInput(this.getBsGraphics().getComponent()));
 		}
 		if (this.getBsMusic() == null) {
-			this.setBsMusic(new DefaultBaseAudio(this.getBsIO(), new MidiRenderer()));
+			this.setBsMusic(new DefaultBaseAudio(this.getBsIO(),
+			        new MidiRenderer()));
 			this.getBsMusic().setExclusive(true);
 			this.getBsMusic().setLoop(true);
 		}
 		if (this.getBsSound() == null) {
-			this.setBsSound(new DefaultBaseAudio(this.getBsIO(), new WaveRenderer()));
+			this.setBsSound(new DefaultBaseAudio(this.getBsIO(),
+			        new WaveRenderer()));
 		}
 		
 		// miscellanous
@@ -795,8 +825,8 @@ public abstract class Game extends BaseGame {
 	 * 
 	 * @see #distribute
 	 */
-	public final boolean isDistribute() {
-		return (this.development == false);
+	public boolean isDistribute() {
+		return distribute;
 	}
 	
 	/** ************************************************************************* */
@@ -845,8 +875,8 @@ public abstract class Game extends BaseGame {
 		}
 		
 		// check for focus owner
-		if (!this.inFocus) {
-			while (!this.inFocus) {
+		if (!this.isInFocus()) {
+			while (!this.isInFocus()) {
 				// the game is not in focus!
 				Graphics2D g = this.getBsGraphics().getBackBuffer();
 				g.setColor(Color.BLACK);
@@ -876,7 +906,7 @@ public abstract class Game extends BaseGame {
 		boolean firstTime = true;
 		while (alpha < 1.0f) {
 			do {
-				if (!this.running) {
+				if (!this.isRunning()) {
 					return;
 				}
 				Graphics2D g = this.getBsGraphics().getBackBuffer();
@@ -913,7 +943,7 @@ public abstract class Game extends BaseGame {
 		
 		// show the shiny logo for 2500 ms :-)
 		do {
-			if (!this.running) {
+			if (!this.isRunning()) {
 				return;
 			}
 			Graphics2D g = this.getBsGraphics().getBackBuffer();
@@ -923,7 +953,7 @@ public abstract class Game extends BaseGame {
 		
 		int i = 0;
 		while (i++ < 50) { // 50 x 50 = 2500
-			if (!this.running) {
+			if (!this.isRunning()) {
 				return;
 			}
 			
@@ -946,7 +976,7 @@ public abstract class Game extends BaseGame {
 		dummyTimer.refresh();
 		while (alpha > 0.0f) {
 			do {
-				if (!this.running) {
+				if (!this.isRunning()) {
 					return;
 				}
 				Graphics2D g = this.getBsGraphics().getBackBuffer();
@@ -1108,6 +1138,124 @@ public abstract class Game extends BaseGame {
 		}
 		
 		return null;
+	}
+	
+	public void setFpsFont(GameFont fpsFont) {
+		this.fpsFont = fpsFont;
+	}
+	
+	public GameFont getFpsFont() {
+		return fpsFont;
+	}
+	
+	/**
+	 * Sets whether or not this <tt>Game</tt> instance is currently running.
+	 * It is recommended to use {@link #start()} and {@link #stop()} to make the
+	 * <tt>Game</tt> instance start and stop respectively, as this method is
+	 * only included to encapsulate the field. If this method needs to be used,
+	 * invoke {@link #runGame()} to resume the game instead of using
+	 * {@link #start()}, which executes this automatically.
+	 * @param running Whether or not this <tt>Game</tt> instance is currently
+	 *        running.
+	 */
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
+	
+	/**
+	 * Sets whether or not this <tt>Game</tt> instance has ended. Normally,
+	 * this method should not be used, as {@link #finish()} should be called to
+	 * end the <tt>Game</tt> instance. However, in the rare circumstances that
+	 * this method is needed to be used, two methods must be overridden: the
+	 * {@link #notifyExit()} method of the <tt>Game</tt> class and the
+	 * {@link BaseGraphics#cleanup()} method of the {@link BaseGraphics}
+	 * instance this game uses via {@link #getBsGraphics()}. Overriding the
+	 * exit behavior and refusing the cleaning up of resources means that the
+	 * game may launch again if both {@link #isFinish()} and
+	 * {@link #isRunning()} return false, via the {@link #start()} method. If
+	 * the game is to be re-initialized when {@link #start()} is called, invoke
+	 * {@link #setInitialized(boolean)} with a value of false before calling
+	 * {@link #start()}.
+	 * @param finish Whether or not this <tt>Game</tt> instance has ended.
+	 */
+	public void setFinish(boolean finish) {
+		this.finish = finish;
+	}
+	
+	public void setDistribute(boolean distribute) {
+		this.distribute = distribute;
+	}
+	
+	/**
+	 * Sets whether or not the current <tt>Game</tt> instance has been
+	 * initialized. Note: this has the effect of calling
+	 * {@link #initResources()} in the {@link #start()} method if this is set to
+	 * true.
+	 * @param initialized Whether or not this <tt>Game</tt> instance has been
+	 *        initialized.
+	 */
+	public void setInitialized(boolean initialized) {
+		this.initialized = initialized;
+	}
+	
+	/**
+	 * Gets whether or not the current <tt>Game</tt> instance has been
+	 * initialized.
+	 * @return Whether or not this <tt>Game</tt> instance has been
+	 *         initialized.
+	 */
+	public boolean isInitialized() {
+		return initialized;
+	}
+	
+	/**
+	 * Sets whether or not this <tt>Game</tt> instance has the "focus" of the
+	 * operating system (i.e. it is occupying the whole window, or the user has
+	 * clicked on the window/applet containing this <tt>Game</tt> instance).
+	 * @param inFocus Whether or not this <tt>Game</tt> instance has the
+	 *        "focus" of the operating system (i.e. it is occupying the whole
+	 *        window, or the user has clicked on the window/applet containing
+	 *        this <tt>Game</tt> instance).
+	 */
+	public void setInFocus(boolean inFocus) {
+		this.inFocus = inFocus;
+	}
+	
+	/**
+	 * Gets whether or not this <tt>Game</tt> instance has the "focus" of the
+	 * operating system (i.e. it is occupying the whole window, or the user has
+	 * clicked on the window/applet containing this <tt>Game</tt> instance).
+	 * @return Whether or not this <tt>Game</tt> instance has the "focus" of
+	 *         the operating system (i.e. it is occupying the whole window, or
+	 *         the user has clicked on the window/applet containing this
+	 *         <tt>Game</tt> instance).
+	 */
+	public boolean isInFocus() {
+		return inFocus;
+	}
+	
+	/**
+	 * Sets whether or not this <tt>Game</tt> instance's focus message is
+	 * enabled and should be displayed on the screen. It is not recommended to
+	 * use this method, as the default implementation of
+	 * {@link #renderLostFocus(Graphics2D)} handles this automatically to
+	 * simulate a blinking message.
+	 * @param gameFocusMessageEnabled Whether or not this <tt>Game</tt>
+	 *        instance's focus message is enabled and should be displayed on the
+	 *        screen.
+	 */
+	public void setGameFocusMessageEnabled(boolean gameFocusMessageEnabled) {
+		this.gameFocusMessageEnabled = gameFocusMessageEnabled;
+	}
+	
+	/**
+	 * Gets whether or not this <tt>Game</tt> instance's focus message is
+	 * enabled and should be displayed on the screen.
+	 * @return Whether or not this <tt>Game</tt> instance's focus message is
+	 *         enabled and should be displayed on the screen.
+	 */
+	public boolean isGameFocusMessageEnabled() {
+		return gameFocusMessageEnabled;
 	}
 	
 }

@@ -50,7 +50,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 
-import com.golden.gamedev.Game;
+import com.golden.gamedev.BaseGame;
 import com.golden.gamedev.engine.BaseGraphics;
 
 /**
@@ -59,6 +59,8 @@ import com.golden.gamedev.engine.BaseGraphics;
  */
 public class ErrorNotificationDialog extends JDialog implements Runnable,
         ActionListener, WindowListener {
+	
+	public static final String NEWLINE = "\n";
 	
 	/**
 	 * 
@@ -158,23 +160,29 @@ public class ErrorNotificationDialog extends JDialog implements Runnable,
 	 * 
 	 * @see #textArea
 	 */
-	protected void printStackTrace() {
-		this.append(this.textArea, "Game Exception on " + this.title);
+	protected void printStackTrace(JTextArea textArea, String title) {
+		textArea.append("Game Exception on " + ((title == null) ? "" : title)
+		        + ErrorNotificationDialog.NEWLINE);
 		String underline = "------------------";
-		for (int i = 0; i < this.title.length(); i++) {
-			underline += "-";
+		if (title != null) {
+			for (int i = 0; i < this.title.length(); i++) {
+				underline += "-";
+			}
 		}
-		this.append(this.textArea, underline);
+		
+		textArea.append(underline + ErrorNotificationDialog.NEWLINE);
 		
 		// print out error stack trace to text area via string writer
 		StringWriter src = new StringWriter();
 		PrintWriter writer = new PrintWriter(src);
 		this.error.printStackTrace(writer);
-		this.append(this.textArea, src.toString());
+		textArea.append(src.toString() + ErrorNotificationDialog.NEWLINE);
 		
 		try {
-			this.append(this.textArea, "Game Environment");
-			this.append(this.textArea, "----------------");
+			textArea.append("Game Environment"
+			        + ErrorNotificationDialog.NEWLINE);
+			textArea.append("----------------"
+			        + ErrorNotificationDialog.NEWLINE);
 			
 			SimpleDateFormat format = new SimpleDateFormat(
 			        "EEE, dd MMM yyyy 'at' HH:mm");
@@ -186,7 +194,7 @@ public class ErrorNotificationDialog extends JDialog implements Runnable,
 			                "java.vm.version", "java.vendor"
 			        }));
 			this.append2(this.textArea, "GTGE Version      : ",
-			        Game.GTGE_VERSION);
+			        BaseGame.GTGE_VERSION);
 			this.append2(this.textArea, "Environment       : ", this.bsGraphics
 			        .getGraphicsDescription());
 			this.append2(this.textArea, "Operating System  : ", this
@@ -203,7 +211,7 @@ public class ErrorNotificationDialog extends JDialog implements Runnable,
 			        }));
 		}
 		catch (Throwable e) {
-			this.append(this.textArea, e.toString());
+			textArea.append(e.toString());
 		}
 	}
 	
@@ -227,7 +235,7 @@ public class ErrorNotificationDialog extends JDialog implements Runnable,
 			this.textArea.setBackground(color);
 			
 			// write the exception to text area
-			this.printStackTrace();
+			this.printStackTrace(this.textArea, this.title);
 			
 			// content pane
 			JPanel panel = new JPanel();
@@ -447,13 +455,13 @@ public class ErrorNotificationDialog extends JDialog implements Runnable,
 	public void windowDeactivated(WindowEvent e) {
 	}
 	
-	private void append(JTextArea text, String st) {
-		text.append(st + "\n");
-	}
+	// private void append(JTextArea text, String st) {
+	// text.append(st + "\n");
+	// }
 	
 	private void append2(JTextArea text, String st, String st2) {
 		text.append(st);
-		text.append(st2 + "\n");
+		text.append(st2 + ErrorNotificationDialog.NEWLINE);
 	}
 	
 	private String getSystemProperty(String[] props) {

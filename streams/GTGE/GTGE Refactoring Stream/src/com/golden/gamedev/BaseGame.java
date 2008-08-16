@@ -44,6 +44,11 @@ import com.golden.gamedev.util.Utility;
  */
 public abstract class BaseGame {
 	
+	/**
+     * Current GTGE version.
+     */
+    public static final String GTGE_VERSION = "0.2.4";
+
 	/** Graphics engine. */
 	private BaseGraphics bsGraphics;
 	

@@ -94,7 +94,7 @@ public abstract class GameObject extends BaseGame {
 	public final void start() {
 		// grabbing engines from master engine
 		this.grabEngines();
-		GameFont fpsFont = this.parent.fpsFont;
+		GameFont fpsFont = this.parent.getFpsFont();
 		if (!this.initialized) {
 			this.initResources();
 			this.initialized = true;
@@ -112,7 +112,7 @@ public abstract class GameObject extends BaseGame {
 		
 		long elapsedTime = 0;
 		out: while (true) {
-			if (this.parent.inFocus) {
+			if (this.parent.isInFocus()) {
 				// update game
 				this.update(elapsedTime);
 				this.parent.update(elapsedTime); // update common variables
@@ -161,7 +161,7 @@ public abstract class GameObject extends BaseGame {
 					fpsFont.drawString(g, "GTGE", this.getWidth() - 65, 9);
 				}
 				
-				if (!this.parent.inFocus) {
+				if (!this.parent.isInFocus()) {
 					this.parent.renderLostFocus(g);
 				}
 				

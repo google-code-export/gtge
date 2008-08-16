@@ -469,7 +469,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	 * Returns the game associated with this game loader or null if this game
 	 * loader has not loaded any game.
 	 */
-	public Game getGame() {
+	public BaseGame getGame() {
 		return this.game;
 	}
 	

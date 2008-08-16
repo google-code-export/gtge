@@ -89,11 +89,12 @@ public class DefaultBaseAudio implements BaseAudio, Runnable {
 		this.setBaseRenderer(baseRenderer);
 		
 		this.setActive(baseRenderer.isAvailable());
+		this.setRenderers(new BaseAudioRenderer[0]);
 		this.setVolume(1.0f);
 		this.setBuffer(10);
 		this.setMaxSimultaneous(6);
 		
-		this.setRenderers(new BaseAudioRenderer[0]);
+		
 		this.setRendererFile(new String[0]);
 		
 		Thread thread = new Thread(this);

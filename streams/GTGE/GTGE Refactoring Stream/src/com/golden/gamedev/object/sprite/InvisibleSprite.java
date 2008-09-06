@@ -28,9 +28,9 @@ import com.golden.gamedev.object.Sprite;
  * its {@link #getImage() image} by default, but is useful for simulating a
  * collision against an invisible block. However, the
  * {@link #setVisible(boolean)} method may now be invoked to re-enable the
- * rendering of the <tt>InvisibleSprite</tt> instance, for example, when a power up block is
- * hit, the power up block then displays its image and is no longer invisible to
- * the user.
+ * rendering of the <tt>InvisibleSprite</tt> instance, for example, when a
+ * power up block is hit, the power up block then displays its image and is no
+ * longer invisible to the user.
  * 
  * @since 0.2.3
  * @version 1.1
@@ -128,13 +128,13 @@ public class InvisibleSprite extends Sprite {
 	}
 	
 	public void render(Graphics2D g) {
-		if (isVisible()) {
+		if (this.isVisible()) {
 			super.render(g);
 		}
 	}
 	
 	public void render(Graphics2D g, int x, int y) {
-		if (isVisible()) {
+		if (this.isVisible()) {
 			super.render(g, x, y);
 		}
 	}
@@ -151,7 +151,7 @@ public class InvisibleSprite extends Sprite {
 	 * @see #render(Graphics2D, int, int)
 	 */
 	public boolean isVisible() {
-		return visible;
+		return this.visible;
 	}
 	
 	/**

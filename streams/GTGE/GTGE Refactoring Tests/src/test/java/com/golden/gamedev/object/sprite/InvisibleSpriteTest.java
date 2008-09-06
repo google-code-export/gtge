@@ -26,38 +26,130 @@ public class InvisibleSpriteTest extends TestCase {
 	}
 	
 	protected void setUp() throws Exception {
-		this.setSpriteUnderTest(new InvisibleSprite(100, 100, 100, 100));
+		this.setSpriteUnderTest(new InvisibleSprite(100, 200, 100, 100));
 	}
 	
 	/**
-	 * Tests the {@link InvisibleSprite#render(java.awt.Graphics2D)} method's
-	 * functionality.
+	 * Test method for
+	 * {@link com.golden.gamedev.object.sprite.InvisibleSprite#render(java.awt.Graphics2D)}.
 	 */
 	public void testRenderGraphics2D() {
 		// This will not throw a null pointer exception, for either the 0.23 or
 		// the refactored class,
 		// because an InvisibleSprite will by default not render.
 		this.getSpriteUnderTest().render(null);
+		this.getSpriteUnderTest().setVisible(true);
+		boolean failedNPECheck = true;
+		try {
+			this.getSpriteUnderTest().render(null);
+		}
+		catch (NullPointerException e) {
+			failedNPECheck = false;
+		}
+		if (failedNPECheck) {
+			Assert
+			        .fail("Expected a NullPointerException because rendering should now be able to be invoked");
+		}
 	}
 	
 	/**
-	 * Tests the {@link InvisibleSprite#render(java.awt.Graphics2D, int, int)}
-	 * method's functionality.
+	 * Test method for
+	 * {@link com.golden.gamedev.object.sprite.InvisibleSprite#render(java.awt.Graphics2D, int, int)}.
 	 */
 	public void testRenderGraphics2DIntInt() {
 		// This will not throw a null pointer exception, for either the 0.23 or
 		// the refactored class,
 		// because an InvisibleSprite will by default not render.
 		this.getSpriteUnderTest().render(null, 100, 200);
+		this.getSpriteUnderTest().setVisible(true);
+		boolean failedNPECheck = true;
+		try {
+			this.getSpriteUnderTest().render(null, 100, 200);
+		}
+		catch (NullPointerException e) {
+			failedNPECheck = false;
+		}
+		if (failedNPECheck) {
+			Assert
+			        .fail("Expected a NullPointerException because rendering should now be able to be invoked");
+		}
 	}
 	
 	/**
-	 * Tests the
-	 * {@link InvisibleSprite#InvisibleSprite(double, double, int, int)}
-	 * constructor.
+	 * Test method for
+	 * {@link com.golden.gamedev.object.sprite.InvisibleSprite#InvisibleSprite()}.
 	 */
 	public void testInvisibleSprite() {
+		this.setSpriteUnderTest(new InvisibleSprite());
 		Assert.assertNotNull(this.getSpriteUnderTest());
+		Assert.assertFalse(this.getSpriteUnderTest().isVisible());
+	}
+	
+	/**
+	 * Test method for
+	 * {@link com.golden.gamedev.object.sprite.InvisibleSprite#InvisibleSprite(java.awt.image.BufferedImage)}.
+	 */
+	public void testInvisibleSpriteBufferedImage() {
+		this.setSpriteUnderTest(new InvisibleSprite(null));
+		Assert.assertNotNull(this.getSpriteUnderTest());
+		Assert.assertNull(this.getSpriteUnderTest().getImage());
+		Assert.assertFalse(this.getSpriteUnderTest().isVisible());
+	}
+	
+	/**
+	 * Test method for
+	 * {@link com.golden.gamedev.object.sprite.InvisibleSprite#InvisibleSprite(java.awt.image.BufferedImage, double, double)}.
+	 */
+	public void testInvisibleSpriteBufferedImageDoubleDouble() {
+		this.setSpriteUnderTest(new InvisibleSprite(null, 100, 200));
+		Assert.assertNotNull(this.getSpriteUnderTest());
+		Assert.assertNull(this.getSpriteUnderTest().getImage());
+		Assert.assertEquals(100, this.getSpriteUnderTest().getX(), 0.0001);
+		Assert.assertEquals(200, this.getSpriteUnderTest().getY(), 0.0001);
+		Assert.assertFalse(this.getSpriteUnderTest().isVisible());
+	}
+	
+	/**
+	 * Test method for
+	 * {@link com.golden.gamedev.object.sprite.InvisibleSprite#InvisibleSprite(double, double)}.
+	 */
+	public void testInvisibleSpriteDoubleDouble() {
+		this.setSpriteUnderTest(new InvisibleSprite(100, 200));
+		Assert.assertNotNull(this.getSpriteUnderTest());
+		Assert.assertEquals(100, this.getSpriteUnderTest().getX(), 0.0001);
+		Assert.assertEquals(200, this.getSpriteUnderTest().getY(), 0.0001);
+		Assert.assertFalse(this.getSpriteUnderTest().isVisible());
+	}
+	
+	/**
+	 * Test method for
+	 * {@link com.golden.gamedev.object.sprite.InvisibleSprite#InvisibleSprite(double, double, int, int)}.
+	 */
+	public void testInvisibleSpriteDoubleDoubleIntInt() {
+		Assert.assertNotNull(this.getSpriteUnderTest());
+		Assert.assertEquals(100, this.getSpriteUnderTest().getX(), 0.0001);
+		Assert.assertEquals(200, this.getSpriteUnderTest().getY(), 0.0001);
+		Assert.assertFalse(this.getSpriteUnderTest().isVisible());
+	}
+	
+	/**
+	 * Test method for
+	 * {@link com.golden.gamedev.object.sprite.InvisibleSprite#isVisible()}.
+	 */
+	public void testIsVisible() {
+		Assert.assertFalse(this.getSpriteUnderTest().isVisible());
+		this.getSpriteUnderTest().setVisible(true);
+		Assert.assertTrue(this.getSpriteUnderTest().isVisible());
+	}
+	
+	/**
+	 * Test method for
+	 * {@link com.golden.gamedev.object.sprite.InvisibleSprite#setVisible(boolean)}.
+	 */
+	public void testSetVisible() {
+		Assert.assertFalse(this.getSpriteUnderTest().isVisible());
+		this.getSpriteUnderTest().setVisible(true);
+		Assert.assertTrue(this.getSpriteUnderTest().isVisible());
 	}
 	
 	/**
@@ -75,5 +167,4 @@ public class InvisibleSpriteTest extends TestCase {
 	public void setSpriteUnderTest(InvisibleSprite spriteUnderTest) {
 		this.spriteUnderTest = spriteUnderTest;
 	}
-	
 }

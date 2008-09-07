@@ -16,7 +16,6 @@
  */
 package com.golden.gamedev.object.sprite;
 
-// JFC
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
@@ -34,6 +33,7 @@ import com.golden.gamedev.object.Sprite;
  * 
  * @since 0.2.3
  * @version 1.1
+ * @see Sprite
  */
 public class InvisibleSprite extends Sprite {
 	

@@ -68,8 +68,12 @@ public class VolatileSpriteTest extends TestCase {
 	 * Test method for
 	 * {@link com.golden.gamedev.object.sprite.VolatileSprite#VolatileSprite(java.awt.image.BufferedImage[], double, double)}.
 	 */
-	public void testVolatileSprite() {
+	public void testVolatileSpriteBufferedImageArrayDoubleDouble() {
 		Assert.assertNotNull(this.getSpriteUnderTest());
+		Assert.assertNotNull(this.getSpriteUnderTest().getImages());
+		Assert.assertEquals(3, this.getSpriteUnderTest().getImages().length);
+		Assert.assertEquals(13, this.getSpriteUnderTest().getX(), 0.0001);
+		Assert.assertEquals(12, this.getSpriteUnderTest().getY(), 0.0001);
 	}
 	
 	/**
@@ -86,6 +90,54 @@ public class VolatileSpriteTest extends TestCase {
 	 */
 	public void setSpriteUnderTest(VolatileSprite spriteUnderTest) {
 		this.spriteUnderTest = spriteUnderTest;
+	}
+	
+	/**
+	 * Test method for
+	 * {@link com.golden.gamedev.object.sprite.VolatileSprite#restoreSprite()}.
+	 */
+	public void testRestoreSprite() {
+		this.testUpdate();
+		// Once the Sprite is restored, testUpdate should function again
+		// properly.
+		this.getSpriteUnderTest().restoreSprite();
+		this.testUpdate();
+	}
+	
+	/**
+	 * Test method for
+	 * {@link com.golden.gamedev.object.sprite.VolatileSprite#VolatileSprite()}.
+	 */
+	public void testVolatileSprite() {
+		this.setSpriteUnderTest(new VolatileSprite());
+		Assert.assertNotNull(this.getSpriteUnderTest());
+		Assert.assertNull(this.getSpriteUnderTest().getImages());
+		Assert.assertEquals(0.0, this.getSpriteUnderTest().getX(), 0.00001);
+		Assert.assertEquals(0.0, this.getSpriteUnderTest().getY(), 0.00001);
+	}
+	
+	/**
+	 * Test method for
+	 * {@link com.golden.gamedev.object.sprite.VolatileSprite#VolatileSprite(java.awt.image.BufferedImage[])}.
+	 */
+	public void testVolatileSpriteBufferedImageArray() {
+		this.setSpriteUnderTest(new VolatileSprite(null));
+		Assert.assertNotNull(this.getSpriteUnderTest());
+		Assert.assertNull(this.getSpriteUnderTest().getImages());
+		Assert.assertEquals(0.0, this.getSpriteUnderTest().getX(), 0.00001);
+		Assert.assertEquals(0.0, this.getSpriteUnderTest().getY(), 0.00001);
+	}
+	
+	/**
+	 * Test method for
+	 * {@link com.golden.gamedev.object.sprite.VolatileSprite#VolatileSprite(double, double)}.
+	 */
+	public void testVolatileSpriteDoubleDouble() {
+		this.setSpriteUnderTest(new VolatileSprite(5.25, 2.4));
+		Assert.assertNotNull(this.getSpriteUnderTest());
+		Assert.assertNull(this.getSpriteUnderTest().getImages());
+		Assert.assertEquals(5.25, this.getSpriteUnderTest().getX(), 0.00001);
+		Assert.assertEquals(2.4, this.getSpriteUnderTest().getY(), 0.00001);
 	}
 	
 }

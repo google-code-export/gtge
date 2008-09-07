@@ -83,6 +83,8 @@ public class InvisibleSpriteTest extends TestCase {
 		this.setSpriteUnderTest(new InvisibleSprite());
 		Assert.assertNotNull(this.getSpriteUnderTest());
 		Assert.assertFalse(this.getSpriteUnderTest().isVisible());
+		Assert.assertEquals(0.0, this.getSpriteUnderTest().getX(), 0.00001);
+		Assert.assertEquals(0.0, this.getSpriteUnderTest().getY(), 0.00001);
 	}
 	
 	/**
@@ -94,6 +96,8 @@ public class InvisibleSpriteTest extends TestCase {
 		Assert.assertNotNull(this.getSpriteUnderTest());
 		Assert.assertNull(this.getSpriteUnderTest().getImage());
 		Assert.assertFalse(this.getSpriteUnderTest().isVisible());
+		Assert.assertEquals(0.0, this.getSpriteUnderTest().getX(), 0.00001);
+		Assert.assertEquals(0.0, this.getSpriteUnderTest().getY(), 0.00001);
 	}
 	
 	/**
@@ -116,6 +120,7 @@ public class InvisibleSpriteTest extends TestCase {
 	public void testInvisibleSpriteDoubleDouble() {
 		this.setSpriteUnderTest(new InvisibleSprite(100, 200));
 		Assert.assertNotNull(this.getSpriteUnderTest());
+		Assert.assertNull(this.getSpriteUnderTest().getImage());
 		Assert.assertEquals(100, this.getSpriteUnderTest().getX(), 0.0001);
 		Assert.assertEquals(200, this.getSpriteUnderTest().getY(), 0.0001);
 		Assert.assertFalse(this.getSpriteUnderTest().isVisible());
@@ -127,6 +132,7 @@ public class InvisibleSpriteTest extends TestCase {
 	 */
 	public void testInvisibleSpriteDoubleDoubleIntInt() {
 		Assert.assertNotNull(this.getSpriteUnderTest());
+		Assert.assertNull(this.getSpriteUnderTest().getImage());
 		Assert.assertEquals(100, this.getSpriteUnderTest().getX(), 0.0001);
 		Assert.assertEquals(200, this.getSpriteUnderTest().getY(), 0.0001);
 		Assert.assertFalse(this.getSpriteUnderTest().isVisible());

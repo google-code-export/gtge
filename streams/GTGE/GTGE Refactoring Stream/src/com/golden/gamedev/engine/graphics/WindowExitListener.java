@@ -16,63 +16,67 @@
  */
 package com.golden.gamedev.engine.graphics;
 
-// JFC
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 /**
- * <code>WindowExitListener</code> class is a dummy window listener class that
- * that forcing Java Virtual Machine to quit by calling
- * <code>System.exit()</code>.
- * <p>
+ * The <tt>WindowExitListener</tt> class is a {@link WindowListener} that only
+ * actually listens for the
+ * {@link WindowListener#windowClosing(WindowEvent) window closing event}, and
+ * forces the Java Virtual Machine to quit when the close button of the object
+ * being listened to is pressed by calling the {@link System#exit(int)} method
+ * with an argument of 0.
  * 
- * This window listener is used by all <code>java.awt.Frame</code> class in
- * this graphics engine package.
+ * @since 0.2.3
+ * @version 1.1
+ * 
  */
 public final class WindowExitListener implements WindowListener {
 	
+	/**
+	 * The <tt>WindowExitListener</tt> class' singleton instance.
+	 */
 	private static final WindowListener singleton = new WindowExitListener();
 	
 	/**
-	 * Returns <code>WindowExitListener</code> singleton instance.
-	 * @return The singleton instance.
+	 * Returns the <tt>WindowExitListener</tt> class' singleton instance.
+	 * @return The <tt>WindowExitListener</tt> class' singleton instance.
 	 */
 	public static WindowListener getInstance() {
 		return WindowExitListener.singleton;
 	}
 	
+	/**
+	 * Creates a new <tt>WindowExitListener</tt> instance.
+	 */
 	private WindowExitListener() {
+		super();
 	}
 	
 	/**
-	 * Calls <code>System.exit(0)</code> to force Java Virtual Machine to quit
-	 * when the close button of the parent object is pressed.
+	 * Calls the {@link System#exit(int)} method with an argument of 0 to force
+	 * the Java Virtual Machine to quit when the close button of the object
+	 * being listened to is pressed.
 	 */
 	public void windowClosing(WindowEvent e) {
 		System.exit(0);
 	}
 	
-	/** Do nothing. */
 	public void windowOpened(WindowEvent e) {
 	}
 	
-	/** Do nothing. */
 	public void windowClosed(WindowEvent e) {
 	}
 	
-	/** Do nothing. */
 	public void windowIconified(WindowEvent e) {
 	}
 	
-	/** Do nothing. */
 	public void windowDeiconified(WindowEvent e) {
 	}
 	
-	/** Do nothing. */
 	public void windowActivated(WindowEvent e) {
 	}
 	
-	/** Do nothing. */
 	public void windowDeactivated(WindowEvent e) {
 	}
 	

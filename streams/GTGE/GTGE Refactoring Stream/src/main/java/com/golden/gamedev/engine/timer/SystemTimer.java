@@ -96,21 +96,14 @@ public class SystemTimer implements BaseTimer {
 				Thread.sleep(this.sleepTime);
 			}
 			catch (InterruptedException e) {
+				// Intentionally blank
 			}
 			
 			this.overSleepTime = (System.currentTimeMillis() - this.end)
 			        - this.sleepTime;
 			
 		}
-		else { // sleepTime <= 0;
-			// give another thread a chance to run
-			try {
-				Thread.sleep(1);
-			}
-			catch (InterruptedException e) {
-			}
-			// Thread.yield();
-			
+		else { 
 			this.overSleepTime = 0;
 		}
 		

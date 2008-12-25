@@ -38,11 +38,7 @@ public class SystemTimer implements BaseTimer {
 	private int fps = 50; // requested FPS
 	private long msDelay; // requested sleep time
 	
-	private long start, end, // start, end time
-	        timeDiff, // time difference between end-start
-	        sleepTime; // real sleep time
-	        
-	private long overSleepTime; // hold drift on Thread.sleep() method
+	private long start, end; // start, end time
 	
 	/** **************************** OTHER VARIABLES **************************** */
 	
@@ -87,24 +83,22 @@ public class SystemTimer implements BaseTimer {
 	public long sleep() {
 		this.end = System.currentTimeMillis();
 		
-		this.timeDiff = this.end - this.start;
-		this.sleepTime = (this.msDelay - this.timeDiff) - this.overSleepTime;
+		long timeDiff = this.end - this.start;
+		long sleepTime = (this.msDelay - timeDiff);
+		long lastSleepAttemptedTime = System.currentTimeMillis();
 		
-		if (this.sleepTime > 0) {
+		while(sleepTime > 0) {
 			// some time left in this cycle
 			try {
-				Thread.sleep(this.sleepTime);
+				Thread.sleep(sleepTime);
 			}
 			catch (InterruptedException e) {
 				// Intentionally blank
 			}
 			
-			this.overSleepTime = (System.currentTimeMillis() - this.end)
-			        - this.sleepTime;
-			
-		}
-		else { 
-			this.overSleepTime = 0;
+			long currentInstant = System.currentTimeMillis();
+			sleepTime -= (currentInstant - lastSleepAttemptedTime);
+			lastSleepAttemptedTime = currentInstant;
 		}
 		
 		this.fpsCounter.calculateFPS();
@@ -149,7 +143,5 @@ public class SystemTimer implements BaseTimer {
 	
 	public void refresh() {
 		this.start = System.currentTimeMillis();
-		this.overSleepTime = 0;
 	}
-	
 }

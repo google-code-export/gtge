@@ -82,7 +82,7 @@
 		<name>Golden T Studios</name>
 		<url>http://www.goldenstudios.or.id</url>
 	</organization>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -98,6 +98,18 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
 				<version>2.2</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<links>
+						<link>http://java.sun.com/j2se/1.4.2/docs/api/</link>
+					</links>
+					<overview>
+						${basedir}/src/main/java/overview.html
+					</overview>
+				</configuration>
 			</plugin>
 		</plugins>
 	</reporting>

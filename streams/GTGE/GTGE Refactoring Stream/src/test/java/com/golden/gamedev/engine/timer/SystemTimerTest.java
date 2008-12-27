@@ -3,10 +3,6 @@
  */
 package com.golden.gamedev.engine.timer;
 
-import java.util.HashMap;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import junit.framework.TestCase;
 
 /**
@@ -157,7 +153,6 @@ public class SystemTimerTest extends TestCase {
 		
 		// The timer is still running, but it restarted.
 		assertTrue(timer.isRunning());
-		
 	}
 	
 	/**

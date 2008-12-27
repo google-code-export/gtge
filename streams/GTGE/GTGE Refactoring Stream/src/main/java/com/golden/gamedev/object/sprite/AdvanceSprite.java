@@ -56,9 +56,15 @@ public class AdvanceSprite extends AnimatedSprite {
 	private int status = -1;
 	private int direction = -1;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new <code>AdvanceSprite</code> with specified images and
@@ -73,8 +79,8 @@ public class AdvanceSprite extends AnimatedSprite {
 	}
 	
 	/**
-	 * Creates new <code>AdvanceSprite</code> with specified images and
-	 * located at (0, 0).
+	 * Creates new <code>AdvanceSprite</code> with specified images and located
+	 * at (0, 0).
 	 * <p>
 	 * 
 	 * @see #setLocation(double, double)
@@ -94,8 +100,8 @@ public class AdvanceSprite extends AnimatedSprite {
 	}
 	
 	/**
-	 * Creates new <code>AdvanceSprite</code> with null image and located at
-	 * (0, 0).
+	 * Creates new <code>AdvanceSprite</code> with null image and located at (0,
+	 * 0).
 	 * <p>
 	 * 
 	 * The sprite images must be set before rendering.
@@ -107,9 +113,15 @@ public class AdvanceSprite extends AnimatedSprite {
 		super();
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ SETTING ANIMATION ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ SETTING ANIMATION ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Sets sprite animation frame to specified animation array. The sprite will
@@ -124,15 +136,31 @@ public class AdvanceSprite extends AnimatedSprite {
 	 * @see #setAnimationFrame(int, int)
 	 */
 	public void setAnimationFrame(int[] animation) {
-		if (this.animationFrame != animation) {
-			this.animationFrame = animation;
-			
-			this
-			        .setAnimationFrame(
-			                0,
-			                (this.animationFrame != null) ? (this.animationFrame.length - 1)
-			                        : (this.getImages().length - 1));
-		}
+		this.animationFrame = animation;
+		this.resetAnimationFrameReferences();
+	}
+	
+	
+	
+	protected final void resetAnimationFrameReferences() {
+		this.setAnimationFrame(0, retrieveDefaultEndingFrame());
+    }
+
+	/**
+	 * Returns the default {@link #setFrame(int) ending frame} for the
+	 * {@link #setAnimationFrame(int[])} method to use when setting the
+	 * {@link #setAnimationFrame(int, int) ending animation frame}. Defaults to
+	 * using the {@link #animationFrame animation frame} length if non-null,
+	 * then the {@link #getImages() images length} if non-null, then defaults to
+	 * 0 if both are null.
+	 * 
+	 * @return The default {@link #setFrame(int) ending frame} for the
+	 *         {@link #setAnimationFrame(int[])} method to use when setting the
+	 *         {@link #setAnimationFrame(int, int) ending animation frame}.
+	 */
+	protected int retrieveDefaultEndingFrame() {
+		return (this.animationFrame != null) ? (this.animationFrame.length - 1)
+		        : ((this.getImages() != null) ? this.getImages().length - 1 : 0);
 	}
 	
 	/**
@@ -143,9 +171,15 @@ public class AdvanceSprite extends AnimatedSprite {
 		return this.animationFrame;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* IMAGE OPERATION ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* IMAGE OPERATION *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public BufferedImage getImage() {
 		return (this.animationFrame == null) ? super.getImage() : this
@@ -154,15 +188,18 @@ public class AdvanceSprite extends AnimatedSprite {
 	
 	public void setImages(BufferedImage[] image) {
 		super.setImages(image);
-		
-		if (this.animationFrame != null) {
-			this.setAnimationFrame(0, this.animationFrame.length - 1);
-		}
+		resetAnimationFrameReferences();
 	}
 	
-	/** ************************************************************************* */
-	/** ****************** NOTIFY STATUS / DIRECTION CHANGED ******************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ****************** NOTIFY STATUS / DIRECTION CHANGED ********************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * The sprite status and/or direction is changed, set appropriate sprite
@@ -181,9 +218,15 @@ public class AdvanceSprite extends AnimatedSprite {
 	protected void animationChanged(int oldStat, int oldDir, int status, int direction) {
 	}
 	
-	/** ************************************************************************* */
-	/** *********************** STATUS / DIRECTION ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *********************** STATUS / DIRECTION ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Sets new sprite direction. Direction is the direction which the sprite is
@@ -198,13 +241,7 @@ public class AdvanceSprite extends AnimatedSprite {
 	 * @see #setStatus(int)
 	 */
 	public void setDirection(int dir) {
-		if (this.direction != dir) {
-			int oldDir = this.direction;
-			this.direction = dir;
-			
-			this.animationChanged(this.status, oldDir, this.status,
-			        this.direction);
-		}
+		setAnimation(this.status, dir);
 	}
 	
 	/**
@@ -227,13 +264,7 @@ public class AdvanceSprite extends AnimatedSprite {
 	 * @see #setDirection(int)
 	 */
 	public void setStatus(int stat) {
-		if (this.status != stat) {
-			int oldStat = this.status;
-			this.status = stat;
-			
-			this.animationChanged(oldStat, this.direction, this.status,
-			        this.direction);
-		}
+		setAnimation(stat, this.direction);
 	}
 	
 	/**
@@ -262,20 +293,4 @@ public class AdvanceSprite extends AnimatedSprite {
 			this.animationChanged(oldStat, oldDir, stat, dir);
 		}
 	}
-	
-	/** ************************************************************************* */
-	/** ************************** RENDER SPRITE ******************************** */
-	/** ************************************************************************* */
-	
-	public void render(Graphics2D g, int xs, int ys) {
-		if (this.animationFrame != null) {
-			g.drawImage(this.getImage(this.animationFrame[this.getFrame()]),
-			        xs, ys, null);
-			
-		}
-		else {
-			super.render(g, xs, ys);
-		}
-	}
-	
 }

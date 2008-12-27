@@ -744,7 +744,7 @@ public class Sprite implements java.io.Serializable {
 	 * @param y screen y-coordinate
 	 */
 	public void render(Graphics2D g, int x, int y) {
-		g.drawImage(this.image, x, y, null);
+		g.drawImage(this.getImage(), x, y, null);
 	}
 	
 	/** ************************************************************************* */

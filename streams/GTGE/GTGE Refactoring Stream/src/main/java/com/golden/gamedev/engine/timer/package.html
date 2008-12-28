@@ -5,7 +5,21 @@
 </head>
 
 <body bgcolor="white">
-<p>Timer engine implementation.</p>
+<p>The timer engine implementation package provides an
+implementation of the {@link com.golden.gamedev.engine.BaseTimer}
+interface. It contains two classes.</p>
+<p>The first class, useable even without an actual timer, is {@link
+com.golden.gamedev.engine.timer.FPSCounter}. This class is very easy to
+use to calculate a running total of the frames per second displayed via
+a game.</p>
+<p>The second class, {@link
+com.golden.gamedev.engine.timer.SystemTimer}, is an implementation of
+the {@link com.golden.gamedev.engine.BaseTimer} interface that has a
+built-in correction scheme for "time drift" due to {@link
+java.lang.InterruptedException interrupted exceptions} occurring during
+sleep. It uses {@link java.lang.System#currentTimeMillis} to keep track
+of time, and a {@link com.golden.gamedev.engine.timer.FPSCounter} to
+keep track of the frames per second.</p>
 
 @see com.golden.gamedev.engine.BaseTimer
 </body>

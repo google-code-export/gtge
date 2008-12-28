@@ -43,6 +43,14 @@ public class FPSCounterTest extends TestCase {
 	
 	/**
 	 * Test method for
+	 * {@link com.golden.gamedev.engine.timer.FPSCounter#reset()}.
+	 */
+	public void testReset() {
+		getCounter().reset();
+	}
+	
+	/**
+	 * Test method for
 	 * {@link com.golden.gamedev.engine.timer.FPSCounter#calculateFPS()}.
 	 */
 	public void testCalculateFPS() {

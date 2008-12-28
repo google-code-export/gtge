@@ -16,49 +16,66 @@
  */
 package com.golden.gamedev.engine.timer;
 
-// GTGE
 import com.golden.gamedev.engine.BaseTimer;
 
 /**
- * The standard timer used in Golden T Game Engine (GTGE) Frame Work.
- * <p>
+ * The {@link SystemTimer} class provides the standard implementation of the
+ * {@link BaseTimer} interface that is used as the default {@link BaseTimer}
+ * implementation in the Golden T Game Engine (GTGE) framework. <br />
+ * <br />
+ * The {@link SystemTimer} class uses {@link System#currentTimeMillis()} for
+ * timing purposes, and its {@link #sleep()} method will execute a full sleep
+ * cycle if its {@link Thread} has to sleep, regardless of any
+ * {@link InterruptedException interrupted exceptions} it may encounter. <br />
+ * <br />
+ * <b><i>Warning: The {@link SystemTimer} class is not threadsafe. Multiple
+ * threads will have to use different instances of the {@link SystemTimer}
+ * class.</i></b>
  * 
- * This timer is using System.currentTimeMillis() and support for time drift
- * calculation.
- * <p>
- * 
- * See {@link com.golden.gamedev.engine.BaseTimer} for how to use timer engine
- * separated from Golden T Game Engine (GTGE) Frame Work.
+ * @version 1.0
+ * @since 0.2.4
+ * @see BaseTimer
  */
 public class SystemTimer implements BaseTimer {
 	
-	/** ************************ TIMER FPS VARIABLES **************************** */
-	
-	// timer variables
-	private int fps = 50; // requested FPS
-	private long msDelay; // requested sleep time
-	
-	private long start, end; // start, end time
-	
-	/** **************************** OTHER VARIABLES **************************** */
-	
-	private boolean running;
-	private FPSCounter fpsCounter;
-	
-	/** ************************************************************************* */
-	/** ************************** CONSTRUCTOR ********************************** */
-	/** ************************************************************************* */
+	/**
+	 * The requested frames per second (FPS) of the game.
+	 * @see #getFPS()
+	 * @see #setFPS(int)
+	 */
+	private int fps = 50;
 	
 	/**
-	 * Constructs new <code>SystemTimer</code>.
+	 * The total time, in milliseconds, that the {@link SystemTimer} instance
+	 * should {@link #sleep() sleep} for.
+	 * @see #sleep()
+	 */
+	private long timeToSleep;
+	
+	/**
+	 * The time, in milliseconds, of the exit of the last call to
+	 * {@link #sleep() sleep}.
+	 * @see #sleep()
+	 */
+	private long startTime;
+	
+	/**
+	 * Whether or not the current {@link SystemTimer} instance is running.
+	 */
+	private boolean running;
+	
+	/**
+	 * The {@link FPSCounter} to use to calculate the {@link #getCurrentFPS()
+	 * current frames per second (FPS)}.
+	 */
+	private FPSCounter fpsCounter = new FPSCounter();
+	
+	/**
+	 * Creates a new {@link SystemTimer} instance.
 	 */
 	public SystemTimer() {
-		this.fpsCounter = new FPSCounter();
+		super();
 	}
-	
-	/** ************************************************************************* */
-	/** ******************** START/STOP TIMER OPERATION ************************* */
-	/** ************************************************************************* */
 	
 	public void startTimer() {
 		if (this.running) {
@@ -66,29 +83,24 @@ public class SystemTimer implements BaseTimer {
 		}
 		this.running = true;
 		
-		this.msDelay = 1000 / this.fps;
+		this.timeToSleep = 1000 / this.fps;
 		this.refresh();
 		
-		this.fpsCounter.refresh();
+		this.fpsCounter.reset();
 	}
 	
 	public void stopTimer() {
 		this.running = false;
 	}
 	
-	/** ************************************************************************* */
-	/** ********************** MAIN FUNCTION: SLEEP() *************************** */
-	/** ************************************************************************* */
-	
 	public long sleep() {
-		this.end = System.currentTimeMillis();
+		long currentTime = System.currentTimeMillis();
 		
-		long timeDiff = this.end - this.start;
-		long sleepTime = (this.msDelay - timeDiff);
+		long timeDiff = currentTime - this.startTime;
+		long sleepTime = this.timeToSleep - timeDiff;
 		long lastSleepAttemptedTime = System.currentTimeMillis();
 		
-		while(sleepTime > 0) {
-			// some time left in this cycle
+		while (sleepTime > 0) {
 			try {
 				Thread.sleep(sleepTime);
 			}
@@ -97,22 +109,18 @@ public class SystemTimer implements BaseTimer {
 			}
 			
 			long currentInstant = System.currentTimeMillis();
-			sleepTime -= (currentInstant - lastSleepAttemptedTime);
+			sleepTime -= currentInstant - lastSleepAttemptedTime;
 			lastSleepAttemptedTime = currentInstant;
 		}
 		
 		this.fpsCounter.calculateFPS();
 		
-		long end = System.currentTimeMillis();
-		long elapsedTime = end - this.start;
-		this.start = end;
+		currentTime = System.currentTimeMillis();
+		long elapsedTime = currentTime - this.startTime;
+		this.startTime = currentTime;
 		
 		return elapsedTime;
 	}
-	
-	/** ************************************************************************* */
-	/** ************************* TIMER PROPERTIES ****************************** */
-	/** ************************************************************************* */
 	
 	public boolean isRunning() {
 		return this.running;
@@ -127,9 +135,6 @@ public class SystemTimer implements BaseTimer {
 	}
 	
 	public void setFPS(int fps) {
-		if (this.fps == fps) {
-			return;
-		}
 		this.fps = fps;
 		
 		if (this.running) {
@@ -142,6 +147,6 @@ public class SystemTimer implements BaseTimer {
 	}
 	
 	public void refresh() {
-		this.start = System.currentTimeMillis();
+		this.startTime = System.currentTimeMillis();
 	}
 }

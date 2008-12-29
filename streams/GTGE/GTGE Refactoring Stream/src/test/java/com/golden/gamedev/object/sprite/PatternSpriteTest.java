@@ -3,37 +3,11 @@
  */
 package com.golden.gamedev.object.sprite;
 
-import java.awt.Color;
-import java.awt.Composite;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.Image;
-import java.awt.Paint;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.Stroke;
-import java.awt.RenderingHints.Key;
-import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.ImageObserver;
-import java.awt.image.RenderedImage;
-import java.awt.image.renderable.RenderableImage;
-import java.text.AttributedCharacterIterator;
-import java.util.Map;
-
-import sun.print.PeekGraphics;
-
-import com.golden.gamedev.object.Sprite;
-import com.golden.mock.java.awt.MockGraphics2D;
 
 import junit.framework.TestCase;
+
+import com.golden.gamedev.object.Sprite;
 
 
 /**
@@ -58,17 +32,13 @@ public class PatternSpriteTest extends TestCase {
 	}
 	
 	/**
-	 * Test method for {@link com.golden.gamedev.object.sprite.PatternSprite#render(java.awt.Graphics2D, int, int)}.
+	 * Test method for {@link com.golden.gamedev.object.sprite.PatternSprite#getImage()}.
 	 */
-	public void testRenderGraphics2DIntInt() {
-		try {
-			sprite.render(null, 1, 2);
-			fail("Expected null pointer exception - graphics context is null.");
-		}
-		catch(NullPointerException e) {
-			//Intentionally Blank
-		}
-		sprite.render(new MockGraphics2D(), 50, 50);
+	public void testGetImage() {
+		BufferedImage image = new BufferedImage(32, 32, BufferedImage.TYPE_INT_RGB);
+		Sprite pattern = new Sprite(image);
+		sprite = new PatternSprite(pattern);
+		assertEquals(image, sprite.getImage());
 	}
 	
 	/**

@@ -36,8 +36,8 @@ package com.golden.gamedev.engine.timer;
  * threads will have to use different instances of the {@link FPSCounter}
  * class.</i></b>
  * 
- * @version 1.0
- * @since 0.2.4
+ * @version 1.1
+ * @since 0.2.3
  * 
  */
 public class FPSCounter {

@@ -184,6 +184,17 @@ public class AdvanceSpriteTest extends TestCase {
 		sprite.setAnimation(3, 4);
 	}
 	
+	/**
+	 * Test method for
+	 * {@link com.golden.gamedev.object.sprite.AdvanceSprite#setStatusAndDirection(int, int)}
+	 * .
+	 */
+	public void testSetStatusAndDirection() {
+		sprite.setStatusAndDirection(3, 4);
+		// This call will not call animation changed.  Included for code coverage.
+		sprite.setStatusAndDirection(3, 4);
+	}
+	
 	public AdvanceSprite getSprite() {
 		return sprite;
 	}

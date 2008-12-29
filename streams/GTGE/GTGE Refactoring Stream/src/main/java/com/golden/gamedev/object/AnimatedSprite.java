@@ -17,7 +17,6 @@
 package com.golden.gamedev.object;
 
 // JFC
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 /**

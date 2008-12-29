@@ -16,136 +16,159 @@
  */
 package com.golden.gamedev.object.sprite;
 
-// JFC
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
 import com.golden.gamedev.object.AnimatedSprite;
+import com.golden.gamedev.object.Sprite;
 
 /**
- * <code>AdvanceSprite</code> class is animated sprite that has status and
- * direction attributes, that way the animation is fully controlled by its
- * status and direction.
- * <p>
+ * The {@link AdvanceSprite} class is an {@link AnimatedSprite} that has support
+ * for storing a {@link Sprite sprite's} {@link #getDirection() direction} and
+ * {@link #getStatus() status}, and the ability to change the default sequence
+ * of animation {@link #getImages() frames} that the {@link AnimatedSprite}
+ * provides. <br />
+ * <br />
+ * To change the default sequence of animation that the {@link AnimatedSprite}
+ * provides, the method {@link #setAnimationFrame(int[])} is provided. See its
+ * documentation for more details. <br />
+ * <br />
+ * Although the {@link AdvanceSprite} class can be used directly and its
+ * {@link #getDirection() direction} and {@link #getStatus() status} set and
+ * retrieved, the {@link AdvanceSprite} class should be subclassed if this
+ * functionality is needed. Upon setting either the {@link #setDirection()
+ * direction}, {@link #setStatus() status}, or
+ * {@link #setStatusAndDirection(int, int) both}, the method {@link
+ * animationChanged(int, int, int, int)} is invoked if one of the two changed,
+ * and this method should be overridden to handle changes to the
+ * {@link AdvanceSprite sprite's} state based on a {@link #getDirection()
+ * direction} or {@link #getStatus() status} change.<br />
+ * <br />
+ * <b><i>Warning: The {@link AdvanceSprite} class is not threadsafe. Multiple
+ * threads will have to use different instances of the {@link AdvanceSprite}
+ * class.</i></b>
  * 
- * This class can be used directly, however this class meant to be subclassed.
- * The method that control the sprite animation and the one that need to be
- * override is {@link #animationChanged(int, int, int, int) animationChanged(int
- * oldStat, int oldDir, int status, int direction)}.
- * <p>
- * 
- * The <code>animationChanged</code> is the method that taking care the sprite
- * animation, everytime sprite {@link #setStatus(int) status} or
- * {@link #setDirection(int) direction} is being changed, the
- * <code>animationChanged</code> is called automatically, and this sprite need
- * to adjust its animation based on the new status and direction.
- * 
- * @see #setStatus(int)
- * @see #setDirection(int)
+ * @version 1.1
+ * @since 0.2.3
+ * @see AnimatedSprite
+ * @see #setAnimationFrame(int[])
+ * @see #setStatusAndDirection(int, int)
  * @see #animationChanged(int, int, int, int)
  */
 public class AdvanceSprite extends AnimatedSprite {
 	
 	/**
-	 * 
+	 * A serialVersionUID for the {@link AdvanceSprite} class.
+	 * @see Serializable
 	 */
 	private static final long serialVersionUID = 6163338876818201162L;
 	
+	/**
+	 * The sequence of animation frames to use.
+	 * @see #getImage()
+	 */
 	private int[] animationFrame;
 	
+	/**
+	 * The current status of this {@link AdvanceSprite} instance.
+	 * @see #animationChanged(int, int, int, int)
+	 */
 	private int status = -1;
+	
+	/**
+	 * The current direction of this {@link AdvanceSprite} instance.
+	 * @see #animationChanged(int, int, int, int)
+	 */
 	private int direction = -1;
 	
 	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ***************************** CONSTRUCTOR *******************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
-	/**
-	 * Creates new <code>AdvanceSprite</code> with specified images and
-	 * location.
-	 * 
-	 * @param image sprite images
-	 * @param x sprite x-coordinate
-	 * @param y sprite y-coordinate
-	 */
-	public AdvanceSprite(BufferedImage[] image, double x, double y) {
-		super(image, x, y);
-	}
-	
-	/**
-	 * Creates new <code>AdvanceSprite</code> with specified images and located
-	 * at (0, 0).
-	 * <p>
-	 * 
-	 * @see #setLocation(double, double)
-	 */
-	public AdvanceSprite(BufferedImage[] image) {
-		super(image);
-	}
-	
-	/**
-	 * Creates new <code>AdvanceSprite</code> with specified location.
-	 * 
-	 * @param x sprite x-coordinate
-	 * @param y sprite y-coordinate
-	 */
-	public AdvanceSprite(double x, double y) {
-		super(x, y);
-	}
-	
-	/**
-	 * Creates new <code>AdvanceSprite</code> with null image and located at (0,
-	 * 0).
-	 * <p>
-	 * 
-	 * The sprite images must be set before rendering.
-	 * 
-	 * @see #setImages(BufferedImage[])
-	 * @see #setLocation(double, double)
+	 * Creates a new {@link AdvanceSprite} instance with the
+	 * {@link AnimatedSprite#AnimatedSprite()} constructor.
+	 * @see AnimatedSprite#AnimatedSprite()
 	 */
 	public AdvanceSprite() {
 		super();
 	}
 	
 	/**
-	 * *************************************************************************
+	 * Creates a new {@link AdvanceSprite} instance with the
+	 * {@link AnimatedSprite#AnimatedSprite(BufferedImage[])} constructor.
+	 * @param image The {@link #getImages() images} to use in this
+	 *        {@link AdvanceSprite} instance's animation sequence.
+	 * @see AnimatedSprite#AnimatedSprite(BufferedImage[])
 	 */
-	/**
-	 * ************************ SETTING ANIMATION ******************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
+	public AdvanceSprite(BufferedImage[] image) {
+		super(image);
+	}
 	
 	/**
-	 * Sets sprite animation frame to specified animation array. The sprite will
-	 * be animated according to the animation array.
-	 * <p>
+	 * Creates a new {@link AdvanceSprite} instance with the
+	 * {@link AnimatedSprite#AnimatedSprite(BufferedImage[], double, double)}
+	 * constructor.
 	 * 
-	 * Use this if only the animation is not following the standard image
-	 * frames, for example if the sprite walking the animation is 2-3-4-2-1,
-	 * then set the animation frame to : setAnimationFrame(new int[] { 2, 3, 4,
-	 * 2, 1 });
-	 * 
-	 * @see #setAnimationFrame(int, int)
+	 * @param image The {@link #getImages() images} to use in this
+	 *        {@link AdvanceSprite} instance's animation sequence.
+	 * @param x The {@link #getX() x-coordinate position} of this
+	 *        {@link AdvanceSprite} instance.
+	 * @param y The {@link #getY() y-coordinate position} of this
+	 *        {@link AdvanceSprite} instance.
+	 * @see AnimatedSprite#AnimatedSprite(BufferedImage[], double, double)
 	 */
-	public void setAnimationFrame(int[] animation) {
-		this.animationFrame = animation;
+	public AdvanceSprite(BufferedImage[] image, double x, double y) {
+		super(image, x, y);
+	}
+	
+	/**
+	 * Creates a new {@link AdvanceSprite} instance with the
+	 * {@link AnimatedSprite#AnimatedSprite(double, double)} constructor.
+	 * 
+	 * @param x The {@link #getX() x-coordinate position} of this
+	 *        {@link AdvanceSprite} instance.
+	 * @param y The {@link #getY() y-coordinate position} of this
+	 *        {@link AdvanceSprite} instance.
+	 * @see AnimatedSprite#AnimatedSprite(double, double)
+	 */
+	public AdvanceSprite(double x, double y) {
+		super(x, y);
+	}
+	
+	/**
+	 * Sets an array of integers that overrides the default animation sequence
+	 * inherited from {@link AnimatedSprite}. <br />
+	 * <br />
+	 * By default, {@link AdvanceSprite} has a null animation array, which means
+	 * that it animates in the {@link #getImages() frame sequence} sequentially
+	 * as {@link AnimatedSprite} does, as in frame 0, 1, 2, ...
+	 * {@link #getImages() images.length} - 1. The animationFrame array
+	 * overrides this sequence, and associates the current frame from the
+	 * default sequence with a possibly different frame. <br />
+	 * <br />
+	 * Setting this sequence to {1, 3, 0, 2}, for example, makes the first frame
+	 * (0) correspond to frame 1, the second frame (1) correspond to frame 3,
+	 * etc. When the animationFrame is set, the
+	 * {@link #getStartAnimationFrame() starting animation frame} is set to 0
+	 * and the {@link #getFinishAnimationFrame() ending animation frame} is set
+	 * to the length of the animationFrame array minus 1, to correspond with its
+	 * last integer index.
+	 */
+	public void setAnimationFrame(int[] animationFrame) {
+		this.animationFrame = animationFrame;
 		this.resetAnimationFrameReferences();
 	}
 	
-	
-	
+	/**
+	 * Resets the animation frame references by calling
+	 * {@link #setAnimationFrame(int, int)} with 0 as the first parameter, and
+	 * {@link #retrieveDefaultEndingFrame()} for the second parameter. Marked
+	 * final to always allow for calling 0 as the first parameter, if this is
+	 * not desired, override the {@link #setAnimationFrame(int[])} and
+	 * {@link #setImages(BufferedImage[])} methods to prevent calling this
+	 * method.
+	 */
 	protected final void resetAnimationFrameReferences() {
 		this.setAnimationFrame(0, retrieveDefaultEndingFrame());
-    }
-
+	}
+	
 	/**
 	 * Returns the default {@link #setFrame(int) ending frame} for the
 	 * {@link #setAnimationFrame(int[])} method to use when setting the
@@ -171,16 +194,6 @@ public class AdvanceSprite extends AnimatedSprite {
 		return this.animationFrame;
 	}
 	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ************************* IMAGE OPERATION *******************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
 	public BufferedImage getImage() {
 		return (this.animationFrame == null) ? super.getImage() : this
 		        .getImage(this.animationFrame[this.getFrame()]);
@@ -192,105 +205,108 @@ public class AdvanceSprite extends AnimatedSprite {
 	}
 	
 	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ****************** NOTIFY STATUS / DIRECTION CHANGED ********************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
-	/**
-	 * The sprite status and/or direction is changed, set appropriate sprite
-	 * animation.
-	 * <p>
+	 * Notifies the {@link AdvanceSprite} instance that either the
+	 * {@link #getDirection() direction} or {@link #getStatus() status} has
+	 * changed, which may need to result in updates to the {@link AdvanceSprite}
+	 * instance's internal state. <br />
+	 * <br />
+	 * By default, this method does nothing. Subclasses may override this method
+	 * to execute specific behavior when the {@link #getDirection() direction}
+	 * or {@link #getStatus() status} changes.
 	 * 
-	 * This method is responsible to set the sprite animation. By default this
-	 * method do nothing.
-	 * 
-	 * @see #setAnimationFrame(int, int)
-	 * @see #setAnimationFrame(int[])
-	 * @see #setImages(BufferedImage[])
-	 * @see #setAnimate(boolean)
-	 * @see #setLoopAnim(boolean)
+	 * @param oldStatus The old {@link #getStatus() status} of this
+	 *        {@link AdvanceSprite} instance.
+	 * @param oldDirection The old {@link #getDirection() direction} of this
+	 *        {@link AdvanceSprite} instance.
+	 * @param status The current {@link #getStatus() status} of this
+	 *        {@link AdvanceSprite} instance.
+	 * @param direction The current {@link #getDirection() direction} of this
+	 *        {@link AdvanceSprite} instance.
+	 * @see #setStatusAndDirection(int, int)
 	 */
-	protected void animationChanged(int oldStat, int oldDir, int status, int direction) {
+	protected void animationChanged(int oldStatus, int oldDirection, int status, int direction) {
+		// Intentionally blank
 	}
 	
 	/**
-	 * *************************************************************************
+	 * Sets the current direction of this {@link AdvanceSprite} instance. This
+	 * method is a shortcut method for calling
+	 * {@link #setStatusAndDirection(int, int)} with {@link #getStatus() the
+	 * AdvanceSprite's status} as the {@link #getStatus() status} to set.
+	 * @param direction The current direction of this {@link AdvanceSprite}
+	 *        instance.
+	 * @see #setStatusAndDirection(int, int)
 	 */
-	/**
-	 * *********************** STATUS / DIRECTION ******************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
-	/**
-	 * Sets new sprite direction. Direction is the direction which the sprite is
-	 * facing, like left, right, up, down, each direction has its own animation
-	 * based on its status.
-	 * <p>
-	 * 
-	 * If the sprite direction is changed (current direction != new direction),
-	 * {@link #animationChanged(int, int, int, int)} will be notified.
-	 * 
-	 * @see #animationChanged(int, int, int, int)
-	 * @see #setStatus(int)
-	 */
-	public void setDirection(int dir) {
-		setAnimation(this.status, dir);
+	public void setDirection(int direction) {
+		setStatusAndDirection(this.status, direction);
 	}
 	
 	/**
-	 * Returns current sprite direction.
+	 * Gets the current direction of this {@link AdvanceSprite} instance.
+	 * @return The current direction of this {@link AdvanceSprite} instance.
 	 */
 	public int getDirection() {
 		return this.direction;
 	}
 	
 	/**
-	 * Sets new sprite status. Status is the sprite status no matter in which
-	 * directional the sprite is facing, like walking status, standing status,
-	 * jumping status.
-	 * <p>
-	 * 
-	 * If the sprite status is changed (current status != new status),
-	 * {@link #animationChanged(int, int, int, int)} will be notified.
-	 * 
-	 * @see #animationChanged(int, int, int, int)
-	 * @see #setDirection(int)
+	 * Sets the current status of this {@link AdvanceSprite} instance. This
+	 * method is a shortcut method for calling
+	 * {@link #setStatusAndDirection(int, int)} with {@link #getDirection() the
+	 * AdvanceSprite's direction} as the {@link #getDirection() direction} to
+	 * set.
+	 * @param status The current status of this {@link AdvanceSprite} instance.
+	 * @see #setStatusAndDirection(int, int)
 	 */
-	public void setStatus(int stat) {
-		setAnimation(stat, this.direction);
+	public void setStatus(int status) {
+		setStatusAndDirection(status, this.direction);
 	}
 	
 	/**
-	 * Returns current sprite status.
+	 * Gets the current status of this {@link AdvanceSprite} instance.
+	 * @return The current status of this {@link AdvanceSprite} instance.
 	 */
 	public int getStatus() {
 		return this.status;
 	}
 	
 	/**
-	 * Sets sprite animation to specified status and direction. This method to
-	 * simplify setting sprite status and direction at once.
+	 * Sets both the {@link AdvanceSprite} instance's {@link #getStatus()
+	 * status} and {@link #getDirection() direction} at once. If either the
+	 * {@link #getStatus() status} or {@link #getDirection() direction} has
+	 * changed, the {@link #animationChanged(int, int, int, int)} method is
+	 * invoked.
 	 * 
-	 * @param stat the new sprite status
-	 * @param dir the new sprite direction
+	 * @param stat The status of this {@link AdvanceSprite} instance.
+	 * @param dir The direction of this {@link AdvanceSprite} instance.
 	 * @see #animationChanged(int, int, int, int)
+	 * @deprecated Deprecated due to naming, use
+	 *             {@link #setStatusAndDirection(int, int)} instead.
 	 */
 	public void setAnimation(int stat, int dir) {
-		if (this.status != stat || this.direction != dir) {
-			int oldStat = this.status;
-			int oldDir = this.direction;
-			
-			this.status = stat;
-			this.direction = dir;
-			
-			this.animationChanged(oldStat, oldDir, stat, dir);
+		setStatusAndDirection(stat, dir);
+	}
+	
+	/**
+	 * Sets both the {@link AdvanceSprite} instance's {@link #getStatus()
+	 * status} and {@link #getDirection() direction} at once. If either the
+	 * {@link #getStatus() status} or {@link #getDirection() direction} has
+	 * changed, the {@link #animationChanged(int, int, int, int)} method is
+	 * invoked.
+	 * 
+	 * @param status The status of this {@link AdvanceSprite} instance.
+	 * @param direction The direction of this {@link AdvanceSprite} instance.
+	 * @see #animationChanged(int, int, int, int)
+	 */
+	public void setStatusAndDirection(int status, int direction) {
+		int oldStatus = this.status;
+		int oldDirection = this.direction;
+		
+		this.status = status;
+		this.direction = direction;
+		
+		if (oldStatus != this.status || oldDirection != this.direction) {
+			this.animationChanged(oldStatus, oldDirection, status, direction);
 		}
 	}
 }

@@ -5,9 +5,22 @@
 </head>
 
 <body bgcolor="white">
-<p>Sprite implementation.</p>
+<p>The sprite package contains specialized implementations of {@link com.golden.gamedev.object.Sprite sprites}.</p>
+<p>
+The four {@link com.golden.gamedev.object.Sprite sprite} implementations are: <br />
+<ul>
+<li>{@link com.golden.gamedev.object.sprite.AdvanceSprite} - An advanced implementation of an {@link com.golden.gamedev.object.AnimatedSprite}.
+	<ul>
+		<li>{@link com.golden.gamedev.object.sprite.VolatileSprite} - An {@link com.golden.gamedev.object.sprite.AdvanceSprite} designed to animate once and then disappear.</li>
+	</ul>
+</li>
+<li>{@link com.golden.gamedev.object.sprite.InvisibleSprite} - A {@link com.golden.gamedev.object.Sprite} that can be set to disappear.</li>
+<li>{@link com.golden.gamedev.object.sprite.PatternSprite} - A {@link com.golden.gamedev.object.Sprite} that has its rendered image controlled by a delegate {@link com.golden.gamedev.object.Sprite pattern sprite}.</li>
 
+
+</p>
 @see com.golden.gamedev.object.Sprite
+@see com.golden.gamedev.object.AnimatedSprite
 </body>
 
 </html>

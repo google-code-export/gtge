@@ -94,13 +94,13 @@ public class VolatileSpriteTest extends TestCase {
 	
 	/**
 	 * Test method for
-	 * {@link com.golden.gamedev.object.sprite.VolatileSprite#restoreSprite()}.
+	 * {@link com.golden.gamedev.object.sprite.VolatileSprite#restore()}.
 	 */
-	public void testRestoreSprite() {
+	public void testRestore() {
 		this.testUpdate();
 		// Once the Sprite is restored, testUpdate should function again
 		// properly.
-		this.getSpriteUnderTest().restoreSprite();
+		this.getSpriteUnderTest().restore();
 		this.testUpdate();
 	}
 	

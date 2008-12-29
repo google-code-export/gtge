@@ -33,7 +33,7 @@ import com.golden.gamedev.engine.BaseTimer;
  * class.</i></b>
  * 
  * @version 1.0
- * @since 0.2.4
+ * @since 0.2.3
  * @see BaseTimer
  */
 public class SystemTimer implements BaseTimer {
@@ -46,12 +46,16 @@ public class SystemTimer implements BaseTimer {
 	private int fps = 50;
 	
 	/**
-	 * The total time, in milliseconds, that the {@link SystemTimer} instance
-	 * should {@link #sleep() sleep} for.
-	 * @see #sleep()
-	 */
-	private long timeToSleep;
-	
+     * The {@link FPSCounter} to use to calculate the {@link #getCurrentFPS()
+     * current frames per second (FPS)}.
+     */
+    private FPSCounter fpsCounter = new FPSCounter();
+
+	/**
+     * Whether or not the current {@link SystemTimer} instance is running.
+     */
+    private boolean running;
+
 	/**
 	 * The time, in milliseconds, of the exit of the last call to
 	 * {@link #sleep() sleep}.
@@ -60,16 +64,12 @@ public class SystemTimer implements BaseTimer {
 	private long startTime;
 	
 	/**
-	 * Whether or not the current {@link SystemTimer} instance is running.
-	 */
-	private boolean running;
-	
-	/**
-	 * The {@link FPSCounter} to use to calculate the {@link #getCurrentFPS()
-	 * current frames per second (FPS)}.
-	 */
-	private FPSCounter fpsCounter = new FPSCounter();
-	
+     * The total time, in milliseconds, that the {@link SystemTimer} instance
+     * should {@link #sleep() sleep} for.
+     * @see #sleep()
+     */
+    private long timeToSleep;
+
 	/**
 	 * Creates a new {@link SystemTimer} instance.
 	 */
@@ -77,6 +77,63 @@ public class SystemTimer implements BaseTimer {
 		super();
 	}
 	
+	public int getCurrentFPS() {
+    	return this.fpsCounter.getCurrentFPS();
+    }
+
+	public int getFPS() {
+    	return this.fps;
+    }
+
+	public long getTime() {
+    	return System.currentTimeMillis();
+    }
+
+	public boolean isRunning() {
+    	return this.running;
+    }
+
+	public void refresh() {
+    	this.startTime = System.currentTimeMillis();
+    }
+
+	public void setFPS(int fps) {
+    	this.fps = fps;
+    	
+    	if (this.running) {
+    		this.startTimer();
+    	}
+    }
+
+	public long sleep() {
+    	long currentTime = System.currentTimeMillis();
+    	
+    	long timeDiff = currentTime - this.startTime;
+    	long sleepTime = this.timeToSleep - timeDiff;
+    	long lastSleepAttemptedTime = System.currentTimeMillis();
+    	
+    	while (sleepTime > 0) {
+    		try {
+    			Thread.sleep(sleepTime);
+    		}
+    		catch (InterruptedException e) {
+    			// Intentionally blank
+    		}
+    		
+    		long currentInstant = System.currentTimeMillis();
+    		sleepTime -= currentInstant - lastSleepAttemptedTime;
+    		lastSleepAttemptedTime = currentInstant;
+    	}
+    	
+    	this.fpsCounter.calculateFPS();
+    	
+    	currentTime = System.currentTimeMillis();
+    	long elapsedTime = currentTime - this.startTime;
+    	this.startTime = currentTime;
+    	
+    	return elapsedTime;
+    }
+
 	public void startTimer() {
 		if (this.running) {
 			this.stopTimer();
@@ -91,62 +148,5 @@ public class SystemTimer implements BaseTimer {
 	
 	public void stopTimer() {
 		this.running = false;
-	}
-	
-	public long sleep() {
-		long currentTime = System.currentTimeMillis();
-		
-		long timeDiff = currentTime - this.startTime;
-		long sleepTime = this.timeToSleep - timeDiff;
-		long lastSleepAttemptedTime = System.currentTimeMillis();
-		
-		while (sleepTime > 0) {
-			try {
-				Thread.sleep(sleepTime);
-			}
-			catch (InterruptedException e) {
-				// Intentionally blank
-			}
-			
-			long currentInstant = System.currentTimeMillis();
-			sleepTime -= currentInstant - lastSleepAttemptedTime;
-			lastSleepAttemptedTime = currentInstant;
-		}
-		
-		this.fpsCounter.calculateFPS();
-		
-		currentTime = System.currentTimeMillis();
-		long elapsedTime = currentTime - this.startTime;
-		this.startTime = currentTime;
-		
-		return elapsedTime;
-	}
-	
-	public boolean isRunning() {
-		return this.running;
-	}
-	
-	public int getCurrentFPS() {
-		return this.fpsCounter.getCurrentFPS();
-	}
-	
-	public int getFPS() {
-		return this.fps;
-	}
-	
-	public void setFPS(int fps) {
-		this.fps = fps;
-		
-		if (this.running) {
-			this.startTimer();
-		}
-	}
-	
-	public long getTime() {
-		return System.currentTimeMillis();
-	}
-	
-	public void refresh() {
-		this.startTime = System.currentTimeMillis();
 	}
 }

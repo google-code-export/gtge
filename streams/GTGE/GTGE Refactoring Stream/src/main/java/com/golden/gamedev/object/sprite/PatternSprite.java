@@ -16,82 +16,92 @@
  */
 package com.golden.gamedev.object.sprite;
 
-// JFC
-import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
 import com.golden.gamedev.object.Sprite;
 
 /**
- * Sprite that its images is taken from another sprite (the pattern).
- * <p>
+ * The {@link PatternSprite} is a {@link Sprite} that
+ * delegates to another {@link Sprite}, the "pattern", to provide it with the image that
+ * this {@link PatternSprite} should display. <br />
+ * <br />
+ * A good use of the {@link PatternSprite} class is to create enemies that all
+ * share the same animation sequence and timing. By using the
+ * {@link PatternSprite} class, the enemies may have different locations and
+ * collision detection information, but all of the enemies will display the same
+ * images at the same time, as long as their {@link Sprite pattern} is kept
+ * updated for the animation sequence. <br />
+ * <br />
+ * <b><i>Warning: The {@link PatternSprite} class is not threadsafe. Multiple
+ * threads will have to use different instances of the {@link PatternSprite}
+ * class.</i></b>
  * 
- * <code>PatternSprite</code> is used to make a number of sprite that share
- * same images and have same animation sequence. <br>
- * A sprite that not created in a same time will have a different animation
- * sequence (the new sprite will start with the first frame animation, and the
- * old one perhaps at the last animation). This kind of sprite will assure that
- * <code>PatternSprite</code> that share the same pattern will animated in the
- * same sequence.
- * <p>
- * 
- * Note: Don't forget to update the pattern sprite in order to keep the pattern
- * animate.
+ * @version 1.0
+ * @since 0.2.3
+ * @see Sprite
  */
 public class PatternSprite extends Sprite {
 	
 	/**
-	 * 
+	 * A serialVersionUID for the {@link PatternSprite} class.
+	 * @see Serializable
 	 */
 	private static final long serialVersionUID = 1246202800220501766L;
+	
+	/**
+	 * The {@link Sprite} to be delegated to for the rendering of images (the
+	 * "pattern").
+	 */
 	private Sprite pattern;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
-	
 	/**
-	 * Creates new <code>PatternSprite</code> with specified pattern and
-	 * coordinate.
-	 */
-	public PatternSprite(Sprite pattern, double x, double y) {
-		super(pattern.getImage(), x, y);
-		
-		this.pattern = pattern;
-	}
-	
-	/**
-	 * Creates new <code>PatternSprite</code> with specified pattern.
+	 * Creates a new {@link PatternSprite} instance with the specified
+	 * {@link Sprite pattern}.
+	 * @param pattern The {@link Sprite pattern} to delegate to for this
+	 *        {@link PatternSprite} instance.
 	 */
 	public PatternSprite(Sprite pattern) {
-		super(pattern.getImage(), 0, 0);
+		this(pattern, 0, 0);
+	}
+	
+	/**
+	 * Creates a new {@link PatternSprite} instance with the specified
+	 * {@link Sprite pattern} and coordinate location.
+	 * @param pattern The {@link Sprite pattern} to delegate to for this
+	 *        {@link PatternSprite} instance.
+	 * @param x The {@link #getX() x-coordinate} location to set for this
+	 *        {@link PatternSprite} instance.
+	 * @param y The {@link #getY() y-coordinate} location to set for this
+	 *        {@link PatternSprite} instance.
+	 */
+	public PatternSprite(Sprite pattern, double x, double y) {
+		super(x, y);
 		
 		this.pattern = pattern;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* RENDER THE PATTERN **************************** */
-	/** ************************************************************************* */
-	
-	public void render(Graphics2D g, int x, int y) {
-		g.drawImage(this.pattern.getImage(), x, y, null);
+	public BufferedImage getImage() {
+		return this.pattern.getImage();
 	}
 	
-	/** ************************************************************************* */
-	/** **************************** THE PATTERN ******************************** */
-	/** ************************************************************************* */
-	
 	/**
-	 * Returns the pattern sprite associates with this sprite.
+	 * Gets the {@link Sprite} to be delegated to for the rendering of images
+	 * (the "pattern").
+	 * @return The {@link Sprite} to be delegated to for the rendering of images
+	 *         (the "pattern").
 	 */
 	public Sprite getPattern() {
 		return this.pattern;
 	}
 	
 	/**
-	 * Sets the pattern of this sprite.
+	 * Sets the {@link Sprite} to be delegated to for the rendering of images
+	 * (the "pattern").
+	 * @param pattern The {@link Sprite} to be delegated to for the rendering of
+	 *        images (the "pattern").
 	 */
 	public void setPattern(Sprite pattern) {
 		this.pattern = pattern;
 	}
-	
 }

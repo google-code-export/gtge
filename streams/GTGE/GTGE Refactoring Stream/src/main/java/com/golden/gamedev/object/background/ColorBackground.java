@@ -16,74 +16,85 @@
  */
 package com.golden.gamedev.object.background;
 
-// JFC
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 
 import com.golden.gamedev.object.Background;
 
 /**
- * The very basic background type that only fill the background view port with a
- * single color.
- * <p>
+ * The {@link ColorBackground} class is a {@link Background} that renders to the
+ * {@link #getClip() viewport} a single {@link Color}. <br />
+ * <br />
+ * <b><i>Warning: The {@link ColorBackground} class is not threadsafe. Multiple
+ * threads will have to use different instances of the {@link ColorBackground}
+ * class.</i></b>
  * 
- * This type of background use a fixed memory size. Memory used by small size
- * color background (e.g: 1 x 1) with an extremely large size color background
- * (e.g: 100,000,000 x 100,000,000) is equal.
+ * @version 1.0
+ * @since 0.2.3
+ * @see Background
+ * @see Color
  */
 public class ColorBackground extends Background {
 	
 	/**
-	 * 
+	 * A serialVersionUID for the {@link ColorBackground} class.
+	 * @see Serializable
 	 */
 	private static final long serialVersionUID = 3668701023849676983L;
+	
+	/**
+	 * The {@link Color} to display on the screen via this
+	 * {@link ColorBackground} instance.
+	 */
 	private Color color;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
-	
 	/**
-	 * Creates new <code>ColorBackground</code> with specified size.
+	 * Creates a new {@link ColorBackground} instance with the given
+	 * {@link Color}, width and height.
+	 * @param color The {@link #getColor() background color} to use.
+	 * @param width The width of the {@link ColorBackground} instance.
+	 * @param height The height of the {@link ColorBackground} instance.
 	 */
-	public ColorBackground(Color bgColor, int w, int h) {
-		super(w, h);
+	public ColorBackground(Color color, int width, int height) {
+		super(width, height);
 		
-		this.color = bgColor;
+		this.color = color;
 	}
 	
 	/**
-	 * Creates new <code>ColorBackground</code> as large as screen dimension.
+	 * Creates a new {@link ColorBackground} instance with the given
+	 * {@link Color}, to be as large as the {@link Background#screen screen
+	 * dimensions}.
 	 */
-	public ColorBackground(Color bgColor) {
-		this.color = bgColor;
+	public ColorBackground(Color color) {
+		super();
+		
+		this.color = color;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** BGCOLOR GET / SET **************************** */
-	/** ************************************************************************* */
-	
 	/**
-	 * Returns this background color.
+	 * Gets the {@link Color} to display on the screen via this
+	 * {@link ColorBackground} instance.
+	 * @return The {@link Color} to display on the screen via this
+	 *         {@link ColorBackground} instance.
 	 */
 	public Color getColor() {
 		return this.color;
 	}
 	
 	/**
-	 * Sets the background color.
+	 * Sets the {@link Color} to display on the screen via this
+	 * {@link ColorBackground} instance.
+	 * @param color The {@link Color} to display on the screen via this
+	 *        {@link ColorBackground} instance.
 	 */
-	public void setColor(Color bgColor) {
-		this.color = bgColor;
+	public void setColor(Color color) {
+		this.color = color;
 	}
-	
-	/** ************************************************************************* */
-	/** ************************ RENDER BACKGROUND ****************************** */
-	/** ************************************************************************* */
 	
 	public void render(Graphics2D g, int xbg, int ybg, int x, int y, int w, int h) {
 		g.setColor(this.color);
 		g.fillRect(x, y, w, h);
 	}
-	
 }

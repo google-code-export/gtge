@@ -28,6 +28,9 @@ import com.golden.gamedev.engine.BaseTimer;
  * cycle if its {@link Thread} has to sleep, regardless of any
  * {@link InterruptedException interrupted exceptions} it may encounter. <br />
  * <br />
+ * To handle {@link #getCurrentFPS() frames per second} calculations, the
+ * {@link SystemTimer} delegates to an {@link FPSCounter} instance. <br />
+ * <br />
  * <b><i>Warning: The {@link SystemTimer} class is not threadsafe. Multiple
  * threads will have to use different instances of the {@link SystemTimer}
  * class.</i></b>
@@ -35,6 +38,7 @@ import com.golden.gamedev.engine.BaseTimer;
  * @version 1.0
  * @since 0.2.3
  * @see BaseTimer
+ * @see FPSCounter
  */
 public class SystemTimer implements BaseTimer {
 	
@@ -46,16 +50,16 @@ public class SystemTimer implements BaseTimer {
 	private int fps = 50;
 	
 	/**
-     * The {@link FPSCounter} to use to calculate the {@link #getCurrentFPS()
-     * current frames per second (FPS)}.
-     */
-    private FPSCounter fpsCounter = new FPSCounter();
-
+	 * The {@link FPSCounter} to use to calculate the {@link #getCurrentFPS()
+	 * current frames per second (FPS)}.
+	 */
+	private FPSCounter fpsCounter = new FPSCounter();
+	
 	/**
-     * Whether or not the current {@link SystemTimer} instance is running.
-     */
-    private boolean running;
-
+	 * Whether or not the current {@link SystemTimer} instance is running.
+	 */
+	private boolean running;
+	
 	/**
 	 * The time, in milliseconds, of the exit of the last call to
 	 * {@link #sleep() sleep}.
@@ -64,12 +68,12 @@ public class SystemTimer implements BaseTimer {
 	private long startTime;
 	
 	/**
-     * The total time, in milliseconds, that the {@link SystemTimer} instance
-     * should {@link #sleep() sleep} for.
-     * @see #sleep()
-     */
-    private long timeToSleep;
-
+	 * The total time, in milliseconds, that the {@link SystemTimer} instance
+	 * should {@link #sleep() sleep} for.
+	 * @see #sleep()
+	 */
+	private long timeToSleep;
+	
 	/**
 	 * Creates a new {@link SystemTimer} instance.
 	 */
@@ -78,62 +82,62 @@ public class SystemTimer implements BaseTimer {
 	}
 	
 	public int getCurrentFPS() {
-    	return this.fpsCounter.getCurrentFPS();
-    }
-
+		return this.fpsCounter.getCurrentFPS();
+	}
+	
 	public int getFPS() {
-    	return this.fps;
-    }
-
+		return this.fps;
+	}
+	
 	public long getTime() {
-    	return System.currentTimeMillis();
-    }
-
+		return System.currentTimeMillis();
+	}
+	
 	public boolean isRunning() {
-    	return this.running;
-    }
-
+		return this.running;
+	}
+	
 	public void refresh() {
-    	this.startTime = System.currentTimeMillis();
-    }
-
+		this.startTime = System.currentTimeMillis();
+	}
+	
 	public void setFPS(int fps) {
-    	this.fps = fps;
-    	
-    	if (this.running) {
-    		this.startTimer();
-    	}
-    }
-
+		this.fps = fps;
+		
+		if (this.running) {
+			this.startTimer();
+		}
+	}
+	
 	public long sleep() {
-    	long currentTime = System.currentTimeMillis();
-    	
-    	long timeDiff = currentTime - this.startTime;
-    	long sleepTime = this.timeToSleep - timeDiff;
-    	long lastSleepAttemptedTime = System.currentTimeMillis();
-    	
-    	while (sleepTime > 0) {
-    		try {
-    			Thread.sleep(sleepTime);
-    		}
-    		catch (InterruptedException e) {
-    			// Intentionally blank
-    		}
-    		
-    		long currentInstant = System.currentTimeMillis();
-    		sleepTime -= currentInstant - lastSleepAttemptedTime;
-    		lastSleepAttemptedTime = currentInstant;
-    	}
-    	
-    	this.fpsCounter.calculateFPS();
-    	
-    	currentTime = System.currentTimeMillis();
-    	long elapsedTime = currentTime - this.startTime;
-    	this.startTime = currentTime;
-    	
-    	return elapsedTime;
-    }
-
+		long currentTime = System.currentTimeMillis();
+		
+		long timeDiff = currentTime - this.startTime;
+		long sleepTime = this.timeToSleep - timeDiff;
+		long lastSleepAttemptedTime = System.currentTimeMillis();
+		
+		while (sleepTime > 0) {
+			try {
+				Thread.sleep(sleepTime);
+			}
+			catch (InterruptedException e) {
+				// Intentionally blank
+			}
+			
+			long currentInstant = System.currentTimeMillis();
+			sleepTime -= currentInstant - lastSleepAttemptedTime;
+			lastSleepAttemptedTime = currentInstant;
+		}
+		
+		this.fpsCounter.calculateFPS();
+		
+		currentTime = System.currentTimeMillis();
+		long elapsedTime = currentTime - this.startTime;
+		this.startTime = currentTime;
+		
+		return elapsedTime;
+	}
+	
 	public void startTimer() {
 		if (this.running) {
 			this.stopTimer();

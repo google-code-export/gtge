@@ -16,40 +16,42 @@
  */
 package com.golden.gamedev.object.background;
 
-// JFC
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
 import com.golden.gamedev.object.Background;
 
 /**
- * Background that use a single image as the background.
+ * The {@link ImageBackground} class is a {@link Background} that renders a
+ * single {@link BufferedImage image} to the {@link #getClip() viewport}.
+ * 
+ * @version 1.0
+ * @since 0.2.3
+ * @see Background
+ * @see BufferedImage
  */
 public class ImageBackground extends Background {
 	
 	/**
-	 * 
+	 * A serialVersionUID for the {@link ImageBackground} class.
+	 * @see Serializable
 	 */
 	private static final long serialVersionUID = -4083512078848542717L;
+	
+	/**
+	 * The {@link BufferedImage image} to display on the screen via this
+	 * {@link ImageBackground} instance.
+	 */
 	private transient BufferedImage image;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
-	
 	/**
-	 * Creates new <code>ImageBackground</code> with specified image and
-	 * background size.
-	 */
-	public ImageBackground(BufferedImage image, int w, int h) {
-		super(w, h);
-		
-		this.image = image;
-	}
-	
-	/**
-	 * Creates new <code>ImageBackground</code> with specified image and the
-	 * background size is as large as the image.
+	 * Creates a new {@link ImageBackground} instance with the given
+	 * {@link BufferedImage image}, setting the {@link #getWidth() width} and
+	 * {@link #getHeight() height} of this {@link ImageBackground} instance to
+	 * be equal to the dimensions of the given {@link BufferedImage image}.
+	 * @param image The {@link #getImage() image} to display on the screen via
+	 *        this {@link ImageBackground} instance.
 	 */
 	public ImageBackground(BufferedImage image) {
 		super(image.getWidth(), image.getHeight());
@@ -57,30 +59,21 @@ public class ImageBackground extends Background {
 		this.image = image;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ IMAGE GET / SET ******************************** */
-	/** ************************************************************************* */
-	
 	/**
-	 * Returns this background image.
+	 * Creates a new {@link ImageBackground} instance with the given
+	 * {@link BufferedImage image}, width and height.
+	 * @param image The {@link #getImage() image} to display on the screen via
+	 *        this {@link ImageBackground} instance.
+	 * @param width The {@link #getWidth() width} of this
+	 *        {@link ImageBackground} instance.
+	 * @param height The {@link #getHeight() height} of this
+	 *        {@link ImageBackground} instance.
 	 */
-	public BufferedImage getImage() {
-		return this.image;
-	}
-	
-	/**
-	 * Sets this background image, and the size of this background is set to the
-	 * image size.
-	 */
-	public void setImage(BufferedImage image) {
-		this.image = image;
+	public ImageBackground(BufferedImage image, int width, int height) {
+		super(width, height);
 		
-		this.setSize(image.getWidth(), image.getHeight());
+		this.image = image;
 	}
-	
-	/** ************************************************************************* */
-	/** ************************ RENDER BACKGROUND ****************************** */
-	/** ************************************************************************* */
 	
 	public void render(Graphics2D g, int xbg, int ybg, int x, int y, int w, int h) {
 		g.drawImage(this.image, x, y, x + w, y + h, // destination (screen area)
@@ -88,4 +81,27 @@ public class ImageBackground extends Background {
 		        null);
 	}
 	
+	/**
+	 * Gets the {@link BufferedImage image} to display on the screen via this
+	 * {@link ImageBackground} instance.
+	 * @return The {@link BufferedImage image} to display on the screen via this
+	 *         {@link ImageBackground} instance.
+	 */
+	public BufferedImage getImage() {
+		return this.image;
+	}
+	
+	/**
+	 * Sets the {@link BufferedImage image} to display on the screen via this
+	 * {@link ImageBackground} instance. The {@link #setSize(int, int) size} of
+	 * this {@link ImageBackground} instance is set to the size of the given
+	 * {@link BufferedImage image}.
+	 * @param image The {@link BufferedImage image} to display on the screen via
+	 *        this {@link ImageBackground} instance.
+	 */
+	public void setImage(BufferedImage image) {
+		this.image = image;
+		
+		this.setSize(image.getWidth(), image.getHeight());
+	}
 }

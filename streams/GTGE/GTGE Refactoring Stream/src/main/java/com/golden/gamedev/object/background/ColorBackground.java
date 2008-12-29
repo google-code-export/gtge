@@ -23,8 +23,8 @@ import java.io.Serializable;
 import com.golden.gamedev.object.Background;
 
 /**
- * The {@link ColorBackground} class is a {@link Background} that renders to the
- * {@link #getClip() viewport} a single {@link Color}. <br />
+ * The {@link ColorBackground} class is a {@link Background} that renders a
+ * single {@link Color} to the {@link #getClip() viewport}. <br />
  * <br />
  * <b><i>Warning: The {@link ColorBackground} class is not threadsafe. Multiple
  * threads will have to use different instances of the {@link ColorBackground}
@@ -51,6 +51,17 @@ public class ColorBackground extends Background {
 	
 	/**
 	 * Creates a new {@link ColorBackground} instance with the given
+	 * {@link Color}, to be as large as the {@link Background#screen screen
+	 * dimensions}.
+	 */
+	public ColorBackground(Color color) {
+		super();
+		
+		this.color = color;
+	}
+	
+	/**
+	 * Creates a new {@link ColorBackground} instance with the given
 	 * {@link Color}, width and height.
 	 * @param color The {@link #getColor() background color} to use.
 	 * @param width The width of the {@link ColorBackground} instance.
@@ -62,15 +73,9 @@ public class ColorBackground extends Background {
 		this.color = color;
 	}
 	
-	/**
-	 * Creates a new {@link ColorBackground} instance with the given
-	 * {@link Color}, to be as large as the {@link Background#screen screen
-	 * dimensions}.
-	 */
-	public ColorBackground(Color color) {
-		super();
-		
-		this.color = color;
+	public void render(Graphics2D g, int xbg, int ybg, int x, int y, int w, int h) {
+		g.setColor(this.color);
+		g.fillRect(x, y, w, h);
 	}
 	
 	/**
@@ -91,10 +96,5 @@ public class ColorBackground extends Background {
 	 */
 	public void setColor(Color color) {
 		this.color = color;
-	}
-	
-	public void render(Graphics2D g, int xbg, int ybg, int x, int y, int w, int h) {
-		g.setColor(this.color);
-		g.fillRect(x, y, w, h);
 	}
 }

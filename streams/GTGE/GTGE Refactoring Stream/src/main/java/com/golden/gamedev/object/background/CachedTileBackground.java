@@ -20,16 +20,18 @@ package com.golden.gamedev.object.background;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
+import java.io.Serializable;
 
 import com.golden.gamedev.engine.BaseGraphics;
 
 public class CachedTileBackground extends TileBackground {
 	
 	/**
-	 * 
+	 * A serializableUID for the {@link CachedTileBackground} class.
+	 * @see Serializable 
 	 */
-	private static final long serialVersionUID = -4682118408949172952L;
-	private VolatileImage cache;
+	private static final long serialVersionUID = 2L;
+	private transient VolatileImage cache;
 	private boolean validated;
 	private double oldX;
 	private double oldY;

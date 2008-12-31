@@ -39,16 +39,16 @@ import com.golden.gamedev.object.background.abstraction.AbstractTileBackground;
  * <pre>
  *    public void render(Graphics2D g, int tileX, int tileY, int x, int y) {
  *       //
- * <code>
+ * &lt;code&gt;
  * tiles
- * </code>
+ * &lt;/code&gt;
  *  is the two dimensional background tiling
  *       int tile = tiles[tileX][tileY];
  *       if (tile &gt;= 0) {
  *          //
- * <code>
+ * &lt;code&gt;
  * tileImages
- * </code>
+ * &lt;/code&gt;
  *  is the tiling images
  *          g.drawImage(tileImages[tile], x, y, null);
  *       }
@@ -87,9 +87,15 @@ public class TileBackground extends AbstractTileBackground {
 	
 	private int[][] tiles;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new <code>TileBackground</code> with specified tile images and
@@ -127,9 +133,15 @@ public class TileBackground extends AbstractTileBackground {
 		this(tileImages, new int[horiz][vert]);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ RENDER BACKGROUND ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ RENDER BACKGROUND ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public void renderTile(Graphics2D g, int tileX, int tileY, int x, int y) {
 		int tile = this.tiles[tileX][tileY];
@@ -140,9 +152,15 @@ public class TileBackground extends AbstractTileBackground {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* BACKGROUND TILE ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* BACKGROUND TILE *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Return the tile background tile images.
@@ -183,19 +201,18 @@ public class TileBackground extends AbstractTileBackground {
 	}
 	
 	public void setSize(int horiz, int vert) {
-		if (horiz != this.tiles.length || vert != this.tiles[0].length) {
-			// enlarge/shrink old tiles
-			int[][] old = this.tiles;
-			
-			this.tiles = new int[horiz][vert];
-			
-			int minx = Math.min(this.tiles.length, old.length), miny = Math
-			        .min(this.tiles[0].length, old[0].length);
-			for (int j = 0; j < miny; j++) {
-				for (int i = 0; i < minx; i++) {
-					this.tiles[i][j] = old[i][j];
-				}
-			}
+		int[][] old = this.tiles;
+		
+		this.tiles = new int[horiz][vert];
+		
+		// Copy the old array.
+		int horizontalSize = Math.min(old.length, horiz);
+		int verticalSize = Math.min(old[0].length, vert);
+		
+		// For all the horizontal arrays, copy up to and including the new
+		// vertical size.
+		for (int index = 0; index < horizontalSize; index++) {
+			System.arraycopy(old[index], 0, tiles[index], 0, verticalSize);
 		}
 		
 		super.setSize(horiz, vert);

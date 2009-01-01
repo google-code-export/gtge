@@ -106,8 +106,18 @@ public class TileBackgroundTest extends TestCase {
 	 */
 	public void testRenderTile() {
 		background.renderTile(new MockGraphics2D(), 0, 0, 0, 0);
-		background.setTiles(new int[][] { {-1}});
-		background.renderTile(new MockGraphics2D(), 0, 0, 0, 0);
+		background.setTiles(new int[][] {
+			{
+				-1
+			}
+		});
+		try {
+			background.renderTile(new MockGraphics2D(), 0, 0, 0, 0);
+			fail("Expecting ArrayIndexOutOfBoundsException - No negative indices allowed");
+		}
+		catch (ArrayIndexOutOfBoundsException e) {
+			// Intentionally blank.
+		}
 	}
 	
 	/**

@@ -46,7 +46,11 @@ import com.golden.gamedev.engine.BaseGraphics;
  * did not mark its {@link VolatileImage} instance as transient, but version 1.1
  * remedies this. Version 1.1 of the {@link CachedTileBackground} class,
  * therefore, does not retain {@link Serializable serialization} compatibility
- * with previous class versions.</i></b>
+ * with previous class versions.</i></b> <br />
+ * <br />
+ * <b><i>Warning: The {@link CachedTileBackground} class is not threadsafe.
+ * Multiple threads will have to use different instances of the
+ * {@link CachedTileBackground} class.</i></b>
  * 
  * @version 1.1
  * @since 0.2.3
@@ -110,25 +114,25 @@ public class CachedTileBackground extends TileBackground {
 		        bsGraphics.getSize().width, bsGraphics.getSize().height);
 	}
 	
+	public void render(Graphics2D g) {
+    	if (!this.validated) {
+    		// Render the new background into the cache
+    		super.render(this.cache.createGraphics());
+    		
+    		// Store state for the next checkMutations call.
+    		this.validated = true;
+    		this.oldX = this.getX();
+    		this.oldY = this.getY();
+    	}
+    	
+    	// Draw the cached VolatileImage onto the screen.
+    	g.drawImage(this.cache, 0, 0, null);
+    }
+
 	public void update(long elapsedTime) {
 		super.update(elapsedTime);
 		
 		this.checkMutations();
-	}
-	
-	public void render(Graphics2D g) {
-		if (!this.validated) {
-			// Render the new background into the cache
-			super.render(this.cache.createGraphics());
-			
-			// Store state for the next checkMutations call.
-			this.validated = true;
-			this.oldX = this.getX();
-			this.oldY = this.getY();
-		}
-		
-		// Draw the cached VolatileImage onto the screen.
-		g.drawImage(this.cache, 0, 0, null);
 	}
 	
 	/**

@@ -31,6 +31,9 @@ import com.golden.gamedev.engine.BaseGraphics;
  * then displayed constantly, dramatically improving performance for
  * {@link TileBackground} instances that will never change their state. <br />
  * <br />
+ * <b><i>Warning: The {@link StaticTileBackground} class is not threadsafe.
+ * Multiple threads will have to use different instances of the
+ * {@link StaticTileBackground} class.</i></b>
  * @author MetroidFan2002
  * @version 1.0
  * @since 0.2.4
@@ -45,15 +48,15 @@ public class StaticTileBackground extends TileBackground {
 	private static final long serialVersionUID = 1L;
 	
 	/**
+     * The cached {@link VolatileImage image} to display.
+     */
+    private transient VolatileImage cache;
+
+	/**
 	 * Whether or not the {@link #cache cached image} is ready to be displayed
 	 * on the screen.
 	 */
 	private boolean imageRenderable;
-	
-	/**
-	 * The cached {@link VolatileImage image} to display.
-	 */
-	private transient VolatileImage cache;
 	
 	/**
 	 * Creates a new {@link StaticTileBackground} instance, using the given

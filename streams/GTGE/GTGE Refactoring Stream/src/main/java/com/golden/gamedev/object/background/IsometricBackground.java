@@ -16,105 +16,188 @@
  */
 package com.golden.gamedev.object.background;
 
-// JFC
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
 import com.golden.gamedev.object.background.abstraction.AbstractIsometricBackground;
 
 /**
- * The basic isometric background, creates a one layer isometric background.
- * <p>
+ * The {@link IsometricBackground} class is a simple, one-layer
+ * {@link AbstractIsometricBackground} implementation that generates the tiles
+ * to render based off a {@link #getTiles() two-dimensional matrix of integer
+ * indices} into a {@link #getTileImages() one-dimensional array of images}.
  * 
- * <code>IsometricBackground</code> takes up two parameter, the first one is a
- * two dimensional array of integer (int[][] tiles) that makes up the background
- * tiling, and the second one is the tiling image array (BufferedImage[]
- * tileImages).
- * <p>
- * 
- * This isometric background is the basic subclass of
- * <code>AbstractIsometricBackground</code> that overrides
- * <code>renderTile</code> method to draw one layer isometric background :
- * 
- * <pre>
- *    public void render(Graphics2D g, int tileX, int tileY, int x, int y) {
- *       //
- * <code>
- * tiles
- * </code>
- *  is the two dimensional background tiling
- *       int tile = tiles[tileX][tileY];
- *       if (tile &gt;= 0) {
- *          //
- * <code>
- * tileImages
- * </code>
- *  is the tiling images
- *          g.drawImage(tileImages[tile], x, y, null);
- *       }
- *    }
- * </pre>
- * 
- * To create multiple layer, simply subclass
- * <code>AbstractIsometricBackground</code> and override the
- * <code>renderTile</code> method to render the tile multiple times.
- * <p>
- * 
- * Isometric background usage example :
+ * As a simple example, consider an image array with four tile images. The
+ * indices of these images are the following: {0, 1, 2, 3}. The tile result of
+ * this background should create an isometric tile background with the images in
+ * a reverse order: <br />
+ * <br />
+ * <table>
+ * <tr>
+ * <td colspan="2" style="text-align: center">TILE 3</td>
+ * </tr>
+ * <tr>
+ * <td>TILE 2</td>
+ * <td>TILE 1</td>
+ * </tr>
+ * <tr>
+ * <td colspan="2" style="text-align: center">TILE 0</td>
+ * </tr>
+ * </table>
+ * <br />
+ * To have this result, the integer matrix simply needs to reference the tile
+ * indices in the same order, as:
  * 
  * <pre>
- * IsometricBackground background;
- * BufferedImage[] tileImages;
- * int[][] tiles = new int[40][30]; // 40 x 30 tiling
- * // fill tiles with random value
- * for (int i = 0; i &lt; tiles.length; i++)
- * 	for (int j = 0; j &lt; tiles[0].length; j++)
- * 		tiles[i][j] = getRandom(0, tileImages.length - 1);
- * // create the background
- * background = new IsometricBackground(tileImages, tiles);
+ * int[][] tiles = new int[][] { {3, 2} {1, 0}}
+ * IsometricBackground background = new IsometricBackground(images, tiles);
  * </pre>
  * 
- * @see com.golden.gamedev.object.background.abstraction.AbstractIsometricBackground
+ * There are three items to note about the {@link IsometricBackground} class.
+ * The first item is that it is possible, and in most cases very likely, to have
+ * a {@link IsometricBackground} that exceeds the width of the
+ * {@link #getClip() viewport}. This is handled directly by the
+ * {@link IsometricBackground} class and as long as the
+ * {@link IsometricBackground} is manipulated appropriately, this should not be
+ * an issue - scrolling the {@link IsometricBackground} will eventually reveal
+ * all of the {@link #getTileImages() tiles} that are mapped to be shown via the
+ * {@link #getTiles() tile matrix}. <br />
+ * <br />
+ * 
+ * Second, note that an illegal index into the {@link #getTileImages() images}
+ * array via the corresponding {@link #getTiles() tile matrix}, such as a
+ * negative index or an index that is out of bounds for the array, will result
+ * in an {@link ArrayIndexOutOfBoundsException} being thrown when the
+ * {@link #renderTile(Graphics2D, int, int, int, int)} method is invoked. This
+ * is a slight change from the previous version of the class, where the
+ * {@link IsometricBackground} class would simply render nothing, but this
+ * behavior may lead to confusion. This is an error on the part of the user and
+ * should be compensated for by the user of this class. <br />
+ * <br />
+ * 
+ * Finally, the offsetTileHeight constructor parameter requires some
+ * explanation. When this parameter is not set directly, or is explicitly set at
+ * 0, the {@link IsometricBackground} class creates a background akin to the
+ * following table of a background:
+ * <table>
+ * <tr>
+ * <td colspan="2" style="text-align: center">TILE 0 TOP HALF SHOWN<br />
+ * BOTTOM HALF HIDDEN</td>
+ * </tr>
+ * <tr>
+ * <td>TILE 1 COVERS BOTTOM HALF TILE 0 SHOWS TOP HALF</td>
+ * <td>TILE 2 COVERS BOTTOM HALF TILE 0 SHOWS TOP HALF</td>
+ * </tr>
+ * </table>
+ * <br />
+ * So, to create the isometric effect, by default, the first tile is half
+ * hidden, then the tiles on top of it are half hidden by the next row, and so
+ * on until the final row in the background where the tile is completely shown. <br />
+ * <br />
+ * The offsetTileHeight parameter, when not set to 0, allows for the changing of
+ * this default behavior. Setting the offsetTileHeight parameter to a positive
+ * number makes the tiles in front hide more of the tiles beneath them, which,
+ * with an extreme enough value, would eventually result in a single row of
+ * tiles, with the top rows completely hidden. Setting the offsetTileHeight
+ * parameter to a negative number makes the tiles in front hide less of the
+ * tiles beneath them, eventually resulting in all of the tiles being shown with
+ * no overlap for extreme values. <br />
+ * If the {@link IsometricBackground} display is not optimal, adjusting this
+ * value may allow for a better display without changing the
+ * {@link #getTileImages() images} that the {@link IsometricBackground} uses.
+ * 
+ * <br />
+ * <br />
+ * <b><i>Warning: The {@link IsometricBackground} class is not threadsafe.
+ * Multiple threads will have to use different instances of the
+ * {@link IsometricBackground} class.</i></b>
+ * 
+ * @version 1.1
+ * @since 0.2.3
+ * @see AbstractIsometricBackground
  */
 public class IsometricBackground extends AbstractIsometricBackground {
 	
 	/**
-	 * 
+	 * A serialVersionUID for the {@link IsometricBackground} class.
+	 * @see Serializable
 	 */
 	private static final long serialVersionUID = -2383969026366897057L;
 	
+	/**
+	 * The array of {@link BufferedImage} instances representing all the images
+	 * that can be used as a single tile.
+	 * @see IsometricBackground
+	 */
 	private transient BufferedImage[] tileImages;
 	
+	/**
+	 * The matrix of integers representing which tile in the
+	 * {@link #getTileImages() tile image array} should be used for a particular
+	 * tile in the grid.
+	 * @see IsometricBackground
+	 */
 	private int[][] tiles;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * Creates a new {@link IsometricBackground} instance with the given
+	 * {@link #getTileImages() array of images} and the two-dimensional
+	 * {@link #getTiles() matrix of indices} into the array to determine which
+	 * tiles get drawn.
+	 * @param tileImages The {@link #getTileImages() array of tile images} to
+	 *        use to construct this {@link IsometricBackground} instance.
+	 * @param tiles The {@link #getTiles() matrix of indices} into the
+	 *        {@link #getTileImages() array of tile images}.
+	 * @see IsometricBackground
+	 */
+	public IsometricBackground(BufferedImage[] tileImages, int[][] tiles) {
+		this(tileImages, tiles, 0, 0);
+	}
 	
 	/**
-	 * Creates new <code>IsometricBackground</code> with specified tile
-	 * images, array of tiles, offset of tile height, and starting y coordinate.
-	 * <p>
-	 * 
-	 * The array of tiles that makes up the isometric background tiling,
-	 * tiles[0][0] = 2 means the tileImages[2] will be drawn on tile 0, 0
-	 * coordinate on the map.
-	 * <p>
-	 * 
-	 * The <code>offsetTileHeight</code> is used to determine the tile image
-	 * base tile height, for example the real height of the tile image is 128
-	 * but the base height of the tile image is 32, therefore set the
-	 * <code>offsetTileHeight</code> to 96 (128-32).
-	 * <p>
-	 * 
-	 * The <code>startY</code> is where the isometric background y coordinate
-	 * is starting to render, set this <code>startY</code> value greater than
-	 * zero if this background need to be drawn down a bit.
-	 * 
-	 * @param tileImages an array of images for the tile
-	 * @param tiles a two dimensional array that makes up the background
-	 * @param offsetTileHeight the tile height offset from the base tile height
-	 * @param startY starting y coordinate to draw this background
+	 * Creates a new {@link IsometricBackground} instance with the given
+	 * {@link #getTileImages() array of images}, the number of tiles in the
+	 * horizontal direction, and the number of tiles in the vertical direction.
+	 * All of the tiles rendered by this {@link IsometricBackground} instance
+	 * will use the first tile in the {@link #getTileImages() tile image array}
+	 * by default, unless this is changed later by a call to
+	 * {@link #setTiles(int[][])}.
+	 * @param tileImages The {@link #getTileImages() array of tile images} to
+	 *        use to construct this {@link IsometricBackground} instance.
+	 * @param horizontalTileCount The number of tiles in the horizontal (left to
+	 *        right) direction.
+	 * @param verticalTileCount The number of tiles in the vertical (top to
+	 *        bottom) direction.
+	 * @see IsometricBackground
+	 */
+	public IsometricBackground(BufferedImage[] tileImages,
+	        int horizontalTileCount, int verticalTileCount) {
+		this(tileImages, new int[horizontalTileCount][verticalTileCount]);
+	}
+	
+	/**
+	 * Creates a new {@link IsometricBackground} instance with the given
+	 * {@link #getTileImages() array of images} and the two-dimensional
+	 * {@link #getTiles() matrix of indices} into the array to determine which
+	 * tiles get drawn, as well as the offsetTileHeight specifying how low or
+	 * high to draw the tiles in relation to the tiles they cover, and the
+	 * startY coordinate offset specifying an offset to add to the
+	 * {@link #getY() y coordinate} when the {@link IsometricBackground} starts
+	 * displaying.
+	 * @param tileImages The {@link #getTileImages() array of tile images} to
+	 *        use to construct this {@link IsometricBackground} instance.
+	 * @param tiles The {@link #getTiles() matrix of indices} into the
+	 *        {@link #getTileImages() array of tile images}.
+	 * @param offsetTileHeight The offset tile height used to determine how low
+	 *        or high to draw tiles for the {@link IsometricBackground}. A
+	 *        positive value makes the front tiles cover more of the back tiles,
+	 *        a negative value makes the front tiles cover less of the back
+	 *        tiles.
+	 * @param startY A y-coordinate offset added to the background
+	 *        {@link #getY() y coordinate}, used if the background needs to
+	 *        start rendering further down the screen than its default of 0.
+	 * @see IsometricBackground
 	 */
 	public IsometricBackground(BufferedImage[] tileImages, int[][] tiles,
 	        int offsetTileHeight, int startY) {
@@ -126,65 +209,58 @@ public class IsometricBackground extends AbstractIsometricBackground {
 	}
 	
 	/**
-	 * Creates new <code>IsometricBackground</code> with specified tile images
-	 * and array of tiles.
-	 * <p>
+	 * {@inheritDoc}
 	 * 
-	 * The array of tiles that makes up the isometric background tiling,
-	 * tiles[0][0] = 2 means the tileImages[2] will be drawn on tile 0, 0
-	 * coordinate on the map.
-	 * <p>
-	 * 
-	 * @param tileImages an array of images for the tile
-	 * @param tiles a two dimensional array that makes up the background
+	 * @throws NullPointerException Throws a {@link NullPointerException} if the
+	 *         {@link Graphics2D graphics context}, {@link #getTileImages() tile
+	 *         image array} or {@link #getTiles() tile position matrix} are
+	 *         null.
+	 * @throws ArrayIndexOutOfBoundsException Throws an
+	 *         {@link ArrayIndexOutOfBoundsException} if tileX or tileY are
+	 *         outside the range of the {@link #getTiles() tile matrix}, or if
+	 *         their integer index returned is outside the range of the
+	 *         {@link #getTileImages() tile image array}.
 	 */
-	public IsometricBackground(BufferedImage[] tileImages, int[][] tiles) {
-		this(tileImages, tiles, 0, 0);
-	}
-	
-	/**
-	 * Creates new <code>IsometricBackground</code> with specified tile images
-	 * as big as <code>horiz</code> and </code>vert</code> tiles.
-	 * <p>
-	 * 
-	 * Generates isometric tile background with tile as big as horiz and vert
-	 * (tiles = new int[horiz][vert]) and using the first image of the tile
-	 * images (tileImages[0]) for all the tiles.
-	 * 
-	 * @param tileImages an array of images for the tile
-	 * @param horiz total horizontal tiles
-	 * @param vert total vertical tiles
-	 */
-	public IsometricBackground(BufferedImage[] tileImages, int horiz, int vert) {
-		this(tileImages, new int[horiz][vert]);
-	}
-	
-	/** ************************************************************************* */
-	/** ************************ RENDER BACKGROUND ****************************** */
-	/** ************************************************************************* */
-	
 	public void renderTile(Graphics2D g, int tileX, int tileY, int x, int y) {
-		int tile = this.tiles[tileX][tileY];
-		
-		if (tile >= 0) {
-			g.drawImage(this.tileImages[tile], x, y, null);
-			// g.drawString(tileX+","+tileY, x, y-5);
-		}
+		g.drawImage(this.tileImages[this.tiles[tileX][tileY]], x, y, null);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* BACKGROUND TILE ******************************* */
-	/** ************************************************************************* */
+	public void setSize(int horiz, int vert) {
+		int[][] old = this.tiles;
+		
+		this.tiles = new int[horiz][vert];
+		
+		// Only copy the minimum sizes to avoid an
+		// ArrayIndexOutOfBoundsException.
+		int horizontalSize = Math.min(old.length, horiz);
+		int verticalSize = Math.min(old[0].length, vert);
+		
+		// For all of the horizontal indices that can be copied, copy the
+		// vertical arrays up to the minimum size allowed.
+		for (int index = 0; index < horizontalSize; index++) {
+			System.arraycopy(old[index], 0, tiles[index], 0, verticalSize);
+		}
+		
+		super.setSize(horiz, vert);
+	}
 	
 	/**
-	 * Return the isometric background tile images.
+	 * Gets the array of {@link BufferedImage} instances representing all the
+	 * images that can be used as a single tile.
+	 * @return The array of {@link BufferedImage} instances representing all the
+	 *         images that can be used as a single tile.
+	 * @see IsometricBackground
 	 */
 	public BufferedImage[] getTileImages() {
 		return this.tileImages;
 	}
 	
 	/**
-	 * Sets the isometric background tile images.
+	 * Sets the array of {@link BufferedImage} instances representing all the
+	 * images that can be used as a single tile.
+	 * @param tileImages The array of {@link BufferedImage} instances
+	 *        representing all the images that can be used as a single tile.
+	 * @see IsometricBackground
 	 */
 	public void setTileImages(BufferedImage[] tileImages, int offsetTileHeight) {
 		this.tileImages = tileImages;
@@ -194,44 +270,31 @@ public class IsometricBackground extends AbstractIsometricBackground {
 	}
 	
 	/**
-	 * Returns the isometric background tiling.
+	 * Gets the matrix of integers representing which tile in the
+	 * {@link #getTileImages() tile image array} should be used for a particular
+	 * tile in the grid.
+	 * @return The matrix of integers representing which tile in the
+	 *         {@link #getTileImages() tile image array} should be used for a
+	 *         particular tile in the grid.
+	 * @see IsometricBackground
 	 */
 	public int[][] getTiles() {
 		return this.tiles;
 	}
 	
 	/**
-	 * Sets the isometric background tiling.
-	 * <p>
-	 * 
-	 * This array of tiles that makes up the background, tiles[0][0] = 2 means
-	 * the tileImages[2] will be drawn on tile 0, 0 coordinate on the map.
-	 * 
-	 * @see #setTileImages(BufferedImage[], int)
+	 * Sets the matrix of integers representing which tile in the
+	 * {@link #getTileImages() tile image array} should be used for a particular
+	 * tile in the grid.
+	 * @param tiles The matrix of integers representing which tile in the
+	 *        {@link #getTileImages() tile image array} should be used for a
+	 *        particular tile in the grid.
+	 * @see IsometricBackground
 	 */
 	public void setTiles(int[][] tiles) {
 		this.tiles = tiles;
 		
 		super.setSize(tiles.length, tiles[0].length);
-	}
-	
-	public void setSize(int horiz, int vert) {
-		if (horiz != this.tiles.length || vert != this.tiles[0].length) {
-			// enlarge/shrink old tiles
-			int[][] old = this.tiles;
-			
-			this.tiles = new int[horiz][vert];
-			
-			int minx = Math.min(this.tiles.length, old.length), miny = Math
-			        .min(this.tiles[0].length, old[0].length);
-			for (int j = 0; j < miny; j++) {
-				for (int i = 0; i < minx; i++) {
-					this.tiles[i][j] = old[i][j];
-				}
-			}
-		}
-		
-		super.setSize(horiz, vert);
 	}
 	
 }

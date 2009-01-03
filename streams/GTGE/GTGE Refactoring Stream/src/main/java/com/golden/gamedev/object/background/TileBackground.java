@@ -33,7 +33,7 @@ import com.golden.gamedev.object.background.abstraction.AbstractTileBackground;
  * this background should create a square tile background with the images in a
  * reverse order: <br />
  * <br />
- * <table style="border: thin">
+ * <table>
  * <tr>
  * <td>TILE 3</td>
  * <td>TILE 2</td>

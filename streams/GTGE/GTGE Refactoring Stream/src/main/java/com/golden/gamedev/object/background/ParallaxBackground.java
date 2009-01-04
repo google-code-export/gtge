@@ -16,7 +16,6 @@
  */
 package com.golden.gamedev.object.background;
 
-// JFC
 import java.awt.Graphics2D;
 
 import com.golden.gamedev.object.Background;

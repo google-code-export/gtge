@@ -5,9 +5,49 @@
 </head>
 
 <body bgcolor="white">
-<p>Background implementation.</p>
+The background package contains specialized implementations of {@link
+com.golden.gamedev.object.Background} class that may be more useful to
+game programmers than just the simple {@link
+com.golden.gamedev.object.Background} implementation. The {@link
+com.golden.gamedev.object.Background} implementations range from simple
+to complex.
+<br />
+<br />
+<h2>Simple {@link com.golden.gamedev.object.Background}
+Implementations</h2>
+<ul>
+	<li>{@link com.golden.gamedev.object.background.ColorBackground} -
+	A {@link com.golden.gamedev.object.Background} implementation that
+	renders a single {@link java.awt.Color} to the screen.</li>
+	<li>{@link com.golden.gamedev.object.background.ImageBackground} -
+	A {@link com.golden.gamedev.object.Background} implementation that
+	draws a single {@link java.awt.image.BufferedImage} to the screen.</li>
+</ul>
+<h2>Medium-complex {@link com.golden.gamedev.object.Background}
+Implementations</h2>
+{@link com.golden.gamedev.object.background.ParallaxBackground} - A
+{@link com.golden.gamedev.object.Background} consisting of multiple
+{@link com.golden.gamedev.object.Background} instances combined into a
+single, smooth scrolling {@link com.golden.gamedev.object.Background}.
+<h2>Complex {@link com.golden.gamedev.object.Background}
+Implementations</h2>
+<ul>
+	<li>{@link
+	com.golden.gamedev.object.background.IsometricBackground} - The default
+	implementation of the {@link
+	com.golden.gamedev.object.background.abstraction.AbstractIsometricBackground}
+	class, providing one-layer isometric {@link
+	com.golden.gamedev.object.Background} support.
+	<li>{@link com.golden.gamedev.object.background.TileBackground} -
+	The default implementation of the {@link
+	com.golden.gamedev.object.background.abstraction.AbstractTileBackground}
+	class, providing one-layer tile {@link
+	com.golden.gamedev.object.Background} support.</li>
+</ul>
 
-@see com.golden.gamedev.object.Background
+@see com.golden.gamedev.object.Background 
+@see com.golden.gamedev.object.background.abstraction.AbstractIsometricBackground
+@see com.golden.gamedev.object.background.abstraction.AbstractTileBackground
 </body>
 
 </html>

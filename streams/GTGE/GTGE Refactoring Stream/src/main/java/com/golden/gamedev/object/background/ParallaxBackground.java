@@ -17,26 +17,29 @@
 package com.golden.gamedev.object.background;
 
 import java.awt.Graphics2D;
+import java.io.Serializable;
 
 import com.golden.gamedev.object.Background;
 
 /**
- * <code>ParallaxBackground</code> class is a background composed by several
- * backgrounds.
- * <p>
- * 
- * This class automatically handles displaying and scrolling of the stacked
- * backgrounds. The backgrounds are normalized to the size and position of the
- * largest background in the stack. This way, the largest coordinate system is
- * presented, and all backgrounds move together at a smooth rate.
- * <p>
- * 
- * The backgrounds is rendered from the first background on the stack to the
- * last background on the stack, in other word the first background on the stack
- * will be at the back of other backgrounds.
- * <p>
- * 
- * Parallax background usage example : <br>
+ * The {@link ParallaxBackground} class is a {@link Background} that consists of
+ * multiple {@link Background} instances that are all rendered together for a
+ * smooth composite {@link Background}. The {@link ParallaxBackground} class
+ * automatically handles displaying and scrolling of the
+ * {@link #getParallaxBackground() stacked backgrounds}. The {@link Background}
+ * instances are normalized to the size and position of the largest
+ * {@link Background} {@link Background#getWidth() width} and
+ * {@link Background#getHeight() height} in the stack. This way, the largest
+ * coordinate system is presented, and all of the {@link Background} instances
+ * move together at a smooth rate. <br />
+ * <br />
+ * The {@link Background} instances are rendered from the first
+ * {@link Background} in the {@link #getParallaxBackground() array} to the last
+ * {@link Background} in the {@link #getParallaxBackground() array}, so that the
+ * first {@link Background} will be rendered behind the second, the second
+ * behind the third, etc. <br />
+ * <br />
+ * Here is an example of creating a {@link ParallaxBackground} instance:
  * 
  * <pre>
  * ParallaxBackground background;
@@ -44,88 +47,108 @@ import com.golden.gamedev.object.Background;
  * background = new ParallaxBackground(new Background[] {
  *         bg1, bg2, bg3
  * });
- * // bg1 is at the back of bg2 and bg2 is at the back of bg3
+ * // bg1 is rendered below bg2, and bg2 is rendered below bg3
  * </pre>
  */
 public class ParallaxBackground extends Background {
 	
 	/**
-	 * 
+	 * A serialVersionUID for the {@link ParallaxBackground} class.
+	 * @see Serializable
 	 */
-	private static final long serialVersionUID = 8282072812030049762L;
-	private Background[] stack;
-	private int total;
-	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	private static final long serialVersionUID = 2L;
 	
 	/**
-	 * Creates new <code>ParallaxBackground</code>.
+	 * The {@link Background} array that this {@link ParallaxBackground}
+	 * instance stores.
 	 */
-	public ParallaxBackground(Background[] stack) {
+	private Background[] stack;
+	
+	/**
+	 * Creates a new {@link ParallaxBackground} instance with the given non-null
+	 * {@link Background} array of {@link Background} instances to render.
+	 * @param stack The {@link #getParallaxBackground() array of Background
+	 *        instances} that are stored via this {@link ParallaxBackground}
+	 *        instance.
+	 * @throws NullPointerException Throws a {@link NullPointerException} if the
+	 *         given {@link Background} array is null.
+	 */
+	public ParallaxBackground(Background[] stack) throws NullPointerException {
 		this.stack = stack;
-		this.total = stack.length;
 		
-		this.normalizedView();
+		this.normalizeView();
 	}
 	
-	private void normalizedView() {
-		// find the largest one!
-		for (int i = 0; i < this.total; i++) {
-			if (this.stack[i].getWidth() > this.getWidth()) {
-				this.setSize(this.stack[i].getWidth(), this.getHeight());
-			}
-			
-			if (this.stack[i].getHeight() > this.getHeight()) {
-				this.setSize(this.getWidth(), this.stack[i].getHeight());
-			}
+	/**
+	 * Sets the {@link #setSize(int, int) size} of this
+	 * {@link ParallaxBackground} instance to the largest dimensions contained
+	 * in each {@link Background} instance in the {@link #stack stack}.
+	 * @throws NullPointerException Throws a {@link NullPointerException} if the
+	 *         {@link #stack stack} is null.
+	 */
+	private void normalizeView() throws NullPointerException {
+		int newWidth = getWidth();
+		int newHeight = getHeight();
+		
+		for (int index = 0; index < this.stack.length; index++) {
+			newWidth = Math.max(newWidth, stack[index].getWidth());
+			newHeight = Math.max(newHeight, stack[index].getHeight());
 		}
+		
+		this.setSize(newWidth, newHeight);
 	}
 	
 	public void setLocation(double xb, double yb) {
 		super.setLocation(xb, yb);
 		
-		for (int i = 0; i < this.total; i++) {
-			this.stack[i].setLocation(this.getX()
-			        * (this.stack[i].getWidth() - this.getClip().width)
-			        / (this.getWidth() - this.getClip().width), this.getY()
-			        * (this.stack[i].getHeight() - this.getClip().height)
-			        / (this.getHeight() - this.getClip().height));
+		int viewportWidth = this.getClip().width;
+		int viewportHeight = this.getClip().height;
+		int normalizationWidth = this.getWidth() - viewportWidth;
+		int normalizationHeight = this.getHeight() - viewportHeight;
+		
+		for (int index = 0; index < this.stack.length; index++) {
+			// Set each background to a scaled location relative to the largest
+			// background drawn into the viewport. The largest background will
+			// be unaffected (its scale will be 1 when computed).
+			this.stack[index].setLocation(this.getX()
+			        * (this.stack[index].getWidth() - viewportWidth)
+			        / (normalizationWidth), this.getY()
+			        * (this.stack[index].getHeight() - viewportHeight)
+			        / (normalizationHeight));
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** **************** UPDATE AND RENDER STACKED BACKGROUND ******************* */
-	/** ************************************************************************* */
-	
 	public void update(long elapsedTime) {
-		for (int i = 0; i < this.total; i++) {
-			this.stack[i].update(elapsedTime);
+		for (int index = 0; index < this.stack.length; index++) {
+			this.stack[index].update(elapsedTime);
 		}
 	}
 	
 	public void render(Graphics2D g) {
-		for (int i = 0; i < this.total; i++) {
-			this.stack[i].render(g);
+		for (int index = 0; index < this.stack.length; index++) {
+			this.stack[index].render(g);
 		}
 	}
 	
 	/**
-	 * Returns the stacked parallax backgrounds.
+	 * Gets the {@link Background} array that this {@link ParallaxBackground}
+	 * instance stores.
+	 * @return The {@link Background} array that this {@link ParallaxBackground}
+	 *         instance stores.
 	 */
 	public Background[] getParallaxBackground() {
 		return this.stack;
 	}
 	
 	/**
-	 * Sets parallax background stacked backgrounds.
+	 * Sets the {@link Background} array that this {@link ParallaxBackground}
+	 * instance stores.
+	 * @param stack The {@link Background} array that this
+	 *        {@link ParallaxBackground} instance stores.
 	 */
 	public void setParallaxBackground(Background[] stack) {
 		this.stack = stack;
-		this.total = stack.length;
 		
-		this.normalizedView();
+		this.normalizeView();
 	}
-	
 }

@@ -49,6 +49,19 @@ import com.golden.gamedev.object.Background;
  * });
  * // bg1 is rendered below bg2, and bg2 is rendered below bg3
  * </pre>
+ * 
+ * <br />
+ * NOTE: due to the removal of a field, the {@link Serializable serializability}
+ * of version 1.1 of the {@link ParallaxBackground} class is not backwards
+ * compatibile with previous versions. <br />
+ * <br />
+ * <b><i>Warning: The {@link ParallaxBackground} class is not threadsafe.
+ * Multiple threads will have to use different instances of the
+ * {@link ParallaxBackground} class.</i></b>
+ * 
+ * @version 1.1
+ * @since 0.2.3
+ * @see Background
  */
 public class ParallaxBackground extends Background {
 	

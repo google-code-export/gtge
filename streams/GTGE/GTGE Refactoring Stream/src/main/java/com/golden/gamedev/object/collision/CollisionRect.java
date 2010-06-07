@@ -24,11 +24,15 @@ public class CollisionRect implements CollisionShape {
 	
 	/**
 	 * The <code>x</code>-coordinate of this collision rect.
+	 * @deprecated Do not access this value directly, as it will no longer be publicly accessible in 0.2.5.
+	 * Use {@link #setX(double)} to set and {@link #getX()} to get this value instead.
 	 */
 	public double x;
 	
 	/**
 	 * The <code>y</code>-coordinate of this collision rect.
+	 * @deprecated Do not access this value directly, as it will no longer be publicly accessible in 0.2.5.
+	 * Use {@link #setY(double)} to set and {@link #getY()} to get this value instead.
 	 */
 	public double y;
 	
@@ -167,6 +171,22 @@ public class CollisionRect implements CollisionShape {
 		return this.height;
 	}
 	
+	/**
+	 * Sets the <code>x</code>-coordinate of this collision rect.
+	 * @param x The <code>x</code>-coordinate of this collision rect.
+	 */
+	public void setX(double x) {
+	    this.x = x;
+    }
+
+	/**
+	 * Sets the <code>y</code>-coordinate of this collision rect.
+	 * @param y The <code>y</code>-coordinate of this collision rect.
+	 */
+	public void setY(double y) {
+	    this.y = y;
+    }
+
 	public String toString() {
 		return super.toString() + " " + "[x=" + this.x + ", y=" + this.y
 		        + ", width=" + this.width + ", height=" + this.height + "]";

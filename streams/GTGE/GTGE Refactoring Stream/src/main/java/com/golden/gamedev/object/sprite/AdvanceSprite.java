@@ -56,9 +56,15 @@ public class AdvanceSprite extends AnimatedSprite {
 	private int status = -1;
 	private int direction = -1;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new <code>AdvanceSprite</code> with specified images and
@@ -73,8 +79,8 @@ public class AdvanceSprite extends AnimatedSprite {
 	}
 	
 	/**
-	 * Creates new <code>AdvanceSprite</code> with specified images and
-	 * located at (0, 0).
+	 * Creates new <code>AdvanceSprite</code> with specified images and located
+	 * at (0, 0).
 	 * <p>
 	 * 
 	 * @see #setLocation(double, double)
@@ -94,8 +100,8 @@ public class AdvanceSprite extends AnimatedSprite {
 	}
 	
 	/**
-	 * Creates new <code>AdvanceSprite</code> with null image and located at
-	 * (0, 0).
+	 * Creates new <code>AdvanceSprite</code> with null image and located at (0,
+	 * 0).
 	 * <p>
 	 * 
 	 * The sprite images must be set before rendering.
@@ -107,9 +113,15 @@ public class AdvanceSprite extends AnimatedSprite {
 		super();
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ SETTING ANIMATION ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ SETTING ANIMATION ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Sets sprite animation frame to specified animation array. The sprite will
@@ -143,9 +155,15 @@ public class AdvanceSprite extends AnimatedSprite {
 		return this.animationFrame;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* IMAGE OPERATION ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* IMAGE OPERATION *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public BufferedImage getImage() {
 		return (this.animationFrame == null) ? super.getImage() : this
@@ -160,9 +178,15 @@ public class AdvanceSprite extends AnimatedSprite {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** ****************** NOTIFY STATUS / DIRECTION CHANGED ******************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ****************** NOTIFY STATUS / DIRECTION CHANGED ********************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * The sprite status and/or direction is changed, set appropriate sprite
@@ -181,9 +205,15 @@ public class AdvanceSprite extends AnimatedSprite {
 	protected void animationChanged(int oldStat, int oldDir, int status, int direction) {
 	}
 	
-	/** ************************************************************************* */
-	/** *********************** STATUS / DIRECTION ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *********************** STATUS / DIRECTION ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Sets new sprite direction. Direction is the direction which the sprite is
@@ -263,9 +293,15 @@ public class AdvanceSprite extends AnimatedSprite {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** RENDER SPRITE ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** RENDER SPRITE ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public void render(Graphics2D g, int xs, int ys) {
 		if (this.animationFrame != null) {

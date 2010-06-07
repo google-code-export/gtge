@@ -87,13 +87,19 @@ public class IsometricBackground extends AbstractIsometricBackground {
 	
 	private int[][] tiles;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
-	 * Creates new <code>IsometricBackground</code> with specified tile
-	 * images, array of tiles, offset of tile height, and starting y coordinate.
+	 * Creates new <code>IsometricBackground</code> with specified tile images,
+	 * array of tiles, offset of tile height, and starting y coordinate.
 	 * <p>
 	 * 
 	 * The array of tiles that makes up the isometric background tiling,
@@ -107,9 +113,9 @@ public class IsometricBackground extends AbstractIsometricBackground {
 	 * <code>offsetTileHeight</code> to 96 (128-32).
 	 * <p>
 	 * 
-	 * The <code>startY</code> is where the isometric background y coordinate
-	 * is starting to render, set this <code>startY</code> value greater than
-	 * zero if this background need to be drawn down a bit.
+	 * The <code>startY</code> is where the isometric background y coordinate is
+	 * starting to render, set this <code>startY</code> value greater than zero
+	 * if this background need to be drawn down a bit.
 	 * 
 	 * @param tileImages an array of images for the tile
 	 * @param tiles a two dimensional array that makes up the background
@@ -159,9 +165,15 @@ public class IsometricBackground extends AbstractIsometricBackground {
 		this(tileImages, new int[horiz][vert]);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ RENDER BACKGROUND ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ RENDER BACKGROUND ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public void renderTile(Graphics2D g, int tileX, int tileY, int x, int y) {
 		int tile = this.tiles[tileX][tileY];
@@ -172,9 +184,15 @@ public class IsometricBackground extends AbstractIsometricBackground {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* BACKGROUND TILE ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* BACKGROUND TILE *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Return the isometric background tile images.

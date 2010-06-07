@@ -20,26 +20,26 @@ package com.golden.gamedev;
 import java.awt.Graphics2D;
 
 /**
- * Extending <code>Game</code> class functionality to be able to handle
- * multiple game screen in order to separate game logic into separated entities.
- * For example: manage intro screen, title screen, menu screen, and main game
- * screen as separated entity.
+ * Extending <code>Game</code> class functionality to be able to handle multiple
+ * game screen in order to separate game logic into separated entities. For
+ * example: manage intro screen, title screen, menu screen, and main game screen
+ * as separated entity.
  * <p>
  * 
  * Each game entity is subclass of {@link GameObject} class (in above example:
  * intro, title, main game screen are subclass of <code>GameObject</code>
- * class). <code>GameObject</code> class is equally with <code>Game</code>
- * class except it works under <code>GameEngine</code> frame work. Thus you
- * can create the game entities as <code>Game</code> class first, run and test
- * it like usual, and then rename it to <code>GameObject</code> in order to
- * attach it into <code>GameEngine</code> frame work.
+ * class). <code>GameObject</code> class is equally with <code>Game</code> class
+ * except it works under <code>GameEngine</code> frame work. Thus you can create
+ * the game entities as <code>Game</code> class first, run and test it like
+ * usual, and then rename it to <code>GameObject</code> in order to attach it
+ * into <code>GameEngine</code> frame work.
  * <p>
  * 
  * The first game to be played is <code>GameObject</code> which use ID = 0.
  * <p>
  * 
- * <code>GameEngine</code> class also can be used to store global variables
- * that can be accessed within all game object entities.
+ * <code>GameEngine</code> class also can be used to store global variables that
+ * can be accessed within all game object entities.
  * <p>
  * 
  * Example how-to-use <code>GameEngine</code> class:
@@ -81,18 +81,26 @@ import java.awt.Graphics2D;
  *       }
  *    }
  * }
+ * 
+ * 
+ * 
+ * 
  * </pre>
  * 
  * @see com.golden.gamedev.GameObject
  */
 public abstract class GameEngine extends Game {
 	
-	/** **************************** CURRENT GAME ******************************* */
+	/**
+	 * **************************** CURRENT GAME *******************************
+	 */
 	
 	private GameObject currentGame;
 	private int currentGameID;
 	
-	/** ***************************** NEXT GAME ********************************* */
+	/**
+	 * ***************************** NEXT GAME *********************************
+	 */
 	
 	/**
 	 * GameObject to be played next, null to exit game.
@@ -108,25 +116,37 @@ public abstract class GameEngine extends Game {
 	 */
 	public int nextGameID = 0;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new <code>GameEngine</code>, the first game to be played is
 	 * GameObject with ID = 0 (zero), please <b>see note</b> below.
 	 * <p>
 	 * 
-	 * Note: <b>Do not</b> make any overloading constructors. All that belong
-	 * to constructor (this method) should be put in {@link #initResources()}
+	 * Note: <b>Do not</b> make any overloading constructors. All that belong to
+	 * constructor (this method) should be put in {@link #initResources()}
 	 * method. Leave this method empty!
 	 */
 	public GameEngine() {
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ GAME LOOP THREAD ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ GAME LOOP THREAD *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	void startGameLoop() {
 		// start the timer
@@ -182,9 +202,15 @@ public abstract class GameEngine extends Game {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** GAME OPERATION ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** GAME OPERATION *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Initialization of global game resources.
@@ -231,13 +257,19 @@ public abstract class GameEngine extends Game {
 	public void refresh() {
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ GETTING GAME OBJECT **************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ GETTING GAME OBJECT ****************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
-	 * Returns <code>GameObject</code> with specific ID, the returned
-	 * GameObject will be the game to be played next.
+	 * Returns <code>GameObject</code> with specific ID, the returned GameObject
+	 * will be the game to be played next.
 	 * 
 	 * @param GameID the id of the GameObject
 	 * @return GameObject to be played next.

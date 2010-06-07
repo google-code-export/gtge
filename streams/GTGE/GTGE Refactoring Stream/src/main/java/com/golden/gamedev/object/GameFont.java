@@ -20,12 +20,13 @@ package com.golden.gamedev.object;
 import java.awt.Graphics2D;
 
 /**
- * <code>GameFont</code> interface is an interface to draw text with
- * alignment.
+ * <code>GameFont</code> interface is an interface to draw text with alignment.
  */
 public interface GameFont {
 	
-	/** ************************* ALIGNMENT CONSTANTS *************************** */
+	/**
+	 * ************************* ALIGNMENT CONSTANTS ***************************
+	 */
 	
 	/**
 	 * Text alignment: left alignment.
@@ -47,9 +48,15 @@ public interface GameFont {
 	 */
 	public static final int JUSTIFY = 4;
 	
-	/** ************************************************************************* */
-	/** *********************** DRAW STRING INTERFACES ************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *********************** DRAW STRING INTERFACES **************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Draw a single line string into graphics context.
@@ -104,8 +111,7 @@ public interface GameFont {
 	 * @param width width per line
 	 * @param vspace additional vertical spacing, in pixel
 	 * @param firstIndent first line indentation, in pixel
-	 * @return The bottom-edge <code>y</code> coordinate to draw next
-	 *         paragraph.
+	 * @return The bottom-edge <code>y</code> coordinate to draw next paragraph.
 	 * 
 	 * @see #LEFT
 	 * @see #RIGHT
@@ -114,9 +120,15 @@ public interface GameFont {
 	 */
 	public int drawText(Graphics2D g, String text, int alignment, int x, int y, int width, int vspace, int firstIndent);
 	
-	/** ************************************************************************* */
-	/** ******************* FONT PROPERTIES INTERFACES ************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ******************* FONT PROPERTIES INTERFACES **************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns the width of <code>String st</code> in pixel.
@@ -140,8 +152,8 @@ public interface GameFont {
 	public int getHeight();
 	
 	/**
-	 * Returns whether the specified <code>char c</code> is available to draw
-	 * by this game font.
+	 * Returns whether the specified <code>char c</code> is available to draw by
+	 * this game font.
 	 */
 	public boolean isAvailable(char c);
 	

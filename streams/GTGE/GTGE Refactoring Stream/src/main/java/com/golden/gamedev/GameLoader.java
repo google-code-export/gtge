@@ -60,6 +60,10 @@ import com.golden.gamedev.funbox.ErrorNotificationDialog;
  *          game.start();
  *       }
  * }
+ * 
+ * 
+ * 
+ * 
  * </pre>
  * 
  * <p>
@@ -68,6 +72,10 @@ import com.golden.gamedev.funbox.ErrorNotificationDialog;
  * override {@link #createAppletGame()} method to return the actual game :
  * 
  * <pre>
+ * 
+ * 
+ * 
+ * 
  * public class YourGameApplet extends GameLoader {
  * 	
  * 	protected Game createAppletGame() {
@@ -76,8 +84,7 @@ import com.golden.gamedev.funbox.ErrorNotificationDialog;
  * }
  * </pre>
  * 
- * Then point the applet tag code to that <code>GameLoader</code> subclass :
- * <br>
+ * Then point the applet tag code to that <code>GameLoader</code> subclass : <br>
  * (html page)
  * 
  * <pre>
@@ -99,7 +106,9 @@ import com.golden.gamedev.funbox.ErrorNotificationDialog;
  */
 public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	
-	/** ************************* VERSION VALIDATOR ***************************** */
+	/**
+	 * ************************* VERSION VALIDATOR *****************************
+	 */
 	
 	/**
 	 * 
@@ -149,13 +158,17 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	
 	private boolean VALID_JAVA_VERSION = true;
 	
-	/** *************************** INFO MESSAGES ******************************* */
+	/**
+	 * *************************** INFO MESSAGES *******************************
+	 */
 	
 	private String[] INFO_MSG = new String[] {
 		"Loading Game, please wait a moment"
 	};
 	
-	/** ************************* LOADER PROPERTIES ***************************** */
+	/**
+	 * ************************* LOADER PROPERTIES *****************************
+	 */
 	
 	/**
 	 * Graphics engine loaded by this <code>GameLoader</code>.
@@ -168,9 +181,15 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	 */
 	protected Game game;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Constructs new <code>GameLoader</code>.
@@ -181,9 +200,15 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	public GameLoader() {
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ START / STOP GAME ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ START / STOP GAME ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Starts the game that have been loaded by this loader.
@@ -326,14 +351,18 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	}
 	
 	/**
-	 * To play game in applet environment, <code>GameLoader</code> class need
-	 * to be subclassed and this method need to be override to return the actual
+	 * To play game in applet environment, <code>GameLoader</code> class need to
+	 * be subclassed and this method need to be override to return the actual
 	 * game object.
 	 * <p>
 	 * 
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
+	 * 
 	 * public class YourGameApplet extends GameLoader {
 	 * 	
 	 * 	protected Game createAppletGame() {
@@ -364,9 +393,15 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 		return null;
 	}
 	
-	/** ************************************************************************* */
-	/** ***************************** GAME SETUP ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** GAME SETUP ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Initializes graphics engine with specified size, mode, bufferstrategy,
@@ -473,9 +508,15 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 		return this.game;
 	}
 	
-	/** ************************************************************************* */
-	/** *************************** INFO NOTIFIER ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *************************** INFO NOTIFIER *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Draw essentials informations in applet game, for example : draw info when
@@ -513,9 +554,15 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** ******************** VALIDATING JAVA VERSION **************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ******************** VALIDATING JAVA VERSION ****************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns whether the Java version is passed the minimum Java version
@@ -595,14 +642,20 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* WINDOW LISTENER ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* WINDOW LISTENER *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * If the user pressing frame close button while playing in
-	 * <code>WindowedMode</code> or <code>FullScreenMode</code>, this
-	 * method will receive the closing event.
+	 * <code>WindowedMode</code> or <code>FullScreenMode</code>, this method
+	 * will receive the closing event.
 	 * <p>
 	 * 
 	 * In this implementation, pressing frame close button will instantly close

@@ -54,8 +54,8 @@ import com.golden.gamedev.Game;
 import com.golden.gamedev.engine.BaseGraphics;
 
 /**
- * <code>ErrorNotificationDialog</code> class is a dialog UI to show the
- * player the game exception and tell the player to send it to the game author.
+ * <code>ErrorNotificationDialog</code> class is a dialog UI to show the player
+ * the game exception and tell the player to send it to the game author.
  */
 public class ErrorNotificationDialog extends JDialog implements Runnable,
         ActionListener, WindowListener {
@@ -93,9 +93,15 @@ public class ErrorNotificationDialog extends JDialog implements Runnable,
 	 */
 	protected JTextArea textArea;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Builds up an error notification dialog for the player.
@@ -398,8 +404,8 @@ public class ErrorNotificationDialog extends JDialog implements Runnable,
 	 * Closes this error notification dialog.
 	 * <p>
 	 * 
-	 * This method will call <code>System.exit(0);</code> if the graphics
-	 * engine is not instance of <code>Applet</code> class.
+	 * This method will call <code>System.exit(0);</code> if the graphics engine
+	 * is not instance of <code>Applet</code> class.
 	 */
 	public void closeDialog() {
 		try {

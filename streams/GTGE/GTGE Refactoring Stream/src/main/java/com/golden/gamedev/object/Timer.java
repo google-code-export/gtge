@@ -20,8 +20,8 @@ import java.io.Serializable;
 
 /**
  * Class to manage timing in GTGE Frame Work to create game independent of frame
- * rate. <code>Timer</code> is usually used to create sprite behaviour, such
- * as used in sprite animation.
+ * rate. <code>Timer</code> is usually used to create sprite behaviour, such as
+ * used in sprite animation.
  * <p>
  * 
  * Example how to use timer in conjunction with sprite in order to make the
@@ -46,19 +46,26 @@ public class Timer implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -5183805739820889052L;
-	/** ************************* TIMER VARIABLES ******************************* */
+	/**
+	 * ************************* TIMER VARIABLES *******************************
+	 */
 	
 	private boolean active = true;
 	private long delay; // action delay
 	private long currentTick;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
-	 * Creates new <code>Timer</code> with specified delay time in
-	 * milliseconds.
+	 * Creates new <code>Timer</code> with specified delay time in milliseconds.
 	 * 
 	 * @param delay delay time in milliseconds.
 	 */
@@ -66,9 +73,15 @@ public class Timer implements Serializable {
 		this.delay = delay;
 	}
 	
-	/** ************************************************************************* */
-	/** *************************** MAIN-FUNCTION ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *************************** MAIN-FUNCTION *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns true, if the timer delay time has been elapsed, thus the action
@@ -110,9 +123,15 @@ public class Timer implements Serializable {
 		this.currentTick = other.currentTick;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ TIMER VARIABLES ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ TIMER VARIABLES ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns active state of this timer, inactive timer won't do any action.

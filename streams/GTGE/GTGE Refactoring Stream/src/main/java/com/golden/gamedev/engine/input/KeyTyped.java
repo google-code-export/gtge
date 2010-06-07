@@ -21,10 +21,10 @@ import com.golden.gamedev.engine.BaseInput;
 import com.golden.gamedev.object.Timer;
 
 /**
- * <code>KeyTyped</code> class is a class to simulate key typing. Key typed is
- * a key that pressed for some time and the key event is fired following
- * {@link #getRepeatDelay() initial repeat delay} and
- * {@link #getRepeatRate() repeat rate delay}.
+ * <code>KeyTyped</code> class is a class to simulate key typing. Key typed is a
+ * key that pressed for some time and the key event is fired following
+ * {@link #getRepeatDelay() initial repeat delay} and {@link #getRepeatRate()
+ * repeat rate delay}.
  * 
  * @see #update(long)
  * @see #getKeyTyped()
@@ -39,9 +39,15 @@ public class KeyTyped {
 	private int key; // store last pressed key
 	private int keyTyped; // currently typed key
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Constructs new <code>KeyTyped</code> using following input engine, and
@@ -70,9 +76,15 @@ public class KeyTyped {
 		this(bsInput, 450, 40);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* UPDATE KEY TYPED ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* UPDATE KEY TYPED ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Updates key typing.
@@ -128,9 +140,15 @@ public class KeyTyped {
 		this.key = this.keyTyped = BaseInput.NO_KEY;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* GETTING KEY TYPED ***************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* GETTING KEY TYPED *****************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns key typed or {@link BaseInput#NO_KEY} if no key is being typed.
@@ -151,9 +169,15 @@ public class KeyTyped {
 		return (this.keyTyped == keyCode);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* REPEAT RATE DELAY ***************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* REPEAT RATE DELAY *****************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns the key typed initial delay.

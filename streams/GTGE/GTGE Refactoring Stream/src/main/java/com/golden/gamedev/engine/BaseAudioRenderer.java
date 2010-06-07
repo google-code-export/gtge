@@ -23,11 +23,14 @@ import java.net.URL;
  * A simple abstraction for playing audio sound.
  * <p>
  * 
- * <code>BaseAudioRenderer</code> <b>must</b> have one empty constructor.
- * <br>
+ * <code>BaseAudioRenderer</code> <b>must</b> have one empty constructor. <br>
  * For example :
  * 
  * <pre>
+ * 
+ * 
+ * 
+ * 
  * public class MP3AudioRenderer extends BaseAudioRenderer {
  * 	
  * 	public MP3Renderer() { // you should provide an empty constructor
@@ -43,7 +46,9 @@ import java.net.URL;
  */
 public abstract class BaseAudioRenderer {
 	
-	/** ********************** RENDERER STATUS CONSTANTS ************************ */
+	/**
+	 * ********************** RENDERER STATUS CONSTANTS ************************
+	 */
 	
 	/**
 	 * Audio renderer status indicates that the audio is currently playing.
@@ -65,7 +70,9 @@ public abstract class BaseAudioRenderer {
 	 */
 	public static final int ERROR = 4;
 	
-	/** ************************* RENDERER VARIABLES **************************** */
+	/**
+	 * ************************* RENDERER VARIABLES ****************************
+	 */
 	
 	private URL audiofile;
 	
@@ -86,9 +93,15 @@ public abstract class BaseAudioRenderer {
 	 */
 	protected float volume;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new audio renderer.
@@ -101,9 +114,15 @@ public abstract class BaseAudioRenderer {
 		this.status = BaseAudioRenderer.STOPPED;
 	}
 	
-	/** ************************************************************************* */
-	/** ******************* MAIN ABSTRACT FUNCTION ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ******************* MAIN ABSTRACT FUNCTION ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Plays sound with specified audio file.
@@ -130,9 +149,15 @@ public abstract class BaseAudioRenderer {
 	protected void setSoundVolume(float volume) {
 	}
 	
-	/** ************************************************************************* */
-	/** ********************** AUDIO PLAYBACK FUNCTION ************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ********************** AUDIO PLAYBACK FUNCTION **************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Stops currently played audio and begins playback of specified audio file.
@@ -190,9 +215,15 @@ public abstract class BaseAudioRenderer {
 		return this.loop;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ AUDIO VOLUME SETTINGS ************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ AUDIO VOLUME SETTINGS **************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Sets audio volume.
@@ -231,9 +262,15 @@ public abstract class BaseAudioRenderer {
 		return true;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* AUDIO PROPERTIES ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* AUDIO PROPERTIES ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns the audio resource URL associated with this audio renderer.

@@ -24,10 +24,9 @@ import com.golden.gamedev.object.SpriteGroup;
 
 /**
  * <p>
- * Subclass of <code>CollisionGroup</code> that calculates the precise
- * positions of the <code>Sprite</code>s at the moment of collision. It is
- * suitable for collisions that need the colliding objects to stop rather than
- * vanish.
+ * Subclass of <code>CollisionGroup</code> that calculates the precise positions
+ * of the <code>Sprite</code>s at the moment of collision. It is suitable for
+ * collisions that need the colliding objects to stop rather than vanish.
  * </p>
  * 
  * <p>
@@ -45,10 +44,10 @@ import com.golden.gamedev.object.SpriteGroup;
  * This class may not work as expected with concave sprites- such as L-shapes.
  * The position of the collision will be found accurately, but the direction may
  * not be as anticipated as it is based on the <code>CollisionRect</code>s
- * rather than pixel collisions or custom <code>CollisionShape</code>s
- * defined in subclasses of <code>PreciseCollisionGroup</code> If concave
- * sprites are necessary, it might be advisable to break them into groups of
- * smaller convex <code>Sprite</code>s.
+ * rather than pixel collisions or custom <code>CollisionShape</code>s defined
+ * in subclasses of <code>PreciseCollisionGroup</code> If concave sprites are
+ * necessary, it might be advisable to break them into groups of smaller convex
+ * <code>Sprite</code>s.
  * </p>
  * 
  * @see PlayField#addCollisionGroup(SpriteGroup, SpriteGroup, CollisionManager)
@@ -58,8 +57,8 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 	
 	/***************************************************************************
 	 * This is used to test for non-convergence in pixel perfect collision, or
-	 * when unusual <code>CollisionShape</code>s are used. The default value
-	 * is 0.000001.
+	 * when unusual <code>CollisionShape</code>s are used. The default value is
+	 * 0.000001.
 	 **************************************************************************/
 	protected static double ITERATIVE_BAILOUT = 0.000001;
 	
@@ -151,7 +150,7 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 				
 				this.collisionSide = 0;
 				
-				Sprite spriteToMove, otherSprite;
+				Sprite spriteToMove;
 				
 				if (speedX1 == 0 && speedY1 == 0 && speedX2 == 0
 				        && speedY2 == 0) {// both
@@ -177,11 +176,9 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 						// 1
 						// faster
 						spriteToMove = s1;
-						otherSprite = s2;
 					}
 					else {
 						spriteToMove = s2;
-						otherSprite = s1;
 					}
 					if (this.log) {
 						System.out.print(spriteToMove + "-->");
@@ -264,7 +261,7 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 			else { // no collision at old location
 			
 				double tHoriz = 999999.0, tVert = 999999.0; // garbage values
-															// that
+				// that
 				// should not be
 				// achieved
 				int xCollision = -1, yCollision = -1;

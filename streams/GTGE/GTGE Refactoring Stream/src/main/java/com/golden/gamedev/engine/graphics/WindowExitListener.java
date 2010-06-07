@@ -26,8 +26,8 @@ import java.awt.event.WindowListener;
  * <code>System.exit()</code>.
  * <p>
  * 
- * This window listener is used by all <code>java.awt.Frame</code> class in
- * this graphics engine package.
+ * This window listener is used by all <code>java.awt.Frame</code> class in this
+ * graphics engine package.
  */
 public final class WindowExitListener implements WindowListener {
 	

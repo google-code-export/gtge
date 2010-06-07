@@ -17,8 +17,8 @@
 package com.golden.gamedev.object.collision;
 
 /**
- * Optimized <code>java.awt.Rectangle</code> with double precision. The
- * default sprite collision bounding box.
+ * Optimized <code>java.awt.Rectangle</code> with double precision. The default
+ * sprite collision bounding box.
  */
 public class CollisionRect implements CollisionShape {
 	
@@ -41,12 +41,6 @@ public class CollisionRect implements CollisionShape {
 	 * The height of this collision rect.
 	 */
 	public int height;
-	
-	private int x1, x2; // optimization, for intersects method
-	        
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
 	
 	/**
 	 * Creates new <code>CollisionRect</code>.

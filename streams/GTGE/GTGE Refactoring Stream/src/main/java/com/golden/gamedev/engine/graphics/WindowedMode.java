@@ -43,7 +43,9 @@ import com.golden.gamedev.util.ImageUtil;
  */
 public class WindowedMode implements BaseGraphics {
 	
-	/** ************************ HARDWARE DEVICE ******************************** */
+	/**
+	 * ************************ HARDWARE DEVICE ********************************
+	 */
 	
 	/**
 	 * The graphics device that constructs this graphics engine.
@@ -57,14 +59,18 @@ public class WindowedMode implements BaseGraphics {
 	public static final GraphicsConfiguration CONFIG = WindowedMode.DEVICE
 	        .getDefaultConfiguration();
 	
-	/** *************************** AWT COMPONENT ******************************* */
+	/**
+	 * *************************** AWT COMPONENT *******************************
+	 */
 	
 	private Frame frame; // top frame where the canvas is put
 	private Canvas canvas;
 	
 	private Dimension size;
 	
-	/** *************************** BACK BUFFER ********************************* */
+	/**
+	 * *************************** BACK BUFFER *********************************
+	 */
 	
 	private VolatileImage offscreen; // backbuffer image
 	
@@ -73,9 +79,15 @@ public class WindowedMode implements BaseGraphics {
 	// current graphics context
 	private Graphics2D currentGraphics;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new instance of Windowed Graphics Engine with specified size, and
@@ -139,9 +151,15 @@ public class WindowedMode implements BaseGraphics {
 		this.canvas.requestFocus();
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ GRAPHICS FUNCTION ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ GRAPHICS FUNCTION ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	private boolean createBufferStrategy() {
 		boolean bufferCreated;
@@ -261,9 +279,15 @@ public class WindowedMode implements BaseGraphics {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** ******************* DISPOSING GRAPHICS ENGINE *************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ******************* DISPOSING GRAPHICS ENGINE ***************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public void cleanup() {
 		try {
@@ -284,9 +308,15 @@ public class WindowedMode implements BaseGraphics {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** *************************** PROPERTIES ********************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *************************** PROPERTIES **********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public Dimension getSize() {
 		return this.size;

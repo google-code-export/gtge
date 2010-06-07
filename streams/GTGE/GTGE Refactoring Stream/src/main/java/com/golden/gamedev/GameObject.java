@@ -43,9 +43,9 @@ import com.golden.gamedev.util.Utility;
  * <code>GameEngine</code> frame work.
  * <p>
  * 
- * <code>GameObject</code> class is plain same with <code>Game</code> class,
- * you can first create the game as <code>Game</code> class, run it, test it,
- * and then rename it to <code>GameObject</code> and attach it to
+ * <code>GameObject</code> class is plain same with <code>Game</code> class, you
+ * can first create the game as <code>Game</code> class, run it, test it, and
+ * then rename it to <code>GameObject</code> and attach it to
  * <code>GameEngine</code> frame work as one of game entities.
  * <p>
  * 
@@ -57,14 +57,18 @@ import com.golden.gamedev.util.Utility;
  */
 public abstract class GameObject {
 	
-	/** **************************** MASTER ENGINE ****************************** */
+	/**
+	 * **************************** MASTER ENGINE ******************************
+	 */
 	
 	/**
 	 * The master <code>GameEngine</code> frame work.
 	 */
 	public final GameEngine parent;
 	
-	/** **************************** GAME ENGINE ******************************** */
+	/**
+	 * **************************** GAME ENGINE ********************************
+	 */
 	
 	/** Graphics engine. */
 	public BaseGraphics bsGraphics;
@@ -84,7 +88,9 @@ public abstract class GameObject {
 	/** Font manager. */
 	public GameFontManager fontManager;
 	
-	/** ************************* OTHER PROPERTIES ****************************** */
+	/**
+	 * ************************* OTHER PROPERTIES ******************************
+	 */
 	
 	private boolean finish; // true, to back to game chooser
 	private boolean initialized; // true, indicates the game has been
@@ -94,9 +100,15 @@ public abstract class GameObject {
 	// to avoid double initialization
 	// if the game is replaying
 	
-	/** ************************************************************************* */
-	/** ************************* CONSTRUCTOR *********************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* CONSTRUCTOR ***********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new <code>GameObject</code> with specified
@@ -211,8 +223,8 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * End this game, and back to
-	 * {@linkplain GameEngine#getGame(int) game object chooser}.
+	 * End this game, and back to {@linkplain GameEngine#getGame(int) game
+	 * object chooser}.
 	 * 
 	 * @see GameEngine#nextGameID
 	 * @see GameEngine#nextGame
@@ -221,9 +233,15 @@ public abstract class GameObject {
 		this.finish = true;
 	}
 	
-	/** ************************************************************************* */
-	/** ***************************** MAIN METHODS ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** MAIN METHODS ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * All game resources initialization, everything that usually goes to
@@ -262,14 +280,26 @@ public abstract class GameObject {
 	// super.finalize();
 	// }
 	
-	/** ************************************************************************* */
-	/** ***************** BELOW THIS LINE IS ENGINES UTILIZE ******************** */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************** BELOW THIS LINE IS ENGINES UTILIZE ********************
+	 */
 	/** ***************** (PASTED FROM GAME CLASS) ******************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
 	
-	/** ************************************************************************* */
-	/** *********************** ESSENTIAL GAME UTILITY ************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *********************** ESSENTIAL GAME UTILITY **************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	// -> com.golden.gamedev.util.Utility
 	/**
 	 * Effectively equivalent to the call
@@ -284,9 +314,15 @@ public abstract class GameObject {
 	// public Locale getLocale() { return locale; }
 	// public void setLocale(Locale locale) { this.locale = locale; }
 	
-	/** ************************************************************************* */
-	/** ************************* GRAPHICS UTILITY ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* GRAPHICS UTILITY ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	// -> com.golden.gamedev.engine.BaseGraphics
 	/**
 	 * Effectively equivalent to the call
@@ -329,9 +365,15 @@ public abstract class GameObject {
 		ImageUtil.saveImage(this.takeScreenShot(), f);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** AUDIO UTILITY ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** AUDIO UTILITY ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	// -> com.golden.gamedev.engine.BaseAudio
 	/**
 	 * Effectively equivalent to the call
@@ -357,9 +399,15 @@ public abstract class GameObject {
 		return this.bsSound.play(audiofile);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** TIMER UTILITY ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** TIMER UTILITY ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	// -> com.golden.gamedev.engine.BaseTimer
 	/**
 	 * Effectively equivalent to the call
@@ -395,9 +443,15 @@ public abstract class GameObject {
 		        "FPS = " + this.getCurrentFPS() + "/" + this.getFPS(), x, y);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** INPUT UTILITY ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** INPUT UTILITY ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	// -> com.golden.gamedev.engine.BaseInput
 	/**
 	 * Effectively equivalent to the call
@@ -517,9 +571,15 @@ public abstract class GameObject {
 		this.bsInput.setMouseVisible(true);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** IMAGE UTILITY ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** IMAGE UTILITY ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	// com.golden.gamedev.engine.BaseLoader
 	/**
 	 * Effectively equivalent to the call
@@ -571,13 +631,18 @@ public abstract class GameObject {
 	 * <p>
 	 * 
 	 * First the image is stripped by column and row, and then the images is
-	 * arranged with specified sequence order. The images then stored into cache ({@linkplain com.golden.gamedev.engine.BaseLoader bsLoader})
-	 * with key as followed: the image file + sequence + digit.
+	 * arranged with specified sequence order. The images then stored into cache
+	 * ({@linkplain com.golden.gamedev.engine.BaseLoader bsLoader}) with key as
+	 * followed: the image file + sequence + digit.
 	 * <p>
 	 * 
 	 * For example:
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
+	 * 
 	 * // we want the images sequence is as followed
 	 * String sequence = &quot;020120&quot;;
 	 * BufferedImage[] image = getImages(&quot;imagestrip.png&quot;, 3, 1, true, sequence, 1);

@@ -40,7 +40,9 @@ import com.golden.gamedev.engine.BaseGraphics;
  */
 public class AppletMode extends Applet implements BaseGraphics {
 	
-	/** ************************ HARDWARE DEVICE ******************************** */
+	/**
+	 * ************************ HARDWARE DEVICE ********************************
+	 */
 	
 	/**
 	 * 
@@ -59,19 +61,29 @@ public class AppletMode extends Applet implements BaseGraphics {
 	public static final GraphicsConfiguration CONFIG = AppletMode.DEVICE
 	        .getDefaultConfiguration();
 	
-	/** *************************** AWT COMPONENT ******************************* */
+	/**
+	 * *************************** AWT COMPONENT *******************************
+	 */
 	
 	private Canvas canvas;
 	
-	/** *************************** BACK BUFFER ********************************* */
+	/**
+	 * *************************** BACK BUFFER *********************************
+	 */
 	
 	private BufferStrategy strategy;
 	
 	private Graphics2D currentGraphics; // current graphics context
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new instance of Applet Graphics Engine, please <b>see note</b>
@@ -81,8 +93,8 @@ public class AppletMode extends Applet implements BaseGraphics {
 	 * <b>Note:</b> <br>
 	 * <b>Do not</b> make any overloading constructors. <br>
 	 * The engine is initialized in {@link #start()} method, therefore do not
-	 * use any graphics function before the <code>start()</code> method is
-	 * being called by the browser.
+	 * use any graphics function before the <code>start()</code> method is being
+	 * called by the browser.
 	 * 
 	 * @see #start()
 	 */
@@ -155,9 +167,15 @@ public class AppletMode extends Applet implements BaseGraphics {
 		this.canvas.requestFocus();
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ GRAPHICS FUNCTION ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ GRAPHICS FUNCTION ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public Graphics2D getBackBuffer() {
 		if (this.currentGraphics == null) {
@@ -191,9 +209,15 @@ public class AppletMode extends Applet implements BaseGraphics {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** ******************* DISPOSING GRAPHICS ENGINE *************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ******************* DISPOSING GRAPHICS ENGINE ***************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public void cleanup() {
 		// do nothing
@@ -207,9 +231,15 @@ public class AppletMode extends Applet implements BaseGraphics {
 		this.cleanup();
 	}
 	
-	/** ************************************************************************* */
-	/** *************************** PROPERTIES ********************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *************************** PROPERTIES **********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public Dimension getSize() {
 		return super.getSize();

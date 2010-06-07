@@ -23,8 +23,8 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 
 /**
- * <code>BaseGraphics</code> interface provides all needed graphics function
- * for drawing unto screen.
+ * <code>BaseGraphics</code> interface provides all needed graphics function for
+ * drawing unto screen.
  * <p>
  * 
  * Common methods of how-to-use <code>BaseGraphics</code>:
@@ -116,8 +116,8 @@ public interface BaseGraphics {
 	public void setWindowTitle(String title);
 	
 	/**
-	 * Returns graphics engine window title or <code>String</code> "" if
-	 * setting window title is not supported.
+	 * Returns graphics engine window title or <code>String</code> "" if setting
+	 * window title is not supported.
 	 * @return The window title.
 	 */
 	public String getWindowTitle();
@@ -135,8 +135,8 @@ public interface BaseGraphics {
 	public void setWindowIcon(Image icon);
 	
 	/**
-	 * Returns graphics engine window icon image or <code>null</code> if
-	 * setting window icon image is not supported.
+	 * Returns graphics engine window icon image or <code>null</code> if setting
+	 * window icon image is not supported.
 	 * @return The window icon.
 	 */
 	public Image getWindowIcon();

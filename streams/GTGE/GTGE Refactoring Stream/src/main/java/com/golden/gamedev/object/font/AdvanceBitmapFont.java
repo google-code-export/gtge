@@ -37,13 +37,19 @@ public class AdvanceBitmapFont extends BitmapFont {
 	
 	private int[] w;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
-	 * Creates new <code>AdvanceBitmapFont</code> with specified images font
-	 * and letter sequence.
+	 * Creates new <code>AdvanceBitmapFont</code> with specified images font and
+	 * letter sequence.
 	 * 
 	 * @param imagefont the images font, all images must have same height
 	 * @param letterSequence the order sequence of the images font
@@ -59,8 +65,8 @@ public class AdvanceBitmapFont extends BitmapFont {
 	}
 	
 	/**
-	 * Creates new <code>AdvanceBitmapFont</code> with specified images font
-	 * and default letter sequence :
+	 * Creates new <code>AdvanceBitmapFont</code> with specified images font and
+	 * default letter sequence :
 	 * 
 	 * <pre>
 	 *         ! &quot; # $ % &amp; ' ( ) * + , - . / 0 1 2 3

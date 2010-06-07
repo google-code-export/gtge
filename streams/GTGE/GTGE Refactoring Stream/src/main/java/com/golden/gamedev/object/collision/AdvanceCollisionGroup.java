@@ -55,9 +55,15 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 	
 	private Sprite source;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Constructs new <code>AdvanceCollisionGroup</code>.
@@ -65,9 +71,15 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 	public AdvanceCollisionGroup() {
 	}
 	
-	/** ************************************************************************* */
-	/** ****************** MAIN-METHOD: CHECKING COLLISION ********************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ****************** MAIN-METHOD: CHECKING COLLISION **********************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public void checkCollision() {
 		// clear previous collision event
@@ -196,15 +208,15 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 	}
 	
 	/**
-	 * Sorts two sprites (<code>o1</code> and <code>o2</code>) that
-	 * collided with {@linkplain #getSourceSprite() the object sprite} to
-	 * determine which one should be checked first.
+	 * Sorts two sprites (<code>o1</code> and <code>o2</code>) that collided
+	 * with {@linkplain #getSourceSprite() the object sprite} to determine which
+	 * one should be checked first.
 	 * <p>
 	 * 
 	 * By default when the {@linkplain #getSourceSprite() object sprite} is
-	 * falling ({@linkplain Sprite#getVerticalSpeed() vertical speed} >= 0),
-	 * all collided sprites are sorted by greater y at bottom, otherwise it sort
-	 * by greater y at top.
+	 * falling ({@linkplain Sprite#getVerticalSpeed() vertical speed} >= 0), all
+	 * collided sprites are sorted by greater y at bottom, otherwise it sort by
+	 * greater y at top.
 	 */
 	public int compare(Object o1, Object o2) {
 		Sprite s1 = (Sprite) o1, s2 = (Sprite) o2;

@@ -27,10 +27,10 @@ import com.golden.gamedev.object.GameFont;
  * equal dimension (same width and height).
  * <p>
  * 
- * <code>BitmapFont</code> takes up two parameters, the array of images font
- * and the sequence of the images, for example if the images font array sequence
- * is ordered as follow: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", specify the parameter
- * letter sequence as is.
+ * <code>BitmapFont</code> takes up two parameters, the array of images font and
+ * the sequence of the images, for example if the images font array sequence is
+ * ordered as follow: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", specify the parameter letter
+ * sequence as is.
  * <p>
  * 
  * If the images font has different width, use
@@ -38,7 +38,9 @@ import com.golden.gamedev.object.GameFont;
  */
 public class BitmapFont implements GameFont {
 	
-	/** *********************** BITMAP FONT PROPERTIES ************************** */
+	/**
+	 * *********************** BITMAP FONT PROPERTIES **************************
+	 */
 	
 	private BufferedImage[] imagefont;
 	
@@ -46,13 +48,19 @@ public class BitmapFont implements GameFont {
 	        
 	protected int[] charIndex = new int[256];
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
-	 * Creates new <code>BitmapFont</code> with specified images font and
-	 * letter sequence.
+	 * Creates new <code>BitmapFont</code> with specified images font and letter
+	 * sequence.
 	 * 
 	 * @param imagefont the images font, all images must have same size
 	 * @param letterSequence the order sequence of the images font
@@ -93,9 +101,15 @@ public class BitmapFont implements GameFont {
 		        + "pqrstuvwxyz{|}~");
 	}
 	
-	/** ************************************************************************* */
-	/** **************************** TEXT DRAWING ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * **************************** TEXT DRAWING *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public int drawString(Graphics2D g, String s, int x, int y) {
 		int len = s.length();
@@ -248,9 +262,15 @@ public class BitmapFont implements GameFont {
 		return y + this.getHeight();
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** FONT PROPERTIES ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** FONT PROPERTIES ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns the images font used to draw this bitmap font.

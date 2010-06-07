@@ -43,7 +43,9 @@ import com.golden.gamedev.object.SpriteGroup;
  */
 public abstract class CollisionGroup extends BasicCollisionGroup {
 	
-	/** ********************* COLLISION SIDE CONSTANTS ************************** */
+	/**
+	 * ********************* COLLISION SIDE CONSTANTS **************************
+	 */
 	
 	/**
 	 * Indicates the collision side of the collided sprites is the left of first
@@ -69,7 +71,9 @@ public abstract class CollisionGroup extends BasicCollisionGroup {
 	 */
 	public static final int BOTTOM_TOP_COLLISION = 8;
 	
-	/** ************************* COLLISION EVENTS ****************************** */
+	/**
+	 * ************************* COLLISION EVENTS ******************************
+	 */
 	
 	/**
 	 * The sprite from group 1 in current collision.
@@ -110,9 +114,15 @@ public abstract class CollisionGroup extends BasicCollisionGroup {
 	 */
 	protected double collisionY2;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new <code>CollisionGroup</code>.
@@ -129,8 +139,8 @@ public abstract class CollisionGroup extends BasicCollisionGroup {
 	 * This method is responsible to take care all collision events, such as the
 	 * {@linkplain #sprite1 collided sprite} (in this case <code>s1</code> and
 	 * <code>s2</code>), the {@linkplain #collisionSide collision side},
-	 * position where collision actually occured ({@linkplain #collisionX1 collisionX1},
-	 * {@linkplain #collisionY1 collisionY1}).
+	 * position where collision actually occured ({@linkplain #collisionX1
+	 * collisionX1}, {@linkplain #collisionY1 collisionY1}).
 	 * <p>
 	 * 
 	 * The collision information is used to return the collided sprite using
@@ -230,9 +240,15 @@ public abstract class CollisionGroup extends BasicCollisionGroup {
 		return false;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ COLLISION EVENTS ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ COLLISION EVENTS *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Reverts sprite 1 position before the collision occured.

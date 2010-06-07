@@ -37,11 +37,15 @@ import com.golden.gamedev.engine.BaseAudioRenderer;
  */
 public class WaveRenderer extends BaseAudioRenderer implements LineListener {
 	
-	/** ************************* WAVE PROPERTIES ******************************* */
+	/**
+	 * ************************* WAVE PROPERTIES *******************************
+	 */
 	
 	private Clip clip;
 	
-	/** ********************* VALIDATING WAVE RENDERER ************************** */
+	/**
+	 * ********************* VALIDATING WAVE RENDERER **************************
+	 */
 	
 	private static boolean available;
 	private static boolean volumeSupported;
@@ -53,9 +57,15 @@ public class WaveRenderer extends BaseAudioRenderer implements LineListener {
 	
 	private static int rendererStatus = WaveRenderer.UNINITIALIZED;
 	
-	/** ************************************************************************* */
-	/** *************************** CONSTRUCTOR ********************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *************************** CONSTRUCTOR *********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new wave audio renderer.
@@ -137,9 +147,15 @@ public class WaveRenderer extends BaseAudioRenderer implements LineListener {
 		return WaveRenderer.available;
 	}
 	
-	/** ************************************************************************* */
-	/** ********************** AUDIO PLAYBACK FUNCTION ************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ********************** AUDIO PLAYBACK FUNCTION **************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	protected void playSound(URL audiofile) {
 		try {
@@ -205,9 +221,15 @@ public class WaveRenderer extends BaseAudioRenderer implements LineListener {
 		this.clip.removeLineListener(this);
 	}
 	
-	/** ************************************************************************* */
-	/** *********************** WAVE EVENT LISTENER ***************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *********************** WAVE EVENT LISTENER *****************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Notified when the sound is stopped externally.
@@ -221,9 +243,15 @@ public class WaveRenderer extends BaseAudioRenderer implements LineListener {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ AUDIO VOLUME SETTINGS ************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ AUDIO VOLUME SETTINGS **************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	protected void setSoundVolume(float volume) {
 		if (this.clip == null) {

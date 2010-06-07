@@ -22,8 +22,8 @@ import java.awt.Graphics2D;
 import com.golden.gamedev.object.Sprite;
 
 /**
- * <code>InvisibleSprite</code> is sprite that has no graphical image,
- * generally used in collision to make invisible block.
+ * <code>InvisibleSprite</code> is sprite that has no graphical image, generally
+ * used in collision to make invisible block.
  */
 public class InvisibleSprite extends Sprite {
 	

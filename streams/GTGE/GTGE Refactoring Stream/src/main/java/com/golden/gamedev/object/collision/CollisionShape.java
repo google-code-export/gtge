@@ -18,9 +18,8 @@ package com.golden.gamedev.object.collision;
 
 /**
  * <code>CollisionShape</code> interface represents a form of geometric shape
- * that behave as sprite collision area. <code>CollisionShape</code> is able
- * to determine whether its area is intersected with another collision shape
- * area.
+ * that behave as sprite collision area. <code>CollisionShape</code> is able to
+ * determine whether its area is intersected with another collision shape area.
  * <p>
  * 
  * This interface that play the role to determine whether two sprites are

@@ -71,8 +71,9 @@ public class Background implements Serializable {
 	 * Background <code>x</code> coordinate.
 	 * 
 	 * @see #setLocation(double, double)
-	 * @deprecated Do not access this value directly, as it will no longer be publicly accessible in 0.2.5.
-	 * Use {@link #setX(double)} to set and {@link #getX()} to get this value instead.
+	 * @deprecated Do not access this value directly, as it will no longer be
+	 *             publicly accessible in 0.2.5. Use {@link #setX(double)} to
+	 *             set and {@link #getX()} to get this value instead.
 	 */
 	protected double x;
 	
@@ -80,8 +81,9 @@ public class Background implements Serializable {
 	 * Background <code>y</code> coordinate.
 	 * 
 	 * @see #setLocation(double, double)
-	 * @deprecated Do not access this value directly, as it will no longer be publicly accessible in 0.2.5.
-	 * Use {@link #setY(double)} to set and {@link #getY()} to get this value instead.
+	 * @deprecated Do not access this value directly, as it will no longer be
+	 *             publicly accessible in 0.2.5. Use {@link #setY(double)} to
+	 *             set and {@link #getY()} to get this value instead.
 	 */
 	protected double y;
 	
@@ -302,18 +304,18 @@ public class Background implements Serializable {
 	 * Sets the background <code>x</code> coordinate.
 	 * @param x The background <code>x</code> coordinate.
 	 */
-	public void setX(double x) {
-	    this.x = x;
-    }
+	public final void setX(double x) {
+		this.x = x;
+	}
 	
 	/**
 	 * Sets the background <code>y</code> coordinate.
 	 * @param y The background <code>y</code> coordinate.
 	 */
-	public void setY(double y) {
-	    this.y = y;
-    }
-
+	public final void setY(double y) {
+		this.y = y;
+	}
+	
 	/**
 	 * *************************************************************************
 	 */

@@ -92,11 +92,17 @@ public class Sprite implements java.io.Serializable {
 	
 	/**
 	 * The width of this sprite.
+	 * @deprecated Do not access this value directly, as it will no longer be
+	 *             publicly accessible in 0.2.5. Use {@link #setWidth(double)}
+	 *             to set and {@link #getWidth()} to get this value instead.
 	 */
 	protected int width;
 	
 	/**
 	 * The height of this sprite.
+	 * @deprecated Do not access this value directly, as it will no longer be
+	 *             publicly accessible in 0.2.5. Use {@link #setHeight(double)}
+	 *             to set and {@link #getHeight()} to get this value instead.
 	 */
 	protected int height;
 	
@@ -431,6 +437,22 @@ public class Sprite implements java.io.Serializable {
 	}
 	
 	/**
+	 * Sets the width of this sprite.
+	 * @param width The width of this sprite.
+	 */
+	public final void setWidth(int width) {
+		this.width = width;
+	}
+	
+	/**
+	 * Sets the height of this sprite.
+	 * @param height The height of this sprite.
+	 */
+	public final void setHeight(int height) {
+		this.height = height;
+	}
+	
+	/**
 	 * Forces sprite <code>x</code> position to specified coordinate.
 	 * <p>
 	 * 
@@ -570,6 +592,12 @@ public class Sprite implements java.io.Serializable {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * Sprite s;
 	 * 
 	 * public void update(long elapsedTime) {
@@ -617,6 +645,12 @@ public class Sprite implements java.io.Serializable {
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 

@@ -217,7 +217,7 @@ public abstract class CollisionGroup extends BasicCollisionGroup {
 			        .getWidth(), shape2.getHeight());
 			
 			// calculate collision side using the intersection rect
-			if (iRect.width <= iRect.height) {
+			if (iRect.getWidth() <= iRect.getHeight()) {
 				// less width, means horizontal collision
 				this.collisionSide = (shape1.getX() < shape2.getX()) ? CollisionGroup.RIGHT_LEFT_COLLISION
 				        : // sprite 1 is at

@@ -40,11 +40,17 @@ public class CollisionRect implements CollisionShape {
 	
 	/**
 	 * The width of this collision rect.
+	 * @deprecated Do not access this value directly, as it will no longer be
+	 *             publicly accessible in 0.2.5. Use {@link #setWidth(double)}
+	 *             to set and {@link #getWidth()} to get this value instead.
 	 */
 	public int width;
 	
 	/**
 	 * The height of this collision rect.
+	 * @deprecated Do not access this value directly, as it will no longer be
+	 *             publicly accessible in 0.2.5. Use {@link #setHeight(double)}
+	 *             to set and {@link #getHeight()} to get this value instead.
 	 */
 	public int height;
 	
@@ -187,6 +193,22 @@ public class CollisionRect implements CollisionShape {
 	 */
 	public final void setY(double y) {
 		this.y = y;
+	}
+	
+	/**
+	 * Sets the width of this collision rect.
+	 * @param width The width of this collision rect.
+	 */
+	public final void setWidth(int width) {
+		this.width = width;
+	}
+	
+	/**
+	 * Sets the height of this collision rect.
+	 * @param height The height of this collision rect.
+	 */
+	public final void setHeight(int height) {
+		this.height = height;
 	}
 	
 	public String toString() {

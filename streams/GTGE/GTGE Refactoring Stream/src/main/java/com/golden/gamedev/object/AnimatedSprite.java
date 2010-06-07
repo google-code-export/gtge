@@ -105,8 +105,8 @@ public class AnimatedSprite extends Sprite {
 		// set sprite images
 		if (image != null) {
 			this.image = image;
-			this.width = image[0].getWidth();
-			this.height = image[0].getHeight();
+			this.setWidth(image[0].getWidth());
+			this.setHeight(image[0].getHeight());
 			
 			this.frame = this.startFrame = 0;
 			this.finishFrame = image.length - 1;
@@ -183,13 +183,15 @@ public class AnimatedSprite extends Sprite {
 		
 		if (image == null || image[0] == null) {
 			// no images
-			this.width = this.height = this.finishFrame = 0;
+			this.setWidth(0);
+			this.setHeight(0);
+			this.finishFrame = 0;
 			
 		}
 		else {
 			this.image = image;
-			this.width = image[0].getWidth();
-			this.height = image[0].getHeight();
+			this.setWidth(image[0].getWidth());
+			this.setHeight(image[0].getHeight());
 			this.finishFrame = image.length - 1;
 		}
 	}

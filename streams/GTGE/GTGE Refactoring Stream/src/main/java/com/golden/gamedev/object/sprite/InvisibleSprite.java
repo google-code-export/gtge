@@ -39,8 +39,8 @@ public class InvisibleSprite extends Sprite {
 	public InvisibleSprite(double x, double y, int width, int height) {
 		super(x, y);
 		
-		this.width = width;
-		this.height = height;
+		this.setWidth(width);
+		this.setHeight(height);
 	}
 	
 	/**

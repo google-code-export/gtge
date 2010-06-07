@@ -17,6 +17,7 @@
 package com.golden.gamedev.engine.graphics;
 
 // JFC
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -29,7 +30,7 @@ import java.awt.event.WindowListener;
  * This window listener is used by all <code>java.awt.Frame</code> class in this
  * graphics engine package.
  */
-public final class WindowExitListener implements WindowListener {
+public final class WindowExitListener extends WindowAdapter {
 	
 	private static final WindowListener singleton = new WindowExitListener();
 	
@@ -51,29 +52,4 @@ public final class WindowExitListener implements WindowListener {
 	public void windowClosing(WindowEvent e) {
 		System.exit(0);
 	}
-	
-	/** Do nothing. */
-	public void windowOpened(WindowEvent e) {
-	}
-	
-	/** Do nothing. */
-	public void windowClosed(WindowEvent e) {
-	}
-	
-	/** Do nothing. */
-	public void windowIconified(WindowEvent e) {
-	}
-	
-	/** Do nothing. */
-	public void windowDeiconified(WindowEvent e) {
-	}
-	
-	/** Do nothing. */
-	public void windowActivated(WindowEvent e) {
-	}
-	
-	/** Do nothing. */
-	public void windowDeactivated(WindowEvent e) {
-	}
-	
 }

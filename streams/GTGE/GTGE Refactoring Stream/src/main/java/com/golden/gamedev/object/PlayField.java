@@ -21,6 +21,7 @@ import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import com.golden.gamedev.UpdateAware;
 import com.golden.gamedev.util.Utility;
 
 /**
@@ -38,7 +39,7 @@ import com.golden.gamedev.util.Utility;
  * @see com.golden.gamedev.object.SpriteGroup
  * @see com.golden.gamedev.object.CollisionManager
  */
-public class PlayField {
+public class PlayField implements UpdateAware {
 	
 	/**
 	 * ********************** PLAYFIELD PROPERTIES *****************************
@@ -125,6 +126,7 @@ public class PlayField {
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
 	 * 
 	 * 
 	 * 

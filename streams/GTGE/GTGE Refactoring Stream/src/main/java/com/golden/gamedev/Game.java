@@ -97,6 +97,8 @@ import com.golden.gamedev.util.Utility;
  * 
  * 
  * 
+ * 
+ * 
  * </pre>
  * 
  * <p>
@@ -129,6 +131,8 @@ import com.golden.gamedev.util.Utility;
  * 
  * 
  * 
+ * 
+ * 
  * </pre>
  * 
  * <p>
@@ -150,7 +154,7 @@ import com.golden.gamedev.util.Utility;
  * @see com.golden.gamedev.GameLoader
  * @see #initEngine()
  */
-public abstract class Game {
+public abstract class Game implements UpdateAware {
 	
 	/**
 	 * Current GTGE version.
@@ -625,6 +629,8 @@ public abstract class Game {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
 	 * protected void initEngine() {
 	 * 	super.initEngine();
 	 * 	// change the timer engine
@@ -708,14 +714,6 @@ public abstract class Game {
 	 * @see com.golden.gamedev.object
 	 */
 	public abstract void initResources();
-	
-	/**
-	 * Updates game variables.
-	 * 
-	 * @see #keyDown(int)
-	 * @see #keyPressed(int)
-	 */
-	public abstract void update(long elapsedTime);
 	
 	/**
 	 * Renders game to the screen.
@@ -884,6 +882,8 @@ public abstract class Game {
 	 * For example:
 	 * 
 	 * <pre>
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 
@@ -1589,6 +1589,8 @@ public abstract class Game {
 	 * For example:
 	 * 
 	 * <pre>
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 

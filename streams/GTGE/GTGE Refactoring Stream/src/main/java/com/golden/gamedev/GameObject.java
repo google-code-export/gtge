@@ -55,7 +55,7 @@ import com.golden.gamedev.util.Utility;
  * @see com.golden.gamedev.GameEngine
  * @see com.golden.gamedev.Game
  */
-public abstract class GameObject {
+public abstract class GameObject implements UpdateAware {
 	
 	/**
 	 * **************************** MASTER ENGINE ******************************
@@ -639,6 +639,7 @@ public abstract class GameObject {
 	 * For example:
 	 * 
 	 * <pre>
+	 * 
 	 * 
 	 * 
 	 * 

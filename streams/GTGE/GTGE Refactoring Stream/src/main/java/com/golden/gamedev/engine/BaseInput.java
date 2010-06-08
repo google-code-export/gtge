@@ -16,6 +16,8 @@
  */
 package com.golden.gamedev.engine;
 
+import com.golden.gamedev.UpdateAware;
+
 /**
  * <code>BaseInput</code> interface provides all needed functions for polling
  * keyboard and mouse input.
@@ -44,7 +46,7 @@ package com.golden.gamedev.engine;
  *    }
  * </pre>
  */
-public interface BaseInput {
+public interface BaseInput extends UpdateAware {
 	
 	/**
 	 * ************************* INPUT CONSTANTS *******************************

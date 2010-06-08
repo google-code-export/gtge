@@ -21,6 +21,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Comparator;
 
+import com.golden.gamedev.UpdateAware;
 import com.golden.gamedev.object.collision.CollisionRect;
 import com.golden.gamedev.object.collision.CollisionShape;
 
@@ -56,7 +57,7 @@ import com.golden.gamedev.object.collision.CollisionShape;
  * @see com.golden.gamedev.object.PlayField
  * @see com.golden.gamedev.object.Timer
  */
-public class Sprite implements java.io.Serializable {
+public class Sprite implements java.io.Serializable, UpdateAware {
 	
 	// /////// optimization /////////
 	// private final Rectangle collisionOffset = new Rectangle(0,0,0,0); //
@@ -598,6 +599,7 @@ public class Sprite implements java.io.Serializable {
 	 * 
 	 * 
 	 * 
+	 * 
 	 * Sprite s;
 	 * 
 	 * public void update(long elapsedTime) {
@@ -645,6 +647,7 @@ public class Sprite implements java.io.Serializable {
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
 	 * 
 	 * 
 	 * 

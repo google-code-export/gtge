@@ -22,6 +22,8 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.io.Serializable;
 
+import com.golden.gamedev.UpdateAware;
+
 /**
  * <code>Background</code> is the area where every sprites lived.
  * <p>
@@ -44,7 +46,7 @@ import java.io.Serializable;
  * 
  * @see com.golden.gamedev.object.background
  */
-public class Background implements Serializable {
+public class Background implements Serializable, UpdateAware {
 	
 	/**
 	 * ********************** SCREEN DIMENSION VAR *****************************

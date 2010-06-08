@@ -35,6 +35,9 @@ import com.golden.gamedev.object.GameFont;
  * 
  * If the images font has different width, use
  * {@link com.golden.gamedev.object.font.AdvanceBitmapFont} instead.
+ * @deprecated This class is deprecated in favor of the simplified
+ *             {@link ImageFont} class, and will be removed in version 0.2.5 of
+ *             GTGE.
  */
 public class BitmapFont implements GameFont {
 	
@@ -322,6 +325,10 @@ public class BitmapFont implements GameFont {
 		catch (Exception e) {
 			return false;
 		}
+	}
+	
+	public int getHeight(final String s) {
+		return getHeight();
 	}
 	
 }

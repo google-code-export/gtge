@@ -157,4 +157,16 @@ public interface GameFont {
 	 */
 	public boolean isAvailable(char c);
 	
+	/**
+	 * Gets the minimum height needed to draw the specified {@link String}.
+	 * @param s The given non-null {@link String} to use to retrieve its height.
+	 * @return The minimum height needed to draw the specified {@link String}.
+	 * @throws NullPointerException Throws a {@link NullPointerException} if the
+	 *         given {@link String} is null.
+	 * @throws IllegalStateException Throws an {@link IllegalStateException} if
+	 *         the given {@link String} is not possible to draw via this
+	 *         {@link GameFont} instance.
+	 */
+	public int getHeight(final String s);
+	
 }

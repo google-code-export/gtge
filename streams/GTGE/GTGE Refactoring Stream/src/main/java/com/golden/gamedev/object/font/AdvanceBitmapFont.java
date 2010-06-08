@@ -32,6 +32,9 @@ import java.awt.image.BufferedImage;
  * 
  * If the images font have same width, use the standard
  * {@link com.golden.gamedev.object.font.BitmapFont}.
+ * @deprecated This class is deprecated in favor of the simplified
+ *             {@link ImageFont} class, and will be removed in version 0.2.5 of
+ *             GTGE.
  */
 public class AdvanceBitmapFont extends BitmapFont {
 	

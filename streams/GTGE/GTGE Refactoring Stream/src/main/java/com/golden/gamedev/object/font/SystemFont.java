@@ -284,4 +284,8 @@ public class SystemFont implements GameFont {
 		return true;
 	}
 	
+	public int getHeight(final String s) {
+		return getHeight();
+	}
+	
 }

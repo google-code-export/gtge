@@ -38,6 +38,8 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import com.golden.gamedev.Renderable;
+
 /**
  * Utility class for creating, loading, and manipulating image.
  */
@@ -314,6 +316,12 @@ public class ImageUtil {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * BufferedImage image;
 	 * // rotate the image by 90 degree clockwise
 	 * BufferedImage rotated = ImageUtil.rotate(image, 90);
@@ -345,6 +353,12 @@ public class ImageUtil {
 	 * For example: <br>
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 
@@ -499,4 +513,26 @@ public class ImageUtil {
 		        alpha));
 	}
 	
+	/**
+	 * Creates a new {@link BufferedImage} with the given width and height that
+	 * is constructed based on the given {@link Renderable} instance's
+	 * {@link Renderable#render(Graphics2D)} method invocation.
+	 * 
+	 * @param renderable The given non-null {@link Renderable} instance to use
+	 *        to create the {@link BufferedImage}.
+	 * @param width The width of the created {@link BufferedImage}.
+	 * @param height The height of the created {@link BufferedImage}.
+	 * @return A new {@link BufferedImage} with the given width and height that
+	 *         is constructed based on the given {@link Renderable} instance's
+	 *         {@link Renderable#render(Graphics2D)} method invocation.
+	 */
+	public static BufferedImage createImage(final Renderable renderable, final int width, final int height) {
+		BufferedImage image = ImageUtil.createImage(width, height,
+		        Transparency.OPAQUE);
+		Graphics2D g = image.createGraphics();
+		renderable.render(g);
+		g.dispose();
+		
+		return image;
+	}
 }

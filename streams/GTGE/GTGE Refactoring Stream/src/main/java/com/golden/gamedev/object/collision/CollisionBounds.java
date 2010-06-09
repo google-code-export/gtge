@@ -184,6 +184,8 @@ public abstract class CollisionBounds extends CollisionManager {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
 	 * public boolean getCollisionRect1(Sprite s1, CollisionRect rect) {
 	 * 	rect.setBounds(s1.getX(), s1.getY(), s1.getWidth(), s1.getHeight());
 	 * 	return rect;

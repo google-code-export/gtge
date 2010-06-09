@@ -21,6 +21,7 @@ import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import com.golden.gamedev.Renderable;
 import com.golden.gamedev.UpdateAware;
 import com.golden.gamedev.util.Utility;
 
@@ -38,6 +39,9 @@ import com.golden.gamedev.util.Utility;
  * For example how to create and use sprite group :
  * 
  * <pre>
+ * 
+ * 
+ * 
  * 
  * 
  * 
@@ -69,7 +73,7 @@ import com.golden.gamedev.util.Utility;
  * @see com.golden.gamedev.object.PlayField
  * @see com.golden.gamedev.object.collision.CollisionGroup
  */
-public class SpriteGroup implements UpdateAware {
+public class SpriteGroup implements UpdateAware, Renderable {
 	
 	/**
 	 * *********************** GROUP SPRITE FACTOR *****************************

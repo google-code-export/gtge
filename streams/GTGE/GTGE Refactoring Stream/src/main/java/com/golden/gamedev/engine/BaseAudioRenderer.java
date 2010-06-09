@@ -31,6 +31,8 @@ import java.net.URL;
  * 
  * 
  * 
+ * 
+ * 
  * public class MP3AudioRenderer extends BaseAudioRenderer {
  * 	
  * 	public MP3Renderer() { // you should provide an empty constructor

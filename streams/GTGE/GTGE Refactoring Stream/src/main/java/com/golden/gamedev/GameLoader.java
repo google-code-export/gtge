@@ -64,6 +64,8 @@ import com.golden.gamedev.funbox.ErrorNotificationDialog;
  * 
  * 
  * 
+ * 
+ * 
  * </pre>
  * 
  * <p>
@@ -72,6 +74,8 @@ import com.golden.gamedev.funbox.ErrorNotificationDialog;
  * override {@link #createAppletGame()} method to return the actual game :
  * 
  * <pre>
+ * 
+ * 
  * 
  * 
  * 
@@ -359,6 +363,8 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 

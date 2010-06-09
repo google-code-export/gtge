@@ -290,6 +290,8 @@ public abstract class AbstractIsometricBackground extends Background {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
 	 * public class YourGame extends Game {
 	 * 	
 	 * 	AbstractTileBackground bg;

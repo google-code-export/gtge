@@ -36,6 +36,8 @@ import com.golden.gamedev.engine.BaseInput;
  * 
  * 
  * 
+ * 
+ * 
  * BaseInput input;
  * String key = &quot;HELLO&quot;;
  * KeyCapture keycap = new KeyCapture(input, key, 1000) {

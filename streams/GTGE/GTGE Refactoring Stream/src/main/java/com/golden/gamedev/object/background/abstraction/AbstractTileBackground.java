@@ -180,6 +180,8 @@ public abstract class AbstractTileBackground extends Background {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
 	 * public class YourGame extends Game {
 	 * 	
 	 * 	AbstractTileBackground bg;

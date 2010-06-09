@@ -77,6 +77,8 @@ public abstract class BasicCollisionGroup extends CollisionManager {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
 	 * class ThisThatCollision extends BasicCollisionGroup {
 	 * 	
 	 * 	// class initialization
@@ -116,6 +118,8 @@ public abstract class BasicCollisionGroup extends CollisionManager {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
 	 * public CollisionShape getCollisionRect1(Sprite s1) {
 	 * 	rect1.setBounds(s1.getX(), s1.getY(), s1.getWidth(), s1.getHeight());
 	 * 	return rect1;
@@ -145,6 +149,8 @@ public abstract class BasicCollisionGroup extends CollisionManager {
 	 * <code>Sprite</code> dimension:
 	 * 
 	 * <pre>
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 

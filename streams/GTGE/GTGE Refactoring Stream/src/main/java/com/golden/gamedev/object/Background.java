@@ -22,6 +22,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.io.Serializable;
 
+import com.golden.gamedev.Renderable;
 import com.golden.gamedev.UpdateAware;
 
 /**
@@ -46,7 +47,7 @@ import com.golden.gamedev.UpdateAware;
  * 
  * @see com.golden.gamedev.object.background
  */
-public class Background implements Serializable, UpdateAware {
+public class Background implements Serializable, UpdateAware, Renderable {
 	
 	/**
 	 * ********************** SCREEN DIMENSION VAR *****************************

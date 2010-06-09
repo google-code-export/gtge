@@ -41,16 +41,16 @@ public class CollisionRect implements CollisionShape {
 	/**
 	 * The width of this collision rect.
 	 * @deprecated Do not access this value directly, as it will no longer be
-	 *             publicly accessible in 0.2.5. Use {@link #setWidth(double)}
-	 *             to set and {@link #getWidth()} to get this value instead.
+	 *             publicly accessible in 0.2.5. Use {@link #setWidth(int)} to
+	 *             set and {@link #getWidth()} to get this value instead.
 	 */
 	public int width;
 	
 	/**
 	 * The height of this collision rect.
 	 * @deprecated Do not access this value directly, as it will no longer be
-	 *             publicly accessible in 0.2.5. Use {@link #setHeight(double)}
-	 *             to set and {@link #getHeight()} to get this value instead.
+	 *             publicly accessible in 0.2.5. Use {@link #setHeight(int)} to
+	 *             set and {@link #getHeight()} to get this value instead.
 	 */
 	public int height;
 	

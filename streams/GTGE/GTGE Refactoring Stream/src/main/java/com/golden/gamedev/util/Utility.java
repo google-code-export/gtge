@@ -202,6 +202,8 @@ public class Utility {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
 	 * // to return random number from 0 to 10
 	 * int rand = Utility.getRandom(0, 10);
 	 * </pre>

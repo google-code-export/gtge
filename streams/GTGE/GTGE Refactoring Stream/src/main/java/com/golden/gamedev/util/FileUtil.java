@@ -180,6 +180,8 @@ public class FileUtil {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
 	 * File f = new File(&quot;paul.dat&quot;);
 	 * File newFile = setExtension(f, &quot;bin&quot;);
 	 * </pre>

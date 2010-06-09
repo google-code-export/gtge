@@ -20,7 +20,6 @@ package com.golden.gamedev;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Transparency;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -55,7 +54,7 @@ import com.golden.gamedev.util.Utility;
  * @see com.golden.gamedev.GameEngine
  * @see com.golden.gamedev.Game
  */
-public abstract class GameObject implements UpdateAware {
+public abstract class GameObject implements UpdateAware, Renderable {
 	
 	/**
 	 * **************************** MASTER ENGINE ******************************
@@ -267,13 +266,6 @@ public abstract class GameObject implements UpdateAware {
 	 */
 	public abstract void update(long elapsedTime);
 	
-	/**
-	 * Renders game to the screen.
-	 * 
-	 * @param g backbuffer graphics context
-	 */
-	public abstract void render(Graphics2D g);
-	
 	// for debugging that this game object is properly disposed
 	// protected void finalize() throws Throwable {
 	// System.out.println("Finalization " + this + " GameObject");
@@ -345,24 +337,27 @@ public abstract class GameObject implements UpdateAware {
 	/**
 	 * Returns a new created buffered image which the current game state is
 	 * rendered into it.
+	 * @deprecated This method is deprecated and will be removed in 0.2.5. Use
+	 *             {@link ImageUtil#createImage(Renderable, int, int)} instead
+	 *             of this method.
 	 */
 	public BufferedImage takeScreenShot() {
-		BufferedImage screen = ImageUtil.createImage(this.getWidth(), this
-		        .getHeight(), Transparency.OPAQUE);
-		Graphics2D g = screen.createGraphics();
-		this.render(g);
-		g.dispose();
-		
-		return screen;
+		return ImageUtil.createImage(this, this.getWidth(), this.getHeight());
 	}
 	
 	/**
 	 * Captures current game screen into specified file.
 	 * 
 	 * @see #takeScreenShot()
+	 * @deprecated This method is deprecated and will be removed in 0.2.5. Use
+	 *             {@link ImageUtil#createImage(Renderable, int, int)} to create
+	 *             a screenshot and
+	 *             {@link ImageUtil#saveImage(BufferedImage, File)} to save it
+	 *             directly.
 	 */
 	public void takeScreenShot(File f) {
-		ImageUtil.saveImage(this.takeScreenShot(), f);
+		ImageUtil.saveImage(ImageUtil.createImage(this, this.getWidth(), this
+		        .getHeight()), f);
 	}
 	
 	/**
@@ -639,6 +634,11 @@ public abstract class GameObject implements UpdateAware {
 	 * For example:
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 

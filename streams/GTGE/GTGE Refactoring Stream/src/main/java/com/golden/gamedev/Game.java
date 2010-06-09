@@ -28,7 +28,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.Transparency;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
@@ -99,6 +98,12 @@ import com.golden.gamedev.util.Utility;
  * 
  * 
  * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  * </pre>
  * 
  * <p>
@@ -133,6 +138,12 @@ import com.golden.gamedev.util.Utility;
  * 
  * 
  * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  * </pre>
  * 
  * <p>
@@ -154,7 +165,7 @@ import com.golden.gamedev.util.Utility;
  * @see com.golden.gamedev.GameLoader
  * @see #initEngine()
  */
-public abstract class Game implements UpdateAware {
+public abstract class Game implements UpdateAware, Renderable {
 	
 	/**
 	 * Current GTGE version.
@@ -631,6 +642,12 @@ public abstract class Game implements UpdateAware {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * protected void initEngine() {
 	 * 	super.initEngine();
 	 * 	// change the timer engine
@@ -714,13 +731,6 @@ public abstract class Game implements UpdateAware {
 	 * @see com.golden.gamedev.object
 	 */
 	public abstract void initResources();
-	
-	/**
-	 * Renders game to the screen.
-	 * 
-	 * @param g backbuffer graphics context
-	 */
-	public abstract void render(Graphics2D g);
 	
 	/**
 	 * *************************************************************************
@@ -882,6 +892,12 @@ public abstract class Game implements UpdateAware {
 	 * For example:
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 
@@ -1251,24 +1267,27 @@ public abstract class Game implements UpdateAware {
 	/**
 	 * Returns a new created buffered image which the current game state is
 	 * rendered into it.
+	 * @deprecated This method is deprecated and will be removed in 0.2.5. Use
+	 *             {@link ImageUtil#createImage(Renderable, int, int)} instead
+	 *             of this method.
 	 */
 	public BufferedImage takeScreenShot() {
-		BufferedImage screen = ImageUtil.createImage(this.getWidth(), this
-		        .getHeight(), Transparency.OPAQUE);
-		Graphics2D g = screen.createGraphics();
-		this.render(g);
-		g.dispose();
-		
-		return screen;
+		return ImageUtil.createImage(this, this.getWidth(), this.getHeight());
 	}
 	
 	/**
 	 * Captures current game screen into specified file.
 	 * 
 	 * @see #takeScreenShot()
+	 * @deprecated This method is deprecated and will be removed in 0.2.5. Use
+	 *             {@link ImageUtil#createImage(Renderable, int, int)} to create
+	 *             a screenshot and
+	 *             {@link ImageUtil#saveImage(BufferedImage, File)} to save it
+	 *             directly.
 	 */
 	public void takeScreenShot(File f) {
-		ImageUtil.saveImage(this.takeScreenShot(), f);
+		ImageUtil.saveImage(ImageUtil.createImage(this, this.getWidth(), this
+		        .getHeight()), f);
 	}
 	
 	/**
@@ -1589,6 +1608,12 @@ public abstract class Game implements UpdateAware {
 	 * For example:
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 

@@ -21,6 +21,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Comparator;
 
+import com.golden.gamedev.Renderable;
 import com.golden.gamedev.UpdateAware;
 import com.golden.gamedev.object.collision.CollisionRect;
 import com.golden.gamedev.object.collision.CollisionShape;
@@ -57,7 +58,7 @@ import com.golden.gamedev.object.collision.CollisionShape;
  * @see com.golden.gamedev.object.PlayField
  * @see com.golden.gamedev.object.Timer
  */
-public class Sprite implements java.io.Serializable, UpdateAware {
+public class Sprite implements java.io.Serializable, UpdateAware, Renderable {
 	
 	// /////// optimization /////////
 	// private final Rectangle collisionOffset = new Rectangle(0,0,0,0); //
@@ -94,16 +95,16 @@ public class Sprite implements java.io.Serializable, UpdateAware {
 	/**
 	 * The width of this sprite.
 	 * @deprecated Do not access this value directly, as it will no longer be
-	 *             publicly accessible in 0.2.5. Use {@link #setWidth(double)}
-	 *             to set and {@link #getWidth()} to get this value instead.
+	 *             publicly accessible in 0.2.5. Use {@link #setWidth(int)} to
+	 *             set and {@link #getWidth()} to get this value instead.
 	 */
 	protected int width;
 	
 	/**
 	 * The height of this sprite.
 	 * @deprecated Do not access this value directly, as it will no longer be
-	 *             publicly accessible in 0.2.5. Use {@link #setHeight(double)}
-	 *             to set and {@link #getHeight()} to get this value instead.
+	 *             publicly accessible in 0.2.5. Use {@link #setHeight(int)} to
+	 *             set and {@link #getHeight()} to get this value instead.
 	 */
 	protected int height;
 	
@@ -600,6 +601,10 @@ public class Sprite implements java.io.Serializable, UpdateAware {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * Sprite s;
 	 * 
 	 * public void update(long elapsedTime) {
@@ -647,6 +652,10 @@ public class Sprite implements java.io.Serializable, UpdateAware {
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 

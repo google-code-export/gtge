@@ -328,7 +328,7 @@ public class BitmapFont implements GameFont {
 	}
 	
 	public int getHeight(final String s) {
-		return getHeight();
+		return this.getHeight();
 	}
 	
 }

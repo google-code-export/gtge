@@ -285,7 +285,7 @@ public class SystemFont implements GameFont {
 	}
 	
 	public int getHeight(final String s) {
-		return getHeight();
+		return this.getHeight();
 	}
 	
 }

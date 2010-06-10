@@ -16,6 +16,10 @@
  */
 package com.golden.gamedev.object.collision;
 
+import java.io.Serializable;
+
+import com.golden.gamedev.Positionable;
+
 /**
  * <code>CollisionShape</code> interface represents a form of geometric shape
  * that behave as sprite collision area. <code>CollisionShape</code> is able to
@@ -24,9 +28,21 @@ package com.golden.gamedev.object.collision;
  * 
  * This interface that play the role to determine whether two sprites are
  * collided to each other or not using <code>CollisionShape</code>
- * {@linkplain #intersects(CollisionShape)} method.
+ * {@linkplain #intersects(CollisionShape)} method. <br />
+ * <br />
+ * As of GTGE 0.2.4, {@link CollisionShape} instances are {@link Positionable} -
+ * they were always able to be positioned via
+ * {@link #setBounds(double, double, int, int)} or
+ * {@link #setLocation(double, double)}, but now an individual X or Y coordinate
+ * may be set directly. <br />
+ * <br />
+ * {@link CollisionShape} instances should be easily able to be serialized to
+ * and retrieved from a byte-stream and hence they were made
+ * {@link Serializable} as of 0.2.4 as well.
+ * 
+ * @version 2.0
  */
-public interface CollisionShape {
+public interface CollisionShape extends Positionable, Serializable {
 	
 	/**
 	 * Returns whether this collision shape intersects with other collision
@@ -50,23 +66,27 @@ public interface CollisionShape {
 	public void setBounds(double x1, double y1, int w1, int h1);
 	
 	/**
-	 * Returns the <code>x</code>-position of this collision shape.
-	 */
-	public double getX();
-	
-	/**
-	 * Returns the <code>y</code>-position of this collision shape.
-	 */
-	public double getY();
-	
-	/**
 	 * Returns the width of this collision shape.
 	 */
 	public int getWidth();
 	
 	/**
+	 * Sets the width of this {@link CollisionShape} instance.
+	 * @param width The width of this {@link CollisionShape} instance.
+	 * @since 0.2.4
+	 */
+	void setWidth(final int width);
+	
+	/**
 	 * Returns the height of this collision shape.
 	 */
 	public int getHeight();
+	
+	/**
+	 * Sets the height of this {@link CollisionShape} instance.
+	 * @param height The height of this {@link CollisionShape} instance.
+	 * @since 0.2.4
+	 */
+	void setHeight(final int height);
 	
 }

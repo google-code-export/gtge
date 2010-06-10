@@ -16,7 +16,7 @@
  */
 package com.golden.gamedev.engine;
 
-import com.golden.gamedev.UpdateAware;
+import com.golden.gamedev.Updateable;
 
 /**
  * <code>BaseInput</code> interface provides all needed functions for polling
@@ -46,7 +46,7 @@ import com.golden.gamedev.UpdateAware;
  *    }
  * </pre>
  */
-public interface BaseInput extends UpdateAware {
+public interface BaseInput extends Updateable {
 	
 	/**
 	 * ************************* INPUT CONSTANTS *******************************
@@ -71,12 +71,6 @@ public interface BaseInput extends UpdateAware {
 	/**
 	 * *************************************************************************
 	 */
-	
-	/**
-	 * Updates input engine, this method need to be called in tight loop.
-	 * @param elapsedTime The time elapsed since the last update.
-	 */
-	public void update(long elapsedTime);
 	
 	/**
 	 * Refresh all input actions to empty (clear input actions).

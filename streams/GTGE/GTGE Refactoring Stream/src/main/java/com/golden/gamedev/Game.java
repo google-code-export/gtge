@@ -104,6 +104,7 @@ import com.golden.gamedev.util.Utility;
  * 
  * 
  * 
+ * 
  * </pre>
  * 
  * <p>
@@ -144,6 +145,7 @@ import com.golden.gamedev.util.Utility;
  * 
  * 
  * 
+ * 
  * </pre>
  * 
  * <p>
@@ -165,7 +167,7 @@ import com.golden.gamedev.util.Utility;
  * @see com.golden.gamedev.GameLoader
  * @see #initEngine()
  */
-public abstract class Game implements UpdateAware, Renderable {
+public abstract class Game implements Updateable, Renderable {
 	
 	/**
 	 * Current GTGE version.
@@ -648,6 +650,7 @@ public abstract class Game implements UpdateAware, Renderable {
 	 * 
 	 * 
 	 * 
+	 * 
 	 * protected void initEngine() {
 	 * 	super.initEngine();
 	 * 	// change the timer engine
@@ -892,6 +895,7 @@ public abstract class Game implements UpdateAware, Renderable {
 	 * For example:
 	 * 
 	 * <pre>
+	 * 
 	 * 
 	 * 
 	 * 
@@ -1446,7 +1450,7 @@ public abstract class Game implements UpdateAware, Renderable {
 	 * Returns sprite in specified sprite group that intersected with mouse
 	 * pointer, or null if no sprite intersected with mouse pointer.
 	 * 
-	 * @param field playfield to check its intersection with mouse pointer
+	 * @param group playfield to check its intersection with mouse pointer
 	 * @param pixelCheck true, checking the sprite image with pixel precision
 	 */
 	public Sprite checkPosMouse(SpriteGroup group, boolean pixelCheck) {
@@ -1608,6 +1612,7 @@ public abstract class Game implements UpdateAware, Renderable {
 	 * For example:
 	 * 
 	 * <pre>
+	 * 
 	 * 
 	 * 
 	 * 

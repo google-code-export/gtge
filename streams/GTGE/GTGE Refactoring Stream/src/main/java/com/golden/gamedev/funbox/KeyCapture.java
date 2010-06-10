@@ -19,7 +19,8 @@ package com.golden.gamedev.funbox;
 // JFC
 import java.awt.event.KeyEvent;
 
-import com.golden.gamedev.UpdateAware;
+import com.golden.gamedev.ActiveHolder;
+import com.golden.gamedev.Updateable;
 import com.golden.gamedev.engine.BaseInput;
 
 /**
@@ -31,6 +32,7 @@ import com.golden.gamedev.engine.BaseInput;
  * the user type 'HELLO' in right sequence)
  * 
  * <pre>
+ * 
  * 
  * 
  * 
@@ -53,7 +55,7 @@ import com.golden.gamedev.engine.BaseInput;
  * }
  * </pre>
  */
-public abstract class KeyCapture implements UpdateAware {
+public abstract class KeyCapture implements Updateable, ActiveHolder {
 	
 	/**
 	 * <code>BaseInput</code> associated with this key capture.

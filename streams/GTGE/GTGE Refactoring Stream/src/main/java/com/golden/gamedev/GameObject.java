@@ -54,7 +54,7 @@ import com.golden.gamedev.util.Utility;
  * @see com.golden.gamedev.GameEngine
  * @see com.golden.gamedev.Game
  */
-public abstract class GameObject implements UpdateAware, Renderable {
+public abstract class GameObject implements Updateable, Renderable {
 	
 	/**
 	 * **************************** MASTER ENGINE ******************************

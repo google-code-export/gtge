@@ -17,7 +17,7 @@
 package com.golden.gamedev.engine.input;
 
 // GTGE
-import com.golden.gamedev.UpdateAware;
+import com.golden.gamedev.Updateable;
 import com.golden.gamedev.engine.BaseInput;
 import com.golden.gamedev.object.Timer;
 
@@ -30,7 +30,7 @@ import com.golden.gamedev.object.Timer;
  * @see #update(long)
  * @see #getKeyTyped()
  */
-public class KeyTyped implements UpdateAware {
+public class KeyTyped implements Updateable {
 	
 	private BaseInput bsInput;
 	

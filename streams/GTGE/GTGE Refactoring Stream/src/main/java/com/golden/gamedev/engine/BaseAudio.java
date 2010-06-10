@@ -17,6 +17,7 @@
 package com.golden.gamedev.engine;
 
 // GTGE
+import com.golden.gamedev.ActiveHolder;
 import com.golden.gamedev.util.Utility;
 
 /**
@@ -34,7 +35,7 @@ import com.golden.gamedev.util.Utility;
  * 
  * This class is using {@link BaseIO} to get the external resources.
  */
-public class BaseAudio implements Runnable {
+public class BaseAudio implements Runnable, ActiveHolder {
 	
 	/**
 	 * *************************** AUDIO POLICY ********************************

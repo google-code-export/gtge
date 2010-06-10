@@ -21,8 +21,10 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Comparator;
 
+import com.golden.gamedev.ActiveHolder;
+import com.golden.gamedev.BackgroundHolder;
 import com.golden.gamedev.Renderable;
-import com.golden.gamedev.UpdateAware;
+import com.golden.gamedev.Updateable;
 import com.golden.gamedev.object.collision.CollisionRect;
 import com.golden.gamedev.object.collision.CollisionShape;
 
@@ -54,18 +56,21 @@ import com.golden.gamedev.object.collision.CollisionShape;
  * To create sprite behaviour, always use {@link Timer} class utility in order
  * to make the sprite behaviour independent of frame rate.
  * 
+ * As of 0.2.4, {@link Sprite} implements {@link CollisionShape} directly,
+ * therefore, {@link #getDefaultCollisionShape()} is deprecated and will be
+ * removed in 0.2.5.
+ * 
  * @see com.golden.gamedev.object.SpriteGroup
  * @see com.golden.gamedev.object.PlayField
  * @see com.golden.gamedev.object.Timer
  */
-public class Sprite implements java.io.Serializable, UpdateAware, Renderable {
-	
-	// /////// optimization /////////
-	// private final Rectangle collisionOffset = new Rectangle(0,0,0,0); //
-	// offset collision
+public class Sprite implements java.io.Serializable, Updateable, Renderable,
+        CollisionShape, BackgroundHolder, ActiveHolder {
 	
 	/**
-	 * 
+	 * Serializable ID denoting the Sprite's serializable version. If the
+	 * internal state of the {@link Sprite} changes, this will be set to 2 in
+	 * the next release.
 	 */
 	private static final long serialVersionUID = -4499098097309229784L;
 	
@@ -111,8 +116,10 @@ public class Sprite implements java.io.Serializable, UpdateAware, Renderable {
 	/**
 	 * Default collision shape used in {@link #getDefaultCollisionShape()}, can
 	 * be used in along with collision manager.
+	 * @deprecated Do not access this value directly, its access will be marked
+	 *             as private in 0.2.5.
 	 */
-	protected CollisionShape defaultCollisionShape = null;
+	protected CollisionShape defaultCollisionShape = new CollisionRect();
 	
 	/**
 	 * **************************** SPRITE FLAGS *******************************
@@ -268,14 +275,13 @@ public class Sprite implements java.io.Serializable, UpdateAware, Renderable {
 	/**
 	 * Returns default {@linkplain #defaultCollisionShape collision shape}, can
 	 * be used along with collision manager.
+	 * @deprecated Deprecated in favor of using the {@link Sprite} as a
+	 *             {@link CollisionShape} instance directly. This method will be
+	 *             removed in 0.2.5.
 	 */
 	public CollisionShape getDefaultCollisionShape() {
-		if (this.defaultCollisionShape == null) {
-			this.defaultCollisionShape = new CollisionRect();
-		}
-		
-		this.defaultCollisionShape.setBounds(this.getX(), this.getY(), this
-		        .getWidth(), this.getHeight());
+		this.defaultCollisionShape.setBounds(this.x, this.y, this.width,
+		        this.height);
 		
 		return this.defaultCollisionShape;
 	}
@@ -428,6 +434,11 @@ public class Sprite implements java.io.Serializable, UpdateAware, Renderable {
 	 * Sets sprite <code>x</code> coordinate.
 	 */
 	public void setX(double xs) {
+		this.defaultCollisionShape.setX(xs);
+		// TODO: remove the following line in 0.2.5 (delegate to the collision
+		// shape to hold x, y, width and height).
+		this.x = xs;
+		this.oldX = xs;
 		this.oldX = this.x = xs;
 	}
 	
@@ -435,7 +446,11 @@ public class Sprite implements java.io.Serializable, UpdateAware, Renderable {
 	 * Sets sprite <code>y</code> coordinate.
 	 */
 	public void setY(double ys) {
-		this.oldY = this.y = ys;
+		this.defaultCollisionShape.setY(ys);
+		// TODO: remove the following line in 0.2.5 (delegate to the collision
+		// shape to hold x, y, width and height).
+		this.y = ys;
+		this.oldY = ys;
 	}
 	
 	/**
@@ -443,6 +458,9 @@ public class Sprite implements java.io.Serializable, UpdateAware, Renderable {
 	 * @param width The width of this sprite.
 	 */
 	public final void setWidth(int width) {
+		this.defaultCollisionShape.setWidth(width);
+		// TODO: remove the following line in 0.2.5 (delegate to the collision
+		// shape to hold x, y, width and height).
 		this.width = width;
 	}
 	
@@ -451,6 +469,9 @@ public class Sprite implements java.io.Serializable, UpdateAware, Renderable {
 	 * @param height The height of this sprite.
 	 */
 	public final void setHeight(int height) {
+		this.defaultCollisionShape.setHeight(height);
+		// TODO: remove the following line in 0.2.5 (delegate to the collision
+		// shape to hold x, y, width and height).
 		this.height = height;
 	}
 	
@@ -605,6 +626,27 @@ public class Sprite implements java.io.Serializable, UpdateAware, Renderable {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * Sprite s;
 	 * 
 	 * public void update(long elapsedTime) {
@@ -652,6 +694,27 @@ public class Sprite implements java.io.Serializable, UpdateAware, Renderable {
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 
@@ -998,11 +1061,14 @@ public class Sprite implements java.io.Serializable, UpdateAware, Renderable {
 		        + Math.pow(this.getCenterY() - other.getCenterY(), 2));
 	}
 	
-	// private static int garbagecount = 0;
-	// protected void finalize() throws Throwable {
-	// System.out.println("Total sprite garbaged = " + (++garbagecount) + " = "
-	// + this);
-	// super.finalize();
-	// }
+	public boolean intersects(CollisionShape shape) {
+		return defaultCollisionShape.intersects(shape);
+	}
 	
+	public void setBounds(double x1, double y1, int w1, int h1) {
+		this.setX(x1);
+		this.setY(y1);
+		this.setWidth(w1);
+		this.setHeight(h1);
+	}
 }

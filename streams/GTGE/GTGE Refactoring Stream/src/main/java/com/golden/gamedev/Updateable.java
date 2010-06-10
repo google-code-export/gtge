@@ -4,7 +4,7 @@
 package com.golden.gamedev;
 
 /**
- * The {@link UpdateAware} interface specifies an {@link Object} that can
+ * The {@link Updateable} interface specifies an {@link Object} that can
  * {@link #update(long) update itself} based on the given long amount of time
  * elapsed, in milliseconds, from the last <i>virtual invocation</i> of the
  * {@link #update(long)} method.
@@ -14,10 +14,10 @@ package com.golden.gamedev;
  * @since 0.2.4
  * 
  */
-public interface UpdateAware {
+public interface Updateable {
 	
 	/**
-	 * Updates this {@link UpdateAware} instance based on the given long amount
+	 * Updates this {@link Updateable} instance based on the given long amount
 	 * of time elapse, in milliseconds, from the last <i>virtual invocation</i>
 	 * of the {@link #update(long)} method. <br />
 	 * <br />

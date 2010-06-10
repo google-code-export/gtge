@@ -19,6 +19,7 @@ package com.golden.gamedev.object;
 // JFC
 import java.awt.image.BufferedImage;
 
+import com.golden.gamedev.ActiveHolder;
 import com.golden.gamedev.object.collision.CollisionRect;
 
 /**
@@ -40,7 +41,7 @@ import com.golden.gamedev.object.collision.CollisionRect;
  * 
  * @see PlayField#addCollisionGroup(SpriteGroup, SpriteGroup, CollisionManager)
  */
-public abstract class CollisionManager {
+public abstract class CollisionManager implements ActiveHolder {
 	
 	/**
 	 * ************************* COLLISION GROUP *******************************

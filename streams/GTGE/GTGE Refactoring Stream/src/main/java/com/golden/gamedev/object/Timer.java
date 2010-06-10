@@ -18,6 +18,8 @@ package com.golden.gamedev.object;
 
 import java.io.Serializable;
 
+import com.golden.gamedev.ActiveHolder;
+
 /**
  * Class to manage timing in GTGE Frame Work to create game independent of frame
  * rate. <code>Timer</code> is usually used to create sprite behaviour, such as
@@ -40,7 +42,7 @@ import java.io.Serializable;
  * }
  * </pre>
  */
-public class Timer implements Serializable {
+public class Timer implements Serializable, ActiveHolder {
 	
 	/**
 	 * 

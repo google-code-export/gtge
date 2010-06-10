@@ -23,7 +23,9 @@ import java.awt.Rectangle;
 import java.io.Serializable;
 
 import com.golden.gamedev.Renderable;
-import com.golden.gamedev.UpdateAware;
+import com.golden.gamedev.Updateable;
+import com.golden.gamedev.object.collision.CollisionRect;
+import com.golden.gamedev.object.collision.CollisionShape;
 
 /**
  * <code>Background</code> is the area where every sprites lived.
@@ -45,9 +47,13 @@ import com.golden.gamedev.UpdateAware;
  * To set a sprite to be the center of the background, use
  * {@linkplain #setToCenter(Sprite)}.
  * 
+ * As of 0.2.4, {@link Background} implements {@link CollisionShape} and can now
+ * be used in collisions if needed.
+ * 
  * @see com.golden.gamedev.object.background
  */
-public class Background implements Serializable, UpdateAware, Renderable {
+public class Background implements Serializable, Updateable, Renderable,
+        CollisionShape {
 	
 	/**
 	 * ********************** SCREEN DIMENSION VAR *****************************
@@ -94,6 +100,8 @@ public class Background implements Serializable, UpdateAware, Renderable {
 	        
 	private final Rectangle clip; // view port (screen clipping)
 	
+	private final CollisionShape delegateCollisionShape = new CollisionRect();
+	
 	/**
 	 * *************************************************************************
 	 */
@@ -139,8 +147,8 @@ public class Background implements Serializable, UpdateAware, Renderable {
 	 * @param h background height
 	 */
 	public Background(int w, int h) {
-		this.x = 0;
-		this.y = 0;
+		this.setX(0);
+		this.setY(0);
 		this.width = w;
 		this.height = h;
 		
@@ -202,8 +210,8 @@ public class Background implements Serializable, UpdateAware, Renderable {
 	 * Sets the size of this background.
 	 */
 	public void setSize(int w, int h) {
-		this.width = w;
-		this.height = h;
+		this.setWidth(w);
+		this.setHeight(h);
 		
 		// revalidate position againts new size
 		this.setLocation(this.x, this.y);
@@ -232,8 +240,8 @@ public class Background implements Serializable, UpdateAware, Renderable {
 			yb = 0; // top bound
 		}
 		
-		this.x = xb;
-		this.y = yb;
+		this.setX(xb);
+		this.setY(yb);
 	}
 	
 	/**
@@ -394,4 +402,24 @@ public class Background implements Serializable, UpdateAware, Renderable {
 	public void render(Graphics2D g, int xbg, int ybg, int x, int y, int w, int h) {
 	}
 	
+	public final boolean intersects(CollisionShape shape) {
+		this.delegateCollisionShape.setBounds(this.x, this.y, this.width,
+		        this.height);
+		return this.delegateCollisionShape.intersects(shape);
+	}
+	
+	public final void setBounds(double x1, double y1, int w1, int h1) {
+		this.setX(x1);
+		this.setY(y1);
+		this.setWidth(w1);
+		this.setHeight(h1);
+	}
+	
+	public final void setHeight(int height) {
+		this.height = height;
+	}
+	
+	public final void setWidth(int width) {
+		this.width = width;
+	}
 }

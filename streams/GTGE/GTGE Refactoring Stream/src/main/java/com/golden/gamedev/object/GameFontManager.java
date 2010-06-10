@@ -23,8 +23,7 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.golden.gamedev.object.font.AdvanceBitmapFont;
-import com.golden.gamedev.object.font.BitmapFont;
+import com.golden.gamedev.object.font.ImageFont;
 import com.golden.gamedev.object.font.SystemFont;
 import com.golden.gamedev.util.ImageUtil;
 import com.golden.gamedev.util.Utility;
@@ -120,11 +119,10 @@ public class GameFontManager {
 	 */
 	
 	/**
-	 * Returns default {@link com.golden.gamedev.object.font.AdvanceBitmapFont}
-	 * that using standard <i>Bitmap Font Writer</i>, created by Stefan
-	 * Pettersson. Bitmap Font Writer is freeware font editor, visit Bitmap Font
-	 * Writer website (http://www.stefan-pettersson.nu) for updates and
-	 * additional information.
+	 * Returns default {@link GameFont} that using standard <i>Bitmap Font
+	 * Writer</i>, created by Stefan Pettersson. Bitmap Font Writer is freeware
+	 * font editor, visit Bitmap Font Writer website
+	 * (http://www.stefan-pettersson.nu) for updates and additional information.
 	 * <p>
 	 * 
 	 * The images should be following this letter sequence :
@@ -150,7 +148,7 @@ public class GameFontManager {
 		GameFont font = (GameFont) this.fontBank.get(bitmap);
 		
 		if (font == null) {
-			font = new AdvanceBitmapFont(this.cutLetter(bitmap));
+			font = new ImageFont(this.cutLetter(bitmap));
 			this.fontBank.put(bitmap, font);
 		}
 		
@@ -158,11 +156,10 @@ public class GameFontManager {
 	}
 	
 	/**
-	 * Returns {@link com.golden.gamedev.object.font.AdvanceBitmapFont} that
-	 * using standard <i>Bitmap Font Writer</i>, created by Stefan Pettersson.
-	 * Bitmap Font Writer is freeware font editor, visit Bitmap Font Writer
-	 * website (http://www.stefan-pettersson.nu) for updates and additional
-	 * information.
+	 * Returns {@link GameFont} that using standard <i>Bitmap Font Writer</i>,
+	 * created by Stefan Pettersson. Bitmap Font Writer is freeware font editor,
+	 * visit Bitmap Font Writer website (http://www.stefan-pettersson.nu) for
+	 * updates and additional information.
 	 * <p>
 	 * 
 	 * How to: Creating <i>Bitmap Font Writer</i> Font <br>
@@ -179,7 +176,7 @@ public class GameFontManager {
 		GameFont font = (GameFont) this.fontBank.get(bitmap);
 		
 		if (font == null) {
-			font = new AdvanceBitmapFont(this.cutLetter(bitmap), letterSequence);
+			font = new ImageFont(this.cutLetter(bitmap), letterSequence);
 			this.fontBank.put(bitmap, font);
 		}
 		
@@ -234,13 +231,13 @@ public class GameFontManager {
 	 * <p>
 	 * 
 	 * If requested font has not been created before, this method creates new
-	 * {@link BitmapFont} and return it.
+	 * {@link GameFont} and return it.
 	 */
 	public GameFont getFont(BufferedImage[] bitmap) {
 		GameFont font = (GameFont) this.fontBank.get(bitmap);
 		
 		if (font == null) {
-			font = new BitmapFont(bitmap);
+			font = new ImageFont(bitmap);
 			this.fontBank.put(bitmap, font);
 		}
 		
@@ -254,7 +251,7 @@ public class GameFontManager {
 		GameFont font = (GameFont) this.fontBank.get(bitmap);
 		
 		if (font == null) {
-			font = new BitmapFont(bitmap, letterSequence);
+			font = new ImageFont(bitmap, letterSequence);
 			this.fontBank.put(bitmap, font);
 		}
 		

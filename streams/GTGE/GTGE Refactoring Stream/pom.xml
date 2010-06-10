@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/POM/4.0.0 ">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>www.goldenstudios.or.id</groupId>
@@ -11,7 +12,7 @@
 
 	<name>Golden T Studios Game Engine (GTGE)</name>
 
-	<version>0.2.4</version>
+	<version>0.2.4-SNAPSHOT</version>
 
 	<description>
 	Golden T Game Engine (GTGE) is an advanced cross-platform game 
@@ -97,7 +98,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.2</version>
+				<version>2.4</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

@@ -26,6 +26,16 @@ import com.golden.gamedev.object.GameFont;
 public final class ImageFont implements GameFont {
 	
 	/**
+	 * The default character sequence that is used when a new {@link ImageFont}
+	 * is constructed via {@link ImageFont#ImageFont(Image[])}.
+	 * @see ImageFont#ImageFont(Image[], CharSequence),
+	 */
+	public static final String DEFAULT_CHARACTER_SEQUENCE = " !\"#$%&'()*+,-./0123"
+	        + "456789:;<=>?@ABCDEFG"
+	        + "HIJKLMNOPQRSTUVWXYZ["
+	        + "\\]^_`abcdefghijklmno" + "pqrstuvwxyz{|}~";
+	
+	/**
 	 * The non-null, but possibly {@link Map#isEmpty() empty} {@link Map} of
 	 * {@link Character} keys to {@link Image} values.
 	 */
@@ -62,20 +72,49 @@ public final class ImageFont implements GameFont {
 	}
 	
 	/**
-	 * Creates a new {@link ImageFont} instance with the given {@link Character}
-	 * array to be mapped to the given {@link Image} array.
-	 * @param characters The non-null array of non-null {@link Character}
-	 *        instances to be mapped to the given {@link Image} array.
+	 * Creates new {@link ImageFont} instance with the given {@link Image} array
+	 * that is expected to be in the following
+	 * {@link #DEFAULT_CHARACTER_SEQUENCE default character sequence}: <br />
+	 * <br />
+	 * 
+	 * <pre>
+	 *         ! &quot; # $ % &amp; ' ( ) * + , - . / 0 1 2 3
+	 *       4 5 6 7 8 9 : ; &lt; = &gt; ? @ A B C D E F G
+	 *       H I J K L M N O P Q R S T U V W X Y Z [
+	 *       \ ] &circ; _ ' a b c d e f g h i j k l m n o
+	 *       p q r s t u v w x y z { | } &tilde;
+	 * </pre>
+	 * 
+	 * @param images The non-null array of images that should correspond exactly
+	 *        to the characters defined in the
+	 *        {@link #DEFAULT_CHARACTER_SEQUENCE default character sequence}.
+	 * @throws IllegalArgumentException Throws an
+	 *         {@link IllegalArgumentException} if the given {@link Image} array
+	 *         is null, or it did not have the same number of images as the
+	 *         length of the {@link #DEFAULT_CHARACTER_SEQUENCE default
+	 *         character sequence}.
+	 */
+	public ImageFont(Image[] images) {
+		this(images, DEFAULT_CHARACTER_SEQUENCE);
+	}
+	
+	/**
+	 * Creates a new {@link ImageFont} instance with the given
+	 * {@link CharSequence} to be mapped to the given {@link Image} array.
 	 * @param images The non-null array of non-null {@link Image} instances to
-	 *        be mapped as values to the given {@link Character} keys.
+	 *        be mapped as values to the given {@link Character} keys contained
+	 *        in the given {@link CharSequence}.
+	 * @param characters The non-null {@link CharSequence} containing
+	 *        {@link Character} instances to be mapped to the given
+	 *        {@link Image} array.
 	 * @throws IllegalArgumentException Throws an
 	 *         {@link IllegalArgumentException} if
 	 *         {@link #addCharacter(Character, Image)} would throw an
-	 *         {@link IllegalArgumentException}, or if the given arrays are null
+	 *         {@link IllegalArgumentException}, or if the given values are null
 	 *         or have non-equal lengths.
 	 * @see #addCharacter(Character, Image)
 	 */
-	public ImageFont(Character[] characters, Image[] images) {
+	public ImageFont(Image[] images, CharSequence characters) {
 		super();
 		if (characters == null) {
 			throw new IllegalArgumentException(
@@ -85,12 +124,15 @@ public final class ImageFont implements GameFont {
 			throw new IllegalArgumentException(
 			        "The images array may not be null.");
 		}
-		if (characters.length != images.length) {
+		if (characters.length() != images.length) {
 			throw new IllegalArgumentException(
 			        "The character array must have the same length as the images array.");
 		}
-		for (int index = 0; index < characters.length; index++) {
-			this.addCharacter(characters[index], images[index]);
+		for (int index = 0; index < images.length; index++) {
+			// NOTE: for a 1.5 implementation, let autoboxing do its stuff -
+			// this is a candidate for rewiring.
+			this.addCharacter(new Character(characters.charAt(index)),
+			        images[index]);
 		}
 	}
 	

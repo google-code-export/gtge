@@ -111,7 +111,8 @@ public final class ImageFont implements GameFont {
 	 *         {@link IllegalArgumentException} if
 	 *         {@link #addCharacter(Character, Image)} would throw an
 	 *         {@link IllegalArgumentException}, or if the given values are null
-	 *         or have non-equal lengths.
+	 *         or the {@link Image} array has a length that exceeds the given
+	 *         {@link CharSequence}.
 	 * @see #addCharacter(Character, Image)
 	 */
 	public ImageFont(Image[] images, CharSequence characters) {
@@ -124,9 +125,9 @@ public final class ImageFont implements GameFont {
 			throw new IllegalArgumentException(
 			        "The images array may not be null.");
 		}
-		if (characters.length() != images.length) {
+		if (images.length > characters.length()) {
 			throw new IllegalArgumentException(
-			        "The character array must have the same length as the images array.");
+			        "The images array must have the same length as the images array.");
 		}
 		for (int index = 0; index < images.length; index++) {
 			// NOTE: for a 1.5 implementation, let autoboxing do its stuff -

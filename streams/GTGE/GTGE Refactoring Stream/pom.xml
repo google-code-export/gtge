@@ -4,7 +4,7 @@
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>www.goldenstudios.or.id</groupId>
+	<groupId>id.or.goldenstudios</groupId>
 
 	<artifactId>golden</artifactId>
 

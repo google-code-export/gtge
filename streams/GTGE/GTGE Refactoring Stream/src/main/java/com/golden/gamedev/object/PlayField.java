@@ -18,12 +18,17 @@ package com.golden.gamedev.object;
 
 // JFC
 import java.awt.Graphics2D;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.golden.gamedev.BackgroundHolder;
 import com.golden.gamedev.Renderable;
 import com.golden.gamedev.Updateable;
+import com.golden.gamedev.util.EqualsComparator;
 import com.golden.gamedev.util.Utility;
 
 /**
@@ -48,15 +53,9 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 	 */
 	
 	private SpriteGroup[] groups;
-	private Background background;
 	private CollisionManager[] collisions;
 	
-	/**
-	 * ************************** SORT RENDERING *******************************
-	 */
-	
-	private Sprite[] cacheSprite;
-	private Comparator comparator;
+	private Comparator comparator = new EqualsComparator();
 	
 	/**
 	 * *************************************************************************
@@ -72,8 +71,6 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 	 * Constructs new <code>PlayField</code> with specified background.
 	 */
 	public PlayField(Background background) {
-		this.background = background;
-		
 		// preserve one group for the extra group
 		SpriteGroup extra = new SpriteGroup("Extra Group");
 		extra.setBackground(background);
@@ -82,7 +79,6 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 		this.groups[0] = extra;
 		
 		this.collisions = new CollisionManager[0];
-		this.cacheSprite = new Sprite[0];
 	}
 	
 	/**
@@ -137,6 +133,41 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * Playfield playfield = new Playfield();
 	 * SpriteGroup PLAYER = playfield.addGroup(new SpriteGroup(&quot;Player&quot;));
 	 * </pre>
@@ -160,7 +191,7 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 		        this.groups.length - 1);
 		
 		this.groups = (SpriteGroup[]) Utility.expand(this.groups, 2);
-		group.setBackground(this.background);
+		group.setBackground(extra.getBackground());
 		this.groups[this.groups.length - 2] = group;
 		this.groups[this.groups.length - 1] = extra; // move extra group to
 		// the last row
@@ -360,7 +391,7 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 	 * Updates playfield background.
 	 */
 	protected void updateBackground(long elapsedTime) {
-		this.background.update(elapsedTime);
+		this.getBackground().update(elapsedTime);
 	}
 	
 	/**
@@ -397,29 +428,42 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 	
 	/**
 	 * Renders background, and sprite groups (with/without
-	 * {@linkplain #setComparator(Comparator) comparator}).
+	 * {@linkplain #setComparator(Comparator) comparator}). <br />
+	 * <br />
+	 * As of 0.2.4, this method is final - although {@link PlayField} itself may
+	 * be extended, this method may not be. <br />
+	 * <br />
+	 * This method invokes {@link #renderBackground(Graphics2D)} and then
+	 * {@link #renderSpriteGroups(Graphics2D, Comparator)} in sequence, so if
+	 * this logic needs to be adjusted, both of these methods may be overridden
+	 * instead where appropriate.
 	 */
-	public void render(Graphics2D g) {
+	public final void render(Graphics2D g) {
 		this.renderBackground(g);
-		
-		if (this.comparator == null) {
-			this.renderSpriteGroups(g);
-			
-		}
-		else {
-			this.renderSpriteGroups(g, this.comparator);
-		}
+		this.renderSpriteGroups(g, this.comparator);
 	}
 	
 	/**
-	 * Renders background to specified graphics context.
+	 * Renders background to specified graphics context, before any
+	 * {@link SpriteGroup} instances are rendered. <br />
+	 * <br />
+	 * This method may be overridden by subclasses, the default is effectively
+	 * equivalent to invoking {@link Background#render(Graphics2D) render} on
+	 * the {@link #getBackground() background}. <br />
+	 * <br />
+	 * This method will always be invoked before
+	 * {@link #renderSpriteGroups(Graphics2D, Comparator)} when
+	 * {@link #render(Graphics2D)} is invoked.
 	 */
 	protected void renderBackground(Graphics2D g) {
-		this.background.render(g);
+		this.getBackground().render(g);
 	}
 	
 	/**
 	 * Renders sprite groups to specified graphics context.
+	 * @deprecated This method is never invoked in normal
+	 *             {@link #render(Graphics2D)} execution and will be removed in
+	 *             0.2.5 with no direct replacement.
 	 */
 	protected void renderSpriteGroups(Graphics2D g) {
 		for (int i = 0; i < this.groups.length; i++) {
@@ -430,27 +474,21 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 	}
 	
 	/**
-	 * Renders all sprites using specified comparator. Only
-	 * {@linkplain Sprite#isActive() active} and
-	 * {@linkplain Sprite#isOnScreen() on screen} sprite is sorted and rendered.
-	 * <p>
-	 * 
-	 * Sprites that rendered within this method is stored in cache, therefore if
-	 * this method is called ONLY ONCE and then
-	 * {@linkplain #setComparator(Comparator) comparator} is set to null, it is
-	 * better to manually {@linkplain #clearCache() clear the cache} after it or
-	 * the cache will hold the sprites forever and makes the sprite can't be
-	 * disposed.
+	 * Renders the {@link Sprite} instances in this {@link PlayField} after
+	 * being sorted by the specified non-null {@link Comparator} instance. By
+	 * default, only {@linkplain Sprite#isActive() active} and
+	 * {@linkplain Sprite#isOnScreen() on screen} sprites are sorted and then
+	 * rendered. <br />
+	 * <br />
+	 * If this behavior is not desired, this method may be overridden via
+	 * subclasses. It will always be invoked after
+	 * {@link #renderBackground(Graphics2D)} when {@link #render(Graphics2D)} is
+	 * invoked.
 	 */
 	protected void renderSpriteGroups(Graphics2D g, Comparator c) {
-		int num = 0, len = this.cacheSprite.length;
-		
-		if (len == 0) {
-			// sprite cache initialization
-			this.cacheSprite = new Sprite[100];
-			len = this.cacheSprite.length;
-		}
-		
+		boolean listWillBeSorted = !(c instanceof EqualsComparator);
+		List activeAndOnScreenSpritesToRender = listWillBeSorted ? (List) new ArrayList()
+		        : new LinkedList();
 		for (int i = 0; i < this.groups.length; i++) {
 			if (!this.groups[i].isActive()) {
 				continue;
@@ -462,24 +500,19 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 			for (int j = 0; j < size; j++) {
 				if (member[j].isActive() && // only active and onscreen sprite
 				        member[j].isOnScreen()) { // is sorted and rendered
-				
-					if (num >= len) {
-						// expand sprite storage
-						this.cacheSprite = (Sprite[]) Utility.expand(
-						        this.cacheSprite, 20);
-						len = this.cacheSprite.length;
-					}
-					
-					this.cacheSprite[num++] = member[j];
+					activeAndOnScreenSpritesToRender.add(member[j]);
 				}
 			}
 		}
 		
-		// sort all active and onscreen sprites
-		Arrays.sort(this.cacheSprite, 0, num, c);
+		if (listWillBeSorted) {
+			// sort all active and onscreen sprites
+			Collections.sort(activeAndOnScreenSpritesToRender, c);
+		}
 		
-		for (int i = 0; i < num; i++) {
-			this.cacheSprite[i].render(g);
+		for (Iterator spriteIterator = activeAndOnScreenSpritesToRender
+		        .iterator(); spriteIterator.hasNext();) {
+			((Sprite) spriteIterator.next()).render(g);
 		}
 	}
 	
@@ -499,10 +532,12 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 	 * rendering is not needed anymore.
 	 * 
 	 * @see #renderSpriteGroups(Graphics2D, Comparator)
+	 * @deprecated This method is deprecated with no direct replacement -
+	 *             {@link PlayField} no longer attempts to cache the active and
+	 *             onscreen sprites that are then compared and rendered.
 	 */
 	public void clearCache() {
-		this.cacheSprite = null;
-		this.cacheSprite = new Sprite[0];
+		// Intentionally blank
 	}
 	
 	/**
@@ -516,32 +551,38 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 	 */
 	
 	/**
-	 * Returns background associated with this playfield.
+	 * Returns background associated with this playfield. <br />
+	 * As of 0.2.4, this method is final - although {@link PlayField} may be
+	 * extended, this method may not be overridden.
 	 */
-	public Background getBackground() {
-		return this.background;
+	public final Background getBackground() {
+		return this.getExtraGroup().getBackground();
 	}
 	
 	/**
-	 * Associates specified background to this playfield.
+	 * Associates specified background to this playfield, setting this
+	 * {@link Background} instance to all {@link Sprite} instances within this
+	 * {@link PlayField}. As of 0.2.4, this method is final - although
+	 * {@link PlayField} may be extended, the {@link #setBackground(Comparator)}
+	 * method may no longer be extended.
 	 */
-	public void setBackground(Background backgr) {
-		this.background = backgr;
-		if (this.background == null) {
-			this.background = Background.getDefaultBackground();
-		}
+	public final void setBackground(Background backgr) {
+		Background background = backgr == null ? Background
+		        .getDefaultBackground() : backgr;
 		
 		// force all sprites to use same background
 		for (int i = 0; i < this.groups.length; i++) {
-			this.groups[i].setBackground(backgr);
+			this.groups[i].setBackground(background);
 		}
 	}
 	
 	/**
 	 * Returns playfield comparator, comparator is used for sorting the sprites
-	 * before rendering.
+	 * before rendering. As of 0.2.4, this method is final - although
+	 * {@link PlayField} may be extended, the {@link #setComparator(Comparator)}
+	 * method may no longer be extended.
 	 */
-	public Comparator getComparator() {
+	public final Comparator getComparator() {
 		return this.comparator;
 	}
 	
@@ -572,13 +613,17 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 	 *    };
 	 * </pre>
 	 * 
+	 * <br />
+	 * As of 0.2.4, this method is final - although {@link PlayField} may be
+	 * extended, the {@link #setComparator(Comparator)} method may no longer be
+	 * extended.
+	 * 
 	 * @param c the sprite comparator, null for unsort order
 	 * @see java.util.Comparator
 	 * @see java.util.Arrays#sort(java.lang.Object[], int, int,
 	 *      java.util.Comparator)
 	 */
-	public void setComparator(Comparator c) {
-		this.comparator = c;
+	public final void setComparator(Comparator c) {
+		this.comparator = (c == null) ? new EqualsComparator() : c;
 	}
-	
 }

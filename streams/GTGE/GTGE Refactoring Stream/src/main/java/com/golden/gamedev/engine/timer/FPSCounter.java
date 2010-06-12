@@ -17,6 +17,8 @@
 
 package com.golden.gamedev.engine.timer;
 
+import com.golden.gamedev.Refreshable;
+
 /**
  * A utility class to calculate timer frame per seconds (FPS) in convenient way.
  * <p>
@@ -32,7 +34,7 @@ package com.golden.gamedev.engine.timer;
  * }
  * </pre>
  */
-public class FPSCounter {
+public class FPSCounter implements Refreshable {
 	
 	private long lastCount; // last time the fps is counted
 	private int currentFPS, // the real fps achieved
@@ -57,6 +59,8 @@ public class FPSCounter {
 	/**
 	 * Refresh the FPS counter, reset the fps to 0 and the timer counter to
 	 * start counting from current time.
+	 * @deprecated This method is deprecated in favor of {@link #reset()} and
+	 *             will be removed in 0.2.5.
 	 */
 	public void refresh() {
 		this.frameCount = 0;
@@ -82,6 +86,10 @@ public class FPSCounter {
 	 */
 	public int getCurrentFPS() {
 		return this.currentFPS;
+	}
+	
+	public void reset() {
+		refresh();
 	}
 	
 }

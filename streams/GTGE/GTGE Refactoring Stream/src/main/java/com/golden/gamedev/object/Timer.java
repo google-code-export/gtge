@@ -19,6 +19,7 @@ package com.golden.gamedev.object;
 import java.io.Serializable;
 
 import com.golden.gamedev.ActiveHolder;
+import com.golden.gamedev.Refreshable;
 
 /**
  * Class to manage timing in GTGE Frame Work to create game independent of frame
@@ -42,7 +43,7 @@ import com.golden.gamedev.ActiveHolder;
  * }
  * </pre>
  */
-public class Timer implements Serializable, ActiveHolder {
+public class Timer implements Serializable, ActiveHolder, Refreshable {
 	
 	/**
 	 * 
@@ -110,6 +111,8 @@ public class Timer implements Serializable, ActiveHolder {
 	
 	/**
 	 * Refreshs the timer counter (current tick).
+	 * @deprecated This method is deprecated in favor of {@link #reset()} and
+	 *             will be removed in 0.2.5.
 	 */
 	public void refresh() {
 		this.currentTick = 0;
@@ -147,7 +150,7 @@ public class Timer implements Serializable, ActiveHolder {
 	 */
 	public void setActive(boolean b) {
 		this.active = b;
-		this.refresh();
+		this.reset();
 	}
 	
 	/**
@@ -162,7 +165,7 @@ public class Timer implements Serializable, ActiveHolder {
 	 */
 	public void setDelay(long i) {
 		this.delay = i;
-		this.refresh();
+		this.reset();
 	}
 	
 	/**
@@ -187,6 +190,10 @@ public class Timer implements Serializable, ActiveHolder {
 	 */
 	public void setCurrentTick(long tick) {
 		this.currentTick = tick;
+	}
+	
+	public void reset() {
+		refresh();
 	}
 	
 }

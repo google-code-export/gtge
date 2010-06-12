@@ -87,11 +87,15 @@ import java.awt.Graphics2D;
  * 
  * 
  * 
+ * 
+ * 
+ * 
+ * 
  * </pre>
  * 
  * @see com.golden.gamedev.GameObject
  */
-public abstract class GameEngine extends Game {
+public abstract class GameEngine extends Game implements Refreshable {
 	
 	/**
 	 * **************************** CURRENT GAME *******************************
@@ -156,8 +160,8 @@ public abstract class GameEngine extends Game {
 		
 		while (this.isRunning()) {
 			// refresh global game state
-			this.bsInput.refresh();
-			this.refresh();
+			this.bsInput.reset();
+			this.reset();
 			
 			// validate game to be played next
 			if (this.nextGameID == -1 && this.nextGame == null) {
@@ -255,6 +259,8 @@ public abstract class GameEngine extends Game {
 	 * 
 	 * The implementation of this method provided by the <code>GameEngine</code>
 	 * class does nothing.
+	 * @deprecated This method is now deprecated in favor of {@link #reset()}
+	 *             and will be removed in 0.2.5.
 	 */
 	public void refresh() {
 	}
@@ -291,6 +297,10 @@ public abstract class GameEngine extends Game {
 	 */
 	public int getCurrentGameID() {
 		return this.currentGameID;
+	}
+	
+	public void reset() {
+		refresh();
 	}
 	
 }

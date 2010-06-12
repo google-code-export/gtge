@@ -152,8 +152,8 @@ public abstract class GameObject implements Updateable, Renderable {
 		System.gc();
 		System.runFinalization();
 		
-		this.bsInput.refresh();
-		this.bsTimer.refresh();
+		this.bsInput.reset();
+		this.bsTimer.reset();
 		
 		long elapsedTime = 0;
 		out: while (true) {
@@ -634,6 +634,7 @@ public abstract class GameObject implements Updateable, Renderable {
 	 * For example:
 	 * 
 	 * <pre>
+	 * 
 	 * 
 	 * 
 	 * 

@@ -105,6 +105,7 @@ import com.golden.gamedev.util.Utility;
  * 
  * 
  * 
+ * 
  * </pre>
  * 
  * <p>
@@ -133,6 +134,7 @@ import com.golden.gamedev.util.Utility;
  *          game.start();
  *       }
  * }
+ * 
  * 
  * 
  * 
@@ -469,7 +471,7 @@ public abstract class Game implements Updateable, Renderable {
 		
 		// start the timer
 		this.bsTimer.startTimer();
-		this.bsTimer.refresh();
+		this.bsTimer.reset();
 		
 		long elapsedTime = 0;
 		out: while (true) {
@@ -638,6 +640,7 @@ public abstract class Game implements Updateable, Renderable {
 	 * Example how to modify or change the default game engine :
 	 * 
 	 * <pre>
+	 * 
 	 * 
 	 * 
 	 * 
@@ -908,6 +911,7 @@ public abstract class Game implements Updateable, Renderable {
 	 * 
 	 * 
 	 * 
+	 * 
 	 * protected void notifyError(Throwable error) {
 	 * 	new ErrorNotificationDialog(error, bsGraphics, &quot;Game Title v1.0&quot;, // the game title
 	 * 	        &quot;yourmail@address.com&quot;); // your email
@@ -956,7 +960,7 @@ public abstract class Game implements Updateable, Renderable {
 		this.hideCursor();
 		SystemTimer dummyTimer = new SystemTimer();
 		dummyTimer.setFPS(20);
-		this.bsInput.refresh();
+		this.bsInput.reset();
 		
 		// loading GTGE logo for splash screen
 		BufferedImage logo = null;
@@ -1000,7 +1004,7 @@ public abstract class Game implements Updateable, Renderable {
 				}
 			}
 			
-			this.bsInput.refresh();
+			this.bsInput.reset();
 			
 			try {
 				Thread.sleep(1000);
@@ -1032,7 +1036,7 @@ public abstract class Game implements Updateable, Renderable {
 			if (firstTime) {
 				// workaround for OpenGL mode
 				firstTime = false;
-				dummyTimer.refresh();
+				dummyTimer.reset();
 			}
 			
 			long elapsedTime = dummyTimer.sleep();
@@ -1082,7 +1086,7 @@ public abstract class Game implements Updateable, Renderable {
 		
 		// gradually disappeared
 		alpha = 1.0f;
-		dummyTimer.refresh();
+		dummyTimer.reset();
 		while (alpha > 0.0f) {
 			do {
 				if (!this.running) {
@@ -1612,6 +1616,7 @@ public abstract class Game implements Updateable, Renderable {
 	 * For example:
 	 * 
 	 * <pre>
+	 * 
 	 * 
 	 * 
 	 * 

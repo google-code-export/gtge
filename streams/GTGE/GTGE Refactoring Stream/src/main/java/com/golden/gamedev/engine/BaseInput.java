@@ -16,6 +16,7 @@
  */
 package com.golden.gamedev.engine;
 
+import com.golden.gamedev.Refreshable;
 import com.golden.gamedev.Updateable;
 
 /**
@@ -46,7 +47,7 @@ import com.golden.gamedev.Updateable;
  *    }
  * </pre>
  */
-public interface BaseInput extends Updateable {
+public interface BaseInput extends Updateable, Refreshable {
 	
 	/**
 	 * ************************* INPUT CONSTANTS *******************************
@@ -71,11 +72,6 @@ public interface BaseInput extends Updateable {
 	/**
 	 * *************************************************************************
 	 */
-	
-	/**
-	 * Refresh all input actions to empty (clear input actions).
-	 */
-	public void refresh();
 	
 	/**
 	 * Releases any system resources hooked by this input engine.

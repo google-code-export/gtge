@@ -16,6 +16,8 @@
  */
 package com.golden.gamedev.engine;
 
+import com.golden.gamedev.Refreshable;
+
 /**
  * <code>BaseTimer</code> interface is an interface for running a loop
  * constantly in a requested frame per second.
@@ -43,7 +45,7 @@ package com.golden.gamedev.engine;
  *    }
  * </pre>
  */
-public interface BaseTimer {
+public interface BaseTimer extends Refreshable {
 	
 	/**
 	 * *************************************************************************
@@ -98,11 +100,6 @@ public interface BaseTimer {
 	 * @return The current time.
 	 */
 	public long getTime();
-	
-	/**
-	 * Refreshs timer elapsed time.
-	 */
-	public void refresh();
 	
 	/**
 	 * *************************************************************************

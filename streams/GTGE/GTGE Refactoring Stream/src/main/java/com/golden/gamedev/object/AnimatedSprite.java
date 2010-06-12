@@ -179,7 +179,7 @@ public class AnimatedSprite extends Sprite {
 		// reset frame
 		this.frame = 0;
 		this.startFrame = 0;
-		this.animationTimer.refresh();
+		this.animationTimer.reset();
 		
 		if (image == null || image[0] == null) {
 			// no images
@@ -288,7 +288,7 @@ public class AnimatedSprite extends Sprite {
 			return;
 		}
 		
-		this.animationTimer.refresh();
+		this.animationTimer.reset();
 		
 		this.startFrame = start;
 		this.finishFrame = finish;

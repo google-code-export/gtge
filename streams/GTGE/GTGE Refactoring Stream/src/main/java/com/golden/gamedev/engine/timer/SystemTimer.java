@@ -87,9 +87,9 @@ public class SystemTimer implements BaseTimer {
 		this.running = true;
 		
 		this.msDelay = 1000 / this.fps;
-		this.refresh();
+		this.reset();
 		
-		this.fpsCounter.refresh();
+		this.fpsCounter.reset();
 	}
 	
 	public void stopTimer() {
@@ -182,9 +182,17 @@ public class SystemTimer implements BaseTimer {
 		return System.currentTimeMillis();
 	}
 	
+	/**
+	 * @deprecated This method is deprecated in favor of {@link #reset()} and
+	 *             will be removed in 0.2.5.
+	 */
 	public void refresh() {
 		this.start = System.currentTimeMillis();
 		this.overSleepTime = 0;
+	}
+	
+	public void reset() {
+		refresh();
 	}
 	
 }

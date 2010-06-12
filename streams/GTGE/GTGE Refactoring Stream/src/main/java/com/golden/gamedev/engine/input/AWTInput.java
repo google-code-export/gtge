@@ -193,9 +193,13 @@ public class AWTInput implements BaseInput {
 		this.pressedKey = this.releasedKey = 0;
 	}
 	
+	/**
+	 * @deprecated This method is deprecated in favor of {@link #reset()} and
+	 *             will be removed in 0.2.5
+	 */
 	public void refresh() {
 		// clear key typed event
-		this.keyTyped.refresh();
+		this.keyTyped.reset();
 		
 		// clear mouse event
 		for (int i = 0; i < this.mouseDown.length; i++) {
@@ -539,9 +543,13 @@ public class AWTInput implements BaseInput {
 		}
 		
 		public void focusLost(FocusEvent e) {
-			AWTInput.this.refresh();
+			AWTInput.this.reset();
 		}
 		
+	}
+	
+	public void reset() {
+		refresh();
 	}
 	
 	// ////////////////////////////////////////////////////////////////////////////

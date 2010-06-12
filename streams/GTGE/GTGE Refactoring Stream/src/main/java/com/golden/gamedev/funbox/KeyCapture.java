@@ -20,6 +20,7 @@ package com.golden.gamedev.funbox;
 import java.awt.event.KeyEvent;
 
 import com.golden.gamedev.ActiveHolder;
+import com.golden.gamedev.Refreshable;
 import com.golden.gamedev.Updateable;
 import com.golden.gamedev.engine.BaseInput;
 
@@ -32,6 +33,11 @@ import com.golden.gamedev.engine.BaseInput;
  * the user type 'HELLO' in right sequence)
  * 
  * <pre>
+ * 
+ * 
+ * 
+ * 
+ * 
  * 
  * 
  * 
@@ -55,7 +61,8 @@ import com.golden.gamedev.engine.BaseInput;
  * }
  * </pre>
  */
-public abstract class KeyCapture implements Updateable, ActiveHolder {
+public abstract class KeyCapture implements Updateable, ActiveHolder,
+        Refreshable {
 	
 	/**
 	 * <code>BaseInput</code> associated with this key capture.
@@ -385,6 +392,8 @@ public abstract class KeyCapture implements Updateable, ActiveHolder {
 	
 	/**
 	 * Refreshs captured key sequence.
+	 * @deprecated This method is deprecated in favor of {@link #reset()} and
+	 *             will be removed in 0.2.5.
 	 */
 	public void refresh() {
 		this.currentKey = 0;
@@ -406,7 +415,7 @@ public abstract class KeyCapture implements Updateable, ActiveHolder {
 			// run out of time
 			this.printDebugWrong("FAILED: Run out of time, delay time="
 			        + this.delay + "ms");
-			this.refresh();
+			this.reset();
 		}
 		
 		if (this.modifiers != null) {
@@ -417,7 +426,7 @@ public abstract class KeyCapture implements Updateable, ActiveHolder {
 						this.printDebugWrong("FAILED: Modifiers key <"
 						        + KeyEvent.getKeyText(this.modifiers[i])
 						        + "> not pressed");
-						this.refresh();
+						this.reset();
 					}
 					
 					// no need further process
@@ -437,7 +446,7 @@ public abstract class KeyCapture implements Updateable, ActiveHolder {
 					// send event to the listener
 					this.keyCaptured();
 					
-					this.refresh();
+					this.reset();
 				}
 				
 			}
@@ -445,7 +454,7 @@ public abstract class KeyCapture implements Updateable, ActiveHolder {
 				// failed, wrong button pressed
 				this.printDebugWrong("FAILED: Wrong key sequence="
 				        + KeyEvent.getKeyText(this.input.getKeyPressed()));
-				this.refresh();
+				this.reset();
 				
 				// try again as the key has been reset
 				// (checking the first key sequence again key[0])
@@ -457,7 +466,7 @@ public abstract class KeyCapture implements Updateable, ActiveHolder {
 						// send event to the listener
 						this.keyCaptured();
 						
-						this.refresh();
+						this.reset();
 					}
 				}
 			}
@@ -488,7 +497,7 @@ public abstract class KeyCapture implements Updateable, ActiveHolder {
 	 */
 	public void setActive(boolean b) {
 		this.active = b;
-		this.refresh();
+		this.reset();
 	}
 	
 	/**
@@ -552,4 +561,7 @@ public abstract class KeyCapture implements Updateable, ActiveHolder {
 		        + ", modifiers=" + modifierBuff + ", delay=" + this.delay + "]";
 	}
 	
+	public void reset() {
+		refresh();
+	}
 }

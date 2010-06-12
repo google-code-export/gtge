@@ -17,6 +17,7 @@
 package com.golden.gamedev.engine.input;
 
 // GTGE
+import com.golden.gamedev.Refreshable;
 import com.golden.gamedev.Updateable;
 import com.golden.gamedev.engine.BaseInput;
 import com.golden.gamedev.object.Timer;
@@ -30,7 +31,7 @@ import com.golden.gamedev.object.Timer;
  * @see #update(long)
  * @see #getKeyTyped()
  */
-public class KeyTyped implements Updateable {
+public class KeyTyped implements Updateable, Refreshable {
 	
 	private BaseInput bsInput;
 	
@@ -114,7 +115,7 @@ public class KeyTyped implements Updateable {
 					// first time delay
 					if (this.repeatDelayTimer.action(elapsedTime)) {
 						this.repeatDelayTimer.setActive(false);
-						this.repeatRateTimer.refresh();
+						this.repeatRateTimer.reset();
 						this.keyTyped = this.key;
 					}
 					
@@ -131,10 +132,12 @@ public class KeyTyped implements Updateable {
 	
 	/**
 	 * Refresh and clears key typing input.
+	 * @deprecated This method is deprecated in favor of {@link #reset()} and
+	 *             will be removed in 0.2.5.
 	 */
 	public void refresh() {
-		this.repeatDelayTimer.refresh();
-		this.repeatRateTimer.refresh();
+		this.repeatDelayTimer.reset();
+		this.repeatRateTimer.reset();
 		
 		this.repeatDelayTimer.setActive(false);
 		
@@ -214,6 +217,10 @@ public class KeyTyped implements Updateable {
 	 */
 	public void setRepeatRate(long rate) {
 		this.repeatRateTimer.setDelay(rate);
+	}
+	
+	public void reset() {
+		refresh();
 	}
 	
 }

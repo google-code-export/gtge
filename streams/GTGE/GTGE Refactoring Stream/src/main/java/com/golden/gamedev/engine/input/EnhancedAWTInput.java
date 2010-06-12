@@ -35,10 +35,18 @@ public class EnhancedAWTInput extends AWTInput {
 		return new EnhancedInputListener();
 	}
 	
+	/**
+	 * @deprecated This method is deprecated in favor of {@link #reset()} and
+	 *             will be removed in 0.2.5.
+	 */
 	public void refresh() {
 		super.refresh();
 		
 		this.keyDown.clear();
+	}
+	
+	public void reset() {
+		refresh();
 	}
 	
 	public boolean[] getKeyDown() {

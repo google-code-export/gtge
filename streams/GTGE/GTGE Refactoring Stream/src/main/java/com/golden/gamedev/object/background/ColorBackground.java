@@ -30,8 +30,52 @@ import com.golden.gamedev.object.Background;
  * This type of background use a fixed memory size. Memory used by small size
  * color background (e.g: 1 x 1) with an extremely large size color background
  * (e.g: 100,000,000 x 100,000,000) is equal.
+ * 
+ * <br />
+ * <br />
+ * As of 0.2.4, the {@link ColorBackground} class is final - it is not suitable
+ * for subclassing. Also, previous versions of the {@link ColorBackground} had a
+ * side-effect when invoking
+ * {@link #render(Graphics2D, int, int, int, int, int, int)} that set the
+ * {@link Graphics2D#setColor(Color) color} of the {@link Graphics2D} instance
+ * to the {@link Color} contained in this {@link ColorBackground} instance -
+ * this side effect has been removed. Users who wish for the
+ * {@link Graphics2D#setColor(Color) color} to be set to the {@link Color}
+ * contained in this {@link ColorBackground} instance are responsible for
+ * manually invoking the operation directly, for example: <br />
+ * <br />
+ * 
+ * <pre>
+ * ColorBackground background = new ColorBackground// ... initialize background
+ * 
+ * public void render(Graphics2D g) {
+ * // rendering...
+ * background.render(g);
+ * g.setColor(background.getColor());
+ * // Now the color of the graphics context is set to the color of the background.
+ * </pre>
+ * 
+ * Previously, users who did not want this side-effect to occur had to use this
+ * strategy, which takes more effort than simply setting the color afterwards: <br />
+ * <br />
+ * 
+ * <pre>
+ * ColorBackground background = new ColorBackground// ... initialize background
+ * 
+ * public void render(Graphics2D g) {
+ * // rendering...
+ * Color oldColor = g.getColor();
+ * background.render(g);
+ * g.setColor(oldColor);
+ * // Now the color of the graphics context is *not* set to the color of the background.
+ * 
+ * </pre>
+ * 
+ * This is no longer needed, making code that uses the {@link ColorBackground}
+ * class easier to use via removing the side-effect.
+ * 
  */
-public class ColorBackground extends Background {
+public final class ColorBackground extends Background {
 	
 	/**
 	 * 
@@ -54,15 +98,14 @@ public class ColorBackground extends Background {
 	 */
 	public ColorBackground(Color bgColor, int w, int h) {
 		super(w, h);
-		
-		this.color = bgColor;
+		this.setColor(bgColor);
 	}
 	
 	/**
 	 * Creates new <code>ColorBackground</code> as large as screen dimension.
 	 */
 	public ColorBackground(Color bgColor) {
-		this.color = bgColor;
+		this(bgColor, Background.screen.width, Background.screen.height);
 	}
 	
 	/**
@@ -100,8 +143,10 @@ public class ColorBackground extends Background {
 	 */
 	
 	public void render(Graphics2D g, int xbg, int ybg, int x, int y, int w, int h) {
+		final Color previousColor = g.getColor();
 		g.setColor(this.color);
 		g.fillRect(x, y, w, h);
+		g.setColor(previousColor);
 	}
 	
 }

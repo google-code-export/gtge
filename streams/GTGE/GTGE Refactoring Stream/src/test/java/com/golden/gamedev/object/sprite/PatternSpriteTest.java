@@ -166,7 +166,7 @@ public final class PatternSpriteTest extends TestCase {
 	
 	/**
 	 * Test method for
-	 * {@link com.golden.gamedev.object.sprite.PatternSprite#getImageHolder() .
+	 * {@link com.golden.gamedev.object.sprite.PatternSprite#getImageHolder()}.
 	 */
 	public void testGetImageHolder() {
 		assertNotNull(sprite.getImageHolder());

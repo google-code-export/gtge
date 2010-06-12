@@ -68,6 +68,32 @@ public class MockGraphics2D extends Graphics2D {
 	public int lastDrawnY;
 	
 	/**
+	 * The {@link Color} instance that is both {@link #setColor(Color) stored}
+	 * and {@link #getColor() retrieved}.
+	 */
+	private Color color;
+	
+	/**
+	 * The last x-coordinate specified in a fill operation.
+	 */
+	public int lastFillX;
+	
+	/**
+	 * The last y-coordinate specified in a fill operation.
+	 */
+	public int lastFillY;
+	
+	/**
+	 * The last height specified in a fill operation.
+	 */
+	public int lastFillHeight;
+	
+	/**
+	 * The last width specified in a fill operation.
+	 */
+	public int lastFillWidth;
+	
+	/**
 	 * Creates a new {@link MockGraphics2D} instance.
 	 */
 	public MockGraphics2D() {
@@ -307,7 +333,10 @@ public class MockGraphics2D extends Graphics2D {
 	}
 	
 	public void fillRect(int x, int y, int width, int height) {
-		throw new UnsupportedOperationException("To be implemented.");
+		this.lastFillX = x;
+		this.lastFillY = y;
+		this.lastFillWidth = width;
+		this.lastFillHeight = height;
 	}
 	
 	public void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
@@ -323,7 +352,7 @@ public class MockGraphics2D extends Graphics2D {
 	}
 	
 	public Color getColor() {
-		throw new UnsupportedOperationException("To be implemented.");
+		return color;
 	}
 	
 	public Font getFont() {
@@ -343,7 +372,7 @@ public class MockGraphics2D extends Graphics2D {
 	}
 	
 	public void setColor(Color c) {
-		throw new UnsupportedOperationException("To be implemented.");
+		this.color = c;
 	}
 	
 	public void setFont(Font font) {

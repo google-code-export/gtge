@@ -168,6 +168,7 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 	 * 
 	 * 
 	 * 
+	 * 
 	 * Playfield playfield = new Playfield();
 	 * SpriteGroup PLAYER = playfield.addGroup(new SpriteGroup(&quot;Player&quot;));
 	 * </pre>
@@ -563,7 +564,7 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 	 * Associates specified background to this playfield, setting this
 	 * {@link Background} instance to all {@link Sprite} instances within this
 	 * {@link PlayField}. As of 0.2.4, this method is final - although
-	 * {@link PlayField} may be extended, the {@link #setBackground(Comparator)}
+	 * {@link PlayField} may be extended, the {@link #setBackground(Background)}
 	 * method may no longer be extended.
 	 */
 	public final void setBackground(Background backgr) {

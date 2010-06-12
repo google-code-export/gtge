@@ -28,7 +28,7 @@ public final class ImageFont implements GameFont {
 	/**
 	 * The default character sequence that is used when a new {@link ImageFont}
 	 * is constructed via {@link ImageFont#ImageFont(Image[])}.
-	 * @see ImageFont#ImageFont(Image[], CharSequence),
+	 * @see ImageFont#ImageFont(Image[])
 	 */
 	public static final String DEFAULT_CHARACTER_SEQUENCE = " !\"#$%&'()*+,-./0123"
 	        + "456789:;<=>?@ABCDEFG"
@@ -85,14 +85,14 @@ public final class ImageFont implements GameFont {
 	 *       p q r s t u v w x y z { | } &tilde;
 	 * </pre>
 	 * 
-	 * @param images The non-null array of images that should correspond exactly
-	 *        to the characters defined in the
-	 *        {@link #DEFAULT_CHARACTER_SEQUENCE default character sequence}.
+	 * @param images The non-null array of images that may have less characters
+	 *        than the {@link #DEFAULT_CHARACTER_SEQUENCE default character
+	 *        sequence}, but will be assumed to contain the characters in the
+	 *        order of the character sequence.
 	 * @throws IllegalArgumentException Throws an
 	 *         {@link IllegalArgumentException} if the given {@link Image} array
-	 *         is null, or it did not have the same number of images as the
-	 *         length of the {@link #DEFAULT_CHARACTER_SEQUENCE default
-	 *         character sequence}.
+	 *         is null, or it had more characters than the length of the
+	 *         {@link #DEFAULT_CHARACTER_SEQUENCE default character sequence}.
 	 */
 	public ImageFont(Image[] images) {
 		this(images, DEFAULT_CHARACTER_SEQUENCE);

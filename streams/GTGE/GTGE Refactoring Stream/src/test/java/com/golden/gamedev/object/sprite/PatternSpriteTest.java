@@ -7,6 +7,8 @@ import java.awt.image.BufferedImage;
 
 import junit.framework.TestCase;
 
+import com.golden.gamedev.BufferedImageHolder;
+import com.golden.gamedev.MockBufferedImageHolder;
 import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.MockGraphics2D;
 import com.golden.gamedev.object.Sprite;
@@ -21,7 +23,7 @@ import com.golden.gamedev.object.Sprite;
  * @see TestCase
  * 
  */
-public class PatternSpriteTest extends TestCase {
+public final class PatternSpriteTest extends TestCase {
 	
 	/**
 	 * The {@link PatternSprite} instance under test.
@@ -47,6 +49,8 @@ public class PatternSpriteTest extends TestCase {
 	 * .
 	 */
 	public final void testRenderGraphics2DIntInt() {
+		Sprite delegateSprite = new Sprite();
+		sprite = new PatternSprite(delegateSprite);
 		MockGraphics2D g = new MockGraphics2D();
 		sprite.render(g, 10, 10);
 		assertNull(g.lastDrawnImage);
@@ -56,7 +60,7 @@ public class PatternSpriteTest extends TestCase {
 		
 		BufferedImage image = new BufferedImage(640, 480,
 		        BufferedImage.TYPE_INT_ARGB);
-		sprite.setPattern(new Sprite(image));
+		delegateSprite.setImage(image);
 		sprite.render(g, 20, 20);
 		assertTrue(image == g.lastDrawnImage);
 		assertNull(g.lastDrawnImageObserver);
@@ -66,10 +70,10 @@ public class PatternSpriteTest extends TestCase {
 	
 	/**
 	 * Test method for
-	 * {@link com.golden.gamedev.object.sprite.PatternSprite#PatternSprite(com.golden.gamedev.object.Sprite, double, double)}
+	 * {@link com.golden.gamedev.object.sprite.PatternSprite#PatternSprite(BufferedImageHolder, double, double)}
 	 * .
 	 */
-	public final void testPatternSpriteSpriteDoubleDouble() {
+	public final void testPatternSpriteBufferedImageHolderDoubleDouble() {
 		sprite = new PatternSprite(new Sprite(), 10, 10);
 		assertNotNull(sprite);
 		assertEquals(10, sprite.getX(), 0);
@@ -89,15 +93,23 @@ public class PatternSpriteTest extends TestCase {
 		assertTrue(sprite.isActive());
 		assertFalse(sprite.isImmutable());
 		assertTrue(sprite.isVisible());
-		assertNotNull(sprite.getPattern());
+		assertNotNull(sprite.getImageHolder());
+		
+		try {
+			sprite = new PatternSprite(new MockBufferedImageHolder(), 10, 10);
+			fail("Expected IllegalArgumentException - MockBufferedImageHolder is not Serializable.");
+		}
+		catch (IllegalArgumentException e) {
+			// Intentionally blank
+		}
 	}
 	
 	/**
 	 * Test method for
-	 * {@link com.golden.gamedev.object.sprite.PatternSprite#PatternSprite(com.golden.gamedev.object.Sprite)}
+	 * {@link com.golden.gamedev.object.sprite.PatternSprite#PatternSprite(BufferedImageHolder)}
 	 * .
 	 */
-	public final void testPatternSpriteSprite() {
+	public final void testPatternSpriteBufferedImageHolder() {
 		assertNotNull(sprite);
 		assertEquals(0, sprite.getX(), 0);
 		assertEquals(0, sprite.getOldX(), 0);
@@ -116,7 +128,15 @@ public class PatternSpriteTest extends TestCase {
 		assertTrue(sprite.isActive());
 		assertFalse(sprite.isImmutable());
 		assertTrue(sprite.isVisible());
-		assertNotNull(sprite.getPattern());
+		assertNotNull(sprite.getImageHolder());
+		
+		try {
+			sprite = new PatternSprite(new MockBufferedImageHolder());
+			fail("Expected IllegalArgumentException - MockBufferedImageHolder is not Serializable.");
+		}
+		catch (IllegalArgumentException e) {
+			// Intentionally blank
+		}
 	}
 	
 	/**
@@ -142,6 +162,14 @@ public class PatternSpriteTest extends TestCase {
 		assertTrue(pattern == sprite.getPattern());
 		sprite.setPattern(null);
 		assertNull(sprite.getPattern());
+	}
+	
+	/**
+	 * Test method for
+	 * {@link com.golden.gamedev.object.sprite.PatternSprite#getImageHolder() .
+	 */
+	public void testGetImageHolder() {
+		assertNotNull(sprite.getImageHolder());
 	}
 	
 }

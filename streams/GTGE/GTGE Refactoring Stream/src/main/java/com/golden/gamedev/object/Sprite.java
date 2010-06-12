@@ -24,6 +24,7 @@ import java.util.Comparator;
 
 import com.golden.gamedev.ActiveHolder;
 import com.golden.gamedev.BackgroundHolder;
+import com.golden.gamedev.BufferedImageHolder;
 import com.golden.gamedev.Renderable;
 import com.golden.gamedev.Updateable;
 import com.golden.gamedev.object.collision.CollisionRect;
@@ -66,7 +67,7 @@ import com.golden.gamedev.object.collision.CollisionShape;
  * @see com.golden.gamedev.object.Timer
  */
 public class Sprite implements Serializable, Updateable, Renderable,
-        CollisionShape, BackgroundHolder, ActiveHolder {
+        CollisionShape, BackgroundHolder, ActiveHolder, BufferedImageHolder {
 	
 	/**
 	 * Serializable ID denoting the Sprite's serializable version.
@@ -678,6 +679,7 @@ public class Sprite implements Serializable, Updateable, Renderable,
 	 * 
 	 * 
 	 * 
+	 * 
 	 * Sprite s;
 	 * 
 	 * public void update(long elapsedTime) {
@@ -725,6 +727,7 @@ public class Sprite implements Serializable, Updateable, Renderable,
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
 	 * 
 	 * 
 	 * 

@@ -34,9 +34,8 @@ public class InvisibleSpriteTest extends TestCase {
 	 * functionality.
 	 */
 	public void testRenderGraphics2D() {
-		// This will not throw a null pointer exception, for either the 0.23 or
-		// the refactored class,
-		// because an InvisibleSprite will by default not render.
+		// This will not throw a null pointer exception, because an
+		// InvisibleSprite will by default not render.
 		this.getSpriteUnderTest().render(null);
 	}
 	
@@ -45,9 +44,8 @@ public class InvisibleSpriteTest extends TestCase {
 	 * method's functionality.
 	 */
 	public void testRenderGraphics2DIntInt() {
-		// This will not throw a null pointer exception, for either the 0.23 or
-		// the refactored class,
-		// because an InvisibleSprite will by default not render.
+		// This will not throw a null pointer exception, because an
+		// InvisibleSprite will by default not render.
 		this.getSpriteUnderTest().render(null, 100, 200);
 	}
 	

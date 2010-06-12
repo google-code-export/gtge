@@ -19,6 +19,7 @@ package com.golden.gamedev.object;
 // JFC
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.Comparator;
 
 import com.golden.gamedev.ActiveHolder;
@@ -64,15 +65,13 @@ import com.golden.gamedev.object.collision.CollisionShape;
  * @see com.golden.gamedev.object.PlayField
  * @see com.golden.gamedev.object.Timer
  */
-public class Sprite implements java.io.Serializable, Updateable, Renderable,
+public class Sprite implements Serializable, Updateable, Renderable,
         CollisionShape, BackgroundHolder, ActiveHolder {
 	
 	/**
-	 * Serializable ID denoting the Sprite's serializable version. If the
-	 * internal state of the {@link Sprite} changes, this will be set to 2 in
-	 * the next release.
+	 * Serializable ID denoting the Sprite's serializable version.
 	 */
-	private static final long serialVersionUID = -4499098097309229784L;
+	private static final long serialVersionUID = 1L;
 	
 	/**
 	 * ************************** SPRITE BACKGROUND ****************************
@@ -132,6 +131,17 @@ public class Sprite implements java.io.Serializable, Updateable, Renderable,
 	
 	private boolean active = true;
 	private boolean immutable; // immutable sprite won't be disposed/thrown
+	
+	/**
+	 * Specifies whether or not the current {@link Sprite} should attempt to be
+	 * rendered - setting this flag to false disables
+	 * {@link #render(Graphics2D) rendering} of this {@link Sprite}, but if the
+	 * {@link Sprite} is off the screen, setting this flag has no effect - a
+	 * {@link Sprite} will only be rendered if it is on the screen and this flag
+	 * is set to true. This flag defaults to true for each {@link Sprite}
+	 * instance.
+	 */
+	private boolean visible = true;
 	
 	// from its group
 	
@@ -647,6 +657,27 @@ public class Sprite implements java.io.Serializable, Updateable, Renderable,
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * Sprite s;
 	 * 
 	 * public void update(long elapsedTime) {
@@ -694,6 +725,27 @@ public class Sprite implements java.io.Serializable, Updateable, Renderable,
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 
@@ -886,26 +938,31 @@ public class Sprite implements java.io.Serializable, Updateable, Renderable,
 	 */
 	
 	/**
-	 * Renders this sprite to specified graphics context.
+	 * Renders this sprite to specified graphics context. <br />
+	 * <br />
+	 * As of 0.2.4, this method is marked as final - while {@link Sprite} may
+	 * still be extended, the {@link #render(Graphics2D)} method may not be.
 	 * 
 	 * @param g graphics context
 	 */
-	public void render(Graphics2D g) {
-		Sprite.screenX = this.x - this.background.getX();
-		Sprite.screenY = this.y - this.background.getY();
-		
-		// check whether the sprite is still on screen rendering area
-		if (Sprite.screenX + this.width <= 0
-		        || Sprite.screenY + this.height <= 0
-		        || Sprite.screenX > this.background.getClip().width
-		        || Sprite.screenY > this.background.getClip().height) {
-			return;
+	public final void render(Graphics2D g) {
+		if (visible) {
+			Sprite.screenX = this.x - this.background.getX();
+			Sprite.screenY = this.y - this.background.getY();
+			
+			// check whether the sprite is still on screen rendering area
+			if (Sprite.screenX + this.width <= 0
+			        || Sprite.screenY + this.height <= 0
+			        || Sprite.screenX > this.background.getClip().width
+			        || Sprite.screenY > this.background.getClip().height) {
+				return;
+			}
+			
+			Sprite.screenX += this.background.getClip().x;
+			Sprite.screenY += this.background.getClip().y;
+			
+			this.render(g, (int) Sprite.screenX, (int) Sprite.screenY);
 		}
-		
-		Sprite.screenX += this.background.getClip().x;
-		Sprite.screenY += this.background.getClip().y;
-		
-		this.render(g, (int) Sprite.screenX, (int) Sprite.screenY);
 	}
 	
 	/**
@@ -1070,5 +1127,37 @@ public class Sprite implements java.io.Serializable, Updateable, Renderable,
 		this.setY(y1);
 		this.setWidth(w1);
 		this.setHeight(h1);
+	}
+	
+	/**
+	 * Gets whether or not the current {@link Sprite} should attempt to be
+	 * rendered. If false, {@link #render(Graphics2D) rendering} of this
+	 * {@link Sprite} is completely disabled, but if the {@link Sprite} is off
+	 * the screen, even if this flag is true, the {@link Sprite} will not be
+	 * rendered - a {@link Sprite} will only be rendered if it is on the screen
+	 * and true is returned. True is returned by default for each {@link Sprite}
+	 * instance.
+	 * @return True if the current {@link Sprite} will attempt to be
+	 *         {@link #render(Graphics2D) rendered} if it is on the screen,
+	 *         false otherwise.
+	 */
+	public final boolean isVisible() {
+		return visible;
+	}
+	
+	/**
+	 * Sets whether or not the current {@link Sprite} should attempt to be
+	 * rendered. If false, {@link #render(Graphics2D) rendering} of this
+	 * {@link Sprite} is completely disabled, but if the {@link Sprite} is off
+	 * the screen, even if this flag is true, the {@link Sprite} will not be
+	 * rendered - a {@link Sprite} will only be rendered if it is on the screen
+	 * and true is returned. True is the default value for each {@link Sprite}
+	 * instance.
+	 * @param visible True if the current {@link Sprite} will attempt to be
+	 *        {@link #render(Graphics2D) rendered} if it is on the screen, false
+	 *        otherwise.
+	 */
+	public final void setVisible(boolean visible) {
+		this.visible = visible;
 	}
 }

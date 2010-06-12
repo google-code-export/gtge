@@ -191,7 +191,7 @@ public class GraphicsUtil {
 		h += 2; // for height delimiter
 		
 		Color delimiter = Color.GREEN;
-		int x = 0, y = 0;
+		int x = 0;
 		BufferedImage texture = ImageUtil.createImage(w, h,
 		        Transparency.BITMASK);
 		Graphics2D g = texture.createGraphics();

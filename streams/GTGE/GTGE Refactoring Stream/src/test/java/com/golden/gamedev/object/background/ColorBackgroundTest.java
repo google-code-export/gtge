@@ -21,7 +21,7 @@ import com.golden.gamedev.object.MockGraphics2D;
  * @see TestCase
  * 
  */
-public class ColorBackgroundTest extends TestCase {
+public final class ColorBackgroundTest extends TestCase {
 	
 	/**
 	 * The {@link ColorBackground} instance under test.

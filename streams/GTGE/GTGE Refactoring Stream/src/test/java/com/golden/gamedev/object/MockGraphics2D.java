@@ -94,6 +94,66 @@ public class MockGraphics2D extends Graphics2D {
 	public int lastFillWidth;
 	
 	/**
+	 * The last x-coordinate of the first corner of the source rectangle in a
+	 * {@link #drawImage(Image, int, int, int, int, int, int, int, int, ImageObserver)}
+	 * method invocation.
+	 */
+	public int lastSourceRectangleFirstX;
+	
+	/**
+	 * The last x-coordinate of the second corner of the source rectangle in a
+	 * {@link #drawImage(Image, int, int, int, int, int, int, int, int, ImageObserver)}
+	 * method invocation.
+	 */
+	public int lastSourceRectangleSecondX;
+	
+	/**
+	 * The last y-coordinate of the first corner of the source rectangle in a
+	 * {@link #drawImage(Image, int, int, int, int, int, int, int, int, ImageObserver)}
+	 * method invocation.
+	 */
+	public int lastSourceRectangleFirstY;
+	
+	/**
+	 * The last y-coordinate of the second corner of the source rectangle in a
+	 * {@link #drawImage(Image, int, int, int, int, int, int, int, int, ImageObserver)}
+	 * method invocation.
+	 */
+	public int lastSourceRectangleSecondY;
+	
+	/**
+	 * The last x-coordinate of the first corner of the destination rectangle in
+	 * a
+	 * {@link #drawImage(Image, int, int, int, int, int, int, int, int, ImageObserver)}
+	 * method invocation.
+	 */
+	public int lastDestinationRectangleFirstX;
+	
+	/**
+	 * The last x-coordinate of the second corner of the destination rectangle
+	 * in a
+	 * {@link #drawImage(Image, int, int, int, int, int, int, int, int, ImageObserver)}
+	 * method invocation.
+	 */
+	public int lastDestinationRectangleSecondX;
+	
+	/**
+	 * The last y-coordinate of the first corner of the destination rectangle in
+	 * a
+	 * {@link #drawImage(Image, int, int, int, int, int, int, int, int, ImageObserver)}
+	 * method invocation.
+	 */
+	public int lastDestinationRectangleFirstY;
+	
+	/**
+	 * The last y-coordinate of the second corner of the destination rectangle
+	 * in a
+	 * {@link #drawImage(Image, int, int, int, int, int, int, int, int, ImageObserver)}
+	 * method invocation.
+	 */
+	public int lastDestinationRectangleSecondY;
+	
+	/**
 	 * Creates a new {@link MockGraphics2D} instance.
 	 */
 	public MockGraphics2D() {
@@ -293,7 +353,17 @@ public class MockGraphics2D extends Graphics2D {
 	}
 	
 	public boolean drawImage(Image img, int dx1, int dy1, int dx2, int dy2, int sx1, int sy1, int sx2, int sy2, ImageObserver observer) {
-		throw new UnsupportedOperationException("To be implemented.");
+		this.lastDrawnImage = img;
+		this.lastDestinationRectangleFirstX = dx1;
+		this.lastDestinationRectangleFirstY = dy1;
+		this.lastDestinationRectangleSecondX = dx2;
+		this.lastDestinationRectangleSecondY = dy2;
+		this.lastSourceRectangleFirstX = sx1;
+		this.lastSourceRectangleFirstY = sy1;
+		this.lastSourceRectangleSecondX = sx2;
+		this.lastSourceRectangleSecondY = sy2;
+		this.lastDrawnImageObserver = observer;
+		return !returnFalseFromDrawImage;
 	}
 	
 	public boolean drawImage(Image img, int dx1, int dy1, int dx2, int dy2, int sx1, int sy1, int sx2, int sy2, Color bgcolor, ImageObserver observer) {

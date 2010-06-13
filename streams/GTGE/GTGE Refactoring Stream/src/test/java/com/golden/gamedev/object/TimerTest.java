@@ -3,6 +3,8 @@
  */
 package com.golden.gamedev.object;
 
+import com.golden.gamedev.MockActionExecutor;
+
 import junit.framework.TestCase;
 
 /**
@@ -46,6 +48,24 @@ public class TimerTest extends TestCase {
 	}
 	
 	/**
+	 * Test method for
+	 * {@link com.golden.gamedev.object.Timer#Timer(long, com.golden.gamedev.ActionExecutor)
+	 * )}.
+	 */
+	public void testTimerLongActionExecutor() {
+		try {
+			timer = new Timer(24, null);
+			fail("Expected IllegalArgumentException - an ActionExecutor instance must be specified.");
+		}
+		catch (IllegalArgumentException e) {
+			// Intentionally blank
+		}
+		timer = new Timer(353, new MockActionExecutor());
+		assertNotNull(timer);
+		assertEquals(353, timer.getDelay());
+	}
+	
+	/**
 	 * Test method for {@link com.golden.gamedev.object.Timer#action(long)}.
 	 */
 	public void testAction() {
@@ -63,12 +83,18 @@ public class TimerTest extends TestCase {
 		// 45 increment would trigger the action, but the timer's not active, so
 		// it doesn't.
 		assertFalse(timer.action(45));
+		
+		MockActionExecutor executor = new MockActionExecutor();
+		timer = new Timer(100, executor);
+		assertFalse(timer.action(50));
+		assertFalse(executor.actionExecuted);
+		assertTrue(timer.action(50));
+		assertTrue(executor.actionExecuted);
 	}
 	
 	/**
 	 * Test method for
-	 * {@link com.golden.gamedev.object.Timer#setEquals(com.golden.gamedev.object.Timer)}
-	 * .
+	 * {@link Timer#setEquals(com.golden.gamedev.engine.timer.Timer)} .
 	 */
 	public void testSetEquals() {
 		Timer newTimer = new Timer(100);
@@ -87,6 +113,19 @@ public class TimerTest extends TestCase {
 		assertTrue(newTimer.isActive());
 	}
 	
+	public void testCopy() throws Exception {
+		Timer newTimer = new Timer(100);
+		assertEquals(0, newTimer.getCurrentTick());
+		assertEquals(100, newTimer.getDelay());
+		assertTrue(newTimer.isActive());
+		timer.action(10);
+		Timer copy = (Timer) newTimer.copy(timer);
+		assertTrue(copy == newTimer);
+		assertEquals(10, newTimer.getCurrentTick());
+		assertEquals(50, newTimer.getDelay());
+		assertTrue(newTimer.isActive());
+	}
+	
 	/**
 	 * Test method for {@link com.golden.gamedev.object.Timer#isActive()}.
 	 */
@@ -101,10 +140,18 @@ public class TimerTest extends TestCase {
 	 * {@link com.golden.gamedev.object.Timer#setActive(boolean)}.
 	 */
 	public void testSetActive() {
+		timer.action(10);
+		assertEquals(10, timer.getCurrentTick());
 		timer.setActive(false);
 		assertFalse(timer.isActive());
+		assertEquals(0, timer.getCurrentTick());
 		timer.setActive(true);
 		assertTrue(timer.isActive());
+		timer.action(10);
+		assertEquals(10, timer.getCurrentTick());
+		timer.setActive(true);
+		assertTrue(timer.isActive());
+		assertEquals(0, timer.getCurrentTick());
 	}
 	
 	/**
@@ -120,10 +167,16 @@ public class TimerTest extends TestCase {
 	 * Test method for {@link com.golden.gamedev.object.Timer#setDelay(long)}.
 	 */
 	public void testSetDelay() {
+		timer.action(10);
+		assertEquals(10, timer.getCurrentTick());
 		timer.setDelay(100);
 		assertEquals(100, timer.getDelay());
+		assertEquals(0, timer.getCurrentTick());
+		timer.action(10);
+		assertEquals(10, timer.getCurrentTick());
 		timer.setDelay(50);
 		assertEquals(50, timer.getDelay());
+		assertEquals(0, timer.getCurrentTick());
 	}
 	
 	/**
@@ -131,7 +184,7 @@ public class TimerTest extends TestCase {
 	 */
 	public void testGetCurrentTick() {
 		assertEquals(0, timer.getCurrentTick());
-		timer.setCurrentTick(10);
+		timer.action(10);
 		assertEquals(10, timer.getCurrentTick());
 	}
 	
@@ -149,10 +202,18 @@ public class TimerTest extends TestCase {
 	 * Test method for {@link com.golden.gamedev.object.Timer#reset()}.
 	 */
 	public void testReset() {
-		timer.setCurrentTick(30);
+		timer.action(30);
 		assertEquals(30, timer.getCurrentTick());
 		timer.reset();
 		assertEquals(0, timer.getCurrentTick());
+	}
+	
+	public void testExecute() throws Exception {
+		MockActionExecutor executor = new MockActionExecutor();
+		timer = new Timer(100, executor);
+		assertFalse(executor.actionExecuted);
+		timer.execute();
+		assertTrue(executor.actionExecuted);
 	}
 	
 }

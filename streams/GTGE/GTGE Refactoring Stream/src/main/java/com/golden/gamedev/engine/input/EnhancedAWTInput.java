@@ -23,12 +23,10 @@ import java.util.BitSet;
 
 public class EnhancedAWTInput extends AWTInput {
 	
-	private BitSet keyDown;
+	private BitSet keyDown = new BitSet();
 	
 	public EnhancedAWTInput(Component comp) {
 		super(comp);
-		
-		this.keyDown = new BitSet();
 	}
 	
 	protected InputListener createInputListener() {
@@ -49,12 +47,24 @@ public class EnhancedAWTInput extends AWTInput {
 		refresh();
 	}
 	
+	/**
+	 * @deprecated The method is deprecated with no direct replacement and will
+	 *             be removed in 0.2.5 - {@link #getKeyDown()} should not be
+	 *             invoked, only the individual query methods (i.e.
+	 *             {@link #isKeyDown(int)}) should be used.
+	 */
 	public boolean[] getKeyDown() {
 		throw new UnsupportedOperationException(
 		        "Enhanced AWT Input use BitSet boolean, "
 		                + "use getKeyDownBitSet() instead.");
 	}
 	
+	/**
+	 * @deprecated The method is deprecated with no direct replacement and will
+	 *             be removed in 0.2.5 - {@link #getKeyDownBitSet()} should not
+	 *             be invoked, only the individual query methods (i.e.
+	 *             {@link #isKeyDown(int)}) should be used.
+	 */
 	public BitSet getKeyDownBitSet() {
 		return this.keyDown;
 	}

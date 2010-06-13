@@ -23,9 +23,11 @@ import java.awt.image.BufferedImage;
 import com.golden.gamedev.object.Background;
 
 /**
- * Background that use a single image as the background.
+ * Background that use a single image as the background. As of 0.2.4, the
+ * {@link ImageBackground} class is marked as final - it is not suitable for
+ * extension by subclasses.
  */
-public class ImageBackground extends Background {
+public final class ImageBackground extends Background {
 	
 	/**
 	 * 
@@ -49,7 +51,6 @@ public class ImageBackground extends Background {
 	 */
 	public ImageBackground(BufferedImage image, int w, int h) {
 		super(w, h);
-		
 		this.image = image;
 	}
 	
@@ -58,9 +59,7 @@ public class ImageBackground extends Background {
 	 * background size is as large as the image.
 	 */
 	public ImageBackground(BufferedImage image) {
-		super(image.getWidth(), image.getHeight());
-		
-		this.image = image;
+		this(image, image.getWidth(), image.getHeight());
 	}
 	
 	/**
@@ -86,7 +85,6 @@ public class ImageBackground extends Background {
 	 */
 	public void setImage(BufferedImage image) {
 		this.image = image;
-		
 		this.setSize(image.getWidth(), image.getHeight());
 	}
 	

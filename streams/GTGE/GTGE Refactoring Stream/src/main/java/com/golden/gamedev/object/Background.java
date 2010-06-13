@@ -112,17 +112,19 @@ public class Background implements Serializable, Updateable, Renderable,
 	 * *************************************************************************
 	 */
 	
-	private static Background backgr;
+	/**
+	 * The default {@link Background} intance to be used by every newly created
+	 * sprite.
+	 */
+	public static Background PLACEHOLDER = new Background();
 	
 	/**
 	 * Returns the default background used by every newly created sprite.
+	 * @deprecated Use {@link #PLACEHOLDER} instead. This method will be removed
+	 *             in 0.2.5.
 	 */
 	public static Background getDefaultBackground() {
-		if (Background.backgr == null) {
-			Background.backgr = new Background();
-		}
-		
-		return Background.backgr;
+		return Background.PLACEHOLDER;
 	}
 	
 	/**
@@ -311,6 +313,7 @@ public class Background implements Serializable, Updateable, Renderable,
 		return this.clip;
 	}
 	
+	// TODO: bound the x-variable in the same matter as setLocation().
 	/**
 	 * Sets the background <code>x</code> coordinate.
 	 * @param x The background <code>x</code> coordinate.
@@ -319,6 +322,7 @@ public class Background implements Serializable, Updateable, Renderable,
 		this.x = x;
 	}
 	
+	// TODO: bound the y-variable in the same matter as setLocation().
 	/**
 	 * Sets the background <code>y</code> coordinate.
 	 * @param y The background <code>y</code> coordinate.

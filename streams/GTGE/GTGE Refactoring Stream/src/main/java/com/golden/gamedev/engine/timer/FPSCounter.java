@@ -33,12 +33,16 @@ import com.golden.gamedev.Refreshable;
  * 	counter.calculateFPS(); // calculating fps
  * }
  * </pre>
+ * 
+ * As of 0.2.4, the {@link FPSCounter} class has been made final as it is not
+ * suitable for extension by subclasses.
  */
-public class FPSCounter implements Refreshable {
+public final class FPSCounter implements Refreshable {
 	
-	private long lastCount; // last time the fps is counted
-	private int currentFPS, // the real fps achieved
-	        frameCount;
+	private long lastCount; // last time the fps is
+	// counted
+	private int currentFPS; // the real fps achieved
+	private int frameCount;
 	
 	/**
 	 * *************************************************************************
@@ -51,9 +55,77 @@ public class FPSCounter implements Refreshable {
 	 */
 	
 	/**
-	 * Creates new <code>FPSCounter</code>.
+	 * Creates new <code>FPSCounter</code>. Effectively equivalent to using the
+	 * {@link FPSCounter#FPSCounter(boolean)} constructor with the boolean
+	 * argument set to false.
 	 */
 	public FPSCounter() {
+		this(false);
+	}
+	
+	/**
+	 * Creates a new {@link FPSCounter} instance which may be initialized for
+	 * counting immediately.
+	 * @param initialize Whether or not to initialize this {@link FPSCounter}
+	 *        instance for counting immediately. If true, this is the effective
+	 *        equivalent of creating a new {@link FPSCounter} instance and
+	 *        immediately invoking {@link #reset()} on it. If false, the first
+	 *        call to {@link #calculateFPS()} will not apply for the current
+	 *        second unless {@link #reset()} is invoked prior to
+	 *        {@link #calculateFPS()}. This is illustrated in the following
+	 *        table:
+	 *        <table border="1">
+	 *        <caption>True</caption>
+	 *        <tr>
+	 *        <th>Invocation #</th>
+	 *        <th>Result</th>
+	 *        </tr>
+	 *        <tr>
+	 *        <td>1</td>
+	 *        <td>Counts for current second, getCurrentFPS returns 0</td>
+	 *        </tr>
+	 *        <tr>
+	 *        <td>...</td>
+	 *        <td>Counts for current second, getCurrentFPS returns 0</td>
+	 *        </tr>
+	 *        <tr>
+	 *        <td>2</td>
+	 *        <td>Counts for current next second, getCurrentFPS returns previous
+	 *        second value.</td>
+	 *        </tr>
+	 *        </table>
+	 * <br />
+	 * <br />
+	 *        <table border="1">
+	 *        <caption>False</caption>
+	 *        <tr>
+	 *        <th>Invocation #</th>
+	 *        <th>Result</th>
+	 *        </tr>
+	 *        <tr>
+	 *        <td>1</td>
+	 *        <td>Counts for no second, getCurrentFPS returns 0</td>
+	 *        </tr>
+	 *        <tr>
+	 *        <td>2</td>
+	 *        <td>Counts for current second, getCurrentFPS returns 1</td>
+	 *        </tr>
+	 *        <tr>
+	 *        <td>...</td>
+	 *        <td>Counts for current current second, getCurrentFPS returns 1</td>
+	 *        </tr>
+	 *        <tr>
+	 *        <td>3</td>
+	 *        <td>Counts for next second, getCurrentFPS returns previous second
+	 *        value.</td>
+	 *        </tr>
+	 *        </table>
+	 */
+	public FPSCounter(boolean initialize) {
+		super();
+		if (initialize) {
+			reset();
+		}
 	}
 	
 	/**

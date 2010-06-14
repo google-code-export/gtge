@@ -100,11 +100,10 @@ public class EnhancedAWTInputTest extends TestCase {
 		
 		// Mouse event reset checks
 		MouseEvent mouseEvent = new MouseEvent(component, 0, System
-		        .currentTimeMillis(), 0, 0, 0, 0, 0, 1, false,
-		        MouseEvent.BUTTON1);
+		        .currentTimeMillis(), 0, 0, 0, 0, false, MouseEvent.BUTTON1);
 		listener.mousePressed(mouseEvent);
 		mouseEvent = new MouseEvent(component, 0, System.currentTimeMillis(),
-		        0, 0, 0, 0, 0, 1, false, MouseEvent.BUTTON1);
+		        0, 0, 0, 0, false, MouseEvent.BUTTON1);
 		listener.mouseReleased(mouseEvent);
 		assertTrue(input.isMousePressed(MouseEvent.BUTTON1));
 		assertEquals(MouseEvent.BUTTON1, input.getMousePressed());
@@ -117,7 +116,7 @@ public class EnhancedAWTInputTest extends TestCase {
 		assertFalse(MouseEvent.BUTTON1 == input.getMouseReleased());
 		
 		mouseEvent = new MouseEvent(component, 0, System.currentTimeMillis(),
-		        0, 0, 0, 0, 0, 1, false, MouseEvent.BUTTON1);
+		        0, 0, 0, 0, false, MouseEvent.BUTTON1);
 		listener.mouseMoved(mouseEvent);
 		input.update(10);
 		assertTrue(input.getMouseDX() != 0);

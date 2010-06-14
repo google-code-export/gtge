@@ -88,7 +88,7 @@ public class Background extends BoundedBackground {
 	 *             {@link BoundedBackground} and will be removed in 0.2.5.
 	 */
 	public Background() {
-		super(BoundedBackground.screen.width, BoundedBackground.screen.height);
+		super();
 	}
 	
 	/**

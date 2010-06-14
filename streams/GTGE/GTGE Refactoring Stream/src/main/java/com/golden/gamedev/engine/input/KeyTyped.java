@@ -17,10 +17,12 @@
 package com.golden.gamedev.engine.input;
 
 // GTGE
+import com.golden.gamedev.NullActionExecutor;
 import com.golden.gamedev.Refreshable;
 import com.golden.gamedev.Updateable;
 import com.golden.gamedev.engine.BaseInput;
-import com.golden.gamedev.object.Timer;
+import com.golden.gamedev.engine.timer.SerializableTimer;
+import com.golden.gamedev.engine.timer.Timer;
 
 /**
  * <code>KeyTyped</code> class is a class to simulate key typing. Key typed is a
@@ -61,8 +63,10 @@ public class KeyTyped implements Updateable, Refreshable {
 	public KeyTyped(BaseInput bsInput, int repeatDelay, int repeatRate) {
 		this.bsInput = bsInput;
 		
-		this.repeatDelayTimer = new Timer(repeatDelay);
-		this.repeatRateTimer = new Timer(repeatRate);
+		this.repeatDelayTimer = new SerializableTimer(repeatDelay,
+		        NullActionExecutor.INSTANCE);
+		this.repeatRateTimer = new SerializableTimer(repeatRate,
+		        NullActionExecutor.INSTANCE);
 		
 		this.repeatDelayTimer.setActive(false);
 		

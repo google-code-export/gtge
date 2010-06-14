@@ -13,6 +13,7 @@ import com.golden.gamedev.object.MockGraphics2D;
 import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.background.Background;
 import com.golden.gamedev.object.background.BoundedBackground;
+import com.golden.gamedev.object.background.ImmutableBackground;
 
 /**
  * The {@link PatternSpriteTest} provides a {@link TestCase} to test the
@@ -84,8 +85,7 @@ public final class PatternSpriteTest extends TestCase {
 		assertNull(sprite.getImage());
 		assertEquals(0, sprite.getHeight());
 		assertEquals(0, sprite.getWidth());
-		assertEquals(BoundedBackground.getDefaultBackground(), sprite
-		        .getBackground());
+		assertEquals(ImmutableBackground.INSTANCE, sprite.getBackground());
 		assertEquals(0, sprite.getHorizontalSpeed(), 0);
 		assertEquals(0, sprite.getVerticalSpeed(), 0);
 		assertNotNull(sprite.getDefaultCollisionShape());
@@ -120,8 +120,7 @@ public final class PatternSpriteTest extends TestCase {
 		assertNull(sprite.getImage());
 		assertEquals(0, sprite.getHeight());
 		assertEquals(0, sprite.getWidth());
-		assertEquals(BoundedBackground.getDefaultBackground(), sprite
-		        .getBackground());
+		assertEquals(ImmutableBackground.INSTANCE, sprite.getBackground());
 		assertEquals(0, sprite.getHorizontalSpeed(), 0);
 		assertEquals(0, sprite.getVerticalSpeed(), 0);
 		assertNotNull(sprite.getDefaultCollisionShape());

@@ -3,7 +3,6 @@
  */
 package com.golden.gamedev;
 
-import java.io.ObjectStreamException;
 import java.io.Serializable;
 
 /**

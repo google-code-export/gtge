@@ -29,7 +29,7 @@ import com.golden.gamedev.BackgroundHolder;
 import com.golden.gamedev.Renderable;
 import com.golden.gamedev.Updateable;
 import com.golden.gamedev.object.background.Background;
-import com.golden.gamedev.object.background.BoundedBackground;
+import com.golden.gamedev.object.background.ImmutableBackground;
 import com.golden.gamedev.util.EqualsComparator;
 import com.golden.gamedev.util.Utility;
 
@@ -88,7 +88,7 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 	 * {@link Background#getDefaultBackground() default background}.
 	 */
 	public PlayField() {
-		this(BoundedBackground.PLACEHOLDER);
+		this(ImmutableBackground.INSTANCE);
 	}
 	
 	/**
@@ -126,6 +126,9 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 
@@ -574,7 +577,7 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 	 * method may no longer be extended.
 	 */
 	public final void setBackground(Background backgr) {
-		Background background = backgr == null ? BoundedBackground.PLACEHOLDER
+		Background background = backgr == null ? ImmutableBackground.INSTANCE
 		        : backgr;
 		
 		// force all sprites to use same background

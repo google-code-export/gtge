@@ -5,9 +5,9 @@ package com.golden.gamedev.object;
 
 import java.awt.image.BufferedImage;
 
-import com.golden.gamedev.object.background.BoundedBackground;
-
 import junit.framework.TestCase;
+
+import com.golden.gamedev.object.background.ImmutableBackground;
 
 /**
  * The {@link SpriteTest} class provides a {@link TestCase} to test the
@@ -77,8 +77,7 @@ public class SpriteTest extends TestCase {
 		assertNull(sprite.getImage());
 		assertEquals(0, sprite.getHeight());
 		assertEquals(0, sprite.getWidth());
-		assertEquals(BoundedBackground.getDefaultBackground(), sprite
-		        .getBackground());
+		assertEquals(ImmutableBackground.INSTANCE, sprite.getBackground());
 		assertEquals(0, sprite.getHorizontalSpeed(), 0);
 		assertEquals(0, sprite.getVerticalSpeed(), 0);
 		assertNotNull(sprite.getDefaultCollisionShape());

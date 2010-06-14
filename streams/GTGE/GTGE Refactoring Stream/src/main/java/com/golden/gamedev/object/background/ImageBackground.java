@@ -20,6 +20,8 @@ package com.golden.gamedev.object.background;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import com.golden.gamedev.BufferedImageHolder;
+
 /**
  * Background that use a single image as the background. As of 0.2.4, the
  * {@link ImageBackground} class is marked as final - it is not suitable for
@@ -30,7 +32,8 @@ import java.awt.image.BufferedImage;
  * As of 0.2.4, {@link ImageBackground} extends {@link BoundedBackground}
  * directly.
  */
-public final class ImageBackground extends BoundedBackground {
+public final class ImageBackground extends BoundedBackground implements
+        BufferedImageHolder {
 	
 	/**
 	 * 

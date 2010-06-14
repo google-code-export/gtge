@@ -28,6 +28,7 @@ import com.golden.gamedev.BufferedImageHolder;
 import com.golden.gamedev.Renderable;
 import com.golden.gamedev.Updateable;
 import com.golden.gamedev.object.background.BoundedBackground;
+import com.golden.gamedev.object.background.ImmutableBackground;
 import com.golden.gamedev.object.collision.CollisionRect;
 import com.golden.gamedev.object.collision.CollisionShape;
 import com.golden.gamedev.object.collision.Dimensionable;
@@ -174,7 +175,7 @@ public class Sprite implements Serializable, Updateable, Renderable,
 			this.height = image.getHeight();
 		}
 		
-		this.background = BoundedBackground.PLACEHOLDER;
+		this.background = ImmutableBackground.INSTANCE;
 	}
 	
 	/**
@@ -231,7 +232,7 @@ public class Sprite implements Serializable, Updateable, Renderable,
 	public void setBackground(Background backgr) {
 		this.background = backgr;
 		if (this.background == null) {
-			this.background = BoundedBackground.PLACEHOLDER;
+			this.background = ImmutableBackground.INSTANCE;
 		}
 	}
 	
@@ -687,6 +688,9 @@ public class Sprite implements Serializable, Updateable, Renderable,
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
+	 * 
 	 * Sprite s;
 	 * 
 	 * public void update(long elapsedTime) {
@@ -734,6 +738,9 @@ public class Sprite implements Serializable, Updateable, Renderable,
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 

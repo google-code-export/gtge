@@ -23,11 +23,14 @@ import java.util.Comparator;
 
 import com.golden.gamedev.ActiveHolder;
 import com.golden.gamedev.BackgroundHolder;
+import com.golden.gamedev.NullActionExecutor;
 import com.golden.gamedev.Renderable;
 import com.golden.gamedev.Updateable;
-import com.golden.gamedev.util.Utility;
+import com.golden.gamedev.engine.timer.SerializableTimer;
+import com.golden.gamedev.engine.timer.Timer;
 import com.golden.gamedev.object.background.Background;
-import com.golden.gamedev.object.background.BoundedBackground;
+import com.golden.gamedev.object.background.ImmutableBackground;
+import com.golden.gamedev.util.Utility;
 
 /**
  * Group of sprites with common behaviour, for example PLAYER_GROUP,
@@ -43,6 +46,10 @@ import com.golden.gamedev.object.background.BoundedBackground;
  * For example how to create and use sprite group :
  * 
  * <pre>
+ * 
+ * 
+ * 
+ * 
  * 
  * 
  * 
@@ -93,7 +100,8 @@ public class SpriteGroup implements Updateable, Renderable, BackgroundHolder,
 	private int expandFactor = 20;
 	
 	// removes inactive sprites every 15 seconds
-	private Timer scanFrequence = new Timer(15000);
+	private Timer scanFrequence = new SerializableTimer(15000,
+	        NullActionExecutor.INSTANCE);
 	
 	/**
 	 * ************************ GROUP PROPERTIES *******************************
@@ -129,7 +137,7 @@ public class SpriteGroup implements Updateable, Renderable, BackgroundHolder,
 	 */
 	public SpriteGroup(String name) {
 		this.name = name;
-		this.background = BoundedBackground.PLACEHOLDER;
+		this.background = ImmutableBackground.INSTANCE;
 		
 		this.sprites = new Sprite[this.expandFactor];
 	}
@@ -508,7 +516,7 @@ public class SpriteGroup implements Updateable, Renderable, BackgroundHolder,
 	public void setBackground(Background backgr) {
 		this.background = backgr;
 		if (this.background == null) {
-			this.background = BoundedBackground.PLACEHOLDER;
+			this.background = ImmutableBackground.INSTANCE;
 		}
 		
 		// force all sprites to use a same background

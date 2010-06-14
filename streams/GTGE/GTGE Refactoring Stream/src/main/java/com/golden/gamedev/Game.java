@@ -47,12 +47,13 @@ import com.golden.gamedev.engine.audio.WaveRenderer;
 import com.golden.gamedev.engine.input.AWTInput;
 import com.golden.gamedev.engine.timer.SystemTimer;
 import com.golden.gamedev.funbox.ErrorNotificationDialog;
-import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.GameFont;
 import com.golden.gamedev.object.GameFontManager;
 import com.golden.gamedev.object.PlayField;
 import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
+import com.golden.gamedev.object.background.Background;
+import com.golden.gamedev.object.background.BoundedBackground;
 import com.golden.gamedev.util.ImageUtil;
 import com.golden.gamedev.util.Utility;
 
@@ -106,6 +107,8 @@ import com.golden.gamedev.util.Utility;
  * 
  * 
  * 
+ * 
+ * 
  * </pre>
  * 
  * <p>
@@ -134,6 +137,8 @@ import com.golden.gamedev.util.Utility;
  *          game.start();
  *       }
  * }
+ * 
+ * 
  * 
  * 
  * 
@@ -654,6 +659,8 @@ public abstract class Game implements Updateable, Renderable {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
 	 * protected void initEngine() {
 	 * 	super.initEngine();
 	 * 	// change the timer engine
@@ -702,7 +709,7 @@ public abstract class Game implements Updateable, Renderable {
 		this.bsTimer.setFPS(Game.DEFAULT_FPS);
 		
 		// set background screen size
-		Background.screen = this.bsGraphics.getSize();
+		BoundedBackground.screen = this.bsGraphics.getSize();
 		
 		// creates font manager
 		if (this.fontManager == null) {
@@ -898,6 +905,8 @@ public abstract class Game implements Updateable, Renderable {
 	 * For example:
 	 * 
 	 * <pre>
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 
@@ -1616,6 +1625,8 @@ public abstract class Game implements Updateable, Renderable {
 	 * For example:
 	 * 
 	 * <pre>
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 

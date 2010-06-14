@@ -20,14 +20,17 @@ package com.golden.gamedev.object.background;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import com.golden.gamedev.object.Background;
-
 /**
  * Background that use a single image as the background. As of 0.2.4, the
  * {@link ImageBackground} class is marked as final - it is not suitable for
  * extension by subclasses.
+ * 
+ * <br />
+ * <br />
+ * As of 0.2.4, {@link ImageBackground} extends {@link BoundedBackground}
+ * directly.
  */
-public final class ImageBackground extends Background {
+public final class ImageBackground extends BoundedBackground {
 	
 	/**
 	 * 

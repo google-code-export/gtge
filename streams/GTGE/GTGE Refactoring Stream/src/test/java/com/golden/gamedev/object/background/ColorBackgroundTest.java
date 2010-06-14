@@ -8,7 +8,6 @@ import java.awt.Rectangle;
 
 import junit.framework.TestCase;
 
-import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.MockGraphics2D;
 
 /**
@@ -75,8 +74,8 @@ public final class ColorBackgroundTest extends TestCase {
 		assertNotNull(clip);
 		assertEquals(0, clip.getX(), 0);
 		assertEquals(0, clip.getY(), 0);
-		assertEquals(Background.screen.height, clip.getHeight(), 0);
-		assertEquals(Background.screen.width, clip.getWidth(), 0);
+		assertEquals(BoundedBackground.screen.height, clip.getHeight(), 0);
+		assertEquals(BoundedBackground.screen.width, clip.getWidth(), 0);
 		
 		background = new ColorBackground(Color.BLUE, 100, 100);
 		assertNotNull(background);
@@ -89,8 +88,8 @@ public final class ColorBackgroundTest extends TestCase {
 		assertNotNull(clip);
 		assertEquals(0, clip.getX(), 0);
 		assertEquals(0, clip.getY(), 0);
-		assertEquals(Background.screen.height, clip.getHeight(), 0);
-		assertEquals(Background.screen.width, clip.getWidth(), 0);
+		assertEquals(BoundedBackground.screen.height, clip.getHeight(), 0);
+		assertEquals(BoundedBackground.screen.width, clip.getWidth(), 0);
 	}
 	
 	/**
@@ -103,27 +102,27 @@ public final class ColorBackgroundTest extends TestCase {
 		assertNull(background.getColor());
 		assertEquals(0, background.getX(), 0);
 		assertEquals(0, background.getY(), 0);
-		assertEquals(Background.screen.height, background.getHeight());
-		assertEquals(Background.screen.width, background.getWidth());
+		assertEquals(BoundedBackground.screen.height, background.getHeight());
+		assertEquals(BoundedBackground.screen.width, background.getWidth());
 		Rectangle clip = background.getClip();
 		assertNotNull(clip);
 		assertEquals(0, clip.getX(), 0);
 		assertEquals(0, clip.getY(), 0);
-		assertEquals(Background.screen.height, clip.getHeight(), 0);
-		assertEquals(Background.screen.width, clip.getWidth(), 0);
+		assertEquals(BoundedBackground.screen.height, clip.getHeight(), 0);
+		assertEquals(BoundedBackground.screen.width, clip.getWidth(), 0);
 		
 		background = new ColorBackground(Color.RED);
 		assertTrue(Color.RED == background.getColor());
 		assertEquals(0, background.getX(), 0);
 		assertEquals(0, background.getY(), 0);
-		assertEquals(Background.screen.height, background.getHeight());
-		assertEquals(Background.screen.width, background.getWidth());
+		assertEquals(BoundedBackground.screen.height, background.getHeight());
+		assertEquals(BoundedBackground.screen.width, background.getWidth());
 		clip = background.getClip();
 		assertNotNull(clip);
 		assertEquals(0, clip.getX(), 0);
 		assertEquals(0, clip.getY(), 0);
-		assertEquals(Background.screen.height, clip.getHeight(), 0);
-		assertEquals(Background.screen.width, clip.getWidth(), 0);
+		assertEquals(BoundedBackground.screen.height, clip.getHeight(), 0);
+		assertEquals(BoundedBackground.screen.width, clip.getWidth(), 0);
 		
 	}
 	

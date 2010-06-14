@@ -27,8 +27,11 @@ import com.golden.gamedev.BackgroundHolder;
 import com.golden.gamedev.BufferedImageHolder;
 import com.golden.gamedev.Renderable;
 import com.golden.gamedev.Updateable;
+import com.golden.gamedev.object.background.BoundedBackground;
 import com.golden.gamedev.object.collision.CollisionRect;
 import com.golden.gamedev.object.collision.CollisionShape;
+import com.golden.gamedev.object.collision.Dimensionable;
+import com.golden.gamedev.object.background.Background;
 
 /**
  * <code>Sprite</code> is the object in game that has graphical look and has its
@@ -36,7 +39,7 @@ import com.golden.gamedev.object.collision.CollisionShape;
  * <p>
  * 
  * Every sprite is lived in a background, by default sprite is attached to
- * {@linkplain Background#getDefaultBackground default background}, always
+ * {@linkplain BoundedBackground#PLACEHOLDER default background}, always
  * remember to set the sprite to the game background or use {@link SpriteGroup}
  * class in {@link PlayField} to take care the sprite background set
  * automatically.
@@ -171,7 +174,7 @@ public class Sprite implements Serializable, Updateable, Renderable,
 			this.height = image.getHeight();
 		}
 		
-		this.background = Background.getDefaultBackground();
+		this.background = BoundedBackground.PLACEHOLDER;
 	}
 	
 	/**
@@ -228,7 +231,7 @@ public class Sprite implements Serializable, Updateable, Renderable,
 	public void setBackground(Background backgr) {
 		this.background = backgr;
 		if (this.background == null) {
-			this.background = Background.getDefaultBackground();
+			this.background = BoundedBackground.PLACEHOLDER;
 		}
 	}
 	
@@ -290,7 +293,7 @@ public class Sprite implements Serializable, Updateable, Renderable,
 	 *             {@link CollisionShape} instance directly. This method will be
 	 *             removed in 0.2.5.
 	 */
-	public CollisionShape getDefaultCollisionShape() {
+	public Dimensionable getDefaultCollisionShape() {
 		this.defaultCollisionShape.setBounds(this.x, this.y, this.width,
 		        this.height);
 		
@@ -680,6 +683,10 @@ public class Sprite implements Serializable, Updateable, Renderable,
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * Sprite s;
 	 * 
 	 * public void update(long elapsedTime) {
@@ -727,6 +734,10 @@ public class Sprite implements Serializable, Updateable, Renderable,
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 

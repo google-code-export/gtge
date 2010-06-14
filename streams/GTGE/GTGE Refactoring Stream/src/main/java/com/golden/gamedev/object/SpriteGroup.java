@@ -26,6 +26,8 @@ import com.golden.gamedev.BackgroundHolder;
 import com.golden.gamedev.Renderable;
 import com.golden.gamedev.Updateable;
 import com.golden.gamedev.util.Utility;
+import com.golden.gamedev.object.background.Background;
+import com.golden.gamedev.object.background.BoundedBackground;
 
 /**
  * Group of sprites with common behaviour, for example PLAYER_GROUP,
@@ -41,6 +43,8 @@ import com.golden.gamedev.util.Utility;
  * For example how to create and use sprite group :
  * 
  * <pre>
+ * 
+ * 
  * 
  * 
  * 
@@ -125,7 +129,7 @@ public class SpriteGroup implements Updateable, Renderable, BackgroundHolder,
 	 */
 	public SpriteGroup(String name) {
 		this.name = name;
-		this.background = Background.getDefaultBackground();
+		this.background = BoundedBackground.PLACEHOLDER;
 		
 		this.sprites = new Sprite[this.expandFactor];
 	}
@@ -504,7 +508,7 @@ public class SpriteGroup implements Updateable, Renderable, BackgroundHolder,
 	public void setBackground(Background backgr) {
 		this.background = backgr;
 		if (this.background == null) {
-			this.background = Background.getDefaultBackground();
+			this.background = BoundedBackground.PLACEHOLDER;
 		}
 		
 		// force all sprites to use a same background

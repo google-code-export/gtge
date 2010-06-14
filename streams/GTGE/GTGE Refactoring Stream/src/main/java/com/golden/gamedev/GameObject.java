@@ -30,10 +30,10 @@ import com.golden.gamedev.engine.BaseIO;
 import com.golden.gamedev.engine.BaseInput;
 import com.golden.gamedev.engine.BaseLoader;
 import com.golden.gamedev.engine.BaseTimer;
-import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.GameFont;
 import com.golden.gamedev.object.GameFontManager;
 import com.golden.gamedev.object.Sprite;
+import com.golden.gamedev.object.background.Background;
 import com.golden.gamedev.util.ImageUtil;
 import com.golden.gamedev.util.Utility;
 
@@ -634,6 +634,7 @@ public abstract class GameObject implements Updateable, Renderable {
 	 * For example:
 	 * 
 	 * <pre>
+	 * 
 	 * 
 	 * 
 	 * 

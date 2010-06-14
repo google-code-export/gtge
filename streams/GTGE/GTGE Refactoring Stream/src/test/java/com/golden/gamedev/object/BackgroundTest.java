@@ -94,6 +94,11 @@ public class BackgroundTest extends TestCase {
 	 */
 	public final void testGetX() {
 		assertEquals(0, background.getX(), 0);
+		background.setX(0);
+		// X is constrained - background is at maximum possible value for
+		// background width.
+		assertEquals(0, background.getX(), 0);
+		background.setWidth(Background.screen.width + 50);
 		background.setX(50);
 		assertEquals(50, background.getX(), 0);
 	}
@@ -103,6 +108,11 @@ public class BackgroundTest extends TestCase {
 	 */
 	public final void testGetY() {
 		assertEquals(0, background.getY(), 0);
+		background.setY(0);
+		// Y is constrained - background is at maximum possible value for
+		// background height.
+		assertEquals(0, background.getY(), 0);
+		background.setHeight(Background.screen.height + 50);
 		background.setY(50);
 		assertEquals(50, background.getY(), 0);
 	}
@@ -322,9 +332,13 @@ public class BackgroundTest extends TestCase {
 	 */
 	public final void testSetX() {
 		assertEquals(0, background.getX(), 0);
+		background.setX(0);
+		// X is constrained - background is at maximum possible value for
+		// background width.
+		assertEquals(0, background.getX(), 0);
+		background.setWidth(Background.screen.width + 50);
 		background.setX(50);
 		assertEquals(50, background.getX(), 0);
-		// TODO: add bounds assertions
 	}
 	
 	/**
@@ -333,9 +347,13 @@ public class BackgroundTest extends TestCase {
 	 */
 	public final void testSetY() {
 		assertEquals(0, background.getY(), 0);
+		background.setY(0);
+		// Y is constrained - background is at maximum possible value for
+		// background height.
+		assertEquals(0, background.getY(), 0);
+		background.setHeight(Background.screen.height + 50);
 		background.setY(50);
 		assertEquals(50, background.getY(), 0);
-		// TODO: add bounds assertions
 	}
 	
 	/**
@@ -462,7 +480,22 @@ public class BackgroundTest extends TestCase {
 		assertEquals(50, background.getY(), 0);
 		assertEquals(50, background.getHeight());
 		assertEquals(50, background.getWidth());
-		// TODO: add bounds checking.
+		Rectangle clip = background.getClip();
+		assertEquals(50, clip.getX(), 0);
+		assertEquals(50, clip.getY(), 0);
+		assertEquals(50, clip.getHeight(), 0);
+		assertEquals(50, clip.getWidth(), 0);
+		
+		background.setBounds(50, 50, 100, 100);
+		assertEquals(50, background.getX(), 0);
+		assertEquals(50, background.getY(), 0);
+		assertEquals(100, background.getHeight());
+		assertEquals(100, background.getWidth());
+		clip = background.getClip();
+		assertEquals(50, clip.getX(), 0);
+		assertEquals(50, clip.getY(), 0);
+		assertEquals(100, clip.getHeight(), 0);
+		assertEquals(100, clip.getWidth(), 0);
 	}
 	
 	/**

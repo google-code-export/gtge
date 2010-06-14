@@ -42,7 +42,7 @@ import com.golden.gamedev.Positionable;
  * 
  * @version 2.0
  */
-public interface CollisionShape extends Positionable, Serializable {
+public interface CollisionShape extends Dimensionable, Serializable {
 	
 	/**
 	 * Returns whether this collision shape intersects with other collision
@@ -66,11 +66,6 @@ public interface CollisionShape extends Positionable, Serializable {
 	public void setBounds(double x1, double y1, int w1, int h1);
 	
 	/**
-	 * Returns the width of this collision shape.
-	 */
-	public int getWidth();
-	
-	/**
 	 * Sets the width of this {@link CollisionShape} instance.
 	 * @param width The width of this {@link CollisionShape} instance.
 	 * @since 0.2.4
@@ -78,15 +73,9 @@ public interface CollisionShape extends Positionable, Serializable {
 	void setWidth(final int width);
 	
 	/**
-	 * Returns the height of this collision shape.
-	 */
-	public int getHeight();
-	
-	/**
 	 * Sets the height of this {@link CollisionShape} instance.
 	 * @param height The height of this {@link CollisionShape} instance.
 	 * @since 0.2.4
 	 */
 	void setHeight(final int height);
-	
 }

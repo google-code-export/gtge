@@ -21,6 +21,8 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.util.Comparator;
 
+import com.golden.gamedev.object.background.Background;
+
 /**
  * Subclass of <code>SpriteGroup</code> that designed to update and render
  * visible on the screen sprites only.

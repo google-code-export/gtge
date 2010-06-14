@@ -20,8 +20,6 @@ package com.golden.gamedev.object.background;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import com.golden.gamedev.object.Background;
-
 /**
  * The very basic background type that only fill the background view port with a
  * single color.
@@ -74,8 +72,13 @@ import com.golden.gamedev.object.Background;
  * This is no longer needed, making code that uses the {@link ColorBackground}
  * class easier to use via removing the side-effect.
  * 
+ * <br />
+ * <br />
+ * As of 0.2.4, {@link ColorBackground} extends the {@link BoundedBackground}
+ * class directly.
+ * 
  */
-public final class ColorBackground extends Background {
+public final class ColorBackground extends BoundedBackground {
 	
 	/**
 	 * 
@@ -105,7 +108,8 @@ public final class ColorBackground extends Background {
 	 * Creates new <code>ColorBackground</code> as large as screen dimension.
 	 */
 	public ColorBackground(Color bgColor) {
-		this(bgColor, Background.screen.width, Background.screen.height);
+		this(bgColor, BoundedBackground.screen.width,
+		        BoundedBackground.screen.height);
 	}
 	
 	/**

@@ -3,9 +3,8 @@
  */
 package com.golden.gamedev;
 
-import com.golden.gamedev.object.Background;
+import com.golden.gamedev.object.background.Background;
 
-// TODO: when Background is converted to an interface, alter this interface to provide for a Background as an interface.
 /**
  * The {@link BackgroundHolder} interface defines an {@link Object} that can
  * store and retrieve a {@link Background} instance.

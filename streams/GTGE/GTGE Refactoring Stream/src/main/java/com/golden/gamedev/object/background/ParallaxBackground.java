@@ -19,8 +19,6 @@ package com.golden.gamedev.object.background;
 // JFC
 import java.awt.Graphics2D;
 
-import com.golden.gamedev.object.Background;
-
 /**
  * <code>ParallaxBackground</code> class is a background composed by several
  * backgrounds.
@@ -47,8 +45,13 @@ import com.golden.gamedev.object.Background;
  * });
  * // bg1 is at the back of bg2 and bg2 is at the back of bg3
  * </pre>
+ * 
+ * <br />
+ * <br />
+ * As of 0.2.4, {@link ParallaxBackground} extends {@link BoundedBackground}
+ * directly.
  */
-public class ParallaxBackground extends Background {
+public class ParallaxBackground extends BoundedBackground {
 	
 	/**
 	 * 
@@ -118,7 +121,7 @@ public class ParallaxBackground extends Background {
 		}
 	}
 	
-	public void render(Graphics2D g) {
+	public void render(Graphics2D g, int xbg, int ybg, int x, int y, int w, int h) {
 		for (int i = 0; i < this.total; i++) {
 			this.stack[i].render(g);
 		}

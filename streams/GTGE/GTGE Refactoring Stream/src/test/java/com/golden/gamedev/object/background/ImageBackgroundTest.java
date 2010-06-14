@@ -6,10 +6,9 @@ package com.golden.gamedev.object.background;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import com.golden.gamedev.object.Background;
-import com.golden.gamedev.object.MockGraphics2D;
-
 import junit.framework.TestCase;
+
+import com.golden.gamedev.object.MockGraphics2D;
 
 /**
  * The {@link ImageBackgroundTest} class provides a {@link TestCase} to test the
@@ -93,8 +92,8 @@ public final class ImageBackgroundTest extends TestCase {
 		assertNotNull(clip);
 		assertEquals(0, clip.getX(), 0);
 		assertEquals(0, clip.getY(), 0);
-		assertEquals(Background.screen.height, clip.getHeight(), 0);
-		assertEquals(Background.screen.width, clip.getWidth(), 0);
+		assertEquals(BoundedBackground.screen.height, clip.getHeight(), 0);
+		assertEquals(BoundedBackground.screen.width, clip.getWidth(), 0);
 		assertTrue(image == background.getImage());
 	}
 	
@@ -113,8 +112,8 @@ public final class ImageBackgroundTest extends TestCase {
 		assertNotNull(clip);
 		assertEquals(0, clip.getX(), 0);
 		assertEquals(0, clip.getY(), 0);
-		assertEquals(Background.screen.height, clip.getHeight(), 0);
-		assertEquals(Background.screen.width, clip.getWidth(), 0);
+		assertEquals(BoundedBackground.screen.height, clip.getHeight(), 0);
+		assertEquals(BoundedBackground.screen.width, clip.getWidth(), 0);
 		assertTrue(image == background.getImage());
 	}
 	

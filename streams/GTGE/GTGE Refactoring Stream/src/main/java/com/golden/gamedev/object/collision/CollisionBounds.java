@@ -19,7 +19,6 @@ package com.golden.gamedev.object.collision;
 // JFC
 import java.awt.Rectangle;
 
-import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.CollisionManager;
 import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
@@ -89,11 +88,13 @@ public abstract class CollisionBounds extends CollisionManager {
 	}
 	
 	/**
-	 * Creates new <code>CollisionBounds</code> with specified background as the
-	 * boundary.
+	 * Creates new <code>CollisionBounds</code> using the specified
+	 * {@link Dimensionable} instance to retrieve the boundary width and height,
+	 * and 0,0 for the starting x and y coordinates.
 	 */
-	public CollisionBounds(Background backgr) {
-		this.boundary.setBounds(0, 0, backgr.getWidth(), backgr.getHeight());
+	public CollisionBounds(Dimensionable dimensionable) {
+		this.boundary.setBounds(0, 0, dimensionable.getWidth(), dimensionable
+		        .getHeight());
 	}
 	
 	public void setCollisionGroup(SpriteGroup group1, SpriteGroup group2) {
@@ -180,6 +181,11 @@ public abstract class CollisionBounds extends CollisionManager {
 	 * <code>Sprite</code> dimension :
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 

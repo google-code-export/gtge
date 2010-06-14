@@ -71,7 +71,7 @@ public class CachedTileBackground extends TileBackground {
 	 * 
 	 * @param g
 	 */
-	public void render(Graphics2D g) {
+	public void render(Graphics2D g, int xbg, int ybg, int x, int y, int w, int h) {
 		if (!this.validated) {
 			// render the background in a big managed image
 			super.render(this.cache.createGraphics());

@@ -21,6 +21,7 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.util.Comparator;
 
+import com.golden.gamedev.Resettable;
 import com.golden.gamedev.object.background.Background;
 
 /**
@@ -206,6 +207,12 @@ public class AdvanceSpriteGroup extends SpriteGroup {
 		return super.remove(s);
 	}
 	
+	/**
+	 * @deprecated This method is unneeded - {@link #reset()} is used
+	 *             consistently throughout GTGE (see {@link Resettable}) and
+	 *             this method will be removed with no direct replacement in
+	 *             0.2.5.
+	 */
 	public void clear() {
 		super.clear();
 		

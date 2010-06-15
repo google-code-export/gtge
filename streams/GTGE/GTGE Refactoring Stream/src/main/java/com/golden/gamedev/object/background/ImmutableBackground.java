@@ -11,7 +11,10 @@ import java.io.Serializable;
  * Pattern</a> for the {@link BaseBackground} interface - it is completely
  * immutable after it is constructed and all its operations do not affect any
  * state. The {@link ImmutableBackground} class will always have 0 for its
- * {@link #setBounds(double, double, int, int) bounds}.
+ * {@link #setBounds(double, double, int, int) bounds}. <br />
+ * <br />
+ * This class is mainly for use within the GTGE framework, but it may be used
+ * wherever a do-nothing background is desired.
  * 
  * @author MetroidFan2002
  * @version 1.0

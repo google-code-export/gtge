@@ -25,6 +25,7 @@ import com.golden.gamedev.ActiveHolder;
 import com.golden.gamedev.BackgroundHolder;
 import com.golden.gamedev.NullActionExecutor;
 import com.golden.gamedev.Renderable;
+import com.golden.gamedev.Resettable;
 import com.golden.gamedev.Updateable;
 import com.golden.gamedev.engine.timer.SerializableTimer;
 import com.golden.gamedev.engine.timer.Timer;
@@ -46,6 +47,9 @@ import com.golden.gamedev.util.Utility;
  * For example how to create and use sprite group :
  * 
  * <pre>
+ * 
+ * 
+ * 
  * 
  * 
  * 
@@ -89,7 +93,7 @@ import com.golden.gamedev.util.Utility;
  * @see com.golden.gamedev.object.collision.CollisionGroup
  */
 public class SpriteGroup implements Updateable, Renderable, BackgroundHolder,
-        ActiveHolder {
+        ActiveHolder, Resettable {
 	
 	/**
 	 * *********************** GROUP SPRITE FACTOR *****************************
@@ -236,7 +240,9 @@ public class SpriteGroup implements Updateable, Renderable, BackgroundHolder,
 			System.arraycopy(this.sprites, index + 1, this.sprites, index,
 			        numMoved);
 		}
-		this.sprites[--this.size] = null;
+		final int newSize = size - 1;
+		this.sprites[newSize] = null;
+		this.size = newSize;
 		
 		return removedSprite;
 	}
@@ -294,6 +300,10 @@ public class SpriteGroup implements Updateable, Renderable, BackgroundHolder,
 	 * {@link #reset()} instead.
 	 * 
 	 * @see #reset()
+	 * @deprecated This method is unneeded - {@link #reset()} is used
+	 *             consistently throughout GTGE (see {@link Resettable}) and
+	 *             this method will be removed with no direct replacement in
+	 *             0.2.5.
 	 */
 	public void clear() {
 		this.size = 0;

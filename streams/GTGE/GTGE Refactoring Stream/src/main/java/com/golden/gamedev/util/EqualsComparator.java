@@ -27,9 +27,15 @@ public final class EqualsComparator implements Comparator, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * Creates a new {@link EqualsComparator} instance.
+	 * The singleton instance of the {@link EqualsComparator} class.
 	 */
-	public EqualsComparator() {
+	public static final Comparator INSTANCE = new EqualsComparator();
+	
+	/**
+	 * Creates a new {@link EqualsComparator} instance, marked private to avoid
+	 * instantiation except via the {@link #INSTANCE singleton instance}.€€€
+	 */
+	private EqualsComparator() {
 		super();
 	}
 	
@@ -37,4 +43,25 @@ public final class EqualsComparator implements Comparator, Serializable {
 		return 0;
 	}
 	
+	/**
+	 * Specialized hidden method defined via the {@link Serializable} interface
+	 * documentation - reads only the singleton {@link #INSTANCE} from the
+	 * bytestream each time a {@link EqualsComparator} instance is de-serialized
+	 * in.
+	 * @return Returns the singleton {@link #INSTANCE}.
+	 */
+	private Object readResolve() {
+		return INSTANCE;
+	}
+	
+	/**
+	 * Specialized hidden method defined via the {@link Serializable} interface
+	 * documentation - writes only the singleton {@link #INSTANCE} to the
+	 * bytestream each time an {@link EqualsComparator} instance is serialized
+	 * out.
+	 * @return Returns the singleton {@link #INSTANCE}.
+	 */
+	private Object writeReplace() {
+		return INSTANCE;
+	}
 }

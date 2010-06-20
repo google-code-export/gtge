@@ -46,23 +46,23 @@ public final class NullActionExecutor implements ActionExecutor, Serializable {
 	
 	/**
 	 * Specialized hidden method defined via the {@link Serializable} interface
+	 * documentation - reads only the singleton {@link #INSTANCE} from the
+	 * bytestream each time a {@link NullActionExecutor} instance is
+	 * de-serialized in.
+	 * @return Returns the singleton {@link #INSTANCE}.
+	 */
+	private Object readResolve() {
+		return INSTANCE;
+	}
+	
+	/**
+	 * Specialized hidden method defined via the {@link Serializable} interface
 	 * documentation - writes only the singleton {@link #INSTANCE} to the
 	 * bytestream each time a {@link NullActionExecutor} instance is serialized
 	 * out.
 	 * @return Returns the singleton {@link #INSTANCE}.
 	 */
 	private Object writeReplace() {
-		return INSTANCE;
-	}
-	
-	/**
-	 * Specialized hidden method defined via the {@link Serializable} interface
-	 * documentation - reads only the singleton {@link #INSTANCE} from the
-	 * bytestream each time a {@link NullActionExecutor} instance is serialized
-	 * in.
-	 * @return Returns the singleton {@link #INSTANCE}.
-	 */
-	private Object readResolve() {
 		return INSTANCE;
 	}
 }

@@ -50,6 +50,12 @@ public class NullActionExecutorTest extends TestCase {
 		executor.execute();
 	}
 	
+	/**
+	 * Tests that serialization and deserialization only serialize and
+	 * deserialize the singleton instance.
+	 * 
+	 * @throws Exception
+	 */
 	public final void testSerializationAndDeserialization() throws Exception {
 		ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
 		ObjectOutputStream outputStream = new ObjectOutputStream(

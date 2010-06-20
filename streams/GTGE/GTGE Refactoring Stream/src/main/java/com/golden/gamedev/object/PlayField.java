@@ -57,7 +57,7 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 	private SpriteGroup[] groups;
 	private CollisionManager[] collisions;
 	
-	private Comparator comparator = new EqualsComparator();
+	private Comparator comparator = EqualsComparator.INSTANCE;
 	
 	/**
 	 * *************************************************************************
@@ -126,6 +126,9 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 
@@ -496,7 +499,7 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 	 * invoked.
 	 */
 	protected void renderSpriteGroups(Graphics2D g, Comparator c) {
-		boolean listWillBeSorted = !(c instanceof EqualsComparator);
+		boolean listWillBeSorted = !(c == EqualsComparator.INSTANCE);
 		List activeAndOnScreenSpritesToRender = listWillBeSorted ? (List) new ArrayList()
 		        : new LinkedList();
 		for (int i = 0; i < this.groups.length; i++) {
@@ -634,6 +637,6 @@ public class PlayField implements Updateable, Renderable, BackgroundHolder {
 	 *      java.util.Comparator)
 	 */
 	public final void setComparator(Comparator c) {
-		this.comparator = (c == null) ? new EqualsComparator() : c;
+		this.comparator = (c == null) ? EqualsComparator.INSTANCE : c;
 	}
 }

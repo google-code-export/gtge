@@ -23,6 +23,16 @@ import java.awt.image.VolatileImage;
 
 import com.golden.gamedev.engine.BaseGraphics;
 
+/**
+ * @deprecated The {@link CachedTileBackground} class is deprecated with no
+ *             direct replacement - caching the background as it attempts to do
+ *             is inefficient for all but the most simple of applications (where
+ *             the background does not move), and furthermore, attempts to
+ *             invoke {@link #render(Graphics2D)} will result in a
+ *             {@link StackOverflowError} due to recursion issues. The
+ *             {@link CachedTileBackground} class will be removed in 0.2.4.
+ * @since 0.2.3
+ */
 public class CachedTileBackground extends TileBackground {
 	
 	/**
@@ -37,6 +47,8 @@ public class CachedTileBackground extends TileBackground {
 	/**
 	 * Create a regular TileBackground using the bsGraphics to generate a big
 	 * managed image to cache the rending.
+	 * @deprecated The {@link CachedTileBackground} class is deprecated and will
+	 *             be removed in 0.2.4.
 	 */
 	public CachedTileBackground(BaseGraphics bsGraphics,
 	        BufferedImage images[], int tiles[][]) {
@@ -52,12 +64,18 @@ public class CachedTileBackground extends TileBackground {
 	 * 
 	 * The cache is valid if : 1) It was already valid and 2) The background did
 	 * not move.
+	 * @deprecated The {@link CachedTileBackground} class is deprecated and will
+	 *             be removed in 0.2.4.
 	 */
 	protected void checkMutations() {
 		this.validated = this.validated && this.oldX == this.getX()
 		        && this.oldY == this.getY();
 	}
 	
+	/**
+	 * @deprecated The {@link CachedTileBackground} class is deprecated and will
+	 *             be removed in 0.2.4.
+	 */
 	public void update(long elapsedTime) {
 		super.update(elapsedTime);
 		
@@ -70,6 +88,8 @@ public class CachedTileBackground extends TileBackground {
 	 * screen.
 	 * 
 	 * @param g
+	 * @deprecated The {@link CachedTileBackground} class is deprecated and will
+	 *             be removed in 0.2.4.
 	 */
 	public void render(Graphics2D g, int xbg, int ybg, int x, int y, int w, int h) {
 		if (!this.validated) {

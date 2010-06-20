@@ -5,6 +5,9 @@ package com.golden.gamedev.engine.input;
 
 import java.awt.Button;
 import java.awt.Component;
+import java.awt.image.VolatileImage;
+
+import com.golden.gamedev.MockVolatileImage;
 
 /**
  * The {@link MockComponent} class provides a mock implementation of the
@@ -44,5 +47,11 @@ public final class MockComponent extends Button {
 	public void setFocusTraversalKeysEnabled(boolean focusTraversalKeysEnabled) {
 		super.setFocusTraversalKeysEnabled(focusTraversalKeysEnabled);
 		this.focusTraversalKeysEnabled = focusTraversalKeysEnabled;
+	}
+	
+	public VolatileImage createVolatileImage(int width, int height) {
+		MockVolatileImage image = new MockVolatileImage();
+		// TODO: if needed, set the width and height.
+		return image;
 	}
 }

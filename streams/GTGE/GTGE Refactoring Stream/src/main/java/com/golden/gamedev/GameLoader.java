@@ -66,6 +66,8 @@ import com.golden.gamedev.funbox.ErrorNotificationDialog;
  * 
  * 
  * 
+ * 
+ * 
  * </pre>
  * 
  * <p>
@@ -74,6 +76,8 @@ import com.golden.gamedev.funbox.ErrorNotificationDialog;
  * override {@link #createAppletGame()} method to return the actual game :
  * 
  * <pre>
+ * 
+ * 
  * 
  * 
  * 
@@ -369,6 +373,8 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
 	 * public class YourGameApplet extends GameLoader {
 	 * 	
 	 * 	protected Game createAppletGame() {
@@ -443,7 +449,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 				try {
 					mode = new FullScreenMode(d, bufferstrategy);
 					mode.getFrame().removeWindowListener(
-					        WindowExitListener.getInstance());
+					        WindowExitListener.INSTANCE);
 					mode.getFrame().addWindowListener(this);
 					
 					this.gfx = mode;
@@ -469,7 +475,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 				// windowed mode
 				WindowedMode mode = new WindowedMode(d, bufferstrategy);
 				mode.getFrame().removeWindowListener(
-				        WindowExitListener.getInstance());
+				        WindowExitListener.INSTANCE);
 				mode.getFrame().addWindowListener(this);
 				
 				this.gfx = mode;

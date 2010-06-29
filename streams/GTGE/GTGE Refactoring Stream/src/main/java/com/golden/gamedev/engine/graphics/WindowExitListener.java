@@ -29,20 +29,40 @@ import java.awt.event.WindowListener;
  * 
  * This window listener is used by all <code>java.awt.Frame</code> class in this
  * graphics engine package.
+ * </p>
+ * <br />
+ * <br />
+ * 
+ * As of 0.2.4, {@link WindowExitListener} has been altered to extend the
+ * {@link WindowAdapter} class instead of implementing {@link WindowListener}
+ * directly, but its functionality remains the same and is backwards-compatible
+ * with the 0.2.3 version.
  */
 public final class WindowExitListener extends WindowAdapter {
 	
-	private static final WindowListener singleton = new WindowExitListener();
+	/**
+	 * The singleton instance of the {@link WindowExitListener} class to use.
+	 */
+	public static final WindowListener INSTANCE = new WindowExitListener();
 	
 	/**
 	 * Returns <code>WindowExitListener</code> singleton instance.
 	 * @return The singleton instance.
+	 * @deprecated As of 0.2.4, this method is deprecated with no direct
+	 *             replacement - use {@link #INSTANCE} directly as an
+	 *             alternative to invoking this method. This method will be
+	 *             removed in 0.2.5.
 	 */
 	public static WindowListener getInstance() {
-		return WindowExitListener.singleton;
+		return WindowExitListener.INSTANCE;
 	}
 	
+	/**
+	 * Creates a new {@link WindowExitListener} instance, marked private to
+	 * avoid instantiation except via the singleton {@link #INSTANCE}.
+	 */
 	private WindowExitListener() {
+		super();
 	}
 	
 	/**

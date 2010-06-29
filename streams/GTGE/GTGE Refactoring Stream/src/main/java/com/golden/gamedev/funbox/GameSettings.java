@@ -64,6 +64,7 @@ import com.golden.gamedev.util.ImageUtil;
  * 
  * 
  * 
+ * 
  * GameSettings settings = new GameSettings() {
  * 	
  * 	public void start() {
@@ -180,7 +181,7 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 		
 		// init dialog
 		this.setResizable(false);
-		this.addWindowListener(WindowExitListener.getInstance());
+		this.addWindowListener(WindowExitListener.INSTANCE);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		
 		// init GUI
@@ -262,6 +263,7 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 	 * 
 	 * 
 	 * 
+	 * 
 	 * protected JPanel initGUI() {
 	 * 	JPanel pane = super.initGUI();
 	 * 	// modify launch panel, add Credits button
@@ -330,6 +332,7 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
 	 * 
 	 * 
 	 * 

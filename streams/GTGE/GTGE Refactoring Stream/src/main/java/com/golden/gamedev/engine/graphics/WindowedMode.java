@@ -109,7 +109,7 @@ public class WindowedMode implements BaseGraphics {
 		catch (Exception e) {
 		}
 		
-		this.frame.addWindowListener(WindowExitListener.getInstance());
+		this.frame.addWindowListener(WindowExitListener.INSTANCE);
 		this.frame.setResizable(false); // non resizable frame
 		this.frame.setIgnoreRepaint(true); // turn off all paint events
 		// since we doing active rendering

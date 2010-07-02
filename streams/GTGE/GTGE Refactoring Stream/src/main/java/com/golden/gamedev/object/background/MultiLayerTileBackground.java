@@ -49,7 +49,7 @@ import com.golden.gamedev.object.background.abstraction.AbstractTileBackground;
  * 	}
  * // create the background
  * background = new TileBackground(tileImages, tiles, tileImages[0].getWidth(),
- * 		tileImages[0].getHeight());
+ *         tileImages[0].getHeight());
  * </pre>
  * 
  * @see com.golden.gamedev.object.background.abstraction.AbstractTileBackground
@@ -58,7 +58,7 @@ import com.golden.gamedev.object.background.abstraction.AbstractTileBackground;
  * 
  */
 public class MultiLayerTileBackground extends AbstractTileBackground {
-
+	
 	/**
 	 * Default serial version ID, here to remove warnings.
 	 */
@@ -71,7 +71,7 @@ public class MultiLayerTileBackground extends AbstractTileBackground {
 	 * Images each tile in this background index
 	 */
 	private transient BufferedImage[] imgs;
-
+	
 	/**
 	 * Constructs a new <code>MultiLayerTileBackground</code> using the
 	 * specified array of images, tiles, and tile dimensions.
@@ -81,30 +81,25 @@ public class MultiLayerTileBackground extends AbstractTileBackground {
 	 * tiles. For example: tiles[0][0][0] = 2, tiles[0][0][1] = 3 implies image
 	 * imgs[2] will be rendered beneath imgs[3].
 	 * 
-	 * @param imgs
-	 *            specified array of images for this background
-	 * @param tiles
-	 *            specified array mapping to images in this background
-	 * @param tileWidth
-	 *            tile width of a single tile
-	 * @param tileHeight
-	 *            tile height of a single tile
+	 * @param imgs specified array of images for this background
+	 * @param tiles specified array mapping to images in this background
+	 * @param tileWidth tile width of a single tile
+	 * @param tileHeight tile height of a single tile
 	 */
 	public MultiLayerTileBackground(BufferedImage[] imgs, int[][][] tiles,
-			int tileWidth, int tileHeight) {
+	        int tileWidth, int tileHeight) {
 		super(tiles.length, tiles[0].length, tileWidth, tileHeight);
 		this.imgs = imgs;
 		this.tiles = tiles;
 	}
-
-	@Override
+	
 	public void renderTile(Graphics2D g, int tileX, int tileY, int x, int y) {
 		int zdepth = tiles[tileY][tileX].length;
 		for (int z = 0; z < zdepth; z++) {
 			g.drawImage(imgs[tiles[tileY][tileX][z]], x, y, null);
 		}
 	}
-
+	
 	/**
 	 * Returns the array of integers mapping to images used for this background
 	 * 
@@ -113,7 +108,7 @@ public class MultiLayerTileBackground extends AbstractTileBackground {
 	public int[][][] getTiles() {
 		return tiles;
 	}
-
+	
 	/**
 	 * Returns the array of images representing tiles for this background
 	 * 
@@ -122,36 +117,33 @@ public class MultiLayerTileBackground extends AbstractTileBackground {
 	public BufferedImage[] getTileImages() {
 		return imgs;
 	}
-
+	
 	/**
 	 * Sets the array of integers mapping to images in this background.
 	 * 
-	 * @param tiles
-	 *            array of integers used in rendering this background
+	 * @param tiles array of integers used in rendering this background
 	 */
 	public void setTiles(int[][][] tiles) {
 		this.tiles = tiles;
 		super.setSize(tiles.length, tiles[0].length);
 	}
-
+	
 	/**
 	 * Sets the array of images representing tiles in this background
 	 * 
-	 * @param imgs
-	 *            images of tiles in this background
+	 * @param imgs images of tiles in this background
 	 */
 	public void setTileImages(BufferedImage[] imgs) {
 		this.imgs = imgs;
 		this.setTileSize(imgs[0].getWidth(), imgs[0].getHeight());
 	}
-
-	@Override
+	
 	public void setSize(int horiz, int vert) {
 		if (horiz != this.tiles.length || vert != this.tiles[0].length) {
 			// enlarge/shrink old tiles
 			int[][][] old = this.tiles;
 			this.tiles = new int[horiz][vert][];
-
+			
 			int minx = Math.min(this.tiles.length, old.length);
 			int miny = Math.min(this.tiles[0].length, old[0].length);
 			for (int y = 0; y < miny; y++) {
@@ -160,7 +152,7 @@ public class MultiLayerTileBackground extends AbstractTileBackground {
 				}
 			}
 		}
-
+		
 		super.setSize(horiz, vert);
 	}
 }

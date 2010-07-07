@@ -88,15 +88,15 @@ public class MultiLayerTileBackground extends AbstractTileBackground {
 	 */
 	public MultiLayerTileBackground(BufferedImage[] imgs, int[][][] tiles,
 	        int tileWidth, int tileHeight) {
-		super(tiles.length, tiles[0].length, tileWidth, tileHeight);
+		super(tiles[0].length, tiles.length, tileWidth, tileHeight);
 		this.imgs = imgs;
 		this.tiles = tiles;
 	}
 	
 	public void renderTile(Graphics2D g, int tileX, int tileY, int x, int y) {
-		int zdepth = tiles[tileY][tileX].length;
+		int zdepth = this.tiles[tileY][tileX].length;
 		for (int z = 0; z < zdepth; z++) {
-			g.drawImage(imgs[tiles[tileY][tileX][z]], x, y, null);
+			g.drawImage(this.imgs[this.tiles[tileY][tileX][z]], x, y, null);
 		}
 	}
 	
@@ -106,7 +106,7 @@ public class MultiLayerTileBackground extends AbstractTileBackground {
 	 * @return array of indices used in rendering the background
 	 */
 	public int[][][] getTiles() {
-		return tiles;
+		return this.tiles;
 	}
 	
 	/**
@@ -115,7 +115,7 @@ public class MultiLayerTileBackground extends AbstractTileBackground {
 	 * @return array of images used in this background
 	 */
 	public BufferedImage[] getTileImages() {
-		return imgs;
+		return this.imgs;
 	}
 	
 	/**
@@ -144,8 +144,8 @@ public class MultiLayerTileBackground extends AbstractTileBackground {
 			int[][][] old = this.tiles;
 			this.tiles = new int[horiz][vert][];
 			
-			int minx = Math.min(this.tiles.length, old.length);
-			int miny = Math.min(this.tiles[0].length, old[0].length);
+			int minx = Math.min(this.tiles[0].length, old[0].length);
+			int miny = Math.min(this.tiles.length, old.length);
 			for (int y = 0; y < miny; y++) {
 				for (int x = 0; x < minx; x++) {
 					this.tiles[y][x] = old[y][x];

@@ -30,6 +30,8 @@ import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
+import java.awt.image.Raster;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -322,6 +324,20 @@ public class ImageUtil {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * BufferedImage image;
 	 * // rotate the image by 90 degree clockwise
 	 * BufferedImage rotated = ImageUtil.rotate(image, 90);
@@ -353,6 +369,20 @@ public class ImageUtil {
 	 * For example: <br>
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 
@@ -533,6 +563,35 @@ public class ImageUtil {
 		renderable.render(g);
 		g.dispose();
 		
+		return image;
+	}
+	
+	public static BufferedImage createTransparentImage(BufferedImage source, short transparency) {
+		if (source.getType() == BufferedImage.TYPE_INT_ARGB
+		        || source.getType() == BufferedImage.TYPE_INT_ARGB_PRE) {
+			return createTransparentImage(source, transparency & 0xFF000000);
+		}
+		else if (source.getType() == BufferedImage.TYPE_INT_BGR
+		        || source.getType() == BufferedImage.TYPE_INT_RGB) {
+			return createTransparentImage(source, transparency & 0x000000FF);
+		}
+		throw new IllegalArgumentException("Image with type "
+		        + source.getType() + " is not recognized.");
+	}
+	
+	public static BufferedImage createTransparentImage(BufferedImage source, int transparentBitFlag) {
+		BufferedImage image = ImageUtil.createImage(source.getWidth(), source
+		        .getHeight(), Transparency.OPAQUE);
+		Raster raster = source.getData();
+		DataBuffer buffer = raster.getDataBuffer();
+		DataBuffer targetBuffer = image.getRaster().getDataBuffer();
+		for (int index = 0; index < buffer.getNumBanks(); index++) {
+			for (int elementIndex = 0; elementIndex < buffer.getSize(); elementIndex++) {
+				targetBuffer.setElem(index, elementIndex, buffer.getElem(index,
+				        elementIndex)
+				        & transparentBitFlag);
+			}
+		}
 		return image;
 	}
 }

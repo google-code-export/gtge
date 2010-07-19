@@ -30,6 +30,8 @@ import com.golden.gamedev.engine.BaseIO;
 import com.golden.gamedev.engine.BaseInput;
 import com.golden.gamedev.engine.BaseLoader;
 import com.golden.gamedev.engine.BaseTimer;
+import com.golden.gamedev.game.BaseGame;
+import com.golden.gamedev.game.Game;
 import com.golden.gamedev.object.GameFont;
 import com.golden.gamedev.object.GameFontManager;
 import com.golden.gamedev.object.Sprite;
@@ -52,22 +54,16 @@ import com.golden.gamedev.util.Utility;
  * to work with <code>GameObject</code> class.
  * 
  * @see com.golden.gamedev.GameEngine
- * @see com.golden.gamedev.Game
+ * @see Game
+ * @deprecated Do not use GameObject, use {@link BaseGame} instead. This class
+ *             will be removed in GTGE 0.2.5.
  */
-public abstract class GameObject implements Updateable, Renderable {
-	
-	/**
-	 * **************************** MASTER ENGINE ******************************
-	 */
+public abstract class GameObject implements Game {
 	
 	/**
 	 * The master <code>GameEngine</code> frame work.
 	 */
 	public final GameEngine parent;
-	
-	/**
-	 * **************************** GAME ENGINE ********************************
-	 */
 	
 	/** Graphics engine. */
 	public BaseGraphics bsGraphics;
@@ -87,27 +83,8 @@ public abstract class GameObject implements Updateable, Renderable {
 	/** Font manager. */
 	public GameFontManager fontManager;
 	
-	/**
-	 * ************************* OTHER PROPERTIES ******************************
-	 */
-	
 	private boolean finish; // true, to back to game chooser
 	private boolean initialized; // true, indicates the game has been
-	
-	// initialized
-	
-	// to avoid double initialization
-	// if the game is replaying
-	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ************************* CONSTRUCTOR ***********************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
 	
 	/**
 	 * Creates new <code>GameObject</code> with specified
@@ -117,6 +94,321 @@ public abstract class GameObject implements Updateable, Renderable {
 		this.parent = parent;
 		
 		this.grabEngines();
+	}
+	
+	// TODO: deprecate, but provide a replacement.
+	/**
+	 * Returns whether the mouse pointer is inside specified screen boundary.
+	 */
+	public boolean checkPosMouse(int x1, int y1, int x2, int y2) {
+		return (this.getMouseX() >= x1 && this.getMouseY() >= y1
+		        && this.getMouseX() <= x2 && this.getMouseY() <= y2);
+	}
+	
+	// TODO: deprecate, but provide a replacement
+	/**
+	 * Returns whether the mouse pointer is inside specified sprite boundary.
+	 * 
+	 * @param sprite sprite to check its intersection with mouse pointer
+	 * @param pixelCheck true, checking the sprite image with pixel precision
+	 */
+	public boolean checkPosMouse(Sprite sprite, boolean pixelCheck) {
+		Background bg = sprite.getBackground();
+		
+		// check whether the mouse is in background clip area
+		if (this.getMouseX() < bg.getClip().x
+		        || this.getMouseY() < bg.getClip().y
+		        || this.getMouseX() > bg.getClip().x + bg.getClip().width
+		        || this.getMouseY() > bg.getClip().y + bg.getClip().height) {
+			return false;
+		}
+		
+		double mosx = this.getMouseX() + bg.getX() - bg.getClip().x;
+		double mosy = this.getMouseY() + bg.getY() - bg.getClip().y;
+		
+		if (pixelCheck) {
+			try {
+				return ((sprite.getImage().getRGB((int) (mosx - sprite.getX()),
+				        (int) (mosy - sprite.getY())) & 0xFF000000) != 0x00);
+			}
+			catch (Exception e) {
+				return false;
+			}
+			
+		}
+		else {
+			return (mosx >= sprite.getX() && mosy >= sprite.getY()
+			        && mosx <= sprite.getX() + sprite.getWidth() && mosy <= sprite
+			        .getY()
+			        + sprite.getHeight());
+		}
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
+	 * bsInput.isMousePressed(java.awt.event.MouseEvent.BUTTON1)}.
+	 * @deprecated Use bsInput.isMousePressed(MouseEvent.BUTTON1) directly. This
+	 *             method is deprecated and will be removed in GTGE 0.2.5.
+	 */
+	public boolean click() {
+		return this.bsInput.isMousePressed(MouseEvent.BUTTON1);
+	}
+	
+	// TODO: deprecate, but provide a replacement.
+	/**
+	 * Draws game frame-per-second (FPS) to specified location.
+	 */
+	public void drawFPS(Graphics2D g, int x, int y) {
+		this.fontManager.getFont("FPS Font").drawString(g,
+		        "FPS = " + this.getCurrentFPS() + "/" + this.getFPS(), x, y);
+	}
+	
+	public final void finish() {
+		this.finish = true;
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseTimer#getCurrentFPS()
+	 * bsTimer.getCurrentFPS()}.
+	 * @deprecated Use bsTimer.getCurrentFPS() directly. This method is
+	 *             deprecated and will be removed in GTGE 0.2.5.
+	 */
+	public int getCurrentFPS() {
+		return this.bsTimer.getCurrentFPS();
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseTimer#getFPS()}.
+	 * @deprecated Use bsTimer.getFPS() directly. This method is deprecated and
+	 *             will be removed in GTGE 0.2.5 with no direct replacement.
+	 */
+	public int getFPS() {
+		return this.bsTimer.getFPS();
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
+	 * bsGraphics.getSize().height}.
+	 * @deprecated Use bsGraphics.getSize().height directly. This method is
+	 *             deprecated and will be removed in GTGE 0.2.5.
+	 */
+	public int getHeight() {
+		return this.bsGraphics.getSize().height;
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImage(String)
+	 * bsLoader.getImage(String)}.
+	 * @deprecated Use bsLoader.getImage(String) directly. This method is
+	 *             deprecated and will be removed in GTGE 0.2.5.
+	 */
+	public BufferedImage getImage(String imagefile) {
+		return this.bsLoader.getImage(imagefile);
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImage(String, boolean)
+	 * bsLoader.getImage(String, boolean)}.
+	 * @deprecated Use bsLoader.getImage(String, boolean) directly. This method
+	 *             is deprecated and will be removed in GTGE 0.2.5.
+	 */
+	public BufferedImage getImage(String imagefile, boolean useMask) {
+		return this.bsLoader.getImage(imagefile, useMask);
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImages(String, int, int)
+	 * bsLoader.getImages(String, int, int)}.
+	 * @deprecated Use bsLoader.getImages(String, int, int) directly. This
+	 *             method is deprecated and will be removed in GTGE 0.2.5.
+	 * 
+	 */
+	public BufferedImage[] getImages(String imagefile, int col, int row) {
+		return this.bsLoader.getImages(imagefile, col, row);
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImages(String, int, int, boolean)
+	 * bsLoader.getImages(String, int, int, boolean)}.
+	 * @deprecated Use bsLoader.getImages(String, int, int, boolean) directly.
+	 *             This method is deprecated and will be removed in GTGE 0.2.5.
+	 */
+	public BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask) {
+		return this.bsLoader.getImages(imagefile, col, row, useMask);
+	}
+	
+	// TODO: deprecate with replacement.
+	/**
+	 * Returns stripped images with cropped sequence.
+	 * <p>
+	 * 
+	 * First the image is stripped by column and row, and then the images is
+	 * arranged with specified series sequence order. The images then stored
+	 * into cache ({@linkplain com.golden.gamedev.engine.BaseLoader bsLoader}
+	 * with key as followed: start sequence + the image file + end sequence.
+	 * <p>
+	 * 
+	 * For example:
+	 * 
+	 * <pre>
+	 *   int start = 2, end = 4;
+	 *   BufferedImage[] image = getImages(&quot;imagestrip.png&quot;, 6, 1, true, start, end);
+	 * </pre>
+	 * 
+	 * Notice that the first image is start from 0 (zero).
+	 */
+	public BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask, int start, int end) {
+		String mapping = start + imagefile + end;
+		BufferedImage[] image = this.bsLoader.getStoredImages(mapping);
+		
+		if (image == null) {
+			BufferedImage[] src = this.getImages(imagefile, col, row, useMask);
+			int count = end - start + 1;
+			image = new BufferedImage[count];
+			for (int i = 0; i < count; i++) {
+				image[i] = src[start + i];
+			}
+			this.bsLoader.storeImages(mapping, image);
+		}
+		
+		return image;
+	}
+	
+	// TODO: deprecate with replacement.
+	/**
+	 * Returns stripped images with specified sequence.
+	 * <p>
+	 * 
+	 * First the image is stripped by column and row, and then the images is
+	 * arranged with specified sequence order. The images then stored into cache
+	 * ({@linkplain com.golden.gamedev.engine.BaseLoader bsLoader}) with key as
+	 * followed: the image file + sequence + digit.
+	 * <p>
+	 * 
+	 * For example:
+	 * 
+	 * <pre>
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * // we want the images sequence is as followed
+	 * String sequence = &quot;020120&quot;;
+	 * BufferedImage[] image = getImages(&quot;imagestrip.png&quot;, 3, 1, true, sequence, 1);
+	 * // this is plain same like above code except we use 2 digits here
+	 * // 2 digits is used for image strip larger than 10
+	 * String sequence = &quot;000200010200&quot;;
+	 * BufferedImage[] image = getImages(&quot;imagestrip.png&quot;, 20, 1, true, sequence, 1);
+	 * </pre>
+	 * 
+	 * Notice that the first image is start from 0 (zero).
+	 * <p>
+	 * 
+	 * This is used to make custom animation (012321).
+	 */
+	public BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask, String sequence, int digit) {
+		String mapping = imagefile + sequence + digit;
+		BufferedImage[] image = this.bsLoader.getStoredImages(mapping);
+		
+		if (image == null) {
+			BufferedImage[] src = this.getImages(imagefile, col, row, useMask);
+			int count = sequence.length() / digit;
+			image = new BufferedImage[count];
+			for (int i = 0; i < count; i++) {
+				image[i] = src[Integer.parseInt(sequence.substring(i * digit,
+				        ((i + 1) * digit)))];
+			}
+			this.bsLoader.storeImages(mapping, image);
+		}
+		
+		return image;
+	}
+	
+	// TODO: deprecate with replacement
+	/**
+	 * Same as {@linkplain #getImages(String, int, int, int, int)
+	 * getImages(imagefile, col, row, useMask, start, end)} with mask color is
+	 * turned on by default.
+	 */
+	public BufferedImage[] getImages(String imagefile, int col, int row, int start, int end) {
+		return this.getImages(imagefile, col, row, true, start, end);
+	}
+	
+	// TODO: deprecate with replacement
+	/**
+	 * Same as {@linkplain #getImages(String, int, int, boolean, String, int)
+	 * getImages(imagefile, col, row, useMask, sequence, digit)} with mask color
+	 * is turned on by default.
+	 */
+	public BufferedImage[] getImages(String imagefile, int col, int row, String sequence, int digit) {
+		return this.getImages(imagefile, col, row, true, sequence, digit);
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseInput#getMouseX()
+	 * bsInput.getMouseX()}.
+	 * @deprecated Use bsInput.getMouseX() directly. This method is deprecated
+	 *             and will be removed in GTGE 0.2.5.
+	 */
+	public int getMouseX() {
+		return this.bsInput.getMouseX();
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseInput#getMouseY()
+	 * bsInput.getMouseY()}.
+	 * @deprecated Use bsInput.getMouseY() directly. This method is deprecated
+	 *             and will be removed in GTGE 0.2.5.
+	 */
+	public int getMouseY() {
+		return this.bsInput.getMouseY();
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.util.Utility#getRandom(int, int)
+	 * Utility.getRandom(int, int)}
+	 * @deprecated Use Utility.getRandom(int, int) directly. This method is
+	 *             deprecated and will be removed in GTGE 0.2.5.
+	 */
+	public int getRandom(int low, int hi) {
+		return Utility.getRandom(low, hi);
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
+	 * bsGraphics.getSize().width}.
+	 * @deprecated Use bsGraphics.getSize().width directly. This method is
+	 *             deprecated and will be removed in GTGE 0.2.5.
+	 */
+	public int getWidth() {
+		return this.bsGraphics.getSize().width;
 	}
 	
 	private void grabEngines() {
@@ -132,14 +424,115 @@ public abstract class GameObject implements Updateable, Renderable {
 	}
 	
 	/**
-	 * Starts the game main loop, this method will not return until the game is
-	 * finished playing/running. To end the game call {@linkplain #finish()}
-	 * method.
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
+	 * bsInput.setMouseVisible(false)}.
+	 * @deprecated Use bsInput.setMouseVisible(false) directly. This method is
+	 *             deprecated and will be removed in GTGE 0.2.5.
 	 */
+	public void hideCursor() {
+		this.bsInput.setMouseVisible(false);
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseInput#isKeyDown(int)
+	 * bsInput.isKeyDown(int)}.
+	 * @deprecated Use bsInput.isKeyDown(int) directly. This method is
+	 *             deprecated and will be removed in GTGE 0.2.5.
+	 */
+	public boolean keyDown(int keyCode) {
+		return this.bsInput.isKeyDown(keyCode);
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseInput#isKeyPressed(int)
+	 * bsInput.isKeyPressed(int)}.
+	 * @deprecated Use bsInput.isKeyPressed(int) directly. This method is
+	 *             deprecated and will be removed in GTGE 0.2.5.
+	 */
+	public boolean keyPressed(int keyCode) {
+		return this.bsInput.isKeyPressed(keyCode);
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseAudio#play(String)
+	 * bsMusic.play(String)}.
+	 * 
+	 * @see com.golden.gamedev.engine.BaseAudio#setBaseRenderer(com.golden.gamedev.engine.BaseAudioRenderer)
+	 * @see com.golden.gamedev.engine.audio
+	 * @deprecated Use bsMusic.play(String) directly. This method is deprecated
+	 *             and will be removed in GTGE 0.2.5.
+	 */
+	public int playMusic(String audiofile) {
+		return this.bsMusic.play(audiofile);
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseAudio#play(String)
+	 * bsSound.play(String)}.
+	 * 
+	 * @see com.golden.gamedev.engine.BaseAudio#setBaseRenderer(com.golden.gamedev.engine.BaseAudioRenderer)
+	 * @see com.golden.gamedev.engine.audio
+	 * @deprecated Use bsSound.play(String) directly. This method is deprecated
+	 *             and will be removed in GTGE 0.2.5.
+	 */
+	public int playSound(String audiofile) {
+		return this.bsSound.play(audiofile);
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
+	 * bsInput.isMousePressed(java.awt.event.MouseEvent.BUTTON3)}.
+	 * @deprecated Use bsInput.isMousePressed(MouseEvent.BUTTON3) directly. This
+	 *             method is deprecated and will be removed in GTGE 0.2.5.
+	 */
+	public boolean rightClick() {
+		return this.bsInput.isMousePressed(MouseEvent.BUTTON3);
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseTimer#setFPS(int)
+	 * bsTimer.setFPS(int)}.
+	 * @deprecated Use bsTimer.setFPS(int) directly. This method is deprecated
+	 *             and will be removed in GTGE 0.2.5.
+	 */
+	public void setFPS(int fps) {
+		this.bsTimer.setFPS(fps);
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseLoader#setMaskColor(Color)
+	 * bsLoader.setMaskColor(java.awt.Color)}.
+	 * @deprecated Use bsLoader.setMaskColor(Color) directly. This method is
+	 *             deprecated and will be removed in GTGE 0.2.5.
+	 */
+	public void setMaskColor(Color c) {
+		this.bsLoader.setMaskColor(c);
+	}
+	
+	/**
+	 * Effectively equivalent to the call
+	 * {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
+	 * bsInput.setMouseVisible(true)}.
+	 * @deprecated Use bsInput.setMouseVisible(true) directly. This method is
+	 *             deprecated and will be removed in GTGE 0.2.5.
+	 */
+	public void showCursor() {
+		this.bsInput.setMouseVisible(true);
+	}
+	
 	public final void start() {
 		// grabbing engines from master engine
 		this.grabEngines();
-		GameFont fpsFont = this.parent.fpsFont;
+		GameFont fpsFont = this.parent.fontManager
+		        .getFont(BaseGame.FPS_FONT_NAME);
 		if (!this.initialized) {
 			this.initResources();
 			this.initialized = true;
@@ -157,7 +550,7 @@ public abstract class GameObject implements Updateable, Renderable {
 		
 		long elapsedTime = 0;
 		out: while (true) {
-			if (this.parent.inFocus) {
+			if (this.parent.isInFocus()) {
 				// update game
 				this.update(elapsedTime);
 				this.parent.update(elapsedTime); // update common variables
@@ -206,7 +599,7 @@ public abstract class GameObject implements Updateable, Renderable {
 					fpsFont.drawString(g, "GTGE", this.getWidth() - 65, 9);
 				}
 				
-				if (!this.parent.inFocus) {
+				if (!this.parent.isInFocus()) {
 					this.parent.renderLostFocus(g);
 				}
 				
@@ -219,119 +612,6 @@ public abstract class GameObject implements Updateable, Renderable {
 				elapsedTime = 100;
 			}
 		}
-	}
-	
-	/**
-	 * End this game, and back to {@linkplain GameEngine#getGame(int) game
-	 * object chooser}.
-	 * 
-	 * @see GameEngine#nextGameID
-	 * @see GameEngine#nextGame
-	 */
-	public void finish() {
-		this.finish = true;
-	}
-	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ***************************** MAIN METHODS ******************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
-	/**
-	 * All game resources initialization, everything that usually goes to
-	 * constructor should be put in here.
-	 * <p>
-	 * 
-	 * This method is called only once for every newly created
-	 * <code>GameObject</code> class.
-	 * 
-	 * @see #getImage(String)
-	 * @see #getImages(String, int, int)
-	 * @see #playMusic(String)
-	 * @see #setMaskColor(Color)
-	 * @see com.golden.gamedev.object
-	 */
-	public abstract void initResources();
-	
-	/**
-	 * Updates game variables.
-	 * 
-	 * @see #keyDown(int)
-	 * @see #keyPressed(int)
-	 */
-	public abstract void update(long elapsedTime);
-	
-	// for debugging that this game object is properly disposed
-	// protected void finalize() throws Throwable {
-	// System.out.println("Finalization " + this + " GameObject");
-	// super.finalize();
-	// }
-	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ***************** BELOW THIS LINE IS ENGINES UTILIZE ********************
-	 */
-	/** ***************** (PASTED FROM GAME CLASS) ******************** */
-	/**
-	 * *************************************************************************
-	 */
-	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * *********************** ESSENTIAL GAME UTILITY **************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	// -> com.golden.gamedev.util.Utility
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.util.Utility#getRandom(int, int)
-	 * Utility.getRandom(int, int)}
-	 */
-	public int getRandom(int low, int hi) {
-		return Utility.getRandom(low, hi);
-	}
-	
-	// INTERNATIONALIZATION UTILITY
-	// public Locale getLocale() { return locale; }
-	// public void setLocale(Locale locale) { this.locale = locale; }
-	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ************************* GRAPHICS UTILITY ******************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	// -> com.golden.gamedev.engine.BaseGraphics
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
-	 * bsGraphics.getSize().width}.
-	 */
-	public int getWidth() {
-		return this.bsGraphics.getSize().width;
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
-	 * bsGraphics.getSize().height}.
-	 */
-	public int getHeight() {
-		return this.bsGraphics.getSize().height;
 	}
 	
 	/**
@@ -360,376 +640,93 @@ public abstract class GameObject implements Updateable, Renderable {
 		        .getHeight()), f);
 	}
 	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ************************** AUDIO UTILITY ********************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	// -> com.golden.gamedev.engine.BaseAudio
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseAudio#play(String)
-	 * bsMusic.play(String)}.
-	 * 
-	 * @see com.golden.gamedev.engine.BaseAudio#setBaseRenderer(com.golden.gamedev.engine.BaseAudioRenderer)
-	 * @see com.golden.gamedev.engine.audio
-	 */
-	public int playMusic(String audiofile) {
-		return this.bsMusic.play(audiofile);
+	public final void stop() {
+		finish();
 	}
 	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseAudio#play(String)
-	 * bsSound.play(String)}.
-	 * 
-	 * @see com.golden.gamedev.engine.BaseAudio#setBaseRenderer(com.golden.gamedev.engine.BaseAudioRenderer)
-	 * @see com.golden.gamedev.engine.audio
-	 */
-	public int playSound(String audiofile) {
-		return this.bsSound.play(audiofile);
+	public final BaseGraphics getBaseGraphics() {
+		return bsGraphics;
 	}
 	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ************************** TIMER UTILITY ********************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	// -> com.golden.gamedev.engine.BaseTimer
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseTimer#setFPS(int)
-	 * bsTimer.setFPS(int)}.
-	 */
-	public void setFPS(int fps) {
-		this.bsTimer.setFPS(fps);
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseTimer#getCurrentFPS()
-	 * bsTimer.getCurrentFPS()}.
-	 */
-	public int getCurrentFPS() {
-		return this.bsTimer.getCurrentFPS();
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseTimer#getFPS()}.
-	 */
-	public int getFPS() {
-		return this.bsTimer.getFPS();
-	}
-	
-	/**
-	 * Draws game frame-per-second (FPS) to specified location.
-	 */
-	public void drawFPS(Graphics2D g, int x, int y) {
-		this.fontManager.getFont("FPS Font").drawString(g,
-		        "FPS = " + this.getCurrentFPS() + "/" + this.getFPS(), x, y);
-	}
-	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ************************** INPUT UTILITY ********************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	// -> com.golden.gamedev.engine.BaseInput
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#getMouseX()
-	 * bsInput.getMouseX()}.
-	 */
-	public int getMouseX() {
-		return this.bsInput.getMouseX();
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#getMouseY()
-	 * bsInput.getMouseY()}.
-	 */
-	public int getMouseY() {
-		return this.bsInput.getMouseY();
-	}
-	
-	/**
-	 * Returns whether the mouse pointer is inside specified screen boundary.
-	 */
-	public boolean checkPosMouse(int x1, int y1, int x2, int y2) {
-		return (this.getMouseX() >= x1 && this.getMouseY() >= y1
-		        && this.getMouseX() <= x2 && this.getMouseY() <= y2);
-	}
-	
-	/**
-	 * Returns whether the mouse pointer is inside specified sprite boundary.
-	 * 
-	 * @param sprite sprite to check its intersection with mouse pointer
-	 * @param pixelCheck true, checking the sprite image with pixel precision
-	 */
-	public boolean checkPosMouse(Sprite sprite, boolean pixelCheck) {
-		Background bg = sprite.getBackground();
-		
-		// check whether the mouse is in background clip area
-		if (this.getMouseX() < bg.getClip().x
-		        || this.getMouseY() < bg.getClip().y
-		        || this.getMouseX() > bg.getClip().x + bg.getClip().width
-		        || this.getMouseY() > bg.getClip().y + bg.getClip().height) {
-			return false;
+	public final void setBaseGraphics(BaseGraphics baseGraphics) {
+		if (baseGraphics == null) {
+			throw new IllegalArgumentException(
+			        "The specified BaseGraphics instance may not be null.");
 		}
-		
-		double mosx = this.getMouseX() + bg.getX() - bg.getClip().x;
-		double mosy = this.getMouseY() + bg.getY() - bg.getClip().y;
-		
-		if (pixelCheck) {
-			try {
-				return ((sprite.getImage().getRGB((int) (mosx - sprite.getX()),
-				        (int) (mosy - sprite.getY())) & 0xFF000000) != 0x00);
-			}
-			catch (Exception e) {
-				return false;
-			}
-			
-		}
-		else {
-			return (mosx >= sprite.getX() && mosy >= sprite.getY()
-			        && mosx <= sprite.getX() + sprite.getWidth() && mosy <= sprite
-			        .getY()
-			        + sprite.getHeight());
-		}
+		this.bsGraphics = baseGraphics;
+	}
+	
+	public final BaseIO getBaseIO() {
+		return bsIO;
+	}
+	
+	public final void setBaseIO(final BaseIO baseIO) {
+		this.bsIO = baseIO;
+	}
+	
+	public final BaseLoader getBaseLoader() {
+		return bsLoader;
+	}
+	
+	public final void setBaseLoader(final BaseLoader baseLoader) {
+		this.bsLoader = baseLoader;
+	}
+	
+	public final BaseInput getBaseInput() {
+		return bsInput;
+	}
+	
+	public final void setBaseInput(final BaseInput baseInput) {
+		this.bsInput = baseInput;
+	}
+	
+	public final BaseTimer getBaseTimer() {
+		return bsTimer;
+	}
+	
+	public final void setBaseTimer(final BaseTimer baseTimer) {
+		this.bsTimer = baseTimer;
+	}
+	
+	public final BaseAudio getMusicEngine() {
+		return bsMusic;
+	}
+	
+	public final void setMusicEngine(final BaseAudio musicEngine) {
+		this.bsMusic = musicEngine;
+	}
+	
+	public final BaseAudio getSoundEngine() {
+		return bsSound;
+	}
+	
+	public final void setSoundEngine(final BaseAudio soundEngine) {
+		this.bsSound = soundEngine;
+	}
+	
+	public final GameFontManager getFontManager() {
+		return fontManager;
+	}
+	
+	public final void setFontManager(GameFontManager fontManager) {
+		this.fontManager = fontManager;
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
-	 * bsInput.isMousePressed(java.awt.event.MouseEvent.BUTTON1)}.
+	 * Returns whether the game is currently running/playing or not. Running
+	 * game means the game is in game main-loop (update and render loop).
+	 * 
+	 * @see #start()
 	 */
-	public boolean click() {
-		return this.bsInput.isMousePressed(MouseEvent.BUTTON1);
+	public final boolean isRunning() {
+		return true;
 	}
 	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
-	 * bsInput.isMousePressed(java.awt.event.MouseEvent.BUTTON3)}.
-	 */
-	public boolean rightClick() {
-		return this.bsInput.isMousePressed(MouseEvent.BUTTON3);
+	public final boolean isInFocus() {
+		return true;
 	}
 	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#isKeyDown(int)
-	 * bsInput.isKeyDown(int)}.
-	 */
-	public boolean keyDown(int keyCode) {
-		return this.bsInput.isKeyDown(keyCode);
+	public void renderLostFocus(Graphics2D g) {
+		render(g);
 	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#isKeyPressed(int)
-	 * bsInput.isKeyPressed(int)}.
-	 */
-	public boolean keyPressed(int keyCode) {
-		return this.bsInput.isKeyPressed(keyCode);
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
-	 * bsInput.setMouseVisible(false)}.
-	 */
-	public void hideCursor() {
-		this.bsInput.setMouseVisible(false);
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
-	 * bsInput.setMouseVisible(true)}.
-	 */
-	public void showCursor() {
-		this.bsInput.setMouseVisible(true);
-	}
-	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ************************** IMAGE UTILITY ********************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	// com.golden.gamedev.engine.BaseLoader
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#setMaskColor(Color)
-	 * bsLoader.setMaskColor(java.awt.Color)}.
-	 */
-	public void setMaskColor(Color c) {
-		this.bsLoader.setMaskColor(c);
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImage(String, boolean)
-	 * bsLoader.getImage(String, boolean)}.
-	 */
-	public BufferedImage getImage(String imagefile, boolean useMask) {
-		return this.bsLoader.getImage(imagefile, useMask);
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImage(String)
-	 * bsLoader.getImage(String)}.
-	 */
-	public BufferedImage getImage(String imagefile) {
-		return this.bsLoader.getImage(imagefile);
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImages(String, int, int, boolean)
-	 * bsLoader.getImages(String, int, int, boolean)}.
-	 */
-	public BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask) {
-		return this.bsLoader.getImages(imagefile, col, row, useMask);
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImages(String, int, int)
-	 * bsLoader.getImages(String, int, int)}.
-	 */
-	public BufferedImage[] getImages(String imagefile, int col, int row) {
-		return this.bsLoader.getImages(imagefile, col, row);
-	}
-	
-	/**
-	 * Returns stripped images with specified sequence.
-	 * <p>
-	 * 
-	 * First the image is stripped by column and row, and then the images is
-	 * arranged with specified sequence order. The images then stored into cache
-	 * ({@linkplain com.golden.gamedev.engine.BaseLoader bsLoader}) with key as
-	 * followed: the image file + sequence + digit.
-	 * <p>
-	 * 
-	 * For example:
-	 * 
-	 * <pre>
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * // we want the images sequence is as followed
-	 * String sequence = &quot;020120&quot;;
-	 * BufferedImage[] image = getImages(&quot;imagestrip.png&quot;, 3, 1, true, sequence, 1);
-	 * // this is plain same like above code except we use 2 digits here
-	 * // 2 digits is used for image strip larger than 10
-	 * String sequence = &quot;000200010200&quot;;
-	 * BufferedImage[] image = getImages(&quot;imagestrip.png&quot;, 20, 1, true, sequence, 1);
-	 * </pre>
-	 * 
-	 * Notice that the first image is start from 0 (zero).
-	 * <p>
-	 * 
-	 * This is used to make custom animation (012321).
-	 */
-	public BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask, String sequence, int digit) {
-		String mapping = imagefile + sequence + digit;
-		BufferedImage[] image = this.bsLoader.getStoredImages(mapping);
-		
-		if (image == null) {
-			BufferedImage[] src = this.getImages(imagefile, col, row, useMask);
-			int count = sequence.length() / digit;
-			image = new BufferedImage[count];
-			for (int i = 0; i < count; i++) {
-				image[i] = src[Integer.parseInt(sequence.substring(i * digit,
-				        ((i + 1) * digit)))];
-			}
-			this.bsLoader.storeImages(mapping, image);
-		}
-		
-		return image;
-	}
-	
-	/**
-	 * Same as {@linkplain #getImages(String, int, int, boolean, String, int)
-	 * getImages(imagefile, col, row, useMask, sequence, digit)} with mask color
-	 * is turned on by default.
-	 */
-	public BufferedImage[] getImages(String imagefile, int col, int row, String sequence, int digit) {
-		return this.getImages(imagefile, col, row, true, sequence, digit);
-	}
-	
-	/**
-	 * Returns stripped images with cropped sequence.
-	 * <p>
-	 * 
-	 * First the image is stripped by column and row, and then the images is
-	 * arranged with specified series sequence order. The images then stored
-	 * into cache ({@linkplain com.golden.gamedev.engine.BaseLoader bsLoader}
-	 * with key as followed: start sequence + the image file + end sequence.
-	 * <p>
-	 * 
-	 * For example:
-	 * 
-	 * <pre>
-	 *   int start = 2, end = 4;
-	 *   BufferedImage[] image = getImages(&quot;imagestrip.png&quot;, 6, 1, true, start, end);
-	 * </pre>
-	 * 
-	 * Notice that the first image is start from 0 (zero).
-	 */
-	public BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask, int start, int end) {
-		String mapping = start + imagefile + end;
-		BufferedImage[] image = this.bsLoader.getStoredImages(mapping);
-		
-		if (image == null) {
-			BufferedImage[] src = this.getImages(imagefile, col, row, useMask);
-			int count = end - start + 1;
-			image = new BufferedImage[count];
-			for (int i = 0; i < count; i++) {
-				image[i] = src[start + i];
-			}
-			this.bsLoader.storeImages(mapping, image);
-		}
-		
-		return image;
-	}
-	
-	/**
-	 * Same as {@linkplain #getImages(String, int, int, int, int)
-	 * getImages(imagefile, col, row, useMask, start, end)} with mask color is
-	 * turned on by default.
-	 */
-	public BufferedImage[] getImages(String imagefile, int col, int row, int start, int end) {
-		return this.getImages(imagefile, col, row, true, start, end);
-	}
-	
 }

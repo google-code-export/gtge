@@ -24,8 +24,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 
-import com.golden.gamedev.Game;
 import com.golden.gamedev.GameLoader;
+import com.golden.gamedev.game.BaseGame;
 import com.golden.gamedev.object.GameFont;
 
 /**
@@ -33,7 +33,7 @@ import com.golden.gamedev.object.GameFont;
  * run by double clicking it like a normal application, GTGE does not have any
  * GUI/form/frame.
  */
-public class LibInfo extends Game {
+public class LibInfo extends BaseGame {
 	
 	private GameFont font1, font2, font3, font4;
 	
@@ -44,8 +44,8 @@ public class LibInfo extends Game {
 	}
 	
 	public void initResources() {
-		this.setFPS(10);
-		this.showCursor();
+		this.bsTimer.setFPS(10);
+		this.bsInput.setMouseVisible(true);
 		
 		this.font1 = this.fontManager
 		        .getFont(new Font("Verdana", Font.BOLD, 32));
@@ -58,17 +58,18 @@ public class LibInfo extends Game {
 	}
 	
 	public void update(long elapsedTime) {
-		if ((this.keyPressed(KeyEvent.VK_ENTER))
-		        || (this.keyPressed(KeyEvent.VK_ESCAPE))
-		        || (this.keyDown(KeyEvent.VK_ALT) && this
-		                .keyPressed(KeyEvent.VK_F4))) {
+		if ((this.bsInput.isKeyPressed(KeyEvent.VK_ENTER))
+		        || (this.bsInput.isKeyPressed(KeyEvent.VK_ESCAPE))
+		        || (this.bsInput.isKeyDown(KeyEvent.VK_ALT) && this.bsInput
+		                .isKeyPressed(KeyEvent.VK_F4))) {
 			this.finish();
 		}
 	}
 	
 	public void render(Graphics2D g) {
 		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, this.getWidth(), this.getHeight());
+		g.fillRect(0, 0, this.bsGraphics.getSize().width, this.bsGraphics
+		        .getSize().height);
 		
 		g.setColor(Color.WHITE);
 		
@@ -78,17 +79,18 @@ public class LibInfo extends Game {
 		
 		int y = 20, lineHeight = this.font1.getHeight();
 		this.font1.drawString(g, "GOLDEN T GAME ENGINE", GameFont.CENTER, 0, y,
-		        this.getWidth());
+		        this.bsGraphics.getSize().width);
 		y += lineHeight + 5;
-		this.font1.drawString(g, "[ G T G E ]", GameFont.CENTER, 0, y, this
-		        .getWidth());
+		this.font1.drawString(g, "[ G T G E ]", GameFont.CENTER, 0, y,
+		        this.bsGraphics.getSize().width);
 		y += lineHeight + 8;
 		
 		lineHeight = this.font2.getHeight();
-		this.font2.drawString(g, "is", GameFont.CENTER, 0, y, this.getWidth());
+		this.font2.drawString(g, "is", GameFont.CENTER, 0, y, this.bsGraphics
+		        .getSize().width);
 		y += lineHeight + 12;
 		this.font2.drawString(g, "A Java Game Library / Game SDK",
-		        GameFont.CENTER, 0, y, this.getWidth());
+		        GameFont.CENTER, 0, y, this.bsGraphics.getSize().width);
 		y += lineHeight + 28;
 		
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -96,17 +98,17 @@ public class LibInfo extends Game {
 		
 		lineHeight = this.font3.getHeight();
 		this.font3.drawString(g, "Thus, you need to code the game",
-		        GameFont.CENTER, 0, y, this.getWidth());
+		        GameFont.CENTER, 0, y, this.bsGraphics.getSize().width);
 		y += lineHeight + 4;
 		this.font3.drawString(g, "in order to make a game with GTGE",
-		        GameFont.CENTER, 0, y, this.getWidth());
+		        GameFont.CENTER, 0, y, this.bsGraphics.getSize().width);
 		y += lineHeight + 18;
 		
 		this.font3.drawString(g, "Please read GTGE tutorials for",
-		        GameFont.CENTER, 0, y, this.getWidth());
+		        GameFont.CENTER, 0, y, this.bsGraphics.getSize().width);
 		y += lineHeight + 4;
 		this.font3.drawString(g, "installation and how to use this library",
-		        GameFont.CENTER, 0, y, this.getWidth());
+		        GameFont.CENTER, 0, y, this.bsGraphics.getSize().width);
 		y += lineHeight + 32;
 		
 		lineHeight = this.font4.getHeight();

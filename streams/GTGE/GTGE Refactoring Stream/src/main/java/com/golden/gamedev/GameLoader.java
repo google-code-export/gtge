@@ -36,6 +36,7 @@ import com.golden.gamedev.engine.graphics.FullScreenMode;
 import com.golden.gamedev.engine.graphics.WindowExitListener;
 import com.golden.gamedev.engine.graphics.WindowedMode;
 import com.golden.gamedev.funbox.ErrorNotificationDialog;
+import com.golden.gamedev.game.Game;
 
 /**
  * <code>GameLoader</code> class is the class that manages <code>Game</code>
@@ -68,6 +69,13 @@ import com.golden.gamedev.funbox.ErrorNotificationDialog;
  * 
  * 
  * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  * </pre>
  * 
  * <p>
@@ -76,6 +84,13 @@ import com.golden.gamedev.funbox.ErrorNotificationDialog;
  * override {@link #createAppletGame()} method to return the actual game :
  * 
  * <pre>
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  * 
  * 
  * 
@@ -187,7 +202,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	 * The game (subclass of <code>Game</code> class) initialized by this
 	 * <code>GameLoader</code>.
 	 */
-	protected Game game;
+	protected com.golden.gamedev.game.Game game;
 	
 	/**
 	 * *************************************************************************
@@ -202,7 +217,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	/**
 	 * Constructs new <code>GameLoader</code>.
 	 * 
-	 * @see #setup(Game, Dimension, boolean, boolean)
+	 * @see #setup(com.golden.gamedev.game.Game, Dimension, boolean, boolean)
 	 * @see #start()
 	 */
 	public GameLoader() {
@@ -302,7 +317,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 				}
 				
 				this.gfx = this;
-				this.game.bsGraphics = this.gfx;
+				this.game.setBaseGraphics(this.gfx);
 			}
 			
 			// initialization of applet mode graphics engine
@@ -375,6 +390,13 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * public class YourGameApplet extends GameLoader {
 	 * 	
 	 * 	protected Game createAppletGame() {
@@ -383,7 +405,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	 * }
 	 * </pre>
 	 */
-	protected Game createAppletGame() {
+	protected com.golden.gamedev.game.Game createAppletGame() {
 		try {
 			String className = this.getParameter("GAME");
 			// System.out.println(className);
@@ -419,7 +441,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	 * Initializes graphics engine with specified size, mode, bufferstrategy,
 	 * and associates it with specified <code>Game</code> object.
 	 */
-	public void setup(Game game, Dimension d, boolean fullscreen, boolean bufferstrategy) {
+	public void setup(com.golden.gamedev.game.Game game, Dimension d, boolean fullscreen, boolean bufferstrategy) {
 		try {
 			// validate java version first
 			if (!this.validJavaVersion()) {
@@ -482,7 +504,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 			}
 			
 			this.game = game;
-			this.game.bsGraphics = this.gfx;
+			this.game.setBaseGraphics(this.gfx);
 			
 		}
 		catch (Throwable e) {
@@ -508,7 +530,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	 * bufferstrategy by default, and associates it with specified
 	 * <code>Game</code> object.
 	 */
-	public void setup(Game game, Dimension d, boolean fullscreen) {
+	public void setup(com.golden.gamedev.game.Game game, Dimension d, boolean fullscreen) {
 		this.setup(game, d, fullscreen, true);
 	}
 	
@@ -516,7 +538,7 @@ public class GameLoader extends AppletMode implements WindowListener, Runnable {
 	 * Returns the game associated with this game loader or null if this game
 	 * loader has not loaded any game.
 	 */
-	public Game getGame() {
+	public com.golden.gamedev.game.Game getGame() {
 		return this.game;
 	}
 	

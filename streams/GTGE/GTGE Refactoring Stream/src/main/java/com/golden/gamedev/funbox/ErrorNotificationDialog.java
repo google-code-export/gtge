@@ -50,8 +50,8 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 
-import com.golden.gamedev.Game;
 import com.golden.gamedev.engine.BaseGraphics;
+import com.golden.gamedev.game.BaseGame;
 
 /**
  * <code>ErrorNotificationDialog</code> class is a dialog UI to show the player
@@ -192,7 +192,7 @@ public class ErrorNotificationDialog extends JDialog implements Runnable,
 			                "java.vm.version", "java.vendor"
 			        }));
 			this.append2(this.textArea, "GTGE Version      : ",
-			        Game.GTGE_VERSION);
+			        BaseGame.GTGE_VERSION);
 			this.append2(this.textArea, "Environment       : ", this.bsGraphics
 			        .getGraphicsDescription());
 			this.append2(this.textArea, "Operating System  : ", this

@@ -26,16 +26,13 @@ import java.awt.Graphics2D;
  * as separated entity.
  * <p>
  * 
- * Each game entity is subclass of {@link GameObject} class (in above example:
- * intro, title, main game screen are subclass of <code>GameObject</code>
- * class). <code>GameObject</code> class is equally with <code>Game</code> class
- * except it works under <code>GameEngine</code> frame work. Thus you can create
- * the game entities as <code>Game</code> class first, run and test it like
- * usual, and then rename it to <code>GameObject</code> in order to attach it
- * into <code>GameEngine</code> frame work.
+ * Each game entity is an instance of the {@link com.golden.gamedev.game.Game}
+ * interface (in above example: intro, title, main game screen are instances of
+ * the {@link com.golden.gamedev.game.Game} interface class).
  * <p>
  * 
- * The first game to be played is <code>GameObject</code> which use ID = 0.
+ * The first game to be played is the {@link com.golden.gamedev.game.Game} which
+ * uses ID = 0.
  * <p>
  * 
  * <code>GameEngine</code> class also can be used to store global variables that
@@ -49,7 +46,7 @@ import java.awt.Graphics2D;
  * 
  * public class YourGame extends GameEngine {
  * 	
- * 	public GameObject getGame(int GameID) {
+ * 	public Game getGame(int GameID) {
  *       switch (GameID) {
  *          case 0: // GameID = 0 is always the first to play
  *             return new IntroMenu(this);
@@ -69,7 +66,7 @@ import java.awt.Graphics2D;
  * 
  * public class IntroMenu extends GameObject { // change Game to GameObject
  * 
- * 	public GameObject(GameEngine parent) {
+ * 	public Game(GameEngine parent) {
  * 		super(parent);
  * 	}
  * 	
@@ -86,221 +83,11 @@ import java.awt.Graphics2D;
  * 
  * 
  * 
- * 
- * 
- * 
- * 
- * 
  * </pre>
  * 
- * @see com.golden.gamedev.GameObject
+ * @deprecated Use {@link com.golden.gamedev.game.GameEngine} instead of this
+ *             class. This class will be removed in GTGE 0.2.5.
  */
-public abstract class GameEngine extends Game implements Refreshable {
-	
-	/**
-	 * **************************** CURRENT GAME *******************************
-	 */
-	
-	private GameObject currentGame;
-	private int currentGameID;
-	
-	/**
-	 * ***************************** NEXT GAME *********************************
-	 */
-	
-	/**
-	 * GameObject to be played next, null to exit game.
-	 * 
-	 * @see #nextGameID
-	 */
-	public GameObject nextGame;
-	
-	/**
-	 * Game ID to be played next, -1 to exit game.
-	 * 
-	 * @see #nextGame
-	 */
-	public int nextGameID = 0;
-	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ***************************** CONSTRUCTOR *******************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
-	/**
-	 * Creates new <code>GameEngine</code>, the first game to be played is
-	 * GameObject with ID = 0 (zero), please <b>see note</b> below.
-	 * <p>
-	 * 
-	 * Note: <b>Do not</b> make any overloading constructors. All that belong to
-	 * constructor (this method) should be put in {@link #initResources()}
-	 * method. Leave this method empty!
-	 */
-	public GameEngine() {
-	}
-	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ************************ GAME LOOP THREAD *******************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
-	void startGameLoop() {
-		// start the timer
-		this.bsTimer.startTimer();
-		
-		while (this.isRunning()) {
-			// refresh global game state
-			this.bsInput.reset();
-			this.reset();
-			
-			// validate game to be played next
-			if (this.nextGameID == -1 && this.nextGame == null) {
-				// next game is not provided, game ended
-				this.finish();
-				break;
-			}
-			
-			// get the game object to be played next
-			this.currentGameID = this.nextGameID;
-			this.currentGame = (this.nextGame != null) ? this.nextGame : this
-			        .getGame(this.nextGameID);
-			
-			if (this.currentGame == null) {
-				// game is not available, exit the game
-				System.err.println("ERROR: GameObject with ID = "
-				        + this.currentGameID + " is not available!!");
-				this.finish();
-				break;
-			}
-			
-			// clear next game, to avoid this current game played forever
-			if (this.nextGame == this.currentGame) {
-				this.nextGame = null;
-			}
-			if (this.nextGameID == this.currentGameID) {
-				this.nextGameID = -1;
-			}
-			
-			// running the game
-			// in here there's other game loop,
-			// loop ended when the game finished, calling GameObject.finish()
-			this.currentGame.start();
-		}
-		
-		// dispose everything
-		this.bsTimer.stopTimer();
-		this.bsSound.stopAll();
-		this.bsMusic.stopAll();
-		
-		if (this.isFinish()) {
-			this.bsGraphics.cleanup();
-			this.notifyExit();
-		}
-	}
-	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ************************** GAME OPERATION *******************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
-	/**
-	 * Initialization of global game resources.
-	 * <p>
-	 * 
-	 * The implementation of this method provided by the <code>GameEngine</code>
-	 * class does nothing.
-	 */
-	public void initResources() {
-	}
-	
-	/**
-	 * Global game update.
-	 * <p>
-	 * 
-	 * The implementation of this method provided by the <code>GameEngine</code>
-	 * class does nothing.
-	 * 
-	 * @param elapsedTime time elapsed since last update
-	 */
-	public void update(long elapsedTime) {
-	}
-	
-	/**
-	 * Global game render.
-	 * <p>
-	 * 
-	 * The implementation of this method provided by the <code>GameEngine</code>
-	 * class does nothing.
-	 * 
-	 * @param g graphics backbuffer
-	 */
-	public void render(Graphics2D g) {
-	}
-	
-	/**
-	 * Refresh game global variables, called right before playing next game
-	 * object.
-	 * <p>
-	 * 
-	 * The implementation of this method provided by the <code>GameEngine</code>
-	 * class does nothing.
-	 * @deprecated This method is now deprecated in favor of {@link #reset()}
-	 *             and will be removed in 0.2.5.
-	 */
-	public void refresh() {
-	}
-	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ************************ GETTING GAME OBJECT ****************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
-	/**
-	 * Returns <code>GameObject</code> with specific ID, the returned GameObject
-	 * will be the game to be played next.
-	 * 
-	 * @param GameID the id of the GameObject
-	 * @return GameObject to be played next.
-	 * @see #nextGame
-	 */
-	public abstract GameObject getGame(int GameID);
-	
-	/**
-	 * Returns currently playing <code>GameObject</code> entity.
-	 */
-	public GameObject getCurrentGame() {
-		return this.currentGame;
-	}
-	
-	/**
-	 * Returns the ID of currently playing <code>GameObject</code> entity.
-	 */
-	public int getCurrentGameID() {
-		return this.currentGameID;
-	}
-	
-	public void reset() {
-		refresh();
-	}
-	
+public abstract class GameEngine extends com.golden.gamedev.game.GameEngine {
+	// Intentionally blank
 }

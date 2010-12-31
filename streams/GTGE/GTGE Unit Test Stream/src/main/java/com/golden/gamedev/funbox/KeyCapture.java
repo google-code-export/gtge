@@ -18,6 +18,9 @@ package com.golden.gamedev.funbox;
 
 // JFC
 import java.awt.event.KeyEvent;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.golden.gamedev.engine.BaseInput;
 
@@ -30,6 +33,36 @@ import com.golden.gamedev.engine.BaseInput;
  * the user type 'HELLO' in right sequence)
  * 
  * <pre>
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  * 
  * BaseInput input;
  * String key = &quot;HELLO&quot;;
@@ -47,6 +80,54 @@ import com.golden.gamedev.engine.BaseInput;
  * </pre>
  */
 public abstract class KeyCapture {
+	
+	/**
+	 * A {@link Map} containing uppercase {@link Character} keys to their
+	 * corresponding {@link Integer} virtual key values to use to translate a
+	 * given {@link String} into an integer array containing only virtual keys.
+	 */
+	private static Map uppercaseCharacterToVirtualKeyMap = initializeUppercaseCharacterToVirtualKeyMap();
+	
+	/**
+	 * Creates and initializes a {@link Map} containing uppercase
+	 * {@link Character} keys to their corresponding {@link Integer} virtual key
+	 * values to use to translate a given {@link String} into an integer array
+	 * containing only virtual keys.
+	 * @return A {@link Map} containing uppercase {@link Character} keys to
+	 *         their corresponding {@link Integer} virtual key values to use to
+	 *         translate a given {@link String} into an integer array containing
+	 *         only virtual keys.
+	 */
+	private static Map initializeUppercaseCharacterToVirtualKeyMap() {
+		HashMap uppercaseCharacterToVirtualKeyMap = new HashMap(37);
+		for (int index = 'A'; index <= 'Z'; index++) {
+			uppercaseCharacterToVirtualKeyMap.put(new Character((char) index),
+			        new Integer(index));
+		}
+		uppercaseCharacterToVirtualKeyMap.put(new Character(' '), new Integer(
+		        KeyEvent.VK_SPACE));
+		uppercaseCharacterToVirtualKeyMap.put(new Character('0'), new Integer(
+		        KeyEvent.VK_NUMPAD0));
+		uppercaseCharacterToVirtualKeyMap.put(new Character('1'), new Integer(
+		        KeyEvent.VK_NUMPAD1));
+		uppercaseCharacterToVirtualKeyMap.put(new Character('2'), new Integer(
+		        KeyEvent.VK_NUMPAD2));
+		uppercaseCharacterToVirtualKeyMap.put(new Character('3'), new Integer(
+		        KeyEvent.VK_NUMPAD3));
+		uppercaseCharacterToVirtualKeyMap.put(new Character('4'), new Integer(
+		        KeyEvent.VK_NUMPAD4));
+		uppercaseCharacterToVirtualKeyMap.put(new Character('5'), new Integer(
+		        KeyEvent.VK_NUMPAD5));
+		uppercaseCharacterToVirtualKeyMap.put(new Character('6'), new Integer(
+		        KeyEvent.VK_NUMPAD6));
+		uppercaseCharacterToVirtualKeyMap.put(new Character('7'), new Integer(
+		        KeyEvent.VK_NUMPAD7));
+		uppercaseCharacterToVirtualKeyMap.put(new Character('8'), new Integer(
+		        KeyEvent.VK_NUMPAD8));
+		uppercaseCharacterToVirtualKeyMap.put(new Character('9'), new Integer(
+		        KeyEvent.VK_NUMPAD9));
+		return Collections.unmodifiableMap(uppercaseCharacterToVirtualKeyMap);
+	}
 	
 	/**
 	 * <code>BaseInput</code> associated with this key capture.
@@ -69,26 +150,12 @@ public abstract class KeyCapture {
 	private int[] modifiers; // key modifiers that must always be pressed
 	// when typing the key sequence
 	
-	/**
-	 * ************************ KEYCAPTURE PROPERTIES **************************
-	 */
-	
 	private int currentKey; // current key to type
 	
 	private int delay; // delay time in ms
 	private long currentTick;
 	
 	private boolean active = true;
-	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ***************************** CONSTRUCTOR *******************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
 	
 	/**
 	 * Creates new <code>KeyCapture</code> with specified input, key, delay, and
@@ -105,11 +172,7 @@ public abstract class KeyCapture {
 		this.key = key;
 		
 		// convert to string
-		StringBuffer buff = new StringBuffer();
-		for (int i = 0; i < key.length; i++) {
-			buff.append(KeyEvent.getKeyText(key[i]));
-		}
-		this.keyString = buff.toString();
+		updateKeyStringRepresentation(key);
 	}
 	
 	/**
@@ -126,23 +189,27 @@ public abstract class KeyCapture {
 		this.delay = delay;
 		this.key = this.parseString(keyString);
 		
-		// convert to string
-		StringBuffer buff = new StringBuffer();
-		for (int i = 0; i < this.key.length; i++) {
-			buff.append(KeyEvent.getKeyText(this.key[i]));
-		}
-		this.keyString = buff.toString();
+		updateKeyStringRepresentation(this.key);
 	}
 	
 	/**
-	 * *************************************************************************
+	 * Updates the key string representation, dubiously exposed via the
+	 * {@link #getKeyString()} method. This method will be deprecated and
+	 * removed in a later version of the {@link KeyCapture} class.
+	 * 
+	 * @param key The non-null integer array representing the sequence of
+	 *        virtual keys the user must press in order for the keys to be
+	 *        captured.
+	 * @throws NullPointerException Throws a {@link NullPointerException} if the
+	 *         given integer array is null.
 	 */
-	/**
-	 * ************************* THE KEY SEQUENCE ******************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
+	private void updateKeyStringRepresentation(int[] key) {
+		StringBuffer buff = new StringBuffer();
+		for (int i = 0; i < key.length; i++) {
+			buff.append(KeyEvent.getKeyText(key[i]));
+		}
+		this.keyString = buff.toString();
+	}
 	
 	/**
 	 * Returns the key sequence key code that will be captured.
@@ -156,6 +223,12 @@ public abstract class KeyCapture {
 	/**
 	 * Returns the key sequence in string.
 	 * @return The key sequence.
+	 * @deprecated This method is not needed and will be removed in a future
+	 *             release. To access the actual information programatically,
+	 *             use {@link #getKeySequence()} instead - concatenating these
+	 *             values into a {@link String} by calling
+	 *             {@link KeyEvent#getKeyText(int)} on each value in the
+	 *             returned array yields the result of this method.
 	 */
 	public String getKeyString() {
 		return this.keyString;
@@ -169,12 +242,7 @@ public abstract class KeyCapture {
 	 */
 	public void setKeySequence(int[] key) {
 		this.key = key;
-		StringBuffer buff = new StringBuffer();
-		for (int i = 0; i < key.length; i++) {
-			buff.append(KeyEvent.getKeyText(key[i]));
-		}
-		
-		this.keyString = buff.toString();
+		updateKeyStringRepresentation(key);
 	}
 	
 	/**
@@ -200,123 +268,14 @@ public abstract class KeyCapture {
 		int[] seq = new int[st.length()];
 		st = st.toUpperCase();
 		for (int i = 0; i < st.length(); i++) {
-			switch (st.charAt(i)) {
-				case 'A':
-					seq[i] = KeyEvent.VK_A;
-					break;
-				case 'B':
-					seq[i] = KeyEvent.VK_B;
-					break;
-				case 'C':
-					seq[i] = KeyEvent.VK_C;
-					break;
-				case 'D':
-					seq[i] = KeyEvent.VK_D;
-					break;
-				case 'E':
-					seq[i] = KeyEvent.VK_E;
-					break;
-				case 'F':
-					seq[i] = KeyEvent.VK_F;
-					break;
-				case 'G':
-					seq[i] = KeyEvent.VK_G;
-					break;
-				case 'H':
-					seq[i] = KeyEvent.VK_H;
-					break;
-				case 'I':
-					seq[i] = KeyEvent.VK_I;
-					break;
-				case 'J':
-					seq[i] = KeyEvent.VK_J;
-					break;
-				case 'K':
-					seq[i] = KeyEvent.VK_K;
-					break;
-				case 'L':
-					seq[i] = KeyEvent.VK_L;
-					break;
-				case 'M':
-					seq[i] = KeyEvent.VK_M;
-					break;
-				case 'N':
-					seq[i] = KeyEvent.VK_N;
-					break;
-				case 'O':
-					seq[i] = KeyEvent.VK_O;
-					break;
-				case 'P':
-					seq[i] = KeyEvent.VK_P;
-					break;
-				case 'Q':
-					seq[i] = KeyEvent.VK_Q;
-					break;
-				case 'R':
-					seq[i] = KeyEvent.VK_R;
-					break;
-				case 'S':
-					seq[i] = KeyEvent.VK_S;
-					break;
-				case 'T':
-					seq[i] = KeyEvent.VK_T;
-					break;
-				case 'U':
-					seq[i] = KeyEvent.VK_U;
-					break;
-				case 'V':
-					seq[i] = KeyEvent.VK_V;
-					break;
-				case 'W':
-					seq[i] = KeyEvent.VK_W;
-					break;
-				case 'X':
-					seq[i] = KeyEvent.VK_X;
-					break;
-				case 'Y':
-					seq[i] = KeyEvent.VK_Y;
-					break;
-				case 'Z':
-					seq[i] = KeyEvent.VK_Z;
-					break;
-				case ' ':
-					seq[i] = KeyEvent.VK_SPACE;
-					break;
-				case '0':
-					seq[i] = KeyEvent.VK_NUMPAD0;
-					break;
-				case '1':
-					seq[i] = KeyEvent.VK_NUMPAD1;
-					break;
-				case '2':
-					seq[i] = KeyEvent.VK_NUMPAD2;
-					break;
-				case '3':
-					seq[i] = KeyEvent.VK_NUMPAD3;
-					break;
-				case '4':
-					seq[i] = KeyEvent.VK_NUMPAD4;
-					break;
-				case '5':
-					seq[i] = KeyEvent.VK_NUMPAD5;
-					break;
-				case '6':
-					seq[i] = KeyEvent.VK_NUMPAD6;
-					break;
-				case '7':
-					seq[i] = KeyEvent.VK_NUMPAD7;
-					break;
-				case '8':
-					seq[i] = KeyEvent.VK_NUMPAD8;
-					break;
-				case '9':
-					seq[i] = KeyEvent.VK_NUMPAD9;
-					break;
-				default:
-					throw new RuntimeException("Can't parse String st at " + i
-					        + " -> " + st.charAt(i)
-					        + "\nUse setKeySequence(int[]) instead");
+			Integer virtualKey = (Integer) uppercaseCharacterToVirtualKeyMap
+			        .get(new Character(st.charAt(i)));
+			if (virtualKey == null) {
+				throw new RuntimeException("Can't parse String st at " + i
+				        + " -> " + st.charAt(i)
+				        + "\nUse setKeySequence(int[]) instead");
 			}
+			seq[i] = virtualKey.intValue();
 		}
 		
 		return seq;
@@ -351,6 +310,8 @@ public abstract class KeyCapture {
 	 * 
 	 * @param i the key modifier
 	 * @see #getModifiers()
+	 * @deprecated This shortcut method is not needed and will be removed - use
+	 *             {@link #setModifiers(int[])} instead.
 	 */
 	public void setModifiers(int i) {
 		this.setModifiers(new int[] {
@@ -509,14 +470,14 @@ public abstract class KeyCapture {
 	 */
 	
 	private void printDebugRight(String st) {
-		if (this.DEBUG && this.currentKey > 0) {
+		if (this.DEBUG) {
 			System.out.println(this);
 			System.out.println(st);
 		}
 	}
 	
 	private void printDebugWrong(String st) {
-		if (this.DEBUG && this.currentKey > 0) {
+		if (this.DEBUG) {
 			System.out.println(this);
 			System.out.print(st + ", ");
 			

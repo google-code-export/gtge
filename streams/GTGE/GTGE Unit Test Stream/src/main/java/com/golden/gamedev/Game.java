@@ -113,6 +113,7 @@ import com.golden.gamedev.util.Utility;
  * 
  * 
  * 
+ * 
  * </pre>
  * 
  * <p>
@@ -141,6 +142,7 @@ import com.golden.gamedev.util.Utility;
  *          game.start();
  *       }
  * }
+ * 
  * 
  * 
  * 
@@ -682,6 +684,7 @@ public abstract class Game {
 	 * 
 	 * 
 	 * 
+	 * 
 	 * protected void initEngine() {
 	 * 	super.initEngine();
 	 * 	// change the timer engine
@@ -726,12 +729,12 @@ public abstract class Game {
 			this.bsInput = new AWTInput(this.bsGraphics.getComponent());
 		}
 		if (this.bsMusic == null) {
-			this.bsMusic = new BaseAudio(this.bsIO, new MidiRenderer());
+			this.bsMusic = new BaseAudio(resourceLoader, new MidiRenderer());
 			this.bsMusic.setExclusive(true);
 			this.bsMusic.setLoop(true);
 		}
 		if (this.bsSound == null) {
-			this.bsSound = new BaseAudio(this.bsIO, new WaveRenderer());
+			this.bsSound = new BaseAudio(resourceLoader, new WaveRenderer());
 		}
 		
 		// miscellanous
@@ -949,6 +952,7 @@ public abstract class Game {
 	 * For example:
 	 * 
 	 * <pre>
+	 * 
 	 * 
 	 * 
 	 * 
@@ -1669,6 +1673,7 @@ public abstract class Game {
 	 * For example:
 	 * 
 	 * <pre>
+	 * 
 	 * 
 	 * 
 	 * 

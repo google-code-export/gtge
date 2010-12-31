@@ -385,6 +385,9 @@ public class BaseLoader {
 	 */
 	public void setBaseIO(BaseIO base) {
 		this.base = base;
+		if (base != null) {
+			this.resourceLoader = base.getSelectedResourceLoader();
+		}
 	}
 	
 	/**

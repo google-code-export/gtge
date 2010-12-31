@@ -29,7 +29,9 @@ import com.golden.gamedev.object.SpriteGroup;
  */
 public abstract class CollisionBounds extends CollisionManager {
 	
-	/** ********************* COLLISION SIDE CONSTANTS ************************** */
+	/**
+	 * ********************* COLLISION SIDE CONSTANTS **************************
+	 */
 	
 	/**
 	 * Indicates the sprite is collided at its left.
@@ -51,7 +53,9 @@ public abstract class CollisionBounds extends CollisionManager {
 	 */
 	public static final int BOTTOM_COLLISION = 8;
 	
-	/** ************************ COLLISION PROPERTIES *************************** */
+	/**
+	 * ************************ COLLISION PROPERTIES ***************************
+	 */
 	
 	private static final SpriteGroup DUMMY = new SpriteGroup("Dummy");
 	
@@ -67,9 +71,15 @@ public abstract class CollisionBounds extends CollisionManager {
 	 */
 	protected final CollisionRect rect1 = new CollisionRect();
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new <code>CollisionBounds</code> with specified boundary.
@@ -79,8 +89,8 @@ public abstract class CollisionBounds extends CollisionManager {
 	}
 	
 	/**
-	 * Creates new <code>CollisionBounds</code> with specified background as
-	 * the boundary.
+	 * Creates new <code>CollisionBounds</code> with specified background as the
+	 * boundary.
 	 */
 	public CollisionBounds(Background backgr) {
 		this.boundary.setBounds(0, 0, backgr.getWidth(), backgr.getHeight());
@@ -90,9 +100,15 @@ public abstract class CollisionBounds extends CollisionManager {
 		super.setCollisionGroup(group1, CollisionBounds.DUMMY);
 	}
 	
-	/** ************************************************************************* */
-	/** ****************** MAIN-METHOD: CHECKING COLLISION ********************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ****************** MAIN-METHOD: CHECKING COLLISION **********************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public void checkCollision() {
 		SpriteGroup group1 = this.getGroup1();
@@ -164,6 +180,7 @@ public abstract class CollisionBounds extends CollisionManager {
 	 * <code>Sprite</code> dimension :
 	 * 
 	 * <pre>
+	 * 
 	 * public boolean getCollisionRect1(Sprite s1, CollisionRect rect) {
 	 * 	rect.setBounds(s1.getX(), s1.getY(), s1.getWidth(), s1.getHeight());
 	 * 	return rect;
@@ -174,8 +191,8 @@ public abstract class CollisionBounds extends CollisionManager {
 	 * @see CollisionRect#intersects(CollisionShape)
 	 */
 	public CollisionShape getCollisionShape1(Sprite s1) {
-		this.rect1.setBounds(s1.getX(), s1.getY(), s1.getWidth(), s1
-		        .getHeight());
+		this.rect1.setBounds(s1.getX(), s1.getY(), s1.getWidth(),
+		        s1.getHeight());
 		
 		return this.rect1;
 	}

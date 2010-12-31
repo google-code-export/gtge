@@ -17,8 +17,8 @@
 package com.golden.gamedev.object.collision;
 
 /**
- * Optimized <code>java.awt.Rectangle</code> with double precision. The
- * default sprite collision bounding box.
+ * Optimized <code>java.awt.Rectangle</code> with double precision. The default
+ * sprite collision bounding box.
  */
 public class CollisionRect implements CollisionShape {
 	
@@ -137,8 +137,8 @@ public class CollisionRect implements CollisionShape {
 	 * collision shape.
 	 */
 	public void setBounds(CollisionShape shape) {
-		this.setBounds(shape.getX(), shape.getY(), shape.getWidth(), shape
-		        .getHeight());
+		this.setBounds(shape.getX(), shape.getY(), shape.getWidth(),
+		        shape.getHeight());
 	}
 	
 	public void setLocation(double x1, double y1) {

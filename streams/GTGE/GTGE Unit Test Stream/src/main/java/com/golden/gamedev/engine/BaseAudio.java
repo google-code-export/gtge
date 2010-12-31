@@ -17,6 +17,9 @@
 package com.golden.gamedev.engine;
 
 // GTGE
+import java.awt.Color;
+
+import com.golden.gamedev.engine.resource.ResourceLoader;
 import com.golden.gamedev.util.Utility;
 
 /**
@@ -36,7 +39,9 @@ import com.golden.gamedev.util.Utility;
  */
 public class BaseAudio implements Runnable {
 	
-	/** *************************** AUDIO POLICY ******************************** */
+	/**
+	 * *************************** AUDIO POLICY ********************************
+	 */
 	
 	/**
 	 * Audio clip with a same name only can be played once at a time. The audio
@@ -75,7 +80,9 @@ public class BaseAudio implements Runnable {
 	private int maxSimultaneous; // max simultaneous audio sound
 	// played at a time
 	
-	/** ************************** AUDIO RENDERER ******************************* */
+	/**
+	 * ************************** AUDIO RENDERER *******************************
+	 */
 	
 	private BaseAudioRenderer baseRenderer;
 	
@@ -86,9 +93,21 @@ public class BaseAudio implements Runnable {
 	
 	private String lastAudioFile; // last played audio
 	
-	/** ************************* MANAGER PROPERTIES **************************** */
-	
+	/**
+	 * @deprecated {@link BaseIO} is deprecated and will be removed in a future
+	 *             release.
+	 */
 	private BaseIO base;
+	
+	/**
+	 * The possibly-null {@link ResourceLoader} instance to use to load
+	 * resources. <br />
+	 * <br />
+	 * Note that the only way this can be set to null is via the
+	 * {@link BaseLoader#BaseLoader(ResourceLoader, Color)} constructor with the
+	 * first argument set to null.
+	 */
+	private ResourceLoader resourceLoader;
 	
 	private boolean exclusive; // only one clip can be played at a time
 	
@@ -102,9 +121,15 @@ public class BaseAudio implements Runnable {
 	
 	// attempting to replace idle renderer
 	
-	/** ************************************************************************* */
-	/** ************************** CONSTRUCTOR ********************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** CONSTRUCTOR **********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new audio manager with specified renderer as the base renderer of
@@ -113,9 +138,34 @@ public class BaseAudio implements Runnable {
 	 * 
 	 * @param base the BaseIO to get audio resources
 	 * @param baseRenderer the base renderer of this audio manager
+	 * @deprecated {@link BaseIO} will no longer be used, use
+	 *             {@link BaseAudio#BaseAudio(ResourceLoader, BaseAudioRenderer)}
+	 *             instead.
 	 */
 	public BaseAudio(BaseIO base, BaseAudioRenderer baseRenderer) {
-		this.base = base;
+		this((ResourceLoader) base, baseRenderer);
+	}
+	
+	/**
+	 * Creates new audio manager with specified renderer as the base renderer of
+	 * all audio sounds created by this audio manager. <br />
+	 * <br />
+	 * Note that although the 0.2.4 version of GTGE does not force the setting
+	 * of a non-null {@link ResourceLoader} via this constructor, a future
+	 * version may change this - a non-null {@link ResourceLoader} instance
+	 * should be set in order for the {@link BaseAudio} class to function
+	 * properly.
+	 * 
+	 * @param resourceLoader The non-null {@link ResourceLoader} instance to use
+	 *        to load resources.
+	 * @param baseRenderer the base renderer of this audio manager
+	 */
+	public BaseAudio(final ResourceLoader resourceLoader,
+	        final BaseAudioRenderer baseRenderer) {
+		if (resourceLoader instanceof BaseIO) {
+			this.base = (BaseIO) resourceLoader;
+		}
+		this.resourceLoader = resourceLoader;
 		this.baseRenderer = baseRenderer;
 		
 		this.active = baseRenderer.isAvailable();
@@ -151,9 +201,15 @@ public class BaseAudio implements Runnable {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** ********************** PLAYING AUDIO OPERATION ************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ********************** PLAYING AUDIO OPERATION **************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Plays audio clip with {@link #getAudioPolicy() default policy}.
@@ -272,7 +328,7 @@ public class BaseAudio implements Runnable {
 		}
 		
 		this.renderer[emptyslot].setVolume(this.volume);
-		this.renderer[emptyslot].play(this.base.getURL(audiofile));
+		this.renderer[emptyslot].play(this.resourceLoader.getURL(audiofile));
 		this.rendererFile[emptyslot] = audiofile;
 		
 		return emptyslot;
@@ -326,9 +382,15 @@ public class BaseAudio implements Runnable {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** ********************* LOADED RENDERER TRACKER *************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ********************* LOADED RENDERER TRACKER ***************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns audio renderer in specified slot.
@@ -389,9 +451,15 @@ public class BaseAudio implements Runnable {
 		return this.renderer.length;
 	}
 	
-	/** ************************************************************************* */
-	/** ******************** SETTINGS AUDIO VOLUME ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ******************** SETTINGS AUDIO VOLUME ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns audio manager volume.
@@ -440,9 +508,15 @@ public class BaseAudio implements Runnable {
 		return this.baseRenderer.isVolumeSupported();
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ MANAGER PROPERTIES ***************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ MANAGER PROPERTIES *****************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns the default audio policy used by this audio manager to play audio
@@ -558,6 +632,8 @@ public class BaseAudio implements Runnable {
 	 * sound resources.
 	 * @return The {@link BaseIO} used to retrieve audio resources.
 	 * @see #setBaseIO(BaseIO)
+	 * @deprecated {@link BaseIO} will no longer be used. Use
+	 *             {@link #getResourceLoader()} instead.
 	 */
 	public BaseIO getBaseIO() {
 		return this.base;
@@ -568,6 +644,8 @@ public class BaseAudio implements Runnable {
 	 * sound resources.
 	 * @param base The {@link BaseIO} to use for getting audio resources.
 	 * @see #getBaseIO()
+	 * @deprecated {@link BaseIO} will no longer be used. Use
+	 *             {@link #setResourceLoader()} instead.
 	 */
 	public void setBaseIO(BaseIO base) {
 		this.base = base;
@@ -614,9 +692,15 @@ public class BaseAudio implements Runnable {
 		return this.baseRenderer.isAvailable();
 	}
 	
-	/** ************************************************************************* */
-	/** *************************** BASE RENDERER ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *************************** BASE RENDERER *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns the base renderer of this audio manager.
@@ -666,6 +750,33 @@ public class BaseAudio implements Runnable {
 			                + "\n"
 			                + "Make sure the base renderer has one empty constructor!");
 		}
+	}
+	
+	/**
+	 * Gets the (possibly null) {@link ResourceLoader} instance to use to load
+	 * resources.
+	 * @return The (possibly null) {@link ResourceLoader} instance to use to
+	 *         load resources.
+	 */
+	public final ResourceLoader getResourceLoader() {
+		return resourceLoader;
+	}
+	
+	/**
+	 * Sets the non-null {@link ResourceLoader} instance to use to load
+	 * resources.
+	 * @param resourceLoader The non-null {@link ResourceLoader} instance to use
+	 *        to load resources.
+	 * @throws IllegalArgumentException Throws an
+	 *         {@link IllegalArgumentException} if the given
+	 *         {@link ResourceLoader} instance is null.
+	 */
+	public final void setResourceLoader(ResourceLoader resourceLoader) {
+		if (resourceLoader == null) {
+			throw new IllegalArgumentException(
+			        "The ResourceLoader may not be null.");
+		}
+		this.resourceLoader = resourceLoader;
 	}
 	
 }

@@ -25,13 +25,13 @@ import java.awt.image.BufferedImage;
  * be animated.
  * <p>
  * 
- * To animate animated sprite, simply use
- * {@linkplain #setAnimate(boolean) setAnimate(true)}, and to loop the
- * animation use {@linkplain #setLoopAnim(boolean) setLoopAnim(true)}. <br>
+ * To animate animated sprite, simply use {@linkplain #setAnimate(boolean)
+ * setAnimate(true)}, and to loop the animation use
+ * {@linkplain #setLoopAnim(boolean) setLoopAnim(true)}. <br>
  * To control animation speed, adjust the sprite
  * {@linkplain #getAnimationTimer() animation timer} delay. <br>
- * To control animation frame sequence, use
- * {@link #setAnimationFrame(int, int) setAnimationFrame(int startframe, int endframe)}.
+ * To control animation frame sequence, use {@link #setAnimationFrame(int, int)
+ * setAnimationFrame(int startframe, int endframe)}.
  * <p>
  * 
  * Animated sprite usage example :
@@ -63,7 +63,9 @@ public class AnimatedSprite extends Sprite {
 	 * 
 	 */
 	private static final long serialVersionUID = -3921494149259881742L;
-	/** ************************** SPRITE ANIMATION ***************************** */
+	/**
+	 * ************************** SPRITE ANIMATION *****************************
+	 */
 	
 	// sprite images
 	private transient BufferedImage[] image;
@@ -79,9 +81,15 @@ public class AnimatedSprite extends Sprite {
 	
 	private Timer animationTimer;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new <code>AnimatedSprite</code> with specified images and
@@ -109,8 +117,8 @@ public class AnimatedSprite extends Sprite {
 	}
 	
 	/**
-	 * Creates new <code>AnimatedSprite</code> with specified images and
-	 * located at (0, 0).
+	 * Creates new <code>AnimatedSprite</code> with specified images and located
+	 * at (0, 0).
 	 * <p>
 	 * 
 	 * @see #setLocation(double, double)
@@ -147,9 +155,15 @@ public class AnimatedSprite extends Sprite {
 		this(0, 0);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* IMAGE OPERATION ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* IMAGE OPERATION *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Sets sprite animation images.
@@ -212,9 +226,15 @@ public class AnimatedSprite extends Sprite {
 		return this.image[this.frame];
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** ANIMATION FRAME ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** ANIMATION FRAME ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Sets current frame animation.
@@ -292,9 +312,15 @@ public class AnimatedSprite extends Sprite {
 		return this.finishFrame;
 	}
 	
-	/** ************************************************************************* */
-	/** *************************** UPDATE SPRITE ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *************************** UPDATE SPRITE *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public void update(long elapsedTime) {
 		super.update(elapsedTime);
@@ -324,17 +350,29 @@ public class AnimatedSprite extends Sprite {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** RENDER SPRITE ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** RENDER SPRITE ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public void render(Graphics2D g, int xs, int ys) {
 		g.drawImage(this.image[this.frame], xs, ys, null);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** SPRITE PROPERTIES **************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** SPRITE PROPERTIES ****************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns whether this sprite is currently animating or not.

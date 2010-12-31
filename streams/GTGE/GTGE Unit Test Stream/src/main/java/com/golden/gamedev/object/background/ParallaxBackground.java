@@ -57,9 +57,15 @@ public class ParallaxBackground extends Background {
 	private Background[] stack;
 	private int total;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new <code>ParallaxBackground</code>.
@@ -88,17 +94,28 @@ public class ParallaxBackground extends Background {
 		super.setLocation(xb, yb);
 		
 		for (int i = 0; i < this.total; i++) {
-			this.stack[i].setLocation(this.getX()
-			        * (this.stack[i].getWidth() - this.getClip().width)
-			        / (this.getWidth() - this.getClip().width), this.getY()
-			        * (this.stack[i].getHeight() - this.getClip().height)
-			        / (this.getHeight() - this.getClip().height));
+			this.stack[i]
+			        .setLocation(
+			                this.getX()
+			                        * (this.stack[i].getWidth() - this
+			                                .getClip().width)
+			                        / (this.getWidth() - this.getClip().width),
+			                this.getY()
+			                        * (this.stack[i].getHeight() - this
+			                                .getClip().height)
+			                        / (this.getHeight() - this.getClip().height));
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** **************** UPDATE AND RENDER STACKED BACKGROUND ******************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * **************** UPDATE AND RENDER STACKED BACKGROUND *******************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public void update(long elapsedTime) {
 		for (int i = 0; i < this.total; i++) {

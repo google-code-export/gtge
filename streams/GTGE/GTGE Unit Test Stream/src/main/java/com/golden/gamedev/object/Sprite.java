@@ -25,8 +25,8 @@ import com.golden.gamedev.object.collision.CollisionRect;
 import com.golden.gamedev.object.collision.CollisionShape;
 
 /**
- * <code>Sprite</code> is the object in game that has graphical look and has
- * its own behaviour.
+ * <code>Sprite</code> is the object in game that has graphical look and has its
+ * own behaviour.
  * <p>
  * 
  * Every sprite is lived in a background, by default sprite is attached to
@@ -67,11 +67,15 @@ public class Sprite implements java.io.Serializable {
 	 */
 	private static final long serialVersionUID = -4499098097309229784L;
 	
-	/** ************************** SPRITE BACKGROUND **************************** */
+	/**
+	 * ************************** SPRITE BACKGROUND ****************************
+	 */
 	
 	private Background background;
 	
-	/** *************************** SPRITE POSITION ***************************** */
+	/**
+	 * *************************** SPRITE POSITION *****************************
+	 */
 	
 	private double x, y;
 	private double horizontalSpeed, verticalSpeed; // in pixels per millisecond
@@ -80,7 +84,9 @@ public class Sprite implements java.io.Serializable {
 	// ///////// optimization ///////////
 	private static double screenX, screenY; // screen position = x-background.x
 	        
-	/** **************************** SPRITE IMAGES ****************************** */
+	/**
+	 * **************************** SPRITE IMAGES ******************************
+	 */
 	
 	private transient BufferedImage image;
 	
@@ -100,7 +106,9 @@ public class Sprite implements java.io.Serializable {
 	 */
 	protected CollisionShape defaultCollisionShape = null;
 	
-	/** **************************** SPRITE FLAGS ******************************* */
+	/**
+	 * **************************** SPRITE FLAGS *******************************
+	 */
 	
 	private int id; // to differentiate a sprite with another
 	private Object dataID;
@@ -112,9 +120,15 @@ public class Sprite implements java.io.Serializable {
 	
 	// from its group
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new <code>Sprite</code> with specified image and location.
@@ -172,9 +186,15 @@ public class Sprite implements java.io.Serializable {
 		this(0, 0);
 	}
 	
-	/** ************************************************************************* */
-	/** *********************** SPRITE BACKGROUND ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *********************** SPRITE BACKGROUND *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Associates specified background with this sprite.
@@ -193,9 +213,15 @@ public class Sprite implements java.io.Serializable {
 		return this.background;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ IMAGE OPERATION ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ IMAGE OPERATION ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns the image of this sprite.
@@ -240,15 +266,21 @@ public class Sprite implements java.io.Serializable {
 			this.defaultCollisionShape = new CollisionRect();
 		}
 		
-		this.defaultCollisionShape.setBounds(this.getX(), this.getY(), this
-		        .getWidth(), this.getHeight());
+		this.defaultCollisionShape.setBounds(this.getX(), this.getY(),
+		        this.getWidth(), this.getHeight());
 		
 		return this.defaultCollisionShape;
 	}
 	
-	/** ************************************************************************* */
-	/** ********************** MOVEMENT OPERATION ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ********************** MOVEMENT OPERATION *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Attempts to move this sprite to specified <code>xs</code>,
@@ -278,8 +310,7 @@ public class Sprite implements java.io.Serializable {
 		double radians = Math.toRadians(angle);
 		
 		double vx = Math.sin(radians) * speed * elapsedTime, vy = -Math
-		        .cos(radians)
-		        * speed * elapsedTime;
+		        .cos(radians) * speed * elapsedTime;
 		
 		boolean arriveX = false, arriveY = false;
 		
@@ -447,24 +478,30 @@ public class Sprite implements java.io.Serializable {
 	}
 	
 	/**
-	 * Returns sprite <code>x</code> coordinate before the sprite moving to
-	 * the current position.
+	 * Returns sprite <code>x</code> coordinate before the sprite moving to the
+	 * current position.
 	 */
 	public double getOldX() {
 		return this.oldX;
 	}
 	
 	/**
-	 * Returns sprite <code>y</code> coordinate before the sprite moving to
-	 * the current position.
+	 * Returns sprite <code>y</code> coordinate before the sprite moving to the
+	 * current position.
 	 */
 	public double getOldY() {
 		return this.oldY;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* SPEED VARIABLES ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* SPEED VARIABLES *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Sets the speed of this sprite, the speed is based on actual time in
@@ -528,6 +565,7 @@ public class Sprite implements java.io.Serializable {
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
 	 * Sprite s;
 	 * 
 	 * public void update(long elapsedTime) {
@@ -575,6 +613,7 @@ public class Sprite implements java.io.Serializable {
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
 	 * Sprite s;
 	 * 
 	 * public void update(long elapsedTime) {
@@ -632,9 +671,15 @@ public class Sprite implements java.io.Serializable {
 		return this.verticalSpeed;
 	}
 	
-	/** ************************************************************************* */
-	/** ******************* OTHER SPRITE POSITION FUNCTIONS ********************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ******************* OTHER SPRITE POSITION FUNCTIONS *********************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns sprite <code>x</code> coordinate relative to screen area.
@@ -678,8 +723,7 @@ public class Sprite implements java.io.Serializable {
 		        && Sprite.screenY + this.height > -topOffset
 		        && Sprite.screenX < this.background.getClip().width
 		                + rightOffset && Sprite.screenY < this.background
-		        .getClip().height
-		        + bottomOffset);
+		        .getClip().height + bottomOffset);
 	}
 	
 	/**
@@ -689,9 +733,15 @@ public class Sprite implements java.io.Serializable {
 		return this.isOnScreen(0, 0, 0, 0);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* UPDATE SPRITE ********************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* UPDATE SPRITE *********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Updates this sprite.
@@ -708,9 +758,15 @@ public class Sprite implements java.io.Serializable {
 		        * elapsedTime);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* RENDER SPRITE ********************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* RENDER SPRITE *********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Renders this sprite to specified graphics context.
@@ -747,9 +803,15 @@ public class Sprite implements java.io.Serializable {
 		g.drawImage(this.image, x, y, null);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** SPRITE FLAGS ********************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** SPRITE FLAGS *********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns sprite ID, ID is used to mark a sprite from other sprite.

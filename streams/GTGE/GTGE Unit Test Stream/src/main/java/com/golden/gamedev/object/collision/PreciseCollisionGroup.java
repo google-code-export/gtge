@@ -24,10 +24,9 @@ import com.golden.gamedev.object.SpriteGroup;
 
 /**
  * <p>
- * Subclass of <code>CollisionGroup</code> that calculates the precise
- * positions of the <code>Sprite</code>s at the moment of collision. It is
- * suitable for collisions that need the colliding objects to stop rather than
- * vanish.
+ * Subclass of <code>CollisionGroup</code> that calculates the precise positions
+ * of the <code>Sprite</code>s at the moment of collision. It is suitable for
+ * collisions that need the colliding objects to stop rather than vanish.
  * </p>
  * 
  * <p>
@@ -45,10 +44,10 @@ import com.golden.gamedev.object.SpriteGroup;
  * This class may not work as expected with concave sprites- such as L-shapes.
  * The position of the collision will be found accurately, but the direction may
  * not be as anticipated as it is based on the <code>CollisionRect</code>s
- * rather than pixel collisions or custom <code>CollisionShape</code>s
- * defined in subclasses of <code>PreciseCollisionGroup</code> If concave
- * sprites are necessary, it might be advisable to break them into groups of
- * smaller convex <code>Sprite</code>s.
+ * rather than pixel collisions or custom <code>CollisionShape</code>s defined
+ * in subclasses of <code>PreciseCollisionGroup</code> If concave sprites are
+ * necessary, it might be advisable to break them into groups of smaller convex
+ * <code>Sprite</code>s.
  * </p>
  * 
  * @see PlayField#addCollisionGroup(SpriteGroup, SpriteGroup, CollisionManager)
@@ -58,8 +57,8 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 	
 	/***************************************************************************
 	 * This is used to test for non-convergence in pixel perfect collision, or
-	 * when unusual <code>CollisionShape</code>s are used. The default value
-	 * is 0.000001.
+	 * when unusual <code>CollisionShape</code>s are used. The default value is
+	 * 0.000001.
 	 **************************************************************************/
 	protected static double ITERATIVE_BAILOUT = 0.000001;
 	
@@ -108,9 +107,9 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 	public boolean isCollide(Sprite s1, Sprite s2, CollisionShape shape1, CollisionShape shape2) {
 		
 		// if (shape1.intersects(shape2)) {
-		if ((this.pixelPerfectCollision && CollisionManager.isPixelCollide(s1
-		        .getX(), s1.getY(), s1.getImage(), s2.getX(), s2.getY(), s2
-		        .getImage()))
+		if ((this.pixelPerfectCollision && CollisionManager.isPixelCollide(
+		        s1.getX(), s1.getY(), s1.getImage(), s2.getX(), s2.getY(),
+		        s2.getImage()))
 		        || (!this.pixelPerfectCollision && shape1.intersects(shape2))) {
 			// basic check to see if collision occurred
 			this.sprite1 = s1;
@@ -122,12 +121,10 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 			// this gets the speed
 			double speedX1 = s1.getX() - s1.getOldX(), speedY1 = s1.getY()
 			        - s1.getOldY(), speedX2 = s2.getX() - s2.getOldX(), speedY2 = s2
-			        .getY()
-			        - s2.getOldY();
+			        .getY() - s2.getOldY();
 			// now get the bounds for the CollisionShapes
 			double x1 = shape1.getX() - speedX1, y1 = shape1.getY() - speedY1, x2 = shape2
-			        .getX()
-			        - speedX2, y2 = shape2.getY() - speedY2;
+			        .getX() - speedX2, y2 = shape2.getY() - speedY2;
 			double w1 = shape1.getWidth(), h1 = shape1.getHeight(), w2 = shape2
 			        .getWidth(), h2 = shape2.getHeight();
 			
@@ -165,15 +162,14 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 					return false;
 				}
 				else {// find fastest moving
-					// find centres
+					  // find centres
 					double s1cx = shape1.getX() + shape1.getWidth() / 2;
 					double s1cy = shape1.getY() + shape1.getHeight() / 2;
 					double s2cx = shape2.getX() + shape2.getWidth() / 2;
 					double s2cy = shape2.getY() + shape2.getHeight() / 2;
 					
 					if (Math.pow(speedX1, 2) + Math.pow(speedY1, 2) > Math.pow(
-					        speedX2, 2)
-					        + Math.pow(speedY2, 2)) {// sprite
+					        speedX2, 2) + Math.pow(speedY2, 2)) {// sprite
 						// 1
 						// faster
 						spriteToMove = s1;
@@ -517,8 +513,8 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 		}
 		
 		if (includePixelPerfect && this.pixelPerfectCollision) {
-			return CollisionManager.isPixelCollide(x1 + dx, y1 + dy, s1
-			        .getImage(), x2, y2, s2.getImage());
+			return CollisionManager.isPixelCollide(x1 + dx, y1 + dy,
+			        s1.getImage(), x2, y2, s2.getImage());
 		}
 		else {// check using default collision shapes
 			this.shape3 = this.getCollisionShape1(s1);
@@ -542,8 +538,9 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 		double curX1, curY1, curX2, curY2;
 		
 		// set up fastest speed- this is used for the bailout condition.
-		double maxSpeed = Math.max(Math.max(Math.abs(speedX1), Math
-		        .abs(speedY1)), Math.max(Math.abs(speedX2), Math.abs(speedY2)));
+		double maxSpeed = Math.max(
+		        Math.max(Math.abs(speedX1), Math.abs(speedY1)),
+		        Math.max(Math.abs(speedX2), Math.abs(speedY2)));
 		
 		while (true) {
 			

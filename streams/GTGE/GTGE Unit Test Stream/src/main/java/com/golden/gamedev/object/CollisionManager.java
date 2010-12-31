@@ -34,23 +34,31 @@ import com.golden.gamedev.object.collision.CollisionRect;
  * <p>
  * 
  * <code>CollisionManager</code> is added into <code>PlayField</code> using
- * {@link PlayField#addCollisionGroup(SpriteGroup, SpriteGroup, CollisionManager)},
- * and then the <code>PlayField</code> manage the collision check everytime
+ * {@link PlayField#addCollisionGroup(SpriteGroup, SpriteGroup, CollisionManager)}
+ * , and then the <code>PlayField</code> manage the collision check everytime
  * the PlayField is updated.
  * 
  * @see PlayField#addCollisionGroup(SpriteGroup, SpriteGroup, CollisionManager)
  */
 public abstract class CollisionManager {
 	
-	/** ************************* COLLISION GROUP ******************************* */
+	/**
+	 * ************************* COLLISION GROUP *******************************
+	 */
 	
 	private SpriteGroup group1, group2;
 	
 	private boolean active = true;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new <code>CollisionManager</code>.
@@ -58,9 +66,15 @@ public abstract class CollisionManager {
 	public CollisionManager() {
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* COLLISION GROUP ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* COLLISION GROUP *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Associates specified sprite groups to this manager. The groups will be
@@ -87,20 +101,31 @@ public abstract class CollisionManager {
 		return this.group2;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** COLLISION CHECK ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** COLLISION CHECK ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
-	 * Checks for collision between all members in
-	 * {@linkplain #getGroup1() group 1} againts all members in
-	 * {@linkplain #getGroup1() group 2}.
+	 * Checks for collision between all members in {@linkplain #getGroup1()
+	 * group 1} againts all members in {@linkplain #getGroup1() group 2}.
 	 */
 	public abstract void checkCollision();
 	
-	/** ************************************************************************* */
-	/** ************************** ACTIVE STATE ********************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** ACTIVE STATE *********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns true, if this collision manager is active. Inactive collision

@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.golden.gamedev.engine.resource.ResourceLoader;
 import com.golden.gamedev.util.ImageUtil;
 
 /**
@@ -45,15 +46,32 @@ import com.golden.gamedev.util.ImageUtil;
  */
 public class BaseLoader {
 	
-	/** ************************** LOADER PROPERTIES **************************** */
+	/**
+	 * ************************** LOADER PROPERTIES ****************************
+	 */
 	
 	// Base IO to get external resources
+	/**
+	 * @deprecated {@link BaseIO} will no longer be used.
+	 */
 	private BaseIO base;
+	
+	/**
+	 * The possibly-null {@link ResourceLoader} instance to use to load
+	 * resources. <br />
+	 * <br />
+	 * Note that the only way this can be set to null is via the
+	 * {@link BaseLoader#BaseLoader(ResourceLoader, Color)} constructor with the
+	 * first argument set to null.
+	 */
+	private ResourceLoader resourceLoader;
 	
 	// masking color
 	private Color maskColor;
 	
-	/** **************************** IMAGE STORAGE ****************************** */
+	/**
+	 * **************************** IMAGE STORAGE ******************************
+	 */
 	
 	// store single image
 	private Map imageBank;
@@ -61,9 +79,15 @@ public class BaseLoader {
 	// store multiple images
 	private Map imagesBank;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Constructs new <code>BaseLoader</code> with specified I/O loader, and
@@ -73,20 +97,56 @@ public class BaseLoader {
 	 * Masking color is the color of the images that will be converted to
 	 * transparent.
 	 * 
-	 * @param base I/O resource loader
+	 * @param base The {@link BaseIO} instance to use to load resources.
 	 * @param maskColor the mask color
+	 * @deprecated The {@link BaseIO} class is deprecated and will no longer be
+	 *             used, use
+	 *             {@link BaseLoader#BaseLoader(ResourceLoader, Color)} instead.
 	 */
 	public BaseLoader(BaseIO base, Color maskColor) {
-		this.base = base;
+		this((ResourceLoader) base, maskColor);
+	}
+	
+	/**
+	 * Constructs new <code>BaseLoader</code> with specified I/O loader, and
+	 * masking color.
+	 * <p>
+	 * 
+	 * Masking color is the color of the images that will be converted to
+	 * transparent.
+	 * 
+	 * <br />
+	 * <br />
+	 * Note that although the 0.2.4 version of GTGE does not force the setting
+	 * of a non-null {@link ResourceLoader} via this constructor, a future
+	 * version may change this - a non-null {@link ResourceLoader} instance
+	 * should be set in order for the {@link BaseLoader} class to function
+	 * properly.
+	 * 
+	 * @param resourceLoader The non-null {@link ResourceLoader} instance to use
+	 *        to load resources.
+	 * @param maskColor the mask color
+	 */
+	public BaseLoader(final ResourceLoader resourceLoader, final Color maskColor) {
+		if (resourceLoader instanceof BaseIO) {
+			this.base = (BaseIO) resourceLoader;
+		}
+		this.resourceLoader = resourceLoader;
 		this.maskColor = maskColor;
 		
 		this.imageBank = new HashMap(5);
 		this.imagesBank = new HashMap(30);
 	}
 	
-	/** ************************************************************************* */
-	/** *********************** INSERTION OPERATION ***************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *********************** INSERTION OPERATION *****************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Loads and returns an image from the file location. If useMask is set to
@@ -102,7 +162,7 @@ public class BaseLoader {
 		BufferedImage image = (BufferedImage) this.imageBank.get(imagefile);
 		
 		if (image == null) {
-			URL url = this.base.getURL(imagefile);
+			URL url = this.resourceLoader.getURL(imagefile);
 			
 			image = (useMask) ? ImageUtil.getImage(url, this.maskColor)
 			        : ImageUtil.getImage(url);
@@ -142,7 +202,7 @@ public class BaseLoader {
 		        .get(imagefile);
 		
 		if (image == null) {
-			URL url = this.base.getURL(imagefile);
+			URL url = this.resourceLoader.getURL(imagefile);
 			
 			image = (useMask) ? ImageUtil.getImages(url, col, row,
 			        this.maskColor) : ImageUtil.getImages(url, col, row);
@@ -168,9 +228,15 @@ public class BaseLoader {
 		return this.getImages(imagefile, col, row, true);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ REMOVAL OPERATION ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ REMOVAL OPERATION ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Removes specified image from cache.
@@ -234,9 +300,15 @@ public class BaseLoader {
 		this.imagesBank.clear();
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* CUSTOM OPERATION ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* CUSTOM OPERATION ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Stores image into cache with specified key.
@@ -284,14 +356,22 @@ public class BaseLoader {
 		return (BufferedImage[]) this.imagesBank.get(key);
 	}
 	
-	/** ************************************************************************* */
-	/** ********************** BASE LOADER PROPERTIES *************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ********************** BASE LOADER PROPERTIES ***************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns {@link BaseIO} associated with this image loader.
 	 * @return The {@link BaseIO} used by the loader.
 	 * @see #setBaseIO(BaseIO)
+	 * @deprecated {@link BaseIO} will no longer be used. Use
+	 *             {@link #getResourceLoader()} instead.
 	 */
 	public BaseIO getBaseIO() {
 		return this.base;
@@ -300,6 +380,8 @@ public class BaseLoader {
 	/**
 	 * Sets {@link BaseIO} where the image resources is loaded from.
 	 * @param base The new {@link BaseIO} used by the loader.
+	 * @deprecated {@link BaseIO} will no longer be used. Use
+	 *             {@link #setResourceLoader()} instead.
 	 */
 	public void setBaseIO(BaseIO base) {
 		this.base = base;
@@ -360,8 +442,34 @@ public class BaseLoader {
 		imagesKey.append("\"");
 		
 		return super.toString() + " " + "[maskColor=" + this.maskColor
-		        + ", BaseIO=" + this.base + ", imageLoaded=" + imageKey
-		        + ", imagesLoaded=" + imagesKey + "]";
+		        + ", BaseIO=" + this.resourceLoader + ", imageLoaded="
+		        + imageKey + ", imagesLoaded=" + imagesKey + "]";
 	}
 	
+	/**
+	 * Gets the (possibly null) {@link ResourceLoader} instance to use to load
+	 * resources.
+	 * @return The (possibly null) {@link ResourceLoader} instance to use to
+	 *         load resources.
+	 */
+	public final ResourceLoader getResourceLoader() {
+		return resourceLoader;
+	}
+	
+	/**
+	 * Sets the non-null {@link ResourceLoader} instance to use to load
+	 * resources.
+	 * @param resourceLoader The non-null {@link ResourceLoader} instance to use
+	 *        to load resources.
+	 * @throws IllegalArgumentException Throws an
+	 *         {@link IllegalArgumentException} if the given
+	 *         {@link ResourceLoader} instance is null.
+	 */
+	public final void setResourceLoader(ResourceLoader resourceLoader) {
+		if (resourceLoader == null) {
+			throw new IllegalArgumentException(
+			        "The ResourceLoader may not be null.");
+		}
+		this.resourceLoader = resourceLoader;
+	}
 }

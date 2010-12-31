@@ -37,6 +37,7 @@ import com.golden.gamedev.util.Utility;
  * For example how to create and use sprite group :
  * 
  * <pre>
+ * 
  * SpriteGroup ENEMY_GROUP;
  * 
  * public void initResources() {
@@ -65,7 +66,9 @@ import com.golden.gamedev.util.Utility;
  */
 public class SpriteGroup {
 	
-	/** *********************** GROUP SPRITE FACTOR ***************************** */
+	/**
+	 * *********************** GROUP SPRITE FACTOR *****************************
+	 */
 	
 	// total 'empty' sprite (NULL sprite, allocation only)
 	// reduce the cost of array enlargement operation
@@ -74,7 +77,9 @@ public class SpriteGroup {
 	// removes inactive sprites every 15 seconds
 	private Timer scanFrequence = new Timer(15000);
 	
-	/** ************************ GROUP PROPERTIES ******************************* */
+	/**
+	 * ************************ GROUP PROPERTIES *******************************
+	 */
 	
 	private String name; // group name (for identifier only)
 	private boolean active = true;
@@ -83,14 +88,22 @@ public class SpriteGroup {
 	
 	private Comparator comparator; // comparator for sorting sprite
 	
-	/** ****************** SPRITES THAT BELONG TO THIS GROUP ******************** */
+	/**
+	 * ****************** SPRITES THAT BELONG TO THIS GROUP ********************
+	 */
 	
 	private Sprite[] sprites; // member of this group
 	private int size; // all non-null sprites (active + inactive)
 	
-	/** ************************************************************************* */
-	/** ************************** CONSTRUCTOR ********************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** CONSTRUCTOR **********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates a new sprite group, with specified name. Name is used for group
@@ -103,9 +116,15 @@ public class SpriteGroup {
 		this.sprites = new Sprite[this.expandFactor];
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* INSERTION OPERATION *************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* INSERTION OPERATION ***************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Inserts sprite at the bottom (last index) of this group.
@@ -172,7 +191,8 @@ public class SpriteGroup {
 	 * tight-loop (main-loop). <br>
 	 * The standard way to remove a sprite from its group is by setting sprite
 	 * active state to false
-	 * {@link com.golden.gamedev.object.Sprite#setActive(boolean) Sprite.setActive(false)}.
+	 * {@link com.golden.gamedev.object.Sprite#setActive(boolean)
+	 * Sprite.setActive(false)}.
 	 * <p>
 	 * 
 	 * SpriteGroup is designed to remove any inactive sprites automatically
@@ -203,7 +223,8 @@ public class SpriteGroup {
 	 * tight-loop (main-loop). <br>
 	 * The standard way to remove a sprite from its group is by setting sprite
 	 * active state to false
-	 * {@link com.golden.gamedev.object.Sprite#setActive(boolean) Sprite.setActive(false)}.
+	 * {@link com.golden.gamedev.object.Sprite#setActive(boolean)
+	 * Sprite.setActive(false)}.
 	 * <p>
 	 * 
 	 * SpriteGroup is designed to remove any inactive sprites automatically
@@ -253,8 +274,8 @@ public class SpriteGroup {
 	}
 	
 	/**
-	 * Removes all group members, same with {@link #clear()}, except this
-	 * method also removes sprite memory reference immediately.
+	 * Removes all group members, same with {@link #clear()}, except this method
+	 * also removes sprite memory reference immediately.
 	 * <p>
 	 * 
 	 * Use this method if only the size of the removed sprites is taking too big
@@ -268,9 +289,15 @@ public class SpriteGroup {
 		this.size = 0;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* UPDATE THIS GROUP ***************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* UPDATE THIS GROUP *****************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Updates all active sprites in this group, and check the schedule for
@@ -372,9 +399,15 @@ public class SpriteGroup {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** ******************** RENDER TO GRAPHICS CONTEXT ************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ******************** RENDER TO GRAPHICS CONTEXT *************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Renders all active sprites in this group. If this group is associated
@@ -411,9 +444,15 @@ public class SpriteGroup {
 		Arrays.sort(this.sprites, 0, this.size, c);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** GROUP PROPERTIES ***************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** GROUP PROPERTIES *****************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns the name of this group. Name is used for group identifier only.
@@ -525,9 +564,15 @@ public class SpriteGroup {
 		this.comparator = c;
 	}
 	
-	/** ************************************************************************* */
-	/** *************************** SPRITES GETTER ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *************************** SPRITES GETTER ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns the first active sprite found in this group, or null if there is
@@ -679,9 +724,15 @@ public class SpriteGroup {
 		return this.size;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ GROUP FACTOR METHODS *************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ GROUP FACTOR METHODS ***************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns allocation size for empty sprite (null sprite).

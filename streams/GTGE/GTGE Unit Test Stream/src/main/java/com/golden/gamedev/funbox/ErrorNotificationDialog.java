@@ -54,8 +54,8 @@ import com.golden.gamedev.Game;
 import com.golden.gamedev.engine.BaseGraphics;
 
 /**
- * <code>ErrorNotificationDialog</code> class is a dialog UI to show the
- * player the game exception and tell the player to send it to the game author.
+ * <code>ErrorNotificationDialog</code> class is a dialog UI to show the player
+ * the game exception and tell the player to send it to the game author.
  */
 public class ErrorNotificationDialog extends JDialog implements Runnable,
         ActionListener, WindowListener {
@@ -93,9 +93,15 @@ public class ErrorNotificationDialog extends JDialog implements Runnable,
 	 */
 	protected JTextArea textArea;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Builds up an error notification dialog for the player.
@@ -178,27 +184,29 @@ public class ErrorNotificationDialog extends JDialog implements Runnable,
 			
 			SimpleDateFormat format = new SimpleDateFormat(
 			        "EEE, dd MMM yyyy 'at' HH:mm");
-			this.append2(this.textArea, "Date/Time         : ", format
-			        .format(Calendar.getInstance(TimeZone.getTimeZone("GMT+7"))
-			                .getTime()));
-			this.append2(this.textArea, "Java Version      : ", this
-			        .getSystemProperty(new String[] {
+			this.append2(
+			        this.textArea,
+			        "Date/Time         : ",
+			        format.format(Calendar.getInstance(
+			                TimeZone.getTimeZone("GMT+7")).getTime()));
+			this.append2(this.textArea, "Java Version      : ",
+			        this.getSystemProperty(new String[] {
 			                "java.vm.version", "java.vendor"
 			        }));
 			this.append2(this.textArea, "GTGE Version      : ",
 			        Game.GTGE_VERSION);
-			this.append2(this.textArea, "Environment       : ", this.bsGraphics
-			        .getGraphicsDescription());
-			this.append2(this.textArea, "Operating System  : ", this
-			        .getSystemProperty(new String[] {
+			this.append2(this.textArea, "Environment       : ",
+			        this.bsGraphics.getGraphicsDescription());
+			this.append2(this.textArea, "Operating System  : ",
+			        this.getSystemProperty(new String[] {
 			                "os.name", "os.version", "sun.os.patch.level"
 			        })); // Windows XP Service Pack 1
-			this.append2(this.textArea, "User Name         : ", this
-			        .getSystemProperty(new String[] {
+			this.append2(this.textArea, "User Name         : ",
+			        this.getSystemProperty(new String[] {
 				        "user.name"
 			        }));
-			this.append2(this.textArea, "Working Directory : ", this
-			        .getSystemProperty(new String[] {
+			this.append2(this.textArea, "Working Directory : ",
+			        this.getSystemProperty(new String[] {
 				        "user.dir"
 			        }));
 		}
@@ -282,8 +290,8 @@ public class ErrorNotificationDialog extends JDialog implements Runnable,
 			ImageIcon[] icons = new ImageIcon[2];
 			
 			// copy to clipboard button
-			icons[0] = new ImageIcon(ErrorNotificationDialog.class
-			        .getResource("Icon1.png"));
+			icons[0] = new ImageIcon(
+			        ErrorNotificationDialog.class.getResource("Icon1.png"));
 			JButton btn1 = new JButton("copy to clipboard", icons[0]);
 			btn1.setBackground(btnColor);
 			btn1.setBorderPainted(false);
@@ -297,8 +305,8 @@ public class ErrorNotificationDialog extends JDialog implements Runnable,
 			btn1.setMargin(new Insets(0, 0, 0, 0));
 			
 			// exit button
-			icons[1] = new ImageIcon(ErrorNotificationDialog.class
-			        .getResource("Icon2.png"));
+			icons[1] = new ImageIcon(
+			        ErrorNotificationDialog.class.getResource("Icon2.png"));
 			JButton btn2 = new JButton("close application", icons[1]);
 			btn2.setBackground(btnColor);
 			btn2.setBorderPainted(false);
@@ -398,8 +406,8 @@ public class ErrorNotificationDialog extends JDialog implements Runnable,
 	 * Closes this error notification dialog.
 	 * <p>
 	 * 
-	 * This method will call <code>System.exit(0);</code> if the graphics
-	 * engine is not instance of <code>Applet</code> class.
+	 * This method will call <code>System.exit(0);</code> if the graphics engine
+	 * is not instance of <code>Applet</code> class.
 	 */
 	public void closeDialog() {
 		try {

@@ -42,15 +42,21 @@ public abstract class AbstractIsometricBackground extends Background {
 	private Point point1 = new Point(); // return value for getTileAt(...)
 	private Point point2 = new Point(); // return value for getCoordinateAt(...)
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new <code>AbstractIsometricBackground</code> as big as
-	 * <code>horiz</code>, <code>vert</code> tiles, where each tile is as
-	 * big as <code>tileWidth</code>, <code>tileHeight</code> with
-	 * specified tile height offset, and starting y coordinate.
+	 * <code>horiz</code>, <code>vert</code> tiles, where each tile is as big as
+	 * <code>tileWidth</code>, <code>tileHeight</code> with specified tile
+	 * height offset, and starting y coordinate.
 	 * 
 	 * @param horiz total horizontal tiles
 	 * @param vert total vertical tiles
@@ -84,8 +90,8 @@ public abstract class AbstractIsometricBackground extends Background {
 	
 	/**
 	 * Creates new <code>AbstractIsometricBackground</code> as big as
-	 * <code>horiz</code>, <code>vert</code> tiles, where each tile is as
-	 * big as <code>tileWidth</code>, <code>tileHeight</code>.
+	 * <code>horiz</code>, <code>vert</code> tiles, where each tile is as big as
+	 * <code>tileWidth</code>, <code>tileHeight</code>.
 	 * 
 	 * @param horiz total horizontal tiles
 	 * @param vert total vertical tiles
@@ -97,9 +103,15 @@ public abstract class AbstractIsometricBackground extends Background {
 		this(horiz, vert, tileWidth, tileHeight, 0, 0);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ RENDER BACKGROUND ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ RENDER BACKGROUND ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public void render(Graphics2D g, int xbg, int ybg, int x, int y, int w, int h) {
 		int x0 = x - xbg + this.startX, // start x, y
@@ -198,9 +210,15 @@ public abstract class AbstractIsometricBackground extends Background {
 	 */
 	public abstract void renderTile(Graphics2D g, int tileX, int tileY, int x, int y);
 	
-	/** ************************************************************************* */
-	/** ************************ BACKGROUND POSITION **************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ BACKGROUND POSITION ****************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * @see com.golden.gamedev.object.Background#setLocation(double, double)
@@ -262,6 +280,7 @@ public abstract class AbstractIsometricBackground extends Background {
 	 * Drawing rectangle at mouse cursor position
 	 * 
 	 * <pre>
+	 * 
 	 * public class YourGame extends Game {
 	 * 	
 	 * 	AbstractTileBackground bg;
@@ -275,8 +294,8 @@ public abstract class AbstractIsometricBackground extends Background {
 	 * 			Point coordAt = bg.getCoordinateAt(tileAt.x, tileAt.y);
 	 * 			g.setColor(Color.WHITE);
 	 * 			g.drawRect(coordAt.x - (int) bg.getX() + bg.getClip().x, coordAt.y
-	 * 			        - (int) bg.getY() + bg.getClip().y, bg.getTileWidth(), bg
-	 * 			        .getTileHeight());
+	 * 			        - (int) bg.getY() + bg.getClip().y, bg.getTileWidth(),
+	 * 			        bg.getTileHeight());
 	 * 		}
 	 * 	}
 	 * }
@@ -321,9 +340,15 @@ public abstract class AbstractIsometricBackground extends Background {
 		return this.point2;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* TILE PROPERTIES ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* TILE PROPERTIES *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns the width of the iso tile.

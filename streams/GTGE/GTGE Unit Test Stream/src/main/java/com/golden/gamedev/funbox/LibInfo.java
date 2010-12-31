@@ -80,8 +80,8 @@ public class LibInfo extends Game {
 		this.font1.drawString(g, "GOLDEN T GAME ENGINE", GameFont.CENTER, 0, y,
 		        this.getWidth());
 		y += lineHeight + 5;
-		this.font1.drawString(g, "[ G T G E ]", GameFont.CENTER, 0, y, this
-		        .getWidth());
+		this.font1.drawString(g, "[ G T G E ]", GameFont.CENTER, 0, y,
+		        this.getWidth());
 		y += lineHeight + 8;
 		
 		lineHeight = this.font2.getHeight();
@@ -119,9 +119,15 @@ public class LibInfo extends Game {
 		this.font4.drawString(g, "http://www.goldenstudios.or.id/", 95, y);
 	}
 	
-	/** ************************************************************************* */
-	/** *************************** CONSTRUCTOR ********************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *************************** CONSTRUCTOR *********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Main method to run this info frame.

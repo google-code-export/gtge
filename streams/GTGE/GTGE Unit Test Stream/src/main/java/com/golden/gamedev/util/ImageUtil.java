@@ -61,9 +61,15 @@ public class ImageUtil {
 	private ImageUtil() {
 	}
 	
-	/** ************************************************************************* */
-	/** ********************* LOADING IMAGE OPERATION *************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ********************* LOADING IMAGE OPERATION ***************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Loads an image from URL and specified transparency.
@@ -80,8 +86,8 @@ public class ImageUtil {
 			Image image = Toolkit.getDefaultToolkit().getImage(url);
 			ImageUtil.waitForResource(image);
 			
-			BufferedImage buffImage = ImageUtil.createImage(image
-			        .getWidth(null), image.getHeight(null), transparency);
+			BufferedImage buffImage = ImageUtil.createImage(
+			        image.getWidth(null), image.getHeight(null), transparency);
 			
 			Graphics2D g = (Graphics2D) buffImage.createGraphics();
 			g.setComposite(AlphaComposite.Src);
@@ -223,9 +229,15 @@ public class ImageUtil {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** ********************** IMAGE MANIPULATION ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ********************** IMAGE MANIPULATION *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Applying mask into image using specified masking color. Any Color in the
@@ -236,8 +248,8 @@ public class ImageUtil {
 	 * @return Masked image
 	 */
 	public static BufferedImage applyMask(Image img, Color keyColor) {
-		BufferedImage alpha = ImageUtil.createImage(img.getWidth(null), img
-		        .getHeight(null), Transparency.BITMASK);
+		BufferedImage alpha = ImageUtil.createImage(img.getWidth(null),
+		        img.getHeight(null), Transparency.BITMASK);
 		
 		Graphics2D g = alpha.createGraphics();
 		g.setComposite(AlphaComposite.Src);
@@ -298,6 +310,7 @@ public class ImageUtil {
 	 * For example: <br>
 	 * 
 	 * <pre>
+	 * 
 	 * BufferedImage image;
 	 * // rotate the image by 90 degree clockwise
 	 * BufferedImage rotated = ImageUtil.rotate(image, 90);
@@ -329,6 +342,7 @@ public class ImageUtil {
 	 * For example: <br>
 	 * 
 	 * <pre>
+	 * 
 	 * BufferedImage image;
 	 * // resize the image to 200x300 size
 	 * BufferedImage resized = ImageUtil.resize(image, 200, 300);
@@ -391,9 +405,15 @@ public class ImageUtil {
 		return flipped;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** SAVING IMAGE ********************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** SAVING IMAGE *********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Saves image into specified file.

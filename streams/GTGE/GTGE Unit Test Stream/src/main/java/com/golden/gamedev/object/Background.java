@@ -46,7 +46,9 @@ import java.io.Serializable;
  */
 public class Background implements Serializable {
 	
-	/** ********************** SCREEN DIMENSION VAR ***************************** */
+	/**
+	 * ********************** SCREEN DIMENSION VAR *****************************
+	 */
 	
 	/**
 	 * 
@@ -54,15 +56,16 @@ public class Background implements Serializable {
 	private static final long serialVersionUID = -2401822583090769966L;
 	
 	/**
-	 * Screen resolution dimension. Used to determine background clipping area.
-	 * <br>
+	 * Screen resolution dimension. Used to determine background clipping area. <br>
 	 * Default value: 640x480.
 	 * 
 	 * @see #setClip(int, int, int, int)
 	 */
 	public static Dimension screen = new Dimension(640, 480);
 	
-	/** ********************** BACKGROUND PROPERTIES **************************** */
+	/**
+	 * ********************** BACKGROUND PROPERTIES ****************************
+	 */
 	
 	/**
 	 * Background <code>x</code> coordinate.
@@ -82,9 +85,15 @@ public class Background implements Serializable {
 	        
 	private final Rectangle clip; // view port (screen clipping)
 	
-	/** ************************************************************************* */
-	/** *************************** SINGLETON *********************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *************************** SINGLETON ***********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	private static Background backgr;
 	
@@ -99,9 +108,15 @@ public class Background implements Serializable {
 		return Background.backgr;
 	}
 	
-	/** ************************************************************************* */
-	/** **************************** CONSTRUCTOR ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * **************************** CONSTRUCTOR ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new Background with specified size, and default clipping area (as
@@ -135,9 +150,15 @@ public class Background implements Serializable {
 		this(Background.screen.width, Background.screen.height);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ BACKGROUND POSITION **************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ BACKGROUND POSITION ****************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns the <code>x</code> coordinate of this background.
@@ -224,13 +245,19 @@ public class Background implements Serializable {
 	 * Sets specified sprite as the center of the background's viewport.
 	 */
 	public void setToCenter(Sprite centered) {
-		this.setToCenter((int) centered.getX(), (int) centered.getY(), centered
-		        .getWidth(), centered.getHeight());
+		this.setToCenter((int) centered.getX(), (int) centered.getY(),
+		        centered.getWidth(), centered.getHeight());
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ BACKGROUND VIEWPORT **************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ BACKGROUND VIEWPORT ****************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Sets background clipping area (viewport). Clipping area is the viewport
@@ -266,9 +293,15 @@ public class Background implements Serializable {
 		return this.clip;
 	}
 	
-	/** ************************************************************************* */
-	/** ******************************* UPDATE ********************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ******************************* UPDATE **********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Updates this background, this method is usually used to create background
@@ -281,9 +314,15 @@ public class Background implements Serializable {
 	public void update(long elapsedTime) {
 	}
 	
-	/** ************************************************************************* */
-	/** ********************** RENDER TO GRAPHICS CONTEXT *********************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ********************** RENDER TO GRAPHICS CONTEXT ***********************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Renders background to specified graphics context.

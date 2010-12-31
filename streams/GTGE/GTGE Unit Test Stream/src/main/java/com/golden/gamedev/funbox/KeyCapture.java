@@ -26,10 +26,11 @@ import com.golden.gamedev.engine.BaseInput;
  * usually used to turn on cheat mode.
  * <p>
  * 
- * Example how-to-use <code>KeyCapture</code> class : (print out a text
- * whenever the user type 'HELLO' in right sequence)
+ * Example how-to-use <code>KeyCapture</code> class : (print out a text whenever
+ * the user type 'HELLO' in right sequence)
  * 
  * <pre>
+ * 
  * BaseInput input;
  * String key = &quot;HELLO&quot;;
  * KeyCapture keycap = new KeyCapture(input, key, 1000) {
@@ -58,7 +59,9 @@ public abstract class KeyCapture {
 	 */
 	public boolean DEBUG = false;
 	
-	/** ***************************** KEY SEQUENCE ****************************** */
+	/**
+	 * ***************************** KEY SEQUENCE ******************************
+	 */
 	
 	private int[] key; // the key sequence
 	private String keyString; // the key sequence in String
@@ -66,7 +69,9 @@ public abstract class KeyCapture {
 	private int[] modifiers; // key modifiers that must always be pressed
 	// when typing the key sequence
 	
-	/** ************************ KEYCAPTURE PROPERTIES ************************** */
+	/**
+	 * ************************ KEYCAPTURE PROPERTIES **************************
+	 */
 	
 	private int currentKey; // current key to type
 	
@@ -75,13 +80,19 @@ public abstract class KeyCapture {
 	
 	private boolean active = true;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
-	 * Creates new <code>KeyCapture</code> with specified input, key, delay,
-	 * and listener.
+	 * Creates new <code>KeyCapture</code> with specified input, key, delay, and
+	 * listener.
 	 * 
 	 * @param input <code>BaseInput</code> associated with this key capture
 	 * @param key key code array (from <code>java.awt.event.KeyEvent</code>
@@ -102,9 +113,9 @@ public abstract class KeyCapture {
 	}
 	
 	/**
-	 * Creates new <code>KeyCapture</code> with specified input, key sequence
-	 * in string, delay, and listener. The string will be parsed internally
-	 * before used.
+	 * Creates new <code>KeyCapture</code> with specified input, key sequence in
+	 * string, delay, and listener. The string will be parsed internally before
+	 * used.
 	 * 
 	 * @param input <code>BaseInput</code> associated with this key capture
 	 * @param keyString string to be captured
@@ -123,9 +134,15 @@ public abstract class KeyCapture {
 		this.keyString = buff.toString();
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* THE KEY SEQUENCE ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* THE KEY SEQUENCE ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns the key sequence key code that will be captured.
@@ -173,8 +190,7 @@ public abstract class KeyCapture {
 	 * 
 	 * @param st <code>String</code> to be parsed into key sequence
 	 * @see #setKeySequence(int[])
-	 * @throws RuntimeException if the <code>String st</code> can not be
-	 *         parsed.
+	 * @throws RuntimeException if the <code>String st</code> can not be parsed.
 	 */
 	public void setKeySequence(String st) {
 		this.setKeySequence(this.parseString(st));
@@ -342,14 +358,19 @@ public abstract class KeyCapture {
 		});
 	}
 	
-	/** ************************************************************************* */
-	/** **************************** MAIN-METHOD ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * **************************** MAIN-METHOD ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
-	 * Received key captured event when the
-	 * {@linkplain #getKeySequence() key sequence combination} is successfully
-	 * captured.
+	 * Received key captured event when the {@linkplain #getKeySequence() key
+	 * sequence combination} is successfully captured.
 	 */
 	public abstract void keyCaptured();
 	
@@ -434,9 +455,15 @@ public abstract class KeyCapture {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** ********************* KEY CAPTURE PROPERTIES **************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ********************* KEY CAPTURE PROPERTIES ****************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns this {@link KeyCapture} is active or not.
@@ -471,9 +498,15 @@ public abstract class KeyCapture {
 		this.delay = i;
 	}
 	
-	/** ************************************************************************* */
-	/** ***************************** DEBUGGER ********************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** DEBUGGER **********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	private void printDebugRight(String st) {
 		if (this.DEBUG && this.currentKey > 0) {

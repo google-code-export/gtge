@@ -25,8 +25,8 @@ import com.golden.gamedev.object.Sprite;
  * Sprite that its images is taken from another sprite (the pattern).
  * <p>
  * 
- * <code>PatternSprite</code> is used to make a number of sprite that share
- * same images and have same animation sequence. <br>
+ * <code>PatternSprite</code> is used to make a number of sprite that share same
+ * images and have same animation sequence. <br>
  * A sprite that not created in a same time will have a different animation
  * sequence (the new sprite will start with the first frame animation, and the
  * old one perhaps at the last animation). This kind of sprite will assure that
@@ -45,9 +45,15 @@ public class PatternSprite extends Sprite {
 	private static final long serialVersionUID = 1246202800220501766L;
 	private Sprite pattern;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new <code>PatternSprite</code> with specified pattern and
@@ -68,17 +74,29 @@ public class PatternSprite extends Sprite {
 		this.pattern = pattern;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* RENDER THE PATTERN **************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* RENDER THE PATTERN ****************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public void render(Graphics2D g, int x, int y) {
 		g.drawImage(this.pattern.getImage(), x, y, null);
 	}
 	
-	/** ************************************************************************* */
-	/** **************************** THE PATTERN ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * **************************** THE PATTERN ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns the pattern sprite associates with this sprite.

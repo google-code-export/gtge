@@ -46,6 +46,8 @@ import com.golden.gamedev.engine.BaseTimer;
 import com.golden.gamedev.engine.audio.MidiRenderer;
 import com.golden.gamedev.engine.audio.WaveRenderer;
 import com.golden.gamedev.engine.input.AWTInput;
+import com.golden.gamedev.engine.resource.ClassBasedResourceLoader;
+import com.golden.gamedev.engine.resource.ResourceLoader;
 import com.golden.gamedev.engine.timer.SystemTimer;
 import com.golden.gamedev.funbox.ErrorNotificationDialog;
 import com.golden.gamedev.object.Background;
@@ -58,9 +60,9 @@ import com.golden.gamedev.util.ImageUtil;
 import com.golden.gamedev.util.Utility;
 
 /**
- * <code>Game</code> class is <b>Golden T Game Engine (GTGE) core class</b>
- * that initializes all GTGE game engines, wrap the engines up, and setup the
- * basic game frame work to be play on.
+ * <code>Game</code> class is <b>Golden T Game Engine (GTGE) core class</b> that
+ * initializes all GTGE game engines, wrap the engines up, and setup the basic
+ * game frame work to be play on.
  * <p>
  * 
  * Every game is a subclass of <code>Game</code> class. And every subclass of
@@ -93,6 +95,24 @@ import com.golden.gamedev.util.Utility;
  * 		// render the game to the screen
  * 	}
  * }
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  * </pre>
  * 
  * <p>
@@ -121,12 +141,29 @@ import com.golden.gamedev.util.Utility;
  *          game.start();
  *       }
  * }
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  * </pre>
  * 
  * <p>
  * 
- * There are two main tasks of <code>Game</code> class that we need to know :
- * <br>
+ * There are two main tasks of <code>Game</code> class that we need to know : <br>
  * <ul>
  * <li>Game class initializes all GTGE game engines and keep the engines
  * reference (named as bsGraphics, bsInput, bsIO, etc). <br>
@@ -152,12 +189,27 @@ public abstract class Game {
 	
 	private static final int DEFAULT_FPS = 100;
 	
-	/** ***************************** GAME ENGINES ****************************** */
+	/**
+	 * ***************************** GAME ENGINES ******************************
+	 */
 	
 	/** Graphics engine. */
 	public BaseGraphics bsGraphics;
-	/** I/O file engine. */
+	/**
+	 * I/O file engine.
+	 * @deprecated - use {@link #setResourceLoader(ResourceLoader)} and
+	 *             {@link #getResourceLoader()} instead. Custom {@link BaseIO}
+	 *             instances may be used in GTGE 0.2.4 but the {@link BaseIO}
+	 *             class is deprecated and will be removed in a future release.
+	 * */
 	public BaseIO bsIO;
+	
+	/**
+	 * The non-null {@link ResourceLoader} instance to use to load resources.
+	 */
+	private ResourceLoader resourceLoader = new ClassBasedResourceLoader(
+	        this.getClass());
+	
 	/** Image loader engine. */
 	public BaseLoader bsLoader;
 	/** Input engine. */
@@ -172,7 +224,9 @@ public abstract class Game {
 	/** Font manager. */
 	public GameFontManager fontManager;
 	
-	/** **************************** GAME VARIABLES ***************************** */
+	/**
+	 * **************************** GAME VARIABLES *****************************
+	 */
 	
 	private boolean running; // true, indicates the game is currently
 	// running/playing
@@ -218,17 +272,23 @@ public abstract class Game {
 	private boolean inFocusBlink;
 	private boolean pauseOnLostFocus = false;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new instance of <code>Game</code> class, please <b>see note</b>
 	 * below.
 	 * <p>
 	 * 
-	 * Note: <b>Do not</b> make any overloading constructors. All that belong
-	 * to constructor (this method) should be put in {@link #initResources()}
+	 * Note: <b>Do not</b> make any overloading constructors. All that belong to
+	 * constructor (this method) should be put in {@link #initResources()}
 	 * method. <b>Leave this method empty and simply do not use constructor!</b>
 	 * 
 	 * @see #initResources()
@@ -238,9 +298,15 @@ public abstract class Game {
 	public Game() {
 	}
 	
-	/** ************************************************************************* */
-	/** *********************** START / STOP OPERATION ************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *********************** START / STOP OPERATION **************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Stops the game from running, and to resume the game call {@link #start()}
@@ -412,9 +478,15 @@ public abstract class Game {
 		this.initResources();
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ GAME LOOP THREAD ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ GAME LOOP THREAD *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	void startGameLoop() {
 		// before play, runs garbage collector to clear unused memory
@@ -559,9 +631,15 @@ public abstract class Game {
 		return this.pauseOnLostFocus;
 	}
 	
-	/** ************************************************************************* */
-	/** ********************* GAME ENGINE INITIALIZATION ************************ */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ********************* GAME ENGINE INITIALIZATION ************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Game engines is initialized in this method. <br>
@@ -571,21 +649,39 @@ public abstract class Game {
 	 * 
 	 * List of default game engines initialized in this method :
 	 * <ul>
-	 * <li> Timer Engine : uses
+	 * <li>Timer Engine : uses
 	 * {@link com.golden.gamedev.engine.timer.SystemTimer}</li>
-	 * <li> Input Engine : uses {@link com.golden.gamedev.engine.input.AWTInput}</li>
-	 * <li> Music Engine : uses
+	 * <li>Input Engine : uses {@link com.golden.gamedev.engine.input.AWTInput}</li>
+	 * <li>Music Engine : uses
 	 * {@link com.golden.gamedev.engine.audio.MidiRenderer}</li>
-	 * <li> Sound Engine : uses
+	 * <li>Sound Engine : uses
 	 * {@link com.golden.gamedev.engine.audio.WaveRenderer}</li>
-	 * <li> I/O Engine : uses {@link com.golden.gamedev.engine.BaseIO}</li>
-	 * <li> Image Engine : uses {@link com.golden.gamedev.engine.BaseLoader}</li>
+	 * <li>ResourceLoader : uses {@link ClassBasedResourceLoader}</li>
+	 * <li>Image Engine : uses {@link com.golden.gamedev.engine.BaseLoader}</li>
 	 * </ul>
 	 * <p>
 	 * 
 	 * Example how to modify or change the default game engine :
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * protected void initEngine() {
 	 * 	super.initEngine();
 	 * 	// change the timer engine
@@ -596,7 +692,7 @@ public abstract class Game {
 	 * </pre>
 	 * 
 	 * @see #bsGraphics
-	 * @see #bsIO
+	 * @see #setResourceLoader(ResourceLoader)
 	 * @see #bsLoader
 	 * @see #bsInput
 	 * @see #bsTimer
@@ -611,11 +707,20 @@ public abstract class Game {
 			this.bsTimer = new SystemTimer(); // GageTimer(); // LoraxTimer();
 			// //
 		}
+		
+		ResourceLoader actualLoader = resourceLoader;
 		if (this.bsIO == null) {
+			// Provided for backwards-compatibility, but not used.
 			this.bsIO = new BaseIO(this.getClass());
 		}
+		else {
+			actualLoader = bsIO.getSelectedResourceLoader();
+		}
+		
+		resourceLoader = actualLoader;
+		
 		if (this.bsLoader == null) {
-			this.bsLoader = new BaseLoader(this.bsIO, Color.MAGENTA);
+			this.bsLoader = new BaseLoader(resourceLoader, Color.MAGENTA);
 		}
 		if (this.bsInput == null) {
 			this.bsInput = new AWTInput(this.bsGraphics.getComponent());
@@ -644,9 +749,15 @@ public abstract class Game {
 		// locale = Locale.getDefault();
 	}
 	
-	/** ************************************************************************* */
-	/** ***************************** MAIN METHODS ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** MAIN METHODS ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * All game resources initialization, everything that usually goes to
@@ -679,14 +790,20 @@ public abstract class Game {
 	 */
 	public abstract void render(Graphics2D g);
 	
-	/** ************************************************************************* */
-	/** ********************* EXIT/ERROR NOTIFICATION *************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ********************* EXIT/ERROR NOTIFICATION ***************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Notified when the game is about to quit. By default this method is
-	 * calling <code>System.exit()</code> to ensure everything is properly
-	 * shut down.
+	 * calling <code>System.exit()</code> to ensure everything is properly shut
+	 * down.
 	 * <p>
 	 * 
 	 * Override this method to create a custom exit dialog, and be sure to call
@@ -706,8 +823,8 @@ public abstract class Game {
 			// applet game should display to the user
 			// that the game has been ended
 			final Applet applet = (Applet) this.bsGraphics;
-			BufferedImage src = ImageUtil.createImage(this.getWidth(), this
-			        .getHeight());
+			BufferedImage src = ImageUtil.createImage(this.getWidth(),
+			        this.getHeight());
 			Graphics2D g = src.createGraphics();
 			
 			try {
@@ -721,10 +838,9 @@ public abstract class Game {
 				
 				// draw in a circle only
 				Shape shape = new java.awt.geom.Ellipse2D.Float(
-				        this.getWidth() / 10, this.getHeight() / 10, this
-				                .getWidth()
-				                - (this.getWidth() / 10 * 2), this.getHeight()
-				                - (this.getHeight() / 10 * 2));
+				        this.getWidth() / 10, this.getHeight() / 10,
+				        this.getWidth() - (this.getWidth() / 10 * 2),
+				        this.getHeight() - (this.getHeight() / 10 * 2));
 				g.setClip(shape);
 				
 				// draw the game unto this image
@@ -749,8 +865,8 @@ public abstract class Game {
 				// converted = new ColorConvertOp(gray, null).filter(src, null);
 				
 				// technique #2
-				BufferedImage image = new BufferedImage(src.getWidth(), src
-				        .getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+				BufferedImage image = new BufferedImage(src.getWidth(),
+				        src.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
 				Graphics gfx = image.getGraphics();
 				gfx.drawImage(src, 0, 0, null);
 				gfx.dispose();
@@ -833,8 +949,28 @@ public abstract class Game {
 	 * For example:
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * protected void notifyError(Throwable error) {
-	 * 	new ErrorNotificationDialog(error, bsGraphics, &quot;Game Title v1.0&quot;, // the game title
+	 * 	new ErrorNotificationDialog(error, bsGraphics, &quot;Game Title v1.0&quot;, // the
+	 * 	                                                                  // game
+	 * 	                                                                  // title
 	 * 	        &quot;yourmail@address.com&quot;); // your email
 	 * }
 	 * </pre>
@@ -857,9 +993,15 @@ public abstract class Game {
 		return (this.development == false);
 	}
 	
-	/** ************************************************************************* */
-	/** ***************************** SHOW LOGO ********************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** SHOW LOGO *********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Shows GTGE logo/splash screen, GTGE is freeware library, please support
@@ -1067,9 +1209,15 @@ public abstract class Game {
 		this.bsGraphics.flip();
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* GTGE VALIDATION ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* GTGE VALIDATION *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	private void bailOut() {
 		try {
@@ -1119,14 +1267,26 @@ public abstract class Game {
 		System.exit(-1);
 	}
 	
-	/** ************************************************************************* */
-	/** ***************** BELOW THIS LINE IS ENGINES UTILIZE ******************** */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************** BELOW THIS LINE IS ENGINES UTILIZE ********************
+	 */
 	/** ***************** (PASTE INTO GAME OBJECT CLASS) ******************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
 	
-	/** ************************************************************************* */
-	/** *********************** ESSENTIAL GAME UTILITY ************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *********************** ESSENTIAL GAME UTILITY **************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	// -> com.golden.gamedev.util.Utility
 	/**
 	 * Effectively equivalent to the call
@@ -1141,9 +1301,15 @@ public abstract class Game {
 	// public Locale getLocale() { return locale; }
 	// public void setLocale(Locale locale) { this.locale = locale; }
 	
-	/** ************************************************************************* */
-	/** ************************* GRAPHICS UTILITY ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* GRAPHICS UTILITY ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	// -> com.golden.gamedev.engine.BaseGraphics
 	/**
 	 * Effectively equivalent to the call
@@ -1168,8 +1334,8 @@ public abstract class Game {
 	 * rendered into it.
 	 */
 	public BufferedImage takeScreenShot() {
-		BufferedImage screen = ImageUtil.createImage(this.getWidth(), this
-		        .getHeight(), Transparency.OPAQUE);
+		BufferedImage screen = ImageUtil.createImage(this.getWidth(),
+		        this.getHeight(), Transparency.OPAQUE);
 		Graphics2D g = screen.createGraphics();
 		this.render(g);
 		g.dispose();
@@ -1186,9 +1352,15 @@ public abstract class Game {
 		ImageUtil.saveImage(this.takeScreenShot(), f);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** AUDIO UTILITY ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** AUDIO UTILITY ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	// -> com.golden.gamedev.engine.BaseAudio
 	/**
 	 * Effectively equivalent to the call
@@ -1214,9 +1386,15 @@ public abstract class Game {
 		return this.bsSound.play(audiofile);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** TIMER UTILITY ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** TIMER UTILITY ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	// -> com.golden.gamedev.engine.BaseTimer
 	/**
 	 * Effectively equivalent to the call
@@ -1252,9 +1430,15 @@ public abstract class Game {
 		        "FPS = " + this.getCurrentFPS() + "/" + this.getFPS(), x, y);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** INPUT UTILITY ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** INPUT UTILITY ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	// -> com.golden.gamedev.engine.BaseInput
 	/**
 	 * Effectively equivalent to the call
@@ -1315,8 +1499,7 @@ public abstract class Game {
 		else {
 			return (mosx >= sprite.getX() && mosy >= sprite.getY()
 			        && mosx <= sprite.getX() + sprite.getWidth() && mosy <= sprite
-			        .getY()
-			        + sprite.getHeight());
+			        .getY() + sprite.getHeight());
 		}
 	}
 	
@@ -1418,9 +1601,15 @@ public abstract class Game {
 		this.bsInput.setMouseVisible(true);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** IMAGE UTILITY ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** IMAGE UTILITY ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	// com.golden.gamedev.engine.BaseLoader
 	/**
 	 * Effectively equivalent to the call
@@ -1472,13 +1661,32 @@ public abstract class Game {
 	 * <p>
 	 * 
 	 * First the image is stripped by column and row, and then the images is
-	 * arranged with specified sequence order. The images then stored into cache ({@linkplain com.golden.gamedev.engine.BaseLoader bsLoader})
-	 * with key as followed: the image file + sequence + digit.
+	 * arranged with specified sequence order. The images then stored into cache
+	 * ({@linkplain com.golden.gamedev.engine.BaseLoader bsLoader}) with key as
+	 * followed: the image file + sequence + digit.
 	 * <p>
 	 * 
 	 * For example:
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * // we want the images sequence is as followed
 	 * String sequence = &quot;020120&quot;;
 	 * BufferedImage[] image = getImages(&quot;imagestrip.png&quot;, 3, 1, true, sequence, 1);
@@ -1565,4 +1773,30 @@ public abstract class Game {
 		return this.getImages(imagefile, col, row, true, start, end);
 	}
 	
+	/**
+	 * Gets the non-null {@link ResourceLoader} instance to use to load
+	 * resources.
+	 * @return The non-null {@link ResourceLoader} instance to use to load
+	 *         resources.
+	 */
+	public final ResourceLoader getResourceLoader() {
+		return resourceLoader;
+	}
+	
+	/**
+	 * Sets the non-null {@link ResourceLoader} instance to use to load
+	 * resources.
+	 * @param resourceLoader The non-null {@link ResourceLoader} instance to use
+	 *        to load resources.
+	 * @throws IllegalArgumentException Throws an
+	 *         {@link IllegalArgumentException} if the given
+	 *         {@link ResourceLoader} instance is null.
+	 */
+	public final void setResourceLoader(ResourceLoader resourceLoader) {
+		if (resourceLoader == null) {
+			throw new IllegalArgumentException(
+			        "The ResourceLoader may not be null.");
+		}
+		this.resourceLoader = resourceLoader;
+	}
 }

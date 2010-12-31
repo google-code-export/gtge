@@ -57,6 +57,7 @@ import com.golden.gamedev.util.ImageUtil;
  * Example of how-to-use <code>GameSettings</code> class :
  * 
  * <pre>
+ * 
  * GameSettings settings = new GameSettings() {
  * 	
  * 	public void start() {
@@ -70,8 +71,8 @@ import com.golden.gamedev.util.ImageUtil;
  * 				bsSound.setActive(sound.isSelected());
  * 				bsMusic.setActive(sound.isSelected());
  * 			}
- * 		}, new Dimension(640, 480), fullscreen.isSelected(), bufferstrategy
- * 		        .isSelected());
+ * 		}, new Dimension(640, 480), fullscreen.isSelected(),
+ * 		        bufferstrategy.isSelected());
  * 		game.start();
  * 	}
  * 	
@@ -95,7 +96,9 @@ import com.golden.gamedev.util.ImageUtil;
 public abstract class GameSettings extends JDialog implements ActionListener,
         Runnable {
 	
-	/** *************************** CHECK BOX UI ******************************** */
+	/**
+	 * *************************** CHECK BOX UI ********************************
+	 */
 	
 	/**
 	 * Check box UI for fullscreen option.
@@ -131,9 +134,15 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 	 */
 	protected URL splashImage;
 	
-	/** ************************************************************************* */
-	/** ************************** CONSTRUCTOR ********************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** CONSTRUCTOR **********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Builds up the game settings/options dialog for the user with specified
@@ -213,9 +222,15 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 		this(fullscreen, true);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** GUI INITIALIZATION *************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** GUI INITIALIZATION ***************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Initializes the content of the settings, by default consists of splash
@@ -228,6 +243,7 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 	 * and launch panel (JPanel), using BorderLayout
 	 * 
 	 * <pre>
+	 * 
 	 * protected JPanel initGUI() {
 	 * 	JPanel pane = super.initGUI();
 	 * 	// modify launch panel, add Credits button
@@ -251,8 +267,8 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 		JLabel splashLabel = null;
 		if (this.splashImage != null) {
 			try {
-				splashLabel = new JLabel(new ImageIcon(ImageUtil
-				        .getImage(this.splashImage)));
+				splashLabel = new JLabel(new ImageIcon(
+				        ImageUtil.getImage(this.splashImage)));
 			}
 			catch (Exception e) {
 				splashLabel = null;
@@ -296,6 +312,7 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
 	 * JCheckBox opengl;
 	 * 
 	 * protected JPanel initSettings() {
@@ -380,9 +397,15 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 		this.start();
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** START THE GAME ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************** START THE GAME *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Starts the game with all the defined settings, the game is actually

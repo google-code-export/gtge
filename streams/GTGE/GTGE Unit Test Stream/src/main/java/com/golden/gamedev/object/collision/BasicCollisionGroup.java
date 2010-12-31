@@ -73,6 +73,7 @@ public abstract class BasicCollisionGroup extends CollisionManager {
 	 * The usual way to turn on this variable is :
 	 * 
 	 * <pre>
+	 * 
 	 * class ThisThatCollision extends BasicCollisionGroup {
 	 * 	
 	 * 	// class initialization
@@ -84,9 +85,15 @@ public abstract class BasicCollisionGroup extends CollisionManager {
 	 */
 	public boolean pixelPerfectCollision;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new <code>BasicCollisionGroup</code>.
@@ -102,6 +109,7 @@ public abstract class BasicCollisionGroup extends CollisionManager {
 	 * <code>Sprite</code> dimension:
 	 * 
 	 * <pre>
+	 * 
 	 * public CollisionShape getCollisionRect1(Sprite s1) {
 	 * 	rect1.setBounds(s1.getX(), s1.getY(), s1.getWidth(), s1.getHeight());
 	 * 	return rect1;
@@ -117,8 +125,8 @@ public abstract class BasicCollisionGroup extends CollisionManager {
 	 * @see CollisionShape#intersects(CollisionShape)
 	 */
 	public CollisionShape getCollisionShape1(Sprite s1) {
-		this.rect1.setBounds(s1.getX(), s1.getY(), s1.getWidth(), s1
-		        .getHeight());
+		this.rect1.setBounds(s1.getX(), s1.getY(), s1.getWidth(),
+		        s1.getHeight());
 		
 		return this.rect1;
 	}
@@ -131,6 +139,7 @@ public abstract class BasicCollisionGroup extends CollisionManager {
 	 * <code>Sprite</code> dimension:
 	 * 
 	 * <pre>
+	 * 
 	 * public CollisionShape getCollisionRect2(Sprite s2) {
 	 * 	rect2.setBounds(s2.getX(), s2.getY(), s2.getWidth(), s2.getHeight());
 	 * 	return rect2;
@@ -146,15 +155,21 @@ public abstract class BasicCollisionGroup extends CollisionManager {
 	 * @see CollisionRect#intersects(CollisionShape)
 	 */
 	public CollisionShape getCollisionShape2(Sprite s2) {
-		this.rect2.setBounds(s2.getX(), s2.getY(), s2.getWidth(), s2
-		        .getHeight());
+		this.rect2.setBounds(s2.getX(), s2.getY(), s2.getWidth(),
+		        s2.getHeight());
 		
 		return this.rect2;
 	}
 	
-	/** ************************************************************************* */
-	/** ****************** MAIN-METHOD: CHECKING COLLISION ********************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ****************** MAIN-METHOD: CHECKING COLLISION **********************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public void checkCollision() {
 		SpriteGroup group1 = this.getGroup1(), group2 = this.getGroup2();
@@ -227,8 +242,8 @@ public abstract class BasicCollisionGroup extends CollisionManager {
 		}
 		else {
 			if (shape1.intersects(shape2)) {
-				return CollisionManager.isPixelCollide(s1.getX(), s1.getY(), s1
-				        .getImage(), s2.getX(), s2.getY(), s2.getImage());
+				return CollisionManager.isPixelCollide(s1.getX(), s1.getY(),
+				        s1.getImage(), s2.getX(), s2.getY(), s2.getImage());
 			}
 			
 			return false;

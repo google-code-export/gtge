@@ -20,7 +20,18 @@ package com.golden.gamedev.engine;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.golden.gamedev.engine.resource.ClassBasedResourceLoader;
+import com.golden.gamedev.engine.resource.ClassLoaderBasedResourceLoader;
+import com.golden.gamedev.engine.resource.FileResourceLoader;
+import com.golden.gamedev.engine.resource.ResourceLoader;
+import com.golden.gamedev.engine.resource.SystemResourceLoader;
+import com.golden.gamedev.engine.resource.UnsupportedResourceLoader;
+
+// TODO: isolate and deprecate once internal modifications are completed.
 /**
  * Class to get external resources object, such as <code>java.io.File</code>,
  * <code>java.io.InputStream</code>, and <code>java.net.URL</code>.
@@ -37,10 +48,40 @@ import java.net.URL;
  * <p>
  * 
  * By default <code>BaseIO</code> class is using <code>CLASS_URL</code>.
+ * 
+ * @deprecated The {@link BaseIO} class is now deprecated in favor of using
+ *             specific {@link ResourceLoader} instances found in the
+ *             com.golden.gamedev.engine.resource package. The reasons
+ *             {@link BaseIO} should no longer be used are as follows:
+ *             <ol>
+ *             <li>{@link BaseIO} switched between a number of modes, but did
+ *             not check user inputs properly, leading to confusing errors at
+ *             runtime.</li> <li>{@link BaseIO} ignored source exceptions and
+ *             instead used its own method,
+ *             {@link #getException(String, int, String)}, to construct an
+ *             {@link Exception} that lost the information contained within the
+ *             source {@link Exception}, making debugging more difficult.</li>
+ *             <li>{@link BaseIO} exposed several internal details that were not
+ *             needed (for example: {@link #getModeString(int)}) </li> <li>The
+ *             methods {@link #getFile(String)}, {@link #setFile(String)},
+ *             {@link #getURL(String)} and {@link #getStream(String)} all
+ *             contain a side-effect that causes the {@link #getMode() mode} to
+ *             be changed internally if an error is encountered with the current
+ *             mode, leading to possibly unpredictable code.</li>
+ *             </ol>
+ * 
+ *             The most common {@link ResourceLoader} that should be used is the
+ *             {@link ClassBasedResourceLoader}, which is now used internally in
+ *             GTGE in place of {@link BaseIO}. However, the other three modes
+ *             continue to be supported outside of the {@link BaseIO} class, but
+ *             without side-effects and they properly throw any
+ *             {@link Exception} instances encountered for easier debugging.
  */
-public class BaseIO {
+public class BaseIO implements ResourceLoader {
 	
-	/** ************************* IO MODE CONSTANTS ***************************** */
+	/**
+	 * ************************* IO MODE CONSTANTS *****************************
+	 */
 	
 	/**
 	 * IO mode constant for class url.
@@ -62,15 +103,57 @@ public class BaseIO {
 	 */
 	public static final int SYSTEM_LOADER = 4;
 	
-	/** ************************* BASE CLASS LOADER ***************************** */
+	/**
+	 * A {@link Map} of {@link Integer} keys to {@link ResourceLoader} instance
+	 * values.
+	 */
+	Map modeToResourceLoaderMap;
+	
+	/**
+	 * Creates the {@link #modeToResourceLoaderMap} instance based on the given
+	 * non-null target {@link Class} instance.
+	 * @param targetClass The non-null target {@link Class} instance to use to
+	 *        create the {@link #modeToResourceLoaderMap}.
+	 * @return The {@link #modeToResourceLoaderMap} instance created based on
+	 *         the given target {@link Class} instance.
+	 * @throws NullPointerException Throws a {@link NullPointerException} if the
+	 *         given target {@link Class} is null.
+	 */
+	private static Map createModeToResourceLoaderMap(final Class targetClass) {
+		HashMap map = new HashMap(4);
+		map.put(new Integer(CLASS_URL), new ClassBasedResourceLoader(
+		        targetClass));
+		map.put(new Integer(WORKING_DIRECTORY), new FileResourceLoader());
+		ClassLoader loader = targetClass.getClassLoader();
+		if (loader != null) {
+			map.put(new Integer(CLASS_LOADER),
+			        new ClassLoaderBasedResourceLoader(targetClass
+			                .getClassLoader()));
+		}
+		else {
+			map.put(new Integer(CLASS_LOADER), new UnsupportedResourceLoader());
+		}
+		map.put(new Integer(SYSTEM_LOADER), new SystemResourceLoader());
+		return Collections.unmodifiableMap(map);
+	}
+	
+	/**
+	 * ************************* BASE CLASS LOADER *****************************
+	 */
 	
 	private Class base;
 	private ClassLoader loader;
 	private int mode;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Construct new <code>BaseIO</code> with specified class as the base
@@ -86,14 +169,27 @@ public class BaseIO {
 	 * @see #SYSTEM_LOADER
 	 */
 	public BaseIO(Class base, int mode) {
-		this.base = base;
-		this.loader = base.getClassLoader();
 		this.mode = mode;
+		initializeWithClass(base);
 	}
 	
 	/**
-	 * Construct new <code>BaseIO</code> with specified class as the base
-	 * loader using {@link #CLASS_URL} mode as the default.
+	 * Initializes this {@link BaseIO} instance with regards to fields changing
+	 * when the base {@link Class} is changed.
+	 * @param base The non-null base target {@link Class} to use to change this
+	 *        {@link BaseIO} instance.
+	 * @throws NullPointerException Throws a {@link NullPointerException} if the
+	 *         given {@link Class} is null.
+	 */
+	private void initializeWithClass(Class base) {
+		this.base = base;
+		this.loader = base.getClassLoader();
+		this.modeToResourceLoaderMap = createModeToResourceLoaderMap(base);
+	}
+	
+	/**
+	 * Construct new <code>BaseIO</code> with specified class as the base loader
+	 * using {@link #CLASS_URL} mode as the default.
 	 * 
 	 * @param base the base class loader
 	 */
@@ -101,9 +197,26 @@ public class BaseIO {
 		this(base, BaseIO.CLASS_URL);
 	}
 	
-	/** ************************************************************************* */
-	/** ***************************** INPUT URL ********************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** INPUT URL *********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
+	
+	/**
+	 * Returns a {@link ResourceLoader} delegate to use based on the currently
+	 * selected mode.
+	 */
+	private ResourceLoader getDelegate(final int mode) {
+		ResourceLoader loaderFromMap = (ResourceLoader) modeToResourceLoaderMap
+		        .get(new Integer(mode));
+		return loaderFromMap == null ? new UnsupportedResourceLoader()
+		        : loaderFromMap;
+	}
 	
 	/**
 	 * Returns URL from specified path with specified mode.
@@ -119,26 +232,7 @@ public class BaseIO {
 		URL url = null;
 		
 		try {
-			switch (mode) {
-				case CLASS_URL:
-					url = this.base.getResource(path);
-					break;
-				
-				case WORKING_DIRECTORY:
-					File f = new File(path);
-					if (f.exists()) {
-						url = f.toURI().toURL();
-					}
-					break;
-				
-				case CLASS_LOADER:
-					url = this.loader.getResource(path);
-					break;
-				
-				case SYSTEM_LOADER:
-					url = ClassLoader.getSystemResource(path);
-					break;
-			}
+			url = getDelegate(mode).getURL(path);
 		}
 		catch (Exception e) {
 		}
@@ -150,12 +244,6 @@ public class BaseIO {
 		return url;
 	}
 	
-	/**
-	 * Returns URL from specified path with this {@link BaseIO} default mode.
-	 * @param path The path to retrieve the URL from.
-	 * @return The {@link URL} of the given path.
-	 * @see #getMode()
-	 */
 	public URL getURL(String path) {
 		URL url = null;
 		
@@ -188,9 +276,15 @@ public class BaseIO {
 		return url;
 	}
 	
-	/** ************************************************************************* */
-	/** **************************** INPUT STREAM ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * **************************** INPUT STREAM *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns {@link InputStream} from specified path with specified mode.
@@ -206,23 +300,7 @@ public class BaseIO {
 		InputStream stream = null;
 		
 		try {
-			switch (mode) {
-				case CLASS_URL:
-					stream = this.base.getResourceAsStream(path);
-					break;
-				
-				case WORKING_DIRECTORY:
-					stream = new File(path).toURI().toURL().openStream();
-					break;
-				
-				case CLASS_LOADER:
-					stream = this.loader.getResourceAsStream(path);
-					break;
-				
-				case SYSTEM_LOADER:
-					stream = ClassLoader.getSystemResourceAsStream(path);
-					break;
-			}
+			stream = getDelegate(mode).getInputStream(path);
 		}
 		catch (Exception e) {
 		}
@@ -243,6 +321,10 @@ public class BaseIO {
 	 * @see #getMode()
 	 */
 	public InputStream getStream(String path) {
+		return getInputStream(path);
+	}
+	
+	public InputStream getInputStream(String path) {
 		InputStream stream = null;
 		
 		try {
@@ -274,9 +356,15 @@ public class BaseIO {
 		return stream;
 	}
 	
-	/** ************************************************************************* */
-	/** ***************************** INPUT FILE ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** INPUT FILE ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Return file from specified path with specified mode.
@@ -292,26 +380,7 @@ public class BaseIO {
 		File file = null;
 		
 		try {
-			switch (mode) {
-				case CLASS_URL:
-					file = new File(this.base.getResource(path).getFile()
-					        .replaceAll("%20", " "));
-					break;
-				
-				case WORKING_DIRECTORY:
-					file = new File(path);
-					break;
-				
-				case CLASS_LOADER:
-					file = new File(this.loader.getResource(path).getFile()
-					        .replaceAll("%20", " "));
-					break;
-				
-				case SYSTEM_LOADER:
-					file = new File(ClassLoader.getSystemResource(path)
-					        .getFile().replaceAll("%20", " "));
-					break;
-			}
+			file = getDelegate(mode).getFile(path);
 		}
 		catch (Exception e) {
 		}
@@ -323,26 +392,6 @@ public class BaseIO {
 		return file;
 	}
 	
-	/**
-	 * Returns file from specified path with this <code>BaseIO</code> default
-	 * mode.
-	 * <p>
-	 * 
-	 * File object usually used only for writing to disk.
-	 * <p>
-	 * 
-	 * <b>Caution:</b> always try to avoid using <code>java.io.File</code>
-	 * object (this method), because <code>java.io.File</code> is system
-	 * dependent and not working inside jar file, use <code>java.net.URL</code>
-	 * OR <code>java.io.InputStream</code> instead.
-	 * <p>
-	 * @param path The path to retrieve an {@link File} from.
-	 * @return The {@link File}.
-	 * @see #getURL(String)
-	 * @see #getStream(String)
-	 * @see #setFile(String)
-	 * @see #getMode()
-	 */
 	public File getFile(String path) {
 		File file = null;
 		
@@ -375,9 +424,15 @@ public class BaseIO {
 		return file;
 	}
 	
-	/** ************************************************************************* */
-	/** *************************** OUTPUT FILE ********************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *************************** OUTPUT FILE *********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns file on specified path with specified mode for processing.
@@ -393,29 +448,7 @@ public class BaseIO {
 		File file = null;
 		
 		try {
-			switch (mode) {
-				case CLASS_URL:
-					file = new File(this.base.getResource("").getFile()
-					        .replaceAll("%20", " ")
-					        + File.separator + path);
-					break;
-				
-				case WORKING_DIRECTORY:
-					file = new File(path);
-					break;
-				
-				case CLASS_LOADER:
-					file = new File(this.loader.getResource("").getFile()
-					        .replaceAll("%20", " ")
-					        + File.separator + path);
-					break;
-				
-				case SYSTEM_LOADER:
-					file = new File(ClassLoader.getSystemResource("").getFile()
-					        .replaceAll("%20", " ")
-					        + File.separator + path);
-					break;
-			}
+			file = getDelegate(mode).createFile(path);
 		}
 		catch (Exception e) {
 		}
@@ -428,8 +461,8 @@ public class BaseIO {
 	}
 	
 	/**
-	 * Returns file on specified path with this <code>BaseIO</code> default
-	 * mode for processing.
+	 * Returns file on specified path with this <code>BaseIO</code> default mode
+	 * for processing.
 	 * @param path The path to retrieve an {@link File} from.
 	 * @return The {@link File}.
 	 */
@@ -445,18 +478,12 @@ public class BaseIO {
 		if (file == null) {
 			// smart resource locater
 			int smart = 0;
-			while (file == null
-			        && !this.getModeString(++smart).equals("[UNKNOWN-MODE]")) {
+			while (file == null) {
 				try {
-					file = this.setFile(path, smart);
+					file = this.setFile(path, ++smart);
 				}
 				catch (Exception e) {
 				}
-			}
-			
-			if (file == null) {
-				throw new RuntimeException(this.getException(path, this.mode,
-				        "setFile"));
 			}
 			
 			this.mode = smart;
@@ -465,9 +492,19 @@ public class BaseIO {
 		return file;
 	}
 	
-	/** ************************************************************************* */
-	/** *********************** IO MODE CONSTANTS ******************************* */
-	/** ************************************************************************* */
+	public File createFile(final String path) {
+		return setFile(path, this.mode);
+	}
+	
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *********************** IO MODE CONSTANTS *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns the root path of this {@link BaseIO} if using specified mode. The
@@ -557,9 +594,15 @@ public class BaseIO {
 		        + path;
 	}
 	
-	/** ************************************************************************* */
-	/** *********************** BASE CLASS LOADER ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *********************** BASE CLASS LOADER *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Sets the base class where the resources will be taken from.
@@ -567,8 +610,7 @@ public class BaseIO {
 	 * @see #getBase()
 	 */
 	public void setBase(Class base) {
-		this.base = base;
-		this.loader = base.getClassLoader();
+		initializeWithClass(base);
 	}
 	
 	/**
@@ -596,6 +638,23 @@ public class BaseIO {
 		return super.toString() + " " + "[mode="
 		        + this.getModeString(this.mode) + ", baseClass=" + this.base
 		        + ", classLoader=" + this.loader + "]";
+	}
+	
+	/**
+	 * Gets the {@link ResourceLoader} that was selected via this {@link BaseIO}
+	 * instance, or itself if one was not selected. <br />
+	 * <br />
+	 * This method is a temporary stopgap that will allow the use of custom
+	 * {@link BaseIO} extensions with GTGE 0.2.4 but will be removed when
+	 * {@link BaseIO} is removed in a later release.
+	 * 
+	 * @return The {@link ResourceLoader} that was selected via this
+	 *         {@link BaseIO} instance, or itself if one was not selected.
+	 */
+	public ResourceLoader getSelectedResourceLoader() {
+		ResourceLoader loaderFromMap = (ResourceLoader) modeToResourceLoaderMap
+		        .get(new Integer(mode));
+		return loaderFromMap == null ? this : loaderFromMap;
 	}
 	
 }

@@ -98,160 +98,59 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 	 * 
 	 * The revert positions are set precisely by this method.
 	 * 
-	 * @param s1 sprite from group 1
-	 * @param s2 sprite from group 2
-	 * @param shape1 bounding box of sprite 1
-	 * @param shape2 bounding box of sprite 2
+	 * @param firstSprite sprite from group 1
+	 * @param secondSprite sprite from group 2
+	 * @param firstCollisionShape bounding box of sprite 1
+	 * @param secondCollisionShape bounding box of sprite 2
 	 * @return <code>true</code> if the sprites is collided one another.
 	 */
-	public boolean isCollide(Sprite s1, Sprite s2, CollisionShape shape1, CollisionShape shape2) {
+	public boolean isCollide(Sprite firstSprite, Sprite secondSprite, CollisionShape firstCollisionShape, CollisionShape secondCollisionShape) {
 		
 		// if (shape1.intersects(shape2)) {
 		if ((this.pixelPerfectCollision && CollisionManager.isPixelCollide(
-		        s1.getX(), s1.getY(), s1.getImage(), s2.getX(), s2.getY(),
-		        s2.getImage()))
-		        || (!this.pixelPerfectCollision && shape1.intersects(shape2))) {
+		        firstSprite.getX(), firstSprite.getY(), firstSprite.getImage(),
+		        secondSprite.getX(), secondSprite.getY(),
+		        secondSprite.getImage()))
+		        || (!this.pixelPerfectCollision && firstCollisionShape
+		                .intersects(secondCollisionShape))) {
 			// basic check to see if collision occurred
-			this.sprite1 = s1;
-			this.sprite2 = s2;
+			this.sprite1 = firstSprite;
+			this.sprite2 = secondSprite;
 			this.collisionSide = 0;
 			
 			// set up collision variables
 			
 			// this gets the speed
-			double speedX1 = s1.getX() - s1.getOldX(), speedY1 = s1.getY()
-			        - s1.getOldY(), speedX2 = s2.getX() - s2.getOldX(), speedY2 = s2
-			        .getY() - s2.getOldY();
+			double firstSpriteSpeedXAxis = firstSprite.getX()
+			        - firstSprite.getOldX();
+			double firstSpriteSpeedYAxis = firstSprite.getY()
+			        - firstSprite.getOldY();
+			double secondSpriteSpeedXAxis = secondSprite.getX()
+			        - secondSprite.getOldX();
+			double secondSpriteSpeedYAxis = secondSprite.getY()
+			        - secondSprite.getOldY();
 			// now get the bounds for the CollisionShapes
-			double x1 = shape1.getX() - speedX1, y1 = shape1.getY() - speedY1, x2 = shape2
-			        .getX() - speedX2, y2 = shape2.getY() - speedY2;
-			double w1 = shape1.getWidth(), h1 = shape1.getHeight(), w2 = shape2
-			        .getWidth(), h2 = shape2.getHeight();
+			double x1 = firstCollisionShape.getX() - firstSpriteSpeedXAxis;
+			double y1 = firstCollisionShape.getY() - firstSpriteSpeedYAxis;
+			double x2 = secondCollisionShape.getX() - secondSpriteSpeedXAxis;
+			double y2 = secondCollisionShape.getY() - secondSpriteSpeedYAxis;
+			double firstCollisionShapeWidth = firstCollisionShape.getWidth();
+			double firstCollisionShapeHeight = firstCollisionShape.getHeight();
+			double secondCollisionShapeWidth = secondCollisionShape.getWidth();
+			double secondCollisionShapeHeight = secondCollisionShape
+			        .getHeight();
 			
 			if (this.log) {
-				System.out.print("Collision (" + s1.getX() + "," + s1.getY()
-				        + "),(" + x1 + "," + y1 + ")-->");
+				System.out.print("Collision (" + firstSprite.getX() + ","
+				        + firstSprite.getY() + "),(" + x1 + "," + y1 + ")-->");
 			}
 			
 			// check for collision at old location
 			
-			if (this.checkCollisionHelper(s1, s2, x1, y1, x2, y2, true)) {// collision
-				// at old
-				// location
-				
-				// if(!log) {log=true;System.out.println("Collision
-				// ("+s1.getX()+","+s1.getY()+"),("+x1+","+y1+")-->");}
-				
-				if (this.log) {
-					System.out.print("Overlap->");
-				}
-				
-				this.collisionSide = 0;
-				
-				Sprite spriteToMove;
-				
-				if (speedX1 == 0 && speedY1 == 0 && speedX2 == 0
-				        && speedY2 == 0) {// both
-					// stationary
-					if (this.log) {
-						System.out.println("Both stationary");
-					}
-					// this should only occur when they are placed directly
-					// overtop with no movement
-					// behaviour here: leave them alone.
-					return false;
-				}
-				else {// find fastest moving
-					  // find centres
-					double s1cx = shape1.getX() + shape1.getWidth() / 2;
-					double s1cy = shape1.getY() + shape1.getHeight() / 2;
-					double s2cx = shape2.getX() + shape2.getWidth() / 2;
-					double s2cy = shape2.getY() + shape2.getHeight() / 2;
-					
-					if (Math.pow(speedX1, 2) + Math.pow(speedY1, 2) > Math.pow(
-					        speedX2, 2) + Math.pow(speedY2, 2)) {// sprite
-						// 1
-						// faster
-						spriteToMove = s1;
-					}
-					else {
-						spriteToMove = s2;
-					}
-					if (this.log) {
-						System.out.print(spriteToMove + "-->");
-					}
-					
-					// find distances to move (based on default collision
-					// shapes)
-					// this might need to be changed to use the iterative method
-					// if this behaviour should respect pixel perfection
-					double distXLeft = s1cx - s2cx + w1 / 2 + w2 / 2;
-					double distXRight = s2cx - s1cx + w1 / 2 + w2 / 2;
-					double distYUp = s1cy - s2cy + h1 / 2 + h2 / 2;
-					double distYDown = s2cy - s1cy + h1 / 2 + h2 / 2;
-					
-					// find minimum distance
-					double minDist = Math.min(Math.min(distXLeft, distXRight),
-					        Math.min(distYUp, distYDown));
-					
-					if (spriteToMove == s1) {// move sprite1
-						this.collisionX2 = s2.getX();
-						this.collisionY2 = s2.getY();
-						if (minDist == distXLeft) {
-							this.collisionX1 = s1.getX() - distXLeft;
-							this.collisionY1 = s1.getY();
-							this.collisionSide = CollisionGroup.RIGHT_LEFT_COLLISION;
-						}
-						else if (minDist == distXRight) {
-							this.collisionX1 = s1.getX() + distXRight;
-							this.collisionY1 = s1.getY();
-							this.collisionSide = CollisionGroup.LEFT_RIGHT_COLLISION;
-						}
-						else if (minDist == distYUp) {
-							this.collisionX1 = s1.getX();
-							this.collisionY1 = s1.getY() - distYUp;
-							this.collisionSide = CollisionGroup.BOTTOM_TOP_COLLISION;
-						}
-						else {
-							this.collisionX1 = s1.getX();
-							this.collisionY1 = s1.getY() + distYDown;
-							this.collisionSide = CollisionGroup.TOP_BOTTOM_COLLISION;
-						}
-						if (this.log) {
-							System.out.println("Corrected");
-						}
-						return true;
-					}
-					else {// move sprite 2
-						this.collisionX1 = s1.getX();
-						this.collisionY1 = s1.getY();
-						if (minDist == distXLeft) {
-							this.collisionX2 = s2.getX() - distXLeft;
-							this.collisionY2 = s2.getY();
-							this.collisionSide = CollisionGroup.LEFT_RIGHT_COLLISION;
-						}
-						else if (minDist == distXRight) {
-							this.collisionX2 = s2.getX() + distXRight;
-							this.collisionY2 = s2.getY();
-							this.collisionSide = CollisionGroup.RIGHT_LEFT_COLLISION;
-						}
-						else if (minDist == distYUp) {
-							this.collisionX2 = s2.getX();
-							this.collisionY2 = s2.getY() - distYUp;
-							this.collisionSide = CollisionGroup.TOP_BOTTOM_COLLISION;
-						}
-						else {
-							this.collisionX2 = s2.getX();
-							this.collisionY2 = s2.getY() + distYDown;
-							this.collisionSide = CollisionGroup.BOTTOM_TOP_COLLISION;
-						}
-						if (this.log) {
-							System.out.println("Corrected");
-						}
-						return true;
-					}
-					
-				}
+			if (this.checkCollisionHelper(firstSprite, secondSprite, x1, y1,
+			        x2, y2, true)) {// collision
+				return handleCollisionWithSpriteCollisionShapes(firstSprite,
+				        secondSprite, firstCollisionShape, secondCollisionShape);
 				
 			} // if overlap
 			
@@ -263,33 +162,43 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 				// achieved
 				int xCollision = -1, yCollision = -1;
 				
-				if (speedX1 > speedX2) {// left-to-right on X
+				if (firstSpriteSpeedXAxis > secondSpriteSpeedXAxis) {// left-to-right
+					                                                 // on X
 					if (this.log) {
 						System.out.print("dx1>dx2-->");
 					}
-					tHoriz = (x2 - x1 - w1) / (speedX1 - speedX2);
+					tHoriz = (x2 - x1 - firstCollisionShapeWidth)
+					        / (firstSpriteSpeedXAxis - secondSpriteSpeedXAxis);
 					xCollision = CollisionGroup.RIGHT_LEFT_COLLISION;
 				}
-				else if (speedX2 > speedX1) { // right-to-left on X
+				else if (secondSpriteSpeedXAxis > firstSpriteSpeedXAxis) { // right-to-left
+					                                                       // on
+					// X
 					if (this.log) {
 						System.out.print("dx1<dx2-->");
 					}
-					tHoriz = (x1 - x2 - w2) / (speedX2 - speedX1);
+					tHoriz = (x1 - x2 - secondCollisionShapeWidth)
+					        / (secondSpriteSpeedXAxis - firstSpriteSpeedXAxis);
 					xCollision = CollisionGroup.LEFT_RIGHT_COLLISION;
 				}
 				
-				if (speedY1 > speedY2) {// bottom-to-top on Y
+				if (firstSpriteSpeedYAxis > secondSpriteSpeedYAxis) {// bottom-to-top
+					                                                 // on Y
 					if (this.log) {
 						System.out.print("dy1>dy2-->");
 					}
-					tVert = (y2 - y1 - h1) / (speedY1 - speedY2);
+					tVert = (y2 - y1 - firstCollisionShapeHeight)
+					        / (firstSpriteSpeedYAxis - secondSpriteSpeedYAxis);
 					yCollision = CollisionGroup.BOTTOM_TOP_COLLISION;
 				}
-				else if (speedY2 > speedY1) { // top-to-bottom on Y
+				else if (secondSpriteSpeedYAxis > firstSpriteSpeedYAxis) { // top-to-bottom
+					                                                       // on
+					// Y
 					if (this.log) {
 						System.out.print("dy1<dy2-->");
 					}
-					tVert = (y1 - y2 - h2) / (speedY2 - speedY1);
+					tVert = (y1 - y2 - secondCollisionShapeHeight)
+					        / (secondSpriteSpeedYAxis - firstSpriteSpeedYAxis);
 					yCollision = CollisionGroup.TOP_BOTTOM_COLLISION;
 				}
 				
@@ -314,10 +223,13 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 					// or similar. If not adjacent at this earliest position,
 					// assume other is correct.
 					
-					if (this.checkAdjacencyHelper(s1, s2,
-					        x1 + tHoriz * speedX1, y1 + tHoriz * speedY1, x2
-					                + tHoriz * speedX2, y2 + tHoriz * speedY2,
-					        speedX1, speedY1, speedX2, speedY2, false)) {
+					if (this.checkAdjacencyHelper(firstSprite, secondSprite, x1
+					        + tHoriz * firstSpriteSpeedXAxis, y1 + tHoriz
+					        * firstSpriteSpeedYAxis, x2 + tHoriz
+					        * secondSpriteSpeedXAxis, y2 + tHoriz
+					        * secondSpriteSpeedYAxis, firstSpriteSpeedXAxis,
+					        firstSpriteSpeedYAxis, secondSpriteSpeedXAxis,
+					        secondSpriteSpeedYAxis, false)) {
 						// Yes- X collision is the first real collision
 						if (this.log) {
 							System.out.print("X " + tHoriz + "-->");
@@ -341,10 +253,13 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 					
 					this.collisionSide = yCollision;
 					// similar check here
-					if (this.checkAdjacencyHelper(s1, s2, x1 + tVert * speedX1,
-					        y1 + tVert * speedY1, x2 + tVert * speedX2, y2
-					                + tVert * speedY2, speedX1, speedY1,
-					        speedX2, speedY2, false)) {
+					if (this.checkAdjacencyHelper(firstSprite, secondSprite, x1
+					        + tVert * firstSpriteSpeedXAxis, y1 + tVert
+					        * firstSpriteSpeedYAxis, x2 + tVert
+					        * secondSpriteSpeedXAxis, y2 + tVert
+					        * secondSpriteSpeedYAxis, firstSpriteSpeedXAxis,
+					        firstSpriteSpeedYAxis, secondSpriteSpeedXAxis,
+					        secondSpriteSpeedYAxis, false)) {
 						// Yes- Y collision is the first real collision
 						if (this.log) {
 							System.out.print("Y " + tVert + "-->");
@@ -367,17 +282,17 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 				// correct for simple cases
 				
 				// these are for the CollisionRect
-				this.collisionX1 = x1 + finalT * speedX1;
-				this.collisionY1 = y1 + finalT * speedY1;
-				this.collisionX2 = x2 + finalT * speedX2;
-				this.collisionY2 = y2 + finalT * speedY2;
+				this.collisionX1 = x1 + finalT * firstSpriteSpeedXAxis;
+				this.collisionY1 = y1 + finalT * firstSpriteSpeedYAxis;
+				this.collisionX2 = x2 + finalT * secondSpriteSpeedXAxis;
+				this.collisionY2 = y2 + finalT * secondSpriteSpeedYAxis;
 				
 				// this is sufficient for non-pixel perfect collisions with
 				// bounding rectangles
 				
-				if (this.checkCollisionHelper(s1, s2, this.collisionX1,
-				        this.collisionY1, this.collisionX2, this.collisionY2,
-				        true)) {
+				if (this.checkCollisionHelper(firstSprite, secondSprite,
+				        this.collisionX1, this.collisionY1, this.collisionX2,
+				        this.collisionY2, true)) {
 					// still a collision- this occurs if a non-rectangular
 					// CollisionShape exists
 					// larger than its height and width would suggest.
@@ -386,16 +301,22 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 						System.out.print("Iterate (1)-->");
 					}
 					
-					if (this.iterativeMethod(s1, s2, 0.0, finalT, x1, y1, x2,
-					        y2, speedX1, speedY1, speedX2, speedY2)) {
+					if (this.iterativeMethod(firstSprite, secondSprite, 0.0,
+					        finalT, x1, y1, x2, y2, firstSpriteSpeedXAxis,
+					        firstSpriteSpeedYAxis, secondSpriteSpeedXAxis,
+					        secondSpriteSpeedYAxis)) {
 						// collision occurred- collision positions set in
 						// iterativeMethod()
 						// correct them because these are for the rect, not the
 						// sprite
-						this.collisionX1 = this.collisionX1 - x1 + s1.getOldX();
-						this.collisionY1 = this.collisionY1 - y1 + s1.getOldY();
-						this.collisionX2 = this.collisionX2 - x2 + s2.getOldX();
-						this.collisionY2 = this.collisionY2 - y2 + s2.getOldY();
+						this.collisionX1 = this.collisionX1 - x1
+						        + firstSprite.getOldX();
+						this.collisionY1 = this.collisionY1 - y1
+						        + firstSprite.getOldY();
+						this.collisionX2 = this.collisionX2 - x2
+						        + secondSprite.getOldX();
+						this.collisionY2 = this.collisionY2 - y2
+						        + secondSprite.getOldY();
 						
 						if (this.log) {
 							System.out.println("true: " + this.collisionSide
@@ -413,17 +334,23 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 					}
 				}
 				
-				else if (this.checkAdjacencyHelper(s1, s2, this.collisionX1,
-				        this.collisionY1, this.collisionX2, this.collisionY2,
-				        speedX1, speedY1, speedX2, speedY2, true)) {
+				else if (this.checkAdjacencyHelper(firstSprite, secondSprite,
+				        this.collisionX1, this.collisionY1, this.collisionX2,
+				        this.collisionY2, firstSpriteSpeedXAxis,
+				        firstSpriteSpeedYAxis, secondSpriteSpeedXAxis,
+				        secondSpriteSpeedYAxis, true)) {
 					// this occurs when regular bounding boxes are used. Nothing
 					// more needs to be done.
 					// need to correct collision?? positions because these are
 					// for the rect, not the sprite
-					this.collisionX1 = this.collisionX1 - x1 + s1.getOldX();
-					this.collisionY1 = this.collisionY1 - y1 + s1.getOldY();
-					this.collisionX2 = this.collisionX2 - x2 + s2.getOldX();
-					this.collisionY2 = this.collisionY2 - y2 + s2.getOldY();
+					this.collisionX1 = this.collisionX1 - x1
+					        + firstSprite.getOldX();
+					this.collisionY1 = this.collisionY1 - y1
+					        + firstSprite.getOldY();
+					this.collisionX2 = this.collisionX2 - x2
+					        + secondSprite.getOldX();
+					this.collisionY2 = this.collisionY2 - y2
+					        + secondSprite.getOldY();
 					
 					if (this.log) {
 						System.out.println("true: " + this.collisionSide + " ("
@@ -445,16 +372,22 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 						System.out.print("Iterate (2)-->");
 					}
 					
-					if (this.iterativeMethod(s1, s2, finalT, 1.0, x1, y1, x2,
-					        y2, speedX1, speedY1, speedX2, speedY2)) {
+					if (this.iterativeMethod(firstSprite, secondSprite, finalT,
+					        1.0, x1, y1, x2, y2, firstSpriteSpeedXAxis,
+					        firstSpriteSpeedYAxis, secondSpriteSpeedXAxis,
+					        secondSpriteSpeedYAxis)) {
 						// collision occurred- collision positions set in
 						// iterativeMethod()
 						// correct them because these are for the rect, not the
 						// sprite
-						this.collisionX1 = this.collisionX1 - x1 + s1.getOldX();
-						this.collisionY1 = this.collisionY1 - y1 + s1.getOldY();
-						this.collisionX2 = this.collisionX2 - x2 + s2.getOldX();
-						this.collisionY2 = this.collisionY2 - y2 + s2.getOldY();
+						this.collisionX1 = this.collisionX1 - x1
+						        + firstSprite.getOldX();
+						this.collisionY1 = this.collisionY1 - y1
+						        + firstSprite.getOldY();
+						this.collisionX2 = this.collisionX2 - x2
+						        + secondSprite.getOldX();
+						this.collisionY2 = this.collisionY2 - y2
+						        + secondSprite.getOldY();
 						
 						if (this.log) {
 							System.out.println("true: " + this.collisionSide
@@ -478,10 +411,199 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 		return false;
 	} // end of method
 	
-	// This checks for an overlap
-	protected boolean checkCollisionHelper(Sprite s1, Sprite s2, double x1, double y1, double x2, double y2, boolean includePixelPerfect) {
+	/**
+	 * Handles the case of a detected collision with either the provided
+	 * {@link CollisionShape} instances or (in the case of pixel-perfect
+	 * collision detection) that a pixel-perfect collision was detected.
+	 * 
+	 * @param firstSprite The first {@link Sprite} to be handled when a
+	 *        collision is detected.
+	 * @param secondSprite The second {@link Sprite} to be handled when a
+	 *        collision is detected.
+	 * @param firstCollisionShape The first {@link CollisionShape} indicating
+	 *        the bounds of collision of the first {@link Sprite}.
+	 * @param secondCollisionShape The second {@link CollisionShape} indicating
+	 *        the bounds of collision of the second {@link Sprite}.
+	 * @return True if the sprites were considered to have collided, false
+	 *         otherwise - checking the {@link #getCollisionSide() collision
+	 *         side} when true is returned will return the side of the collision
+	 *         relative to the first {@link Sprite}.
+	 */
+	private boolean handleCollisionWithSpriteCollisionShapes(Sprite firstSprite, Sprite secondSprite, CollisionShape firstCollisionShape, CollisionShape secondCollisionShape) {
+		if (this.log) {
+			System.out.print("Overlap->");
+		}
 		
-		if (includePixelPerfect && this.pixelPerfectCollision) {
+		this.collisionSide = 0;
+		
+		double firstSpriteSpeedXAxis = firstSprite.getX()
+		        - firstSprite.getOldX();
+		double firstSpriteSpeedYAxis = firstSprite.getY()
+		        - firstSprite.getOldY();
+		double secondSpriteSpeedXAxis = secondSprite.getX()
+		        - secondSprite.getOldX();
+		double secondSpriteSpeedYAxis = secondSprite.getY()
+		        - secondSprite.getOldY();
+		
+		if (objectsAreStationary(firstSpriteSpeedXAxis, firstSpriteSpeedYAxis,
+		        secondSpriteSpeedXAxis, secondSpriteSpeedYAxis)) {
+			if (this.log) {
+				System.out.println("Both stationary");
+			}
+			// Since they did not move, a collision is not detected - only
+			// active collisions are considered.
+			return false;
+		}
+		else {// find fastest moving
+			  // find centres
+			double s1cx = firstCollisionShape.getX()
+			        + firstCollisionShape.getWidth() / 2;
+			double s1cy = firstCollisionShape.getY()
+			        + firstCollisionShape.getHeight() / 2;
+			double s2cx = secondCollisionShape.getX()
+			        + secondCollisionShape.getWidth() / 2;
+			double s2cy = secondCollisionShape.getY()
+			        + secondCollisionShape.getHeight() / 2;
+			
+			Sprite spriteToMove;
+			
+			if (Math.pow(firstSpriteSpeedXAxis, 2)
+			        + Math.pow(firstSpriteSpeedYAxis, 2) > Math.pow(
+			        secondSpriteSpeedXAxis, 2)
+			        + Math.pow(secondSpriteSpeedYAxis, 2)) {// sprite
+				// 1
+				// faster
+				spriteToMove = firstSprite;
+			}
+			else {
+				spriteToMove = secondSprite;
+			}
+			if (this.log) {
+				System.out.print(spriteToMove + "-->");
+			}
+			
+			// find distances to move (based on default collision
+			// shapes)
+			// this might need to be changed to use the iterative method
+			// if this behaviour should respect pixel perfection
+			double distXLeft = s1cx - s2cx + firstCollisionShape.getWidth() / 2
+			        + secondCollisionShape.getWidth() / 2;
+			double distXRight = s2cx - s1cx + firstCollisionShape.getWidth()
+			        / 2 + secondCollisionShape.getWidth() / 2;
+			double distYUp = s1cy - s2cy + firstCollisionShape.getHeight() / 2
+			        + secondCollisionShape.getHeight() / 2;
+			double distYDown = s2cy - s1cy + firstCollisionShape.getHeight()
+			        / 2 + secondCollisionShape.getHeight() / 2;
+			
+			// find minimum distance
+			double minDist = Math.min(Math.min(distXLeft, distXRight),
+			        Math.min(distYUp, distYDown));
+			
+			if (spriteToMove == firstSprite) {// move sprite1
+				this.collisionX2 = secondSprite.getX();
+				this.collisionY2 = secondSprite.getY();
+				if (minDist == distXLeft) {
+					this.collisionX1 = firstSprite.getX() - distXLeft;
+					this.collisionY1 = firstSprite.getY();
+					this.collisionSide = CollisionGroup.RIGHT_LEFT_COLLISION;
+				}
+				else if (minDist == distXRight) {
+					this.collisionX1 = firstSprite.getX() + distXRight;
+					this.collisionY1 = firstSprite.getY();
+					this.collisionSide = CollisionGroup.LEFT_RIGHT_COLLISION;
+				}
+				else if (minDist == distYUp) {
+					this.collisionX1 = firstSprite.getX();
+					this.collisionY1 = firstSprite.getY() - distYUp;
+					this.collisionSide = CollisionGroup.BOTTOM_TOP_COLLISION;
+				}
+				else {
+					this.collisionX1 = firstSprite.getX();
+					this.collisionY1 = firstSprite.getY() + distYDown;
+					this.collisionSide = CollisionGroup.TOP_BOTTOM_COLLISION;
+				}
+				if (this.log) {
+					System.out.println("Corrected");
+				}
+				return true;
+			}
+			else {// move sprite 2
+				this.collisionX1 = firstSprite.getX();
+				this.collisionY1 = firstSprite.getY();
+				if (minDist == distXLeft) {
+					this.collisionX2 = secondSprite.getX() - distXLeft;
+					this.collisionY2 = secondSprite.getY();
+					this.collisionSide = CollisionGroup.LEFT_RIGHT_COLLISION;
+				}
+				else if (minDist == distXRight) {
+					this.collisionX2 = secondSprite.getX() + distXRight;
+					this.collisionY2 = secondSprite.getY();
+					this.collisionSide = CollisionGroup.RIGHT_LEFT_COLLISION;
+				}
+				else if (minDist == distYUp) {
+					this.collisionX2 = secondSprite.getX();
+					this.collisionY2 = secondSprite.getY() - distYUp;
+					this.collisionSide = CollisionGroup.TOP_BOTTOM_COLLISION;
+				}
+				else {
+					this.collisionX2 = secondSprite.getX();
+					this.collisionY2 = secondSprite.getY() + distYDown;
+					this.collisionSide = CollisionGroup.BOTTOM_TOP_COLLISION;
+				}
+				if (this.log) {
+					System.out.println("Corrected");
+				}
+				return true;
+			}
+			
+		}
+	}
+	
+	/**
+	 * Gets whether or not two objects with velocities are stationary due to
+	 * their speeds.
+	 * @param firstObjectSpeedXAxis The speed of the first object relative to
+	 *        the X-axis (right/left speed).
+	 * @param firstObjectSpeedYAxis The speed of the first object relative to
+	 *        the Y-axis (up/down speed).
+	 * @param secondObjectSpeedXAxis The speed of the second object relative to
+	 *        the X-axis (right/left speed).
+	 * @param secondObjectSpeedYAxis The speed of the second object relative to
+	 *        the Y-axis (up/down speed).
+	 * @return True if the given speeds represent that both objects are
+	 *         stationary, false otherwise.
+	 */
+	private static boolean objectsAreStationary(double firstObjectSpeedXAxis, double firstObjectSpeedYAxis, double secondObjectSpeedXAxis, double secondObjectSpeedYAxis) {
+		return firstObjectSpeedXAxis == 0 && firstObjectSpeedYAxis == 0
+		        && secondObjectSpeedXAxis == 0 && secondObjectSpeedYAxis == 0;
+	}
+	
+	/**
+	 * 
+	 * @deprecated The flag includePixelPerfect is redundant - use the alternate
+	 *             version
+	 *             {@link #checkCollisionHelper(Sprite, Sprite, double, double, double, double)}
+	 *             without this flag (
+	 *             {@link BasicCollisionGroup#pixelPerfectCollision} triggers
+	 *             this condition without the redundant additional flag).
+	 */
+	protected boolean checkCollisionHelper(Sprite s1, Sprite s2, double x1, double y1, double x2, double y2, boolean includePixelPerfect) {
+		if (!includePixelPerfect) {
+			// check using normal method
+			this.shape3 = this.getCollisionShape1(s1);
+			this.shape3.setLocation(x1, y1);
+			this.shape4 = this.getCollisionShape2(s2);
+			this.shape4.setLocation(x2, y2);
+			return this.shape3.intersects(this.shape4);
+		}
+		else {
+			return checkCollisionHelper(s1, s2, x1, y1, x2, y2);
+		}
+	}
+	
+	protected boolean checkCollisionHelper(Sprite s1, Sprite s2, double x1, double y1, double x2, double y2) {
+		
+		if (this.pixelPerfectCollision) {
 			return CollisionManager.isPixelCollide(x1, y1, s1.getImage(), x2,
 			        y2, s2.getImage());
 		}

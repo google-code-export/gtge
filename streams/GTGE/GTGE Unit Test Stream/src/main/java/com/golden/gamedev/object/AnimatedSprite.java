@@ -195,14 +195,20 @@ public class AnimatedSprite extends Sprite {
 	}
 	
 	/**
-	 * This method is obsolete on animated sprite, since animated sprite always
-	 * use several images for its animation.
+	 * This method used to throw a {@link RuntimeException} when invoked in
+	 * 0.2.4, as {@link AnimatedSprite} instance use a {@link BufferedImage}
+	 * array and generally not a single {@link BufferedImage image}. <br />
+	 * <br />
+	 * Since 0.3.0, however, this method works as expected and simply serves as
+	 * a shortcut for invoking {@link #setImages(BufferedImage[])} with a single
+	 * image provided with the {@link BufferedImage} parameter to this method.
 	 * 
 	 * @see #setImages(BufferedImage[])
 	 */
 	public void setImage(BufferedImage image) {
-		throw new RuntimeException("Animated Sprite need an array of images, "
-		        + "use setImages(BufferedImage[]) instead!");
+		setImages(new BufferedImage[] {
+			image
+		});
 	}
 	
 	/**
@@ -221,6 +227,14 @@ public class AnimatedSprite extends Sprite {
 	
 	/**
 	 * Returns image of current frame.
+	 * @throws NullPointerException Throws a {@link NullPointerException} if
+	 *         this {@link AnimatedSprite} currently contains a null
+	 *         {@link #setImages(BufferedImage[]) image array}.
+	 * @throws ArrayIndexOutOfBoundsException Throws an
+	 *         {@link ArrayIndexOutOfBoundsException} if the
+	 *         {@link #setAnimationFrame(int, int)} method has been invoked with
+	 *         an index that does not exist in the
+	 *         {@link #setImages(BufferedImage[]) array of images}.
 	 */
 	public BufferedImage getImage() {
 		return this.image[this.frame];

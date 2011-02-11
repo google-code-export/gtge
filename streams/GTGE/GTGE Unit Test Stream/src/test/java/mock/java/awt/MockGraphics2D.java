@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.golden.gamedev.object;
+package mock.java.awt;
 
 import java.awt.Color;
 import java.awt.Composite;
@@ -14,9 +14,9 @@ import java.awt.Image;
 import java.awt.Paint;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.RenderingHints.Key;
 import java.awt.Shape;
 import java.awt.Stroke;
-import java.awt.RenderingHints.Key;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.geom.AffineTransform;
@@ -34,7 +34,7 @@ import java.util.Map;
  * 
  * @author MetroidFan2002
  * @version 1.0
- * @since 0.2.4
+ * @since 0.3.0
  * 
  */
 public class MockGraphics2D extends Graphics2D {

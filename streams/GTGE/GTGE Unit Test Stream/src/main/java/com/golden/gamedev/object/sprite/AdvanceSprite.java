@@ -154,16 +154,6 @@ public class AdvanceSprite extends AnimatedSprite {
 		return this.animationFrame;
 	}
 	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ************************* IMAGE OPERATION *******************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
 	public BufferedImage getImage() {
 		return (this.animationFrame == null) ? super.getImage() : this
 		        .getImage(this.animationFrame[this.getFrame()]);
@@ -176,16 +166,6 @@ public class AdvanceSprite extends AnimatedSprite {
 			this.setAnimationFrame(0, this.animationFrame.length - 1);
 		}
 	}
-	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ****************** NOTIFY STATUS / DIRECTION CHANGED ********************
-	 */
-	/**
-	 * *************************************************************************
-	 */
 	
 	/**
 	 * The sprite status and/or direction is changed, set appropriate sprite

@@ -566,6 +566,8 @@ public class Sprite implements java.io.Serializable {
 	 * 
 	 * <pre>
 	 * 
+	 * 
+	 * 
 	 * Sprite s;
 	 * 
 	 * public void update(long elapsedTime) {
@@ -613,6 +615,8 @@ public class Sprite implements java.io.Serializable {
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
+	 * 
 	 * 
 	 * Sprite s;
 	 * 
@@ -798,6 +802,8 @@ public class Sprite implements java.io.Serializable {
 	 * @param g graphics context
 	 * @param x screen x-coordinate
 	 * @param y screen y-coordinate
+	 * @throws NullPointerException Throws a {@link NullPointerException} if the
+	 *         given {@link Graphics2D} instance is null.
 	 */
 	public void render(Graphics2D g, int x, int y) {
 		g.drawImage(this.image, x, y, null);

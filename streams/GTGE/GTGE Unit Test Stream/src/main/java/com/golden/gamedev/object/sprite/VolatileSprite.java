@@ -26,16 +26,6 @@ import java.awt.image.BufferedImage;
 public class VolatileSprite extends AdvanceSprite {
 	
 	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ***************************** CONSTRUCTOR *******************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
-	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3599186946035433218L;
@@ -48,16 +38,6 @@ public class VolatileSprite extends AdvanceSprite {
 		
 		this.setAnimate(true);
 	}
-	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ************************* UPDATE SPRITE *********************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
 	
 	public void update(long elapsedTime) {
 		super.update(elapsedTime);

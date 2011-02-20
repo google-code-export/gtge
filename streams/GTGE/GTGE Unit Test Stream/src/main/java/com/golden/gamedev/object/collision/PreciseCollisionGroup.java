@@ -436,13 +436,13 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 		
 		this.collisionSide = 0;
 		
-		double firstSpriteSpeedXAxis = firstSprite.getX()
+		final double firstSpriteSpeedXAxis = firstSprite.getX()
 		        - firstSprite.getOldX();
-		double firstSpriteSpeedYAxis = firstSprite.getY()
+		final double firstSpriteSpeedYAxis = firstSprite.getY()
 		        - firstSprite.getOldY();
-		double secondSpriteSpeedXAxis = secondSprite.getX()
+		final double secondSpriteSpeedXAxis = secondSprite.getX()
 		        - secondSprite.getOldX();
-		double secondSpriteSpeedYAxis = secondSprite.getY()
+		final double secondSpriteSpeedYAxis = secondSprite.getY()
 		        - secondSprite.getOldY();
 		
 		if (objectsAreStationary(firstSpriteSpeedXAxis, firstSpriteSpeedYAxis,
@@ -454,108 +454,157 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 			// active collisions are considered.
 			return false;
 		}
-		else {// find fastest moving
-			  // find centres
-			double s1cx = firstCollisionShape.getX()
-			        + firstCollisionShape.getWidth() / 2;
-			double s1cy = firstCollisionShape.getY()
-			        + firstCollisionShape.getHeight() / 2;
-			double s2cx = secondCollisionShape.getX()
-			        + secondCollisionShape.getWidth() / 2;
-			double s2cy = secondCollisionShape.getY()
-			        + secondCollisionShape.getHeight() / 2;
-			
-			Sprite spriteToMove;
-			
-			if (Math.pow(firstSpriteSpeedXAxis, 2)
-			        + Math.pow(firstSpriteSpeedYAxis, 2) > Math.pow(
-			        secondSpriteSpeedXAxis, 2)
-			        + Math.pow(secondSpriteSpeedYAxis, 2)) {// sprite
-				// 1
-				// faster
-				spriteToMove = firstSprite;
-			}
-			else {
-				spriteToMove = secondSprite;
-			}
-			if (this.log) {
-				System.out.print(spriteToMove + "-->");
-			}
-			
+		else {
 			// find distances to move (based on default collision
 			// shapes)
 			// this might need to be changed to use the iterative method
 			// if this behaviour should respect pixel perfection
-			double distXLeft = s1cx - s2cx + firstCollisionShape.getWidth() / 2
-			        + secondCollisionShape.getWidth() / 2;
-			double distXRight = s2cx - s1cx + firstCollisionShape.getWidth()
-			        / 2 + secondCollisionShape.getWidth() / 2;
-			double distYUp = s1cy - s2cy + firstCollisionShape.getHeight() / 2
-			        + secondCollisionShape.getHeight() / 2;
-			double distYDown = s2cy - s1cy + firstCollisionShape.getHeight()
-			        / 2 + secondCollisionShape.getHeight() / 2;
+			final double distanceBetweenRightSideOfFirstSpriteAndLeftSideOfSecondSprite = firstCollisionShape
+			        .getX()
+			        - secondCollisionShape.getX()
+			        + firstCollisionShape.getWidth();
 			
-			// find minimum distance
-			double minDist = Math.min(Math.min(distXLeft, distXRight),
-			        Math.min(distYUp, distYDown));
+			final double distanceBetweenLeftSideOfFirstSpriteAndRightSideOfSecondSprite = secondCollisionShape
+			        .getX()
+			        - firstCollisionShape.getX()
+			        + secondCollisionShape.getWidth();
 			
-			if (spriteToMove == firstSprite) {// move sprite1
-				this.collisionX2 = secondSprite.getX();
-				this.collisionY2 = secondSprite.getY();
-				if (minDist == distXLeft) {
-					this.collisionX1 = firstSprite.getX() - distXLeft;
-					this.collisionY1 = firstSprite.getY();
-					this.collisionSide = CollisionGroup.RIGHT_LEFT_COLLISION;
-				}
-				else if (minDist == distXRight) {
-					this.collisionX1 = firstSprite.getX() + distXRight;
-					this.collisionY1 = firstSprite.getY();
-					this.collisionSide = CollisionGroup.LEFT_RIGHT_COLLISION;
-				}
-				else if (minDist == distYUp) {
-					this.collisionX1 = firstSprite.getX();
-					this.collisionY1 = firstSprite.getY() - distYUp;
-					this.collisionSide = CollisionGroup.BOTTOM_TOP_COLLISION;
-				}
-				else {
-					this.collisionX1 = firstSprite.getX();
-					this.collisionY1 = firstSprite.getY() + distYDown;
-					this.collisionSide = CollisionGroup.TOP_BOTTOM_COLLISION;
-				}
-				if (this.log) {
-					System.out.println("Corrected");
-				}
-				return true;
-			}
-			else {// move sprite 2
-				this.collisionX1 = firstSprite.getX();
-				this.collisionY1 = firstSprite.getY();
-				if (minDist == distXLeft) {
-					this.collisionX2 = secondSprite.getX() - distXLeft;
-					this.collisionY2 = secondSprite.getY();
-					this.collisionSide = CollisionGroup.LEFT_RIGHT_COLLISION;
-				}
-				else if (minDist == distXRight) {
-					this.collisionX2 = secondSprite.getX() + distXRight;
-					this.collisionY2 = secondSprite.getY();
-					this.collisionSide = CollisionGroup.RIGHT_LEFT_COLLISION;
-				}
-				else if (minDist == distYUp) {
-					this.collisionX2 = secondSprite.getX();
-					this.collisionY2 = secondSprite.getY() - distYUp;
-					this.collisionSide = CollisionGroup.TOP_BOTTOM_COLLISION;
-				}
-				else {
-					this.collisionX2 = secondSprite.getX();
-					this.collisionY2 = secondSprite.getY() + distYDown;
-					this.collisionSide = CollisionGroup.BOTTOM_TOP_COLLISION;
-				}
-				if (this.log) {
-					System.out.println("Corrected");
-				}
-				return true;
+			final double distanceBetweenBottomSideOfFirstSpriteAndTopSideOfSecondSprite = firstCollisionShape
+			        .getY()
+			        - secondCollisionShape.getY()
+			        + firstCollisionShape.getHeight();
+			
+			final double distanceBetweenTopSideOfFirstSpriteAndBottomSideOfSecondSprite = secondCollisionShape
+			        .getY()
+			        - firstCollisionShape.getY()
+			        + secondCollisionShape.getHeight();
+			
+			final double minimumDistanceBetweenSpriteSides = Math
+			        .min(Math
+			                .min(distanceBetweenRightSideOfFirstSpriteAndLeftSideOfSecondSprite,
+			                        distanceBetweenLeftSideOfFirstSpriteAndRightSideOfSecondSprite),
+			                Math.min(
+			                        distanceBetweenBottomSideOfFirstSpriteAndTopSideOfSecondSprite,
+			                        distanceBetweenTopSideOfFirstSpriteAndBottomSideOfSecondSprite));
+			
+			Sprite spriteWhichInitiatedCollision = secondSprite;
+			
+			// The collided sprite is the sprite which has the greater sum of
+			// the squares of the speeds between the two sprites. If they are
+			// equal, the second
+			// sprite will be assumed to be the one that initiated the collision
+			if (Math.pow(firstSpriteSpeedXAxis, 2)
+			        + Math.pow(firstSpriteSpeedYAxis, 2) > Math.pow(
+			        secondSpriteSpeedXAxis, 2)
+			        + Math.pow(secondSpriteSpeedYAxis, 2)) {
+				spriteWhichInitiatedCollision = firstSprite;
 			}
 			
+			if (this.log) {
+				System.out.print(spriteWhichInitiatedCollision + "-->");
+			}
+			
+			if (spriteWhichInitiatedCollision == firstSprite) {
+				adjustCollisionFieldsWhenFirstSpriteInitiatesCollision(
+				        firstSprite,
+				        secondSprite,
+				        distanceBetweenRightSideOfFirstSpriteAndLeftSideOfSecondSprite,
+				        distanceBetweenLeftSideOfFirstSpriteAndRightSideOfSecondSprite,
+				        distanceBetweenBottomSideOfFirstSpriteAndTopSideOfSecondSprite,
+				        distanceBetweenTopSideOfFirstSpriteAndBottomSideOfSecondSprite,
+				        minimumDistanceBetweenSpriteSides);
+			}
+			else {
+				adjustCollisionFieldsWhenSecondSpriteInitiatesCollision(
+				        firstSprite,
+				        secondSprite,
+				        distanceBetweenRightSideOfFirstSpriteAndLeftSideOfSecondSprite,
+				        distanceBetweenLeftSideOfFirstSpriteAndRightSideOfSecondSprite,
+				        distanceBetweenBottomSideOfFirstSpriteAndTopSideOfSecondSprite,
+				        distanceBetweenTopSideOfFirstSpriteAndBottomSideOfSecondSprite,
+				        minimumDistanceBetweenSpriteSides);
+			}
+			if (this.log) {
+				System.out.println("Corrected");
+			}
+			return true;
+			
+		}
+	}
+	
+	/**
+	 * @param firstSprite
+	 * @param secondSprite
+	 * @param distanceBetweenRightSideOfFirstSpriteAndLeftSideOfSecondSprite
+	 * @param distanceBetweenLeftSideOfFirstSpriteAndRightSideOfSecondSprite
+	 * @param distanceBetweenBottomSideOfFirstSpriteAndTopSideOfSecondSprite
+	 * @param distanceBetweenTopSideOfFirstSpriteAndBottomSideOfSecondSprite
+	 * @param minimumDistanceBetweenSpriteSides
+	 */
+	private void adjustCollisionFieldsWhenSecondSpriteInitiatesCollision(Sprite firstSprite, Sprite secondSprite, final double distanceBetweenRightSideOfFirstSpriteAndLeftSideOfSecondSprite, final double distanceBetweenLeftSideOfFirstSpriteAndRightSideOfSecondSprite, final double distanceBetweenBottomSideOfFirstSpriteAndTopSideOfSecondSprite, final double distanceBetweenTopSideOfFirstSpriteAndBottomSideOfSecondSprite, final double minimumDistanceBetweenSpriteSides) {
+		this.collisionX1 = firstSprite.getX();
+		this.collisionY1 = firstSprite.getY();
+		if (minimumDistanceBetweenSpriteSides == distanceBetweenRightSideOfFirstSpriteAndLeftSideOfSecondSprite) {
+			this.collisionX2 = secondSprite.getX()
+			        - distanceBetweenRightSideOfFirstSpriteAndLeftSideOfSecondSprite;
+			this.collisionY2 = secondSprite.getY();
+			this.collisionSide = CollisionGroup.LEFT_RIGHT_COLLISION;
+		}
+		else if (minimumDistanceBetweenSpriteSides == distanceBetweenLeftSideOfFirstSpriteAndRightSideOfSecondSprite) {
+			this.collisionX2 = secondSprite.getX()
+			        + distanceBetweenLeftSideOfFirstSpriteAndRightSideOfSecondSprite;
+			this.collisionY2 = secondSprite.getY();
+			this.collisionSide = CollisionGroup.RIGHT_LEFT_COLLISION;
+		}
+		else if (minimumDistanceBetweenSpriteSides == distanceBetweenBottomSideOfFirstSpriteAndTopSideOfSecondSprite) {
+			this.collisionX2 = secondSprite.getX();
+			this.collisionY2 = secondSprite.getY()
+			        - distanceBetweenBottomSideOfFirstSpriteAndTopSideOfSecondSprite;
+			this.collisionSide = CollisionGroup.TOP_BOTTOM_COLLISION;
+		}
+		else {
+			this.collisionX2 = secondSprite.getX();
+			this.collisionY2 = secondSprite.getY()
+			        + distanceBetweenTopSideOfFirstSpriteAndBottomSideOfSecondSprite;
+			this.collisionSide = CollisionGroup.BOTTOM_TOP_COLLISION;
+		}
+	}
+	
+	/**
+	 * @param firstSprite
+	 * @param secondSprite
+	 * @param distanceBetweenRightSideOfFirstSpriteAndLeftSideOfSecondSprite
+	 * @param distanceBetweenLeftSideOfFirstSpriteAndRightSideOfSecondSprite
+	 * @param distanceBetweenBottomSideOfFirstSpriteAndTopSideOfSecondSprite
+	 * @param distanceBetweenTopSideOfFirstSpriteAndBottomSideOfSecondSprite
+	 * @param minimumDistanceBetweenSpriteSides
+	 */
+	private void adjustCollisionFieldsWhenFirstSpriteInitiatesCollision(Sprite firstSprite, Sprite secondSprite, final double distanceBetweenRightSideOfFirstSpriteAndLeftSideOfSecondSprite, final double distanceBetweenLeftSideOfFirstSpriteAndRightSideOfSecondSprite, final double distanceBetweenBottomSideOfFirstSpriteAndTopSideOfSecondSprite, final double distanceBetweenTopSideOfFirstSpriteAndBottomSideOfSecondSprite, final double minimumDistanceBetweenSpriteSides) {
+		this.collisionX2 = secondSprite.getX();
+		this.collisionY2 = secondSprite.getY();
+		if (minimumDistanceBetweenSpriteSides == distanceBetweenRightSideOfFirstSpriteAndLeftSideOfSecondSprite) {
+			this.collisionX1 = firstSprite.getX()
+			        - distanceBetweenRightSideOfFirstSpriteAndLeftSideOfSecondSprite;
+			this.collisionY1 = firstSprite.getY();
+			this.collisionSide = CollisionGroup.RIGHT_LEFT_COLLISION;
+		}
+		else if (minimumDistanceBetweenSpriteSides == distanceBetweenLeftSideOfFirstSpriteAndRightSideOfSecondSprite) {
+			this.collisionX1 = firstSprite.getX()
+			        + distanceBetweenLeftSideOfFirstSpriteAndRightSideOfSecondSprite;
+			this.collisionY1 = firstSprite.getY();
+			this.collisionSide = CollisionGroup.LEFT_RIGHT_COLLISION;
+		}
+		else if (minimumDistanceBetweenSpriteSides == distanceBetweenBottomSideOfFirstSpriteAndTopSideOfSecondSprite) {
+			this.collisionX1 = firstSprite.getX();
+			this.collisionY1 = firstSprite.getY()
+			        - distanceBetweenBottomSideOfFirstSpriteAndTopSideOfSecondSprite;
+			this.collisionSide = CollisionGroup.BOTTOM_TOP_COLLISION;
+		}
+		else {
+			this.collisionX1 = firstSprite.getX();
+			this.collisionY1 = firstSprite.getY()
+			        + distanceBetweenTopSideOfFirstSpriteAndBottomSideOfSecondSprite;
+			this.collisionSide = CollisionGroup.TOP_BOTTOM_COLLISION;
 		}
 	}
 	

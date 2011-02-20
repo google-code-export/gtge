@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.golden.gamedev;
+package mock.java.lang;
 
 import java.security.Permission;
 
@@ -11,7 +11,7 @@ import java.security.Permission;
  * 
  * @author MetroidFan2002
  * @version 1.0
- * @since 0.2.4
+ * @since 0.3.0
  * @see SecurityManager
  * 
  */

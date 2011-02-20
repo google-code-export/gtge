@@ -114,6 +114,12 @@ import com.golden.gamedev.util.Utility;
  * 
  * 
  * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  * </pre>
  * 
  * <p>
@@ -161,6 +167,12 @@ import com.golden.gamedev.util.Utility;
  * 
  * 
  * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  * </pre>
  * 
  * <p>
@@ -183,6 +195,107 @@ import com.golden.gamedev.util.Utility;
  * @see #initEngine()
  */
 public abstract class Game {
+	
+	/**
+	 * 
+	 * @author MetroidFan2002
+	 * @version 1.0
+	 * @since 0.3.0
+	 * 
+	 */
+	private final class GTGEEndCreditAppletCanvas extends Canvas {
+		
+		/**
+         *
+         * @author MetroidFan2002
+         * @version 1.0
+         * @since 0.3.0
+         * 
+         */
+        private final class GTGEEndCreditAppletMouseListener extends
+                MouseAdapter {
+	        
+	        /**
+	         * 
+	         */
+	        private final Applet applet;
+	        
+	        /**
+	         * Creates a new {@link GTGEEndCreditAppletMouseListener} instance.
+	         */
+	        private GTGEEndCreditAppletMouseListener(Applet applet) {
+		        this.applet = applet;
+	        }
+	        
+	        public void mouseClicked(MouseEvent e) {
+	        	try {
+	        		applet.getAppletContext().showDocument(
+	        		        new URL("http://goldenstudios.or.id/"));
+	        	}
+	        	catch (Exception excp) {
+	        	}
+	        }
+        }
+
+		/**
+	     * 
+	     */
+		private final BufferedImage image;
+		/**
+	     * 
+	     */
+		private static final long serialVersionUID = 8493852179266447783L;
+		
+		/**
+		 * Creates a new {@link GTGEEndCreditAppletCanvas} instance.
+		 * @param applet TODO
+		 */
+		private GTGEEndCreditAppletCanvas(BufferedImage image,
+		        final Applet applet) {
+			this.image = image;
+			this.setSize(applet.getSize());
+			this.addMouseListener(new GTGEEndCreditAppletMouseListener(applet));
+			
+			applet.add(this);
+		}
+		
+		public void paint(Graphics g1) {
+			Graphics2D g = (Graphics2D) g1;
+			
+			// draw game image
+			g.drawImage(this.image, 0, 0, null);
+			
+			// draw text
+			g.setColor(Color.YELLOW);
+			g.setFont(new Font("Verdana", Font.BOLD, 12));
+			g.drawString("Game has been ended", 10, 25);
+			g.drawString("Thank you for playing!", 10, 45);
+			g.drawString("Visit http://www.goldenstudios.or.id/", 10, 75);
+			g.drawString("For free game engine!", 10, 95);
+			g.drawString("This game is developed with GTGE v"
+			        + Game.GTGE_VERSION, 10, 115);
+		}
+	}
+	
+	/**
+	 * 
+	 * @author MetroidFan2002
+	 * @version 1.0
+	 * @since 0.3.0
+	 * 
+	 */
+	private final class GameFocusListener implements FocusListener {
+		
+		public void focusGained(FocusEvent e) {
+			Game.this.inFocus = true;
+		}
+		
+		public void focusLost(FocusEvent e) {
+			if (Game.this.pauseOnLostFocus) {
+				Game.this.inFocus = false;
+			}
+		}
+	}
 	
 	/**
 	 * Current GTGE version.
@@ -427,18 +540,7 @@ public abstract class Game {
 		
 		try {
 			this.bsGraphics.getComponent().addFocusListener(
-			        new FocusListener() {
-				        
-				        public void focusGained(FocusEvent e) {
-					        Game.this.inFocus = true;
-				        }
-				        
-				        public void focusLost(FocusEvent e) {
-					        if (Game.this.pauseOnLostFocus) {
-						        Game.this.inFocus = false;
-					        }
-				        }
-			        });
+			        new GameFocusListener());
 		}
 		catch (Exception e) {
 		}
@@ -685,6 +787,12 @@ public abstract class Game {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * protected void initEngine() {
 	 * 	super.initEngine();
 	 * 	// change the timer engine
@@ -711,30 +819,32 @@ public abstract class Game {
 			// //
 		}
 		
-		ResourceLoader actualLoader = resourceLoader;
+		ResourceLoader actualLoader = this.resourceLoader;
 		if (this.bsIO == null) {
 			// Provided for backwards-compatibility, but not used.
 			this.bsIO = new BaseIO(this.getClass());
 		}
 		else {
-			actualLoader = bsIO.getSelectedResourceLoader();
+			actualLoader = this.bsIO.getSelectedResourceLoader();
 		}
 		
-		resourceLoader = actualLoader;
+		this.resourceLoader = actualLoader;
 		
 		if (this.bsLoader == null) {
-			this.bsLoader = new BaseLoader(resourceLoader, Color.MAGENTA);
+			this.bsLoader = new BaseLoader(this.resourceLoader, Color.MAGENTA);
 		}
 		if (this.bsInput == null) {
 			this.bsInput = new AWTInput(this.bsGraphics.getComponent());
 		}
 		if (this.bsMusic == null) {
-			this.bsMusic = new BaseAudio(resourceLoader, new MidiRenderer());
+			this.bsMusic = new BaseAudio(this.resourceLoader,
+			        new MidiRenderer());
 			this.bsMusic.setExclusive(true);
 			this.bsMusic.setLoop(true);
 		}
 		if (this.bsSound == null) {
-			this.bsSound = new BaseAudio(resourceLoader, new WaveRenderer());
+			this.bsSound = new BaseAudio(this.resourceLoader,
+			        new WaveRenderer());
 		}
 		
 		// miscellanous
@@ -889,45 +999,8 @@ public abstract class Game {
 			applet.removeAll();
 			applet.setIgnoreRepaint(false);
 			
-			Canvas canvas = new Canvas() {
-				
-				/**
-				 * 
-				 */
-				private static final long serialVersionUID = 8493852179266447783L;
-				
-				public void paint(Graphics g1) {
-					Graphics2D g = (Graphics2D) g1;
-					
-					// draw game image
-					g.drawImage(image, 0, 0, null);
-					
-					// draw text
-					g.setColor(Color.YELLOW);
-					g.setFont(new Font("Verdana", Font.BOLD, 12));
-					g.drawString("Game has been ended", 10, 25);
-					g.drawString("Thank you for playing!", 10, 45);
-					g.drawString("Visit http://www.goldenstudios.or.id/", 10,
-					        75);
-					g.drawString("For free game engine!", 10, 95);
-					g.drawString("This game is developed with GTGE v"
-					        + Game.GTGE_VERSION, 10, 115);
-				}
-			};
-			canvas.setSize(applet.getSize());
-			canvas.addMouseListener(new MouseAdapter() {
-				
-				public void mouseClicked(MouseEvent e) {
-					try {
-						applet.getAppletContext().showDocument(
-						        new URL("http://goldenstudios.or.id/"));
-					}
-					catch (Exception excp) {
-					}
-				}
-			});
+			Canvas canvas = new GTGEEndCreditAppletCanvas(image, applet);
 			
-			applet.add(canvas);
 			applet.repaint();
 			canvas.repaint();
 		}
@@ -952,6 +1025,12 @@ public abstract class Game {
 	 * For example:
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * 
 	 * 
 	 * 
@@ -1692,6 +1771,12 @@ public abstract class Game {
 	 * 
 	 * 
 	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
 	 * // we want the images sequence is as followed
 	 * String sequence = &quot;020120&quot;;
 	 * BufferedImage[] image = getImages(&quot;imagestrip.png&quot;, 3, 1, true, sequence, 1);
@@ -1785,7 +1870,7 @@ public abstract class Game {
 	 *         resources.
 	 */
 	public final ResourceLoader getResourceLoader() {
-		return resourceLoader;
+		return this.resourceLoader;
 	}
 	
 	/**

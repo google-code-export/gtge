@@ -40,7 +40,9 @@ import java.net.URL;
  */
 public class BaseIO {
 	
-	/** ************************* IO MODE CONSTANTS ***************************** */
+	/**
+	 * ************************* IO MODE CONSTANTS *****************************
+	 */
 	
 	/**
 	 * IO mode constant for class url.
@@ -62,15 +64,23 @@ public class BaseIO {
 	 */
 	public static final int SYSTEM_LOADER = 4;
 	
-	/** ************************* BASE CLASS LOADER ***************************** */
+	/**
+	 * ************************* BASE CLASS LOADER *****************************
+	 */
 	
-	private Class base;
+	private Class<?> base;
 	private ClassLoader loader;
 	private int mode;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Construct new <code>BaseIO</code> with specified class as the base
@@ -85,25 +95,31 @@ public class BaseIO {
 	 * @see #CLASS_LOADER
 	 * @see #SYSTEM_LOADER
 	 */
-	public BaseIO(Class base, int mode) {
+	public BaseIO(Class<?> base, int mode) {
 		this.base = base;
 		this.loader = base.getClassLoader();
 		this.mode = mode;
 	}
 	
 	/**
-	 * Construct new <code>BaseIO</code> with specified class as the base
-	 * loader using {@link #CLASS_URL} mode as the default.
+	 * Construct new <code>BaseIO</code> with specified class as the base loader
+	 * using {@link #CLASS_URL} mode as the default.
 	 * 
 	 * @param base the base class loader
 	 */
-	public BaseIO(Class base) {
+	public BaseIO(Class<?> base) {
 		this(base, BaseIO.CLASS_URL);
 	}
 	
-	/** ************************************************************************* */
-	/** ***************************** INPUT URL ********************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** INPUT URL *********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns URL from specified path with specified mode.
@@ -188,9 +204,15 @@ public class BaseIO {
 		return url;
 	}
 	
-	/** ************************************************************************* */
-	/** **************************** INPUT STREAM ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * **************************** INPUT STREAM *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns {@link InputStream} from specified path with specified mode.
@@ -274,9 +296,15 @@ public class BaseIO {
 		return stream;
 	}
 	
-	/** ************************************************************************* */
-	/** ***************************** INPUT FILE ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** INPUT FILE ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Return file from specified path with specified mode.
@@ -375,9 +403,15 @@ public class BaseIO {
 		return file;
 	}
 	
-	/** ************************************************************************* */
-	/** *************************** OUTPUT FILE ********************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *************************** OUTPUT FILE *********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns file on specified path with specified mode for processing.
@@ -428,8 +462,8 @@ public class BaseIO {
 	}
 	
 	/**
-	 * Returns file on specified path with this <code>BaseIO</code> default
-	 * mode for processing.
+	 * Returns file on specified path with this <code>BaseIO</code> default mode
+	 * for processing.
 	 * @param path The path to retrieve an {@link File} from.
 	 * @return The {@link File}.
 	 */
@@ -465,9 +499,15 @@ public class BaseIO {
 		return file;
 	}
 	
-	/** ************************************************************************* */
-	/** *********************** IO MODE CONSTANTS ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *********************** IO MODE CONSTANTS *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns the root path of this {@link BaseIO} if using specified mode. The
@@ -557,16 +597,22 @@ public class BaseIO {
 		        + path;
 	}
 	
-	/** ************************************************************************* */
-	/** *********************** BASE CLASS LOADER ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *********************** BASE CLASS LOADER *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Sets the base class where the resources will be taken from.
 	 * @param base The base {@link Class}.
 	 * @see #getBase()
 	 */
-	public void setBase(Class base) {
+	public void setBase(Class<?> base) {
 		this.base = base;
 		this.loader = base.getClassLoader();
 	}
@@ -576,7 +622,7 @@ public class BaseIO {
 	 * @return The base {@link Class}.
 	 * @see #setBase(Class)
 	 */
-	public Class getBase() {
+	public Class<?> getBase() {
 		return this.base;
 	}
 	

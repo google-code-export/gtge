@@ -38,9 +38,15 @@ public class FileUtil {
 	private FileUtil() {
 	}
 	
-	/** ************************************************************************* */
-	/** ******************** READING/WRITING TEXT FILE ************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ******************** READING/WRITING TEXT FILE **************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Writes an array of String to specified text file.
@@ -82,7 +88,7 @@ public class FileUtil {
 			FileReader in = new FileReader(file);
 			BufferedReader readIn = new BufferedReader(in);
 			
-			ArrayList list = new ArrayList(50);
+			ArrayList<String> list = new ArrayList<String>(50);
 			String data;
 			
 			// reading text
@@ -92,8 +98,8 @@ public class FileUtil {
 			
 			readIn.close();
 			
-			return Utility.compactStrings((String[]) list
-			        .toArray(new String[0]));
+			return Utility
+			        .compactStrings(list.toArray(new String[list.size()]));
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -115,7 +121,7 @@ public class FileUtil {
 			InputStreamReader in = new InputStreamReader(stream);
 			BufferedReader readIn = new BufferedReader(in);
 			
-			ArrayList list = new ArrayList(50);
+			ArrayList<String> list = new ArrayList<String>(50);
 			String data;
 			
 			// reading text
@@ -124,8 +130,8 @@ public class FileUtil {
 			}
 			
 			readIn.close();
-			return Utility.compactStrings((String[]) list
-			        .toArray(new String[0]));
+			return Utility
+			        .compactStrings(list.toArray(new String[list.size()]));
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -152,9 +158,15 @@ public class FileUtil {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ FILE PROCESSING ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ FILE PROCESSING ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Sets file extension.
@@ -164,6 +176,8 @@ public class FileUtil {
 	 * Renaming <code>"paul.dat"</code> to <code>"paul.bin"</code>:
 	 * 
 	 * <pre>
+	 * 
+	 * 
 	 * File f = new File(&quot;paul.dat&quot;);
 	 * File newFile = setExtension(f, &quot;bin&quot;);
 	 * </pre>
@@ -218,8 +232,7 @@ public class FileUtil {
 	
 	/**
 	 * Returns name of a file without its extension. <br>
-	 * A file with name <code>"paul.dat"</code> will return
-	 * <code>"paul"</code>.
+	 * A file with name <code>"paul.dat"</code> will return <code>"paul"</code>.
 	 * 
 	 * @param f file to get it's name
 	 * @return The file name.

@@ -45,7 +45,9 @@ import com.golden.gamedev.util.ImageUtil;
  */
 public class BaseLoader {
 	
-	/** ************************** LOADER PROPERTIES **************************** */
+	/**
+	 * ************************** LOADER PROPERTIES ****************************
+	 */
 	
 	// Base IO to get external resources
 	private BaseIO base;
@@ -53,17 +55,25 @@ public class BaseLoader {
 	// masking color
 	private Color maskColor;
 	
-	/** **************************** IMAGE STORAGE ****************************** */
+	/**
+	 * **************************** IMAGE STORAGE ******************************
+	 */
 	
 	// store single image
-	private Map imageBank;
+	private Map<String, BufferedImage> imageBank;
 	
 	// store multiple images
-	private Map imagesBank;
+	private Map<String, BufferedImage[]> imagesBank;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Constructs new <code>BaseLoader</code> with specified I/O loader, and
@@ -80,13 +90,19 @@ public class BaseLoader {
 		this.base = base;
 		this.maskColor = maskColor;
 		
-		this.imageBank = new HashMap(5);
-		this.imagesBank = new HashMap(30);
+		this.imageBank = new HashMap<String, BufferedImage>(5);
+		this.imagesBank = new HashMap<String, BufferedImage[]>(30);
 	}
 	
-	/** ************************************************************************* */
-	/** *********************** INSERTION OPERATION ***************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *********************** INSERTION OPERATION *****************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Loads and returns an image from the file location. If useMask is set to
@@ -99,7 +115,7 @@ public class BaseLoader {
 	 * @return Requested image.
 	 */
 	public BufferedImage getImage(String imagefile, boolean useMask) {
-		BufferedImage image = (BufferedImage) this.imageBank.get(imagefile);
+		BufferedImage image = this.imageBank.get(imagefile);
 		
 		if (image == null) {
 			URL url = this.base.getURL(imagefile);
@@ -168,9 +184,15 @@ public class BaseLoader {
 		return this.getImages(imagefile, col, row, true);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ REMOVAL OPERATION ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ REMOVAL OPERATION ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Removes specified image from cache.
@@ -178,7 +200,7 @@ public class BaseLoader {
 	 * @return If removing the image from cache worked.
 	 */
 	public boolean removeImage(BufferedImage image) {
-		Iterator it = this.imageBank.values().iterator();
+		Iterator<BufferedImage> it = this.imageBank.values().iterator();
 		
 		while (it.hasNext()) {
 			if (it.next() == image) {
@@ -196,7 +218,7 @@ public class BaseLoader {
 	 * @return If removing the images from cache worked.
 	 */
 	public boolean removeImages(BufferedImage[] images) {
-		Iterator it = this.imagesBank.values().iterator();
+		Iterator<BufferedImage[]> it = this.imagesBank.values().iterator();
 		
 		while (it.hasNext()) {
 			if (it.next() == images) {
@@ -234,9 +256,15 @@ public class BaseLoader {
 		this.imagesBank.clear();
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* CUSTOM OPERATION ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* CUSTOM OPERATION ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Stores image into cache with specified key.
@@ -284,9 +312,15 @@ public class BaseLoader {
 		return (BufferedImage[]) this.imagesBank.get(key);
 	}
 	
-	/** ************************************************************************* */
-	/** ********************** BASE LOADER PROPERTIES *************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ********************** BASE LOADER PROPERTIES ***************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns {@link BaseIO} associated with this image loader.
@@ -333,7 +367,7 @@ public class BaseLoader {
 	public String toString() {
 		StringBuffer imageKey = new StringBuffer(), imagesKey = new StringBuffer();
 		
-		Iterator imageIt = this.imageBank.keySet().iterator(), imagesIt = this.imagesBank
+		Iterator<String> imageIt = this.imageBank.keySet().iterator(), imagesIt = this.imagesBank
 		        .keySet().iterator();
 		
 		imageKey.append("\"");

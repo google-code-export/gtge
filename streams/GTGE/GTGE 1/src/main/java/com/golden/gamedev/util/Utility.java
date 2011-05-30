@@ -33,13 +33,19 @@ public class Utility {
 	private Utility() {
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ ARRAY ENLARGEMENT ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ ARRAY ENLARGEMENT ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
-	 * Expands an array of object by specified size, <code>src</code> can not
-	 * be <code>null</code>.
+	 * Expands an array of object by specified size, <code>src</code> can not be
+	 * <code>null</code>.
 	 * <p>
 	 * 
 	 * The original array is not changed, this method creates and returns a new
@@ -61,12 +67,12 @@ public class Utility {
 	}
 	
 	/**
-	 * Expands an array of object by specified size, <code>src</code> can not
-	 * be <code>null</code>.
+	 * Expands an array of object by specified size, <code>src</code> can not be
+	 * <code>null</code>.
 	 * <p>
 	 * 
-	 * The new expanded object will be at the bottom of the returned array (<b>last
-	 * index</b>).
+	 * The new expanded object will be at the bottom of the returned array
+	 * (<b>last index</b>).
 	 * 
 	 * @param src the array to be expanded, could be an array of primitive or an
 	 *        array of Object
@@ -88,7 +94,7 @@ public class Utility {
 	 * @param type array class
 	 * @return The expanded array.
 	 */
-	public static Object expand(Object src, int increase, boolean bottom, Class type) {
+	public static Object expand(Object src, int increase, boolean bottom, Class<?> type) {
 		if (src == null) {
 			return Array.newInstance(type, 1);
 		}
@@ -96,9 +102,15 @@ public class Utility {
 		return Utility.expand(src, increase, bottom);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ ARRAY SHRINKMENT ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ ARRAY SHRINKMENT *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Cuts an array of object from specified position.
@@ -161,9 +173,15 @@ public class Utility {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** **************************** RANDOMIZE ********************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * **************************** RANDOMIZE **********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns pre-defined Random object.
@@ -180,6 +198,7 @@ public class Utility {
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
 	 * // to return random number from 0 to 10
 	 * int rand = Utility.getRandom(0, 10);
 	 * </pre>

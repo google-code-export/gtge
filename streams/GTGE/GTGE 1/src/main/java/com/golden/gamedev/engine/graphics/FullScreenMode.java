@@ -43,9 +43,11 @@ import com.golden.gamedev.util.ImageUtil;
  * See {@link com.golden.gamedev.engine.BaseGraphics} for how to use graphics
  * engine separated from Golden T Game Engine (GTGE) Frame Work.
  */
-public class FullScreenMode implements BaseGraphics, Comparator {
+public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 	
-	/** ************************ HARDWARE DEVICE ******************************** */
+	/**
+	 * ************************ HARDWARE DEVICE ********************************
+	 */
 	
 	/**
 	 * The graphics device that constructs this graphics engine.
@@ -59,13 +61,17 @@ public class FullScreenMode implements BaseGraphics, Comparator {
 	public static final GraphicsConfiguration CONFIG = FullScreenMode.DEVICE
 	        .getDefaultConfiguration();
 	
-	/** *************************** AWT COMPONENT ******************************* */
+	/**
+	 * *************************** AWT COMPONENT *******************************
+	 */
 	
 	private Frame frame;
 	
 	private Dimension size;
 	
-	/** *************************** BACK BUFFER ********************************* */
+	/**
+	 * *************************** BACK BUFFER *********************************
+	 */
 	
 	private VolatileImage offscreen; // backbuffer image
 	
@@ -74,9 +80,15 @@ public class FullScreenMode implements BaseGraphics, Comparator {
 	// current graphics context
 	private Graphics2D currentGraphics;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new instance of Full Screen Graphics Engine with specified size,
@@ -153,9 +165,15 @@ public class FullScreenMode implements BaseGraphics, Comparator {
 		this.frame.requestFocus();
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ GRAPHICS FUNCTION ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ GRAPHICS FUNCTION ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	private boolean createBufferStrategy() {
 		// create bufferstrategy
@@ -278,9 +296,15 @@ public class FullScreenMode implements BaseGraphics, Comparator {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** ******************* DISPOSING GRAPHICS ENGINE *************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ******************* DISPOSING GRAPHICS ENGINE ***************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public void cleanup() {
 		try {
@@ -306,9 +330,15 @@ public class FullScreenMode implements BaseGraphics, Comparator {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** *************************** PROPERTIES ********************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *************************** PROPERTIES **********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	public Dimension getSize() {
 		return this.size;
@@ -361,15 +391,21 @@ public class FullScreenMode implements BaseGraphics, Comparator {
 		return this.frame.getIconImage();
 	}
 	
-	/** ************************************************************************* */
-	/** ********************* FIND THE BEST DISPLAY MODE ************************ */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ********************* FIND THE BEST DISPLAY MODE ************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	private DisplayMode getBestDisplay(Dimension size) {
 		// get display mode for width x height x 32 with the optimum HZ
 		DisplayMode mode[] = FullScreenMode.DEVICE.getDisplayModes();
 		
-		ArrayList modeList = new ArrayList();
+		ArrayList<DisplayMode> modeList = new ArrayList<DisplayMode>();
 		for (int i = 0; i < mode.length; i++) {
 			if (mode[i].getWidth() == size.width
 			        && mode[i].getHeight() == size.height) {
@@ -382,8 +418,8 @@ public class FullScreenMode implements BaseGraphics, Comparator {
 			return null;
 		}
 		
-		DisplayMode[] match = (DisplayMode[]) modeList
-		        .toArray(new DisplayMode[0]);
+		DisplayMode[] match = modeList
+		        .toArray(new DisplayMode[modeList.size()]);
 		Arrays.sort(match, this);
 		
 		return match[0];
@@ -391,18 +427,15 @@ public class FullScreenMode implements BaseGraphics, Comparator {
 	
 	/**
 	 * Sorts display mode, display mode in the first stack will be used by this
-	 * graphics engine. The <code>o1</code> and <code>o2</code> are instance
-	 * of <code>java.awt.DisplayMode</code>.
+	 * graphics engine. The <code>o1</code> and <code>o2</code> are instance of
+	 * <code>java.awt.DisplayMode</code>.
 	 * <p>
 	 * 
 	 * In this comparator, the first stack (the one that this graphics engine
 	 * will be used) will be display mode that has the biggest bits per pixel
 	 * (bpp) and has the biggest but limited to 75Hz frequency (refresh rate).
 	 */
-	public int compare(Object o1, Object o2) {
-		DisplayMode mode1 = (DisplayMode) o1;
-		DisplayMode mode2 = (DisplayMode) o2;
-		
+	public int compare(DisplayMode mode1, DisplayMode mode2) {
 		int removed1 = (mode1.getRefreshRate() > 75) ? 5000 * mode1
 		        .getRefreshRate() : 0;
 		int removed2 = (mode2.getRefreshRate() > 75) ? 5000 * mode2

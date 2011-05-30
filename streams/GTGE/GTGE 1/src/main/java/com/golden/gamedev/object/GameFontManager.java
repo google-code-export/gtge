@@ -37,11 +37,17 @@ import com.golden.gamedev.util.Utility;
  */
 public class GameFontManager {
 	
-	private final Map fontBank = new HashMap(5);
+	private final Map<Object, Object> fontBank = new HashMap<Object, Object>(5);
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Creates new <code>GameFontManager</code>.
@@ -49,9 +55,15 @@ public class GameFontManager {
 	public GameFontManager() {
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ REMOVAL OPERATION ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ REMOVAL OPERATION ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Removed all loaded font from the storage.
@@ -69,9 +81,15 @@ public class GameFontManager {
 		return this.fontBank.remove(name);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* MANUAL OPERATION ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************* MANUAL OPERATION ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns font with specified name.
@@ -91,9 +109,15 @@ public class GameFontManager {
 		return (GameFont) this.fontBank.put(name, font);
 	}
 	
-	/** ************************************************************************* */
-	/** *********************** CREATION OPERATION ****************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *********************** CREATION OPERATION ******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns default {@link com.golden.gamedev.object.font.AdvanceBitmapFont}
@@ -186,8 +210,8 @@ public class GameFontManager {
 		int height = bitmap.getHeight() - 1;
 		int w = 0;
 		for (int i = 0; i < imagefont.length; i++) {
-			imagefont[i] = ImageUtil.applyMask(bitmap.getSubimage(w, 1,
-			        width[i], height), backgr);
+			imagefont[i] = ImageUtil.applyMask(
+			        bitmap.getSubimage(w, 1, width[i], height), backgr);
 			
 			w += width[i];
 		}
@@ -196,7 +220,8 @@ public class GameFontManager {
 	}
 	
 	/**
-	 * Returns bitmap font with specified images following this letter sequence :
+	 * Returns bitmap font with specified images following this letter sequence
+	 * :
 	 * 
 	 * <pre>
 	 *         ! &quot; # $ % &amp; ' ( ) * + , - . / 0 1 2 3

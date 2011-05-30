@@ -24,8 +24,8 @@ import java.util.Comparator;
 import com.golden.gamedev.util.Utility;
 
 /**
- * <code>PlayField</code> class is the game arena where all the game objects
- * are put on. This class manages all objects in the game, such as sprite,
+ * <code>PlayField</code> class is the game arena where all the game objects are
+ * put on. This class manages all objects in the game, such as sprite,
  * background, sprite group, and collision check.
  * <p>
  * 
@@ -40,20 +40,30 @@ import com.golden.gamedev.util.Utility;
  */
 public class PlayField {
 	
-	/** ********************** PLAYFIELD PROPERTIES ***************************** */
+	/**
+	 * ********************** PLAYFIELD PROPERTIES *****************************
+	 */
 	
 	private SpriteGroup[] groups;
 	private Background background;
 	private CollisionManager[] collisions;
 	
-	/** ************************** SORT RENDERING ******************************* */
+	/**
+	 * ************************** SORT RENDERING *******************************
+	 */
 	
 	private Sprite[] cacheSprite;
-	private Comparator comparator;
+	private Comparator<Sprite> comparator;
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ***************************** CONSTRUCTOR *******************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Constructs new <code>PlayField</code> with specified background.
@@ -80,9 +90,15 @@ public class PlayField {
 		this(Background.getDefaultBackground());
 	}
 	
-	/** ************************************************************************* */
-	/** ********************* SPRITE GROUP OPERATION **************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ********************* SPRITE GROUP OPERATION ****************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Inserts a sprite (extra sprite) directly into playfield, for example
@@ -109,6 +125,10 @@ public class PlayField {
 	 * For example :
 	 * 
 	 * <pre>
+	 * 
+	 * 
+	 * 
+	 * 
 	 * Playfield playfield = new Playfield();
 	 * SpriteGroup PLAYER = playfield.addGroup(new SpriteGroup(&quot;Player&quot;));
 	 * </pre>
@@ -222,9 +242,15 @@ public class PlayField {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** ****************** COLLISION GROUP OPERATION **************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ****************** COLLISION GROUP OPERATION ****************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Associates specified collision group to this playfield.
@@ -302,9 +328,15 @@ public class PlayField {
 		return this.collisions;
 	}
 	
-	/** ************************************************************************* */
-	/** *********************** UPDATE PLAYFIELD ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *********************** UPDATE PLAYFIELD ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Updates sprites, background, and check for collisions.
@@ -345,9 +377,15 @@ public class PlayField {
 		}
 	}
 	
-	/** ************************************************************************* */
-	/** *********************** RENDER PLAYFIELD ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * *********************** RENDER PLAYFIELD ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Renders background, and sprite groups (with/without
@@ -396,7 +434,7 @@ public class PlayField {
 	 * the cache will hold the sprites forever and makes the sprite can't be
 	 * disposed.
 	 */
-	protected void renderSpriteGroups(Graphics2D g, Comparator c) {
+	protected void renderSpriteGroups(Graphics2D g, Comparator<Sprite> c) {
 		int num = 0, len = this.cacheSprite.length;
 		
 		if (len == 0) {
@@ -459,9 +497,15 @@ public class PlayField {
 		this.cacheSprite = new Sprite[0];
 	}
 	
-	/** ************************************************************************* */
-	/** ************************ OTHER FUNCTIONS ******************************** */
-	/** ************************************************************************* */
+	/**
+	 * *************************************************************************
+	 */
+	/**
+	 * ************************ OTHER FUNCTIONS ********************************
+	 */
+	/**
+	 * *************************************************************************
+	 */
 	
 	/**
 	 * Returns background associated with this playfield.
@@ -489,7 +533,7 @@ public class PlayField {
 	 * Returns playfield comparator, comparator is used for sorting the sprites
 	 * before rendering.
 	 */
-	public Comparator getComparator() {
+	public Comparator<Sprite> getComparator() {
 		return this.comparator;
 	}
 	
@@ -525,7 +569,7 @@ public class PlayField {
 	 * @see java.util.Arrays#sort(java.lang.Object[], int, int,
 	 *      java.util.Comparator)
 	 */
-	public void setComparator(Comparator c) {
+	public void setComparator(Comparator<Sprite> c) {
 		this.comparator = c;
 	}
 	

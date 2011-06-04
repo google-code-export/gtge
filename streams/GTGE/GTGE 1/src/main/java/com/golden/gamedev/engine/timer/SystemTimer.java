@@ -73,7 +73,7 @@ public class SystemTimer implements BaseTimer {
 		this.msDelay = 1000 / this.fps;
 		this.refresh();
 		
-		this.fpsCounter.refresh();
+		this.fpsCounter.reset();
 	}
 	
 	public void stopTimer() {

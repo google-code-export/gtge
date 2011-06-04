@@ -18,64 +18,70 @@
 package com.golden.gamedev.engine.timer;
 
 /**
- * A utility class to calculate timer frame per seconds (FPS) in convenient way.
- * <p>
+ * The {@link FPSCounter} class counts the frames rendered for the current second, and keeps the value for retrieval of
+ * the frames rendered for the last second for retrieval purposes.
  * 
- * How to use :
- * 
- * <pre>
- * FPSCounter counter;
- * // game loop
- * while (true) {
- * 	counter.getCurrentFPS(); // returns current fps
- * 	counter.calculateFPS(); // calculating fps
- * }
- * </pre>
+ * @author MetroidFan2002 - Changed to be package-private to support the {@link SystemTimer} class only, and made the
+ *         class final.
+ * @author Paulus Tuerah - Original Author
+ * @version 1.0
+ * @since 1.0
+ * @see SystemTimer For the use of this class.
  */
-public class FPSCounter {
-	
-	private long lastCount; // last time the fps is counted
-	private int currentFPS, // the real fps achieved
-	        frameCount;
-	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
+final class FPSCounter {
 	
 	/**
-	 * Creates new <code>FPSCounter</code>.
+	 * The timestamp, in milliseconds, when the frames per second clock started.
 	 */
-	public FPSCounter() {
+	private long clockStartTime;
+	
+	/**
+	 * The number of frames counted for the last second interval.
+	 */
+	private int framesCountForLastSecond;
+	
+	/**
+	 * The number of frames calculated for the current second.
+	 */
+	private int frameCountForCurrentSecond;
+	
+	/**
+	 * Creates a new {@link FPSCounter} instance.
+	 */
+	FPSCounter() {
+		super();
+		reset();
 	}
 	
 	/**
-	 * Refresh the FPS counter, reset the fps to 0 and the timer counter to
-	 * start counting from current time.
+	 * Resets the current count of frames per second to 0 and the timestamp for counting frames to the current time.
 	 */
-	public void refresh() {
-		this.frameCount = 0;
-		this.lastCount = System.currentTimeMillis();
+	void reset() {
+		frameCountForCurrentSecond = 0;
+		clockStartTime = System.currentTimeMillis();
 	}
 	
 	/**
-	 * The main method that calculating the frame per second.
+	 * Calculates the current frames per second by incrementing the frame count. If the time elapsed since the last time
+	 * this method was invoked was greater than a second, the count is stored into the {@link #getCurrentFPS() frames
+	 * per second interval} and the timestamp of the timer is reset to the current time to begin counting for the next
+	 * second.
 	 */
-	public void calculateFPS() {
-		this.frameCount++;
-		if (System.currentTimeMillis() - this.lastCount > 1000) {
-			this.lastCount = System.currentTimeMillis();
-			this.currentFPS = this.frameCount;
-			this.frameCount = 0;
+	void calculateFPS() {
+		frameCountForCurrentSecond++;
+		if (System.currentTimeMillis() - clockStartTime > 1000) {
+			clockStartTime = System.currentTimeMillis();
+			framesCountForLastSecond = frameCountForCurrentSecond;
+			frameCountForCurrentSecond = 0;
 		}
 	}
 	
 	/**
-	 * Returns current FPS.
-	 * @return The current FPS.
-	 * @see #calculateFPS()
+	 * Gets the number of frames counted for the last second interval.
+	 * 
+	 * @return The number of frames counted for the last second interval.
 	 */
-	public int getCurrentFPS() {
-		return this.currentFPS;
+	int getCurrentFPS() {
+		return framesCountForLastSecond;
 	}
-	
 }

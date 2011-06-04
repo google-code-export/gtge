@@ -12,7 +12,7 @@
 
 	<name>Golden T Studios Game Engine (GTGE)</name>
 
-	<version>0.2.4-SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
 
 	<description>
 	Golden T Game Engine (GTGE) is an advanced cross-platform game 
@@ -42,7 +42,7 @@
 
 	<developers>
 		<developer>
-			<name>Paupau</name>
+			<name>Paulus Tuerah</name>
 			<email>pauwui@yahoo.com</email>
 			<url>http://www.goldenstudios.or.id</url>
 			<organization>Golden T Studios</organization>
@@ -88,8 +88,14 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.2</version>
-			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -114,4 +120,32 @@
 			</plugin>
 		</plugins>
 	</reporting>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${version.junit}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-all</artifactId>
+				<version>${version.mockito}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>commons-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+				<version>${version.commons-lang}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<properties>
+		<version.commons-lang>2.6</version.commons-lang>
+		<version.mockito>1.8.5</version.mockito>
+		<version.junit>4.8.2</version.junit>
+	</properties>
 </project>

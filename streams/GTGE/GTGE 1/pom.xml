@@ -84,6 +84,28 @@
 		<url>http://www.goldenstudios.or.id</url>
 	</organization>
 
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${version.compiler}</version>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -145,6 +167,7 @@
 
 	<properties>
 		<version.commons-lang>2.6</version.commons-lang>
+		<version.compiler>2.3.2</version.compiler>
 		<version.mockito>1.8.5</version.mockito>
 		<version.junit>4.8.2</version.junit>
 	</properties>

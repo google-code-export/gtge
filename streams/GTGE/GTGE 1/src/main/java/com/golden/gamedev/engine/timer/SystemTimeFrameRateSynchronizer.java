@@ -16,12 +16,14 @@
  */
 package com.golden.gamedev.engine.timer;
 
-import com.golden.gamedev.engine.BaseTimer;
+import org.apache.commons.lang.Validate;
+
+import com.golden.gamedev.engine.FrameRateSynchronizer;
 
 /**
- * The {@link SystemTimeFrameRateSynchronizer} class provides a {@link BaseTimer} implementation that uses the
- * {@link System#currentTimeMillis() current system time}, in milliseconds, to provide for the {@link #delayForFrame()
- * delay} for a frame to be rendered.
+ * The {@link SystemTimeFrameRateSynchronizer} class provides a {@link FrameRateSynchronizer} implementation that uses
+ * the {@link System#currentTimeMillis() current system time}, in milliseconds, to provide for the
+ * {@link #delayForFrame() delay} for a frame to be rendered.
  * 
  * @version 1.0
  * @since 1.0
@@ -29,13 +31,80 @@ import com.golden.gamedev.engine.BaseTimer;
  * @author Paulus Tuerah - Original Author
  * 
  */
-public final class SystemTimeFrameRateSynchronizer extends BaseFrameRateSynchronizer {
+public final class SystemTimeFrameRateSynchronizer implements FrameRateSynchronizer {
+	
+	/**
+	 * The {@link FPSCounter} class counts the frames rendered for the current second, and keeps the value of the frames
+	 * rendered for the last second for retrieval purposes.
+	 * 
+	 * @author MetroidFan2002 - Changed to be private and static to support the {@link SystemTimeFrameRateSynchronizer}
+	 *         class only, and made the class final.
+	 * @author Paulus Tuerah - Original Author
+	 * @version 1.0
+	 * @since 1.0
+	 */
+	private static final class FPSCounter {
+		
+		/**
+		 * The timestamp, in milliseconds, when the frames per second clock started.
+		 */
+		private long clockStartTime;
+		
+		/**
+		 * The number of frames counted for the last second interval.
+		 */
+		private int framesCountForLastSecond;
+		
+		/**
+		 * The number of frames calculated for the current second.
+		 */
+		private int frameCountForCurrentSecond;
+		
+		/**
+		 * Creates a new {@link FPSCounter} instance.
+		 */
+		private FPSCounter() {
+			super();
+		}
+		
+		/**
+		 * Resets the current count of frames per second to 0 and the timestamp for counting frames to the current time.
+		 */
+		private void reset() {
+			frameCountForCurrentSecond = 0;
+			clockStartTime = System.currentTimeMillis();
+		}
+		
+		/**
+		 * Calculates the current frames per second by incrementing the frame count. If the time elapsed since the last
+		 * time this method was invoked was greater than a second, the count is stored into the {@link #getCurrentFPS()
+		 * frames per second interval} and the timestamp of the timer is reset to the current time to begin counting for
+		 * the next second.
+		 */
+		private void calculateFPS() {
+			frameCountForCurrentSecond++;
+			if (System.currentTimeMillis() - clockStartTime > 1000) {
+				clockStartTime = System.currentTimeMillis();
+				framesCountForLastSecond = frameCountForCurrentSecond;
+				frameCountForCurrentSecond = 0;
+			}
+		}
+		
+		/**
+		 * Gets the number of frames counted for the last second interval.
+		 * 
+		 * @return The number of frames counted for the last second interval.
+		 */
+		private int getCurrentFPS() {
+			return framesCountForLastSecond;
+		}
+	}
 	
 	/**
 	 * Whether or not to throw {@link InterruptedException} instances wrapped in a {@link RuntimeException} if one
 	 * occurs when {@link #delayForFrame()} is invoked.
 	 */
-	private boolean throwInterruptedExceptions;
+	private final boolean throwInterruptedExceptions;
 	
 	/**
 	 * The number of milliseconds each call to {@link #delayForFrame()} should attempt to {@link Thread#sleep(long)
@@ -60,6 +129,11 @@ public final class SystemTimeFrameRateSynchronizer extends BaseFrameRateSynchron
 	 * 
 	 */
 	private final FPSCounter fpsCounter = new FPSCounter();
+	
+	/**
+	 * The requested number of frames per second.
+	 */
+	private int fps;
 	
 	/**
 	 * Creates a new {@link SystemTimeFrameRateSynchronizer} instance with the default requested frames per second value
@@ -100,17 +174,21 @@ public final class SystemTimeFrameRateSynchronizer extends BaseFrameRateSynchron
 	 *             or equal to 0.
 	 */
 	public SystemTimeFrameRateSynchronizer(final int fps, final boolean throwInterruptedExceptions) {
-		super(fps);
+		super();
+		setFps(fps);
 		this.throwInterruptedExceptions = throwInterruptedExceptions;
 	}
 	
 	@Override
+	public void beginSynchronization() {
+		timeOfLastSleep = System.currentTimeMillis();
+		overSleepTime = 0;
+		fpsCounter.reset();
+		delayForFrame = 1000 / getFps();
+	}
+	
+	@Override
 	public long delayForFrame() {
-		if (!isRunning()) {
-			throw new IllegalStateException(
-					"The timer is not running - call the startTimer() method before the sleep() method is invoked!");
-		}
-		
 		long end = System.currentTimeMillis();
 		
 		final long sleepTime = (delayForFrame - (end - timeOfLastSleep)) - overSleepTime;
@@ -141,10 +219,13 @@ public final class SystemTimeFrameRateSynchronizer extends BaseFrameRateSynchron
 	}
 	
 	@Override
-	public void reset() {
-		timeOfLastSleep = System.currentTimeMillis();
-		overSleepTime = 0;
-		fpsCounter.reset();
-		delayForFrame = 1000 / getFps();
+	public final int getFps() {
+		return fps;
+	}
+	
+	@Override
+	public final void setFps(final int fps) {
+		Validate.isTrue(fps >= 1, "FPS must be greater than or equal to 1!");
+		this.fps = fps;
 	}
 }

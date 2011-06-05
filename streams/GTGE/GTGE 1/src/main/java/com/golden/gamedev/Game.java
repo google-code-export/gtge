@@ -42,11 +42,10 @@ import com.golden.gamedev.engine.BaseGraphics;
 import com.golden.gamedev.engine.BaseIO;
 import com.golden.gamedev.engine.BaseInput;
 import com.golden.gamedev.engine.BaseLoader;
-import com.golden.gamedev.engine.BaseTimer;
+import com.golden.gamedev.engine.FrameRateSynchronizer;
 import com.golden.gamedev.engine.audio.MidiRenderer;
 import com.golden.gamedev.engine.audio.WaveRenderer;
 import com.golden.gamedev.engine.input.AWTInput;
-import com.golden.gamedev.engine.timer.BaseFrameRateSynchronizer;
 import com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer;
 import com.golden.gamedev.funbox.ErrorNotificationDialog;
 import com.golden.gamedev.object.Background;
@@ -59,13 +58,12 @@ import com.golden.gamedev.util.ImageUtil;
 import com.golden.gamedev.util.Utility;
 
 /**
- * <code>Game</code> class is <b>Golden T Game Engine (GTGE) core class</b>
- * that initializes all GTGE game engines, wrap the engines up, and setup the
- * basic game frame work to be play on.
+ * <code>Game</code> class is <b>Golden T Game Engine (GTGE) core class</b> that initializes all GTGE game engines, wrap
+ * the engines up, and setup the basic game frame work to be play on.
  * <p>
  * 
- * Every game is a subclass of <code>Game</code> class. And every subclass of
- * <code>Game</code> class have to do three things :
+ * Every game is a subclass of <code>Game</code> class. And every subclass of <code>Game</code> class have to do three
+ * things :
  * <ul>
  * <li>{@linkplain #initResources() initialize game variables}</li>
  * <li>{@linkplain #update(long) update the game variables}</li>
@@ -126,17 +124,15 @@ import com.golden.gamedev.util.Utility;
  * 
  * <p>
  * 
- * There are two main tasks of <code>Game</code> class that we need to know :
- * <br>
+ * There are two main tasks of <code>Game</code> class that we need to know : <br>
  * <ul>
- * <li>Game class initializes all GTGE game engines and keep the engines
- * reference (named as bsGraphics, bsInput, bsIO, etc). <br>
- * Therefore to change the default engine, do it within Game class game engine
- * initialization in {@link #initEngine()} method.</li>
- * <li>The Game class then provides a direct call to the engines commonly used
- * functions, in other word, wrapping the game engines inside the class. <br>
- * The purpose of this wrapping is to make the game coding more convenient,
- * easier, and simple. <br>
+ * <li>Game class initializes all GTGE game engines and keep the engines reference (named as bsGraphics, bsInput, bsIO,
+ * etc). <br>
+ * Therefore to change the default engine, do it within Game class game engine initialization in {@link #initEngine()}
+ * method.</li>
+ * <li>The Game class then provides a direct call to the engines commonly used functions, in other word, wrapping the
+ * game engines inside the class. <br>
+ * The purpose of this wrapping is to make the game coding more convenient, easier, and simple. <br>
  * Therefore you can call the engines functions directly if you like to.</li>
  * </ul>
  * <p>
@@ -164,7 +160,7 @@ public abstract class Game {
 	/** Input engine. */
 	public BaseInput bsInput;
 	/** Timer engine. */
-	public BaseTimer bsTimer;
+	public FrameRateSynchronizer bsTimer;
 	/** Audio engine for music. */
 	public BaseAudio bsMusic;
 	/** Audio engine for sound. */
@@ -181,17 +177,15 @@ public abstract class Game {
 	// an ended game can't be played anymore
 	
 	/**
-	 * Indicates whether this game is finished and ready to distribute or still
-	 * in development stage.
+	 * Indicates whether this game is finished and ready to distribute or still in development stage.
 	 * <p>
 	 * 
-	 * A distributed game (distribute = true) will catch any uncatch/unexpected
-	 * game exception and send the error to {@link #notifyError(Throwable)}
-	 * method.
+	 * A distributed game (distribute = true) will catch any uncatch/unexpected game exception and send the error to
+	 * {@link #notifyError(Throwable)} method.
 	 * <p>
 	 * 
-	 * When your game is completed and it is time to distribute the game to the
-	 * world, set this distribute value to true in class initialization :
+	 * When your game is completed and it is time to distribute the game to the world, set this distribute value to true
+	 * in class initialization :
 	 * 
 	 * <pre>
 	 *    public class YourGame extends Game {
@@ -224,13 +218,11 @@ public abstract class Game {
 	/** ************************************************************************* */
 	
 	/**
-	 * Creates new instance of <code>Game</code> class, please <b>see note</b>
-	 * below.
+	 * Creates new instance of <code>Game</code> class, please <b>see note</b> below.
 	 * <p>
 	 * 
-	 * Note: <b>Do not</b> make any overloading constructors. All that belong
-	 * to constructor (this method) should be put in {@link #initResources()}
-	 * method. <b>Leave this method empty and simply do not use constructor!</b>
+	 * Note: <b>Do not</b> make any overloading constructors. All that belong to constructor (this method) should be put
+	 * in {@link #initResources()} method. <b>Leave this method empty and simply do not use constructor!</b>
 	 * 
 	 * @see #initResources()
 	 * @see #update(long)
@@ -244,15 +236,13 @@ public abstract class Game {
 	/** ************************************************************************* */
 	
 	/**
-	 * Stops the game from running, and to resume the game call {@link #start()}
-	 * method. This method is only holding the game, to quit the game call
-	 * {@link #finish()} instead. During the holding time, no action is taken,
-	 * even the game rendering, therefore this method is not suitable for making
-	 * game pause event.
+	 * Stops the game from running, and to resume the game call {@link #start()} method. This method is only holding the
+	 * game, to quit the game call {@link #finish()} instead. During the holding time, no action is taken, even the game
+	 * rendering, therefore this method is not suitable for making game pause event.
 	 * <p>
 	 * 
-	 * By default this stop method is only called in applet environment whenever
-	 * the applet stop method is executed by the webpage.
+	 * By default this stop method is only called in applet environment whenever the applet stop method is executed by
+	 * the webpage.
 	 * 
 	 * @see #start()
 	 * @see #finish()
@@ -265,9 +255,8 @@ public abstract class Game {
 	 * End the game and back to operating system.
 	 * <p>
 	 * 
-	 * Only call this method when the game has been finished playing. Calling
-	 * this method will immediatelly makes the game to quit and the game can not
-	 * be resumed/played anymore.
+	 * Only call this method when the game has been finished playing. Calling this method will immediatelly makes the
+	 * game to quit and the game can not be resumed/played anymore.
 	 * 
 	 * @see #stop()
 	 */
@@ -277,16 +266,15 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Returns true, if the game has been finished playing and the game is about
-	 * to return back to operating system.
+	 * Returns true, if the game has been finished playing and the game is about to return back to operating system.
 	 */
 	public boolean isFinish() {
 		return this.finish;
 	}
 	
 	/**
-	 * Returns whether the game is currently running/playing or not. Running
-	 * game means the game is in game main-loop (update and render loop).
+	 * Returns whether the game is currently running/playing or not. Running game means the game is in game main-loop
+	 * (update and render loop).
 	 * 
 	 * @see #start()
 	 */
@@ -295,13 +283,12 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Starts the game main loop, this method will not return until the game is
-	 * finished playing/running. To stop the game use either {@link #finish()}
-	 * to quit the game or {@link #stop()} to hold the game.
+	 * Starts the game main loop, this method will not return until the game is finished playing/running. To stop the
+	 * game use either {@link #finish()} to quit the game or {@link #stop()} to hold the game.
 	 * <p>
 	 * 
-	 * Be sure the game {@linkplain #bsGraphics graphics engine} has been
-	 * initialized (not null) before attempt to call this method.
+	 * Be sure the game {@linkplain #bsGraphics graphics engine} has been initialized (not null) before attempt to call
+	 * this method.
 	 * 
 	 * @see #finish()
 	 * @see #initEngine()
@@ -331,13 +318,11 @@ public abstract class Game {
 				}
 				
 				this.startGameLoop();
-			}
-			catch (Throwable e) {
+			} catch (Throwable e) {
 				this.notifyError(e);
 			}
 			
-		}
-		else { // still in development
+		} else { // still in development
 			if (this.initialized == false) {
 				this.initialized = true;
 				this.initialize();
@@ -359,21 +344,19 @@ public abstract class Game {
 		this.initEngine();
 		
 		try {
-			this.bsGraphics.getComponent().addFocusListener(
-			        new FocusListener() {
-				        
-				        public void focusGained(FocusEvent e) {
-					        Game.this.inFocus = true;
-				        }
-				        
-				        public void focusLost(FocusEvent e) {
-					        if (Game.this.pauseOnLostFocus) {
-						        Game.this.inFocus = false;
-					        }
-				        }
-			        });
-		}
-		catch (Exception e) {
+			this.bsGraphics.getComponent().addFocusListener(new FocusListener() {
+				
+				public void focusGained(FocusEvent e) {
+					Game.this.inFocus = true;
+				}
+				
+				public void focusLost(FocusEvent e) {
+					if (Game.this.pauseOnLostFocus) {
+						Game.this.inFocus = false;
+					}
+				}
+			});
+		} catch (Exception e) {
 		}
 		
 		if (this.development == false) {
@@ -399,8 +382,7 @@ public abstract class Game {
 				this.fpsFont = null;
 			}
 			
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			// someone is trying to hack GTGE here!
 			this.bailOut();
 		}
@@ -423,8 +405,7 @@ public abstract class Game {
 		System.runFinalization();
 		
 		// start the timer
-		this.bsTimer.startTimer();
-		this.bsTimer.reset();
+		this.bsTimer.beginSynchronization();
 		
 		long elapsedTime = 0;
 		out: while (true) {
@@ -433,13 +414,11 @@ public abstract class Game {
 				this.update(elapsedTime);
 				this.bsInput.update(elapsedTime); // update input
 				
-			}
-			else {
+			} else {
 				// the game is not in focus!
 				try {
 					Thread.sleep(300);
-				}
-				catch (InterruptedException e) {
+				} catch (InterruptedException e) {
 				}
 			}
 			
@@ -480,8 +459,6 @@ public abstract class Game {
 			}
 		}
 		
-		// stop the timer
-		this.bsTimer.stopTimer();
 		this.bsSound.stopAll();
 		this.bsMusic.stopAll();
 		
@@ -504,9 +481,8 @@ public abstract class Game {
 		
 		int posy = (this.getHeight() / 2) - ((fm.getHeight() + 10) * (2 / 2));
 		
-		int x = (this.getWidth() / 2) - (fm.stringWidth(st2) / 2) - 20, y = posy - 25, width = fm
-		        .stringWidth(st2) + 40, height = fm.getHeight()
-		        + fm.getHeight() + 30;
+		int x = (this.getWidth() / 2) - (fm.stringWidth(st2) / 2) - 20, y = posy - 25, width = fm.stringWidth(st2) + 40, height = fm
+				.getHeight() + fm.getHeight() + 30;
 		
 		g.setColor(Color.BLACK);
 		g.fillRect(x, y, width - 1, height - 1);
@@ -518,26 +494,21 @@ public abstract class Game {
 		if (!this.inFocusBlink) {
 			try {
 				// for smoooth text :)
-				((Graphics2D) g).setRenderingHint(
-				        RenderingHints.KEY_TEXT_ANTIALIASING,
-				        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-			}
-			catch (Exception e) {
+				((Graphics2D) g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+						RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			} catch (Exception e) {
 			}
 			
 			g.setColor(Color.RED);
-			g.drawString(st1,
-			        (this.getWidth() / 2) - (fm.stringWidth(st1) / 2), posy);
+			g.drawString(st1, (this.getWidth() / 2) - (fm.stringWidth(st1) / 2), posy);
 			posy += fm.getHeight() + 10;
-			g.drawString(st2,
-			        (this.getWidth() / 2) - (fm.stringWidth(st2) / 2), posy);
+			g.drawString(st2, (this.getWidth() / 2) - (fm.stringWidth(st2) / 2), posy);
 		}
 	}
 	
 	/**
-	 * Sets whether the game is paused when the game is lost the input focus or
-	 * not. By default only applet game that paused when the game is lost the
-	 * focus.
+	 * Sets whether the game is paused when the game is lost the input focus or not. By default only applet game that
+	 * paused when the game is lost the focus.
 	 * 
 	 * @see #renderLostFocus(Graphics2D)
 	 */
@@ -551,8 +522,7 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Returns whether whether the game is paused when the game is lost the
-	 * input focus or not.
+	 * Returns whether whether the game is paused when the game is lost the input focus or not.
 	 * 
 	 * @see #renderLostFocus(Graphics2D)
 	 */
@@ -566,21 +536,17 @@ public abstract class Game {
 	
 	/**
 	 * Game engines is initialized in this method. <br>
-	 * Thus modifying or changing any game engines should be done within this
-	 * method.
+	 * Thus modifying or changing any game engines should be done within this method.
 	 * <p>
 	 * 
 	 * List of default game engines initialized in this method :
 	 * <ul>
-	 * <li> Timer Engine : uses
-	 * {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer}</li>
-	 * <li> Input Engine : uses {@link com.golden.gamedev.engine.input.AWTInput}</li>
-	 * <li> Music Engine : uses
-	 * {@link com.golden.gamedev.engine.audio.MidiRenderer}</li>
-	 * <li> Sound Engine : uses
-	 * {@link com.golden.gamedev.engine.audio.WaveRenderer}</li>
-	 * <li> I/O Engine : uses {@link com.golden.gamedev.engine.BaseIO}</li>
-	 * <li> Image Engine : uses {@link com.golden.gamedev.engine.BaseLoader}</li>
+	 * <li>Timer Engine : uses {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer}</li>
+	 * <li>Input Engine : uses {@link com.golden.gamedev.engine.input.AWTInput}</li>
+	 * <li>Music Engine : uses {@link com.golden.gamedev.engine.audio.MidiRenderer}</li>
+	 * <li>Sound Engine : uses {@link com.golden.gamedev.engine.audio.WaveRenderer}</li>
+	 * <li>I/O Engine : uses {@link com.golden.gamedev.engine.BaseIO}</li>
+	 * <li>Image Engine : uses {@link com.golden.gamedev.engine.BaseLoader}</li>
 	 * </ul>
 	 * <p>
 	 * 
@@ -650,12 +616,10 @@ public abstract class Game {
 	/** ************************************************************************* */
 	
 	/**
-	 * All game resources initialization, everything that usually goes to
-	 * constructor should be put in here.
+	 * All game resources initialization, everything that usually goes to constructor should be put in here.
 	 * <p>
 	 * 
-	 * This method is called only once for every newly created <code>Game</code>
-	 * class.
+	 * This method is called only once for every newly created <code>Game</code> class.
 	 * 
 	 * @see #getImage(String)
 	 * @see #getImages(String, int, int)
@@ -676,7 +640,8 @@ public abstract class Game {
 	/**
 	 * Renders game to the screen.
 	 * 
-	 * @param g backbuffer graphics context
+	 * @param g
+	 *            backbuffer graphics context
 	 */
 	public abstract void render(Graphics2D g);
 	
@@ -685,30 +650,25 @@ public abstract class Game {
 	/** ************************************************************************* */
 	
 	/**
-	 * Notified when the game is about to quit. By default this method is
-	 * calling <code>System.exit()</code> to ensure everything is properly
-	 * shut down.
+	 * Notified when the game is about to quit. By default this method is calling <code>System.exit()</code> to ensure
+	 * everything is properly shut down.
 	 * <p>
 	 * 
-	 * Override this method to create a custom exit dialog, and be sure to call
-	 * <code>System.exit()</code> at the end.
+	 * Override this method to create a custom exit dialog, and be sure to call <code>System.exit()</code> at the end.
 	 */
 	protected void notifyExit() {
 		if ((this.bsGraphics instanceof Applet) == false) {
 			// non-applet game should call System.exit(0);
 			try {
 				System.exit(0);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 			}
 			
-		}
-		else {
+		} else {
 			// applet game should display to the user
 			// that the game has been ended
 			final Applet applet = (Applet) this.bsGraphics;
-			BufferedImage src = ImageUtil.createImage(this.getWidth(), this
-			        .getHeight());
+			BufferedImage src = ImageUtil.createImage(this.getWidth(), this.getHeight());
 			Graphics2D g = src.createGraphics();
 			
 			try {
@@ -717,15 +677,11 @@ public abstract class Game {
 				g.fillRect(0, 0, this.getWidth(), this.getHeight());
 				
 				// play with transparency a bit
-				g.setComposite(AlphaComposite.getInstance(
-				        AlphaComposite.SRC_OVER, 0.8f));
+				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
 				
 				// draw in a circle only
-				Shape shape = new java.awt.geom.Ellipse2D.Float(
-				        this.getWidth() / 10, this.getHeight() / 10, this
-				                .getWidth()
-				                - (this.getWidth() / 10 * 2), this.getHeight()
-				                - (this.getHeight() / 10 * 2));
+				Shape shape = new java.awt.geom.Ellipse2D.Float(this.getWidth() / 10, this.getHeight() / 10,
+						this.getWidth() - (this.getWidth() / 10 * 2), this.getHeight() - (this.getHeight() / 10 * 2));
 				g.setClip(shape);
 				
 				// draw the game unto this image
@@ -735,8 +691,7 @@ public abstract class Game {
 				this.render(g);
 				
 				g.dispose();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				g.setColor(Color.BLACK);
 				g.fillRect(0, 0, this.getWidth(), this.getHeight());
 				g.dispose();
@@ -750,8 +705,7 @@ public abstract class Game {
 				// converted = new ColorConvertOp(gray, null).filter(src, null);
 				
 				// technique #2
-				BufferedImage image = new BufferedImage(src.getWidth(), src
-				        .getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+				BufferedImage image = new BufferedImage(src.getWidth(), src.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
 				Graphics gfx = image.getGraphics();
 				gfx.drawImage(src, 0, 0, null);
 				gfx.dispose();
@@ -763,8 +717,7 @@ public abstract class Game {
 				// FilteredImageSource(colorImage.getSource(), filter);
 				// Image mage = this.createImage(producer);
 				
-			}
-			catch (Throwable e) {
+			} catch (Throwable e) {
 			}
 			final BufferedImage image = (converted != null) ? converted : src;
 			
@@ -789,11 +742,9 @@ public abstract class Game {
 					g.setFont(new Font("Verdana", Font.BOLD, 12));
 					g.drawString("Game has been ended", 10, 25);
 					g.drawString("Thank you for playing!", 10, 45);
-					g.drawString("Visit http://www.goldenstudios.or.id/", 10,
-					        75);
+					g.drawString("Visit http://www.goldenstudios.or.id/", 10, 75);
 					g.drawString("For free game engine!", 10, 95);
-					g.drawString("This game is developed with GTGE v"
-					        + Game.GTGE_VERSION, 10, 115);
+					g.drawString("This game is developed with GTGE v" + Game.GTGE_VERSION, 10, 115);
 				}
 			};
 			canvas.setSize(applet.getSize());
@@ -801,10 +752,8 @@ public abstract class Game {
 				
 				public void mouseClicked(MouseEvent e) {
 					try {
-						applet.getAppletContext().showDocument(
-						        new URL("http://goldenstudios.or.id/"));
-					}
-					catch (Exception excp) {
+						applet.getAppletContext().showDocument(new URL("http://goldenstudios.or.id/"));
+					} catch (Exception excp) {
 					}
 				}
 			});
@@ -816,19 +765,17 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Notified of any unexpected or uncatch error thrown by the game when the
-	 * game is ready to distribute ({@link #distribute} = true).
+	 * Notified of any unexpected or uncatch error thrown by the game when the game is ready to distribute (
+	 * {@link #distribute} = true).
 	 * <p>
 	 * 
-	 * By default this method creates an
-	 * {@link com.golden.gamedev.funbox.ErrorNotificationDialog} to show the
-	 * error to the user.
+	 * By default this method creates an {@link com.golden.gamedev.funbox.ErrorNotificationDialog} to show the error to
+	 * the user.
 	 * <p>
 	 * 
 	 * Override this method to make a custom error dialog, or simply use the
-	 * {@linkplain com.golden.gamedev.funbox.ErrorNotificationDialog} with your
-	 * email address provided so the user can directly send the exception to
-	 * your email.
+	 * {@linkplain com.golden.gamedev.funbox.ErrorNotificationDialog} with your email address provided so the user can
+	 * directly send the exception to your email.
 	 * <p>
 	 * 
 	 * For example:
@@ -836,7 +783,7 @@ public abstract class Game {
 	 * <pre>
 	 * protected void notifyError(Throwable error) {
 	 * 	new ErrorNotificationDialog(error, bsGraphics, &quot;Game Title v1.0&quot;, // the game title
-	 * 	        &quot;yourmail@address.com&quot;); // your email
+	 * 			&quot;yourmail@address.com&quot;); // your email
 	 * }
 	 * </pre>
 	 * 
@@ -844,13 +791,11 @@ public abstract class Game {
 	 * @see com.golden.gamedev.funbox.ErrorNotificationDialog
 	 */
 	protected void notifyError(Throwable error) {
-		new ErrorNotificationDialog(error, this.bsGraphics, this.getClass()
-		        .getName(), null);
+		new ErrorNotificationDialog(error, this.bsGraphics, this.getClass().getName(), null);
 	}
 	
 	/**
-	 * Returns whether this game is ready to distribute or still in development
-	 * stage.
+	 * Returns whether this game is ready to distribute or still in development stage.
 	 * 
 	 * @see #distribute
 	 */
@@ -863,8 +808,8 @@ public abstract class Game {
 	/** ************************************************************************* */
 	
 	/**
-	 * Shows GTGE logo/splash screen, GTGE is freeware library, please support
-	 * GTGE by showing this logo on your game, thank you.
+	 * Shows GTGE logo/splash screen, GTGE is freeware library, please support GTGE by showing this logo on your game,
+	 * thank you.
 	 * <p>
 	 * 
 	 * <b><u>Keep this method intact!</u></b>
@@ -874,7 +819,7 @@ public abstract class Game {
 	 */
 	public final void showLogo() {
 		this.hideCursor();
-		BaseFrameRateSynchronizer dummyTimer = new SystemTimeFrameRateSynchronizer();
+		SystemTimeFrameRateSynchronizer dummyTimer = new SystemTimeFrameRateSynchronizer();
 		dummyTimer.setFps(20);
 		this.bsInput.refresh();
 		
@@ -888,8 +833,7 @@ public abstract class Game {
 			
 			orig.flush();
 			orig = null;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			this.bailOut();
 		}
 		
@@ -899,8 +843,7 @@ public abstract class Game {
 		try {
 			this.clearScreen(Color.BLACK);
 			Thread.sleep(1000L);
-		}
-		catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 		}
 		
 		// check for focus owner
@@ -915,8 +858,7 @@ public abstract class Game {
 				
 				try {
 					Thread.sleep(200);
-				}
-				catch (InterruptedException e) {
+				} catch (InterruptedException e) {
 				}
 			}
 			
@@ -924,14 +866,13 @@ public abstract class Game {
 			
 			try {
 				Thread.sleep(1000);
-			}
-			catch (InterruptedException e) {
+			} catch (InterruptedException e) {
 			}
 		}
 		
 		// gradually show (alpha blending)
 		float alpha = 0.0f;
-		dummyTimer.startTimer();
+		dummyTimer.beginSynchronization();
 		boolean firstTime = true;
 		while (alpha < 1.0f) {
 			do {
@@ -943,8 +884,7 @@ public abstract class Game {
 				g.setColor(Color.BLACK);
 				g.fillRect(0, 0, this.getWidth(), this.getHeight());
 				Composite old = g.getComposite();
-				g.setComposite(AlphaComposite.getInstance(
-				        AlphaComposite.SRC_OVER, alpha));
+				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
 				g.drawImage(logo, 0, 0, null);
 				g.setComposite(old);
 			} while (this.bsGraphics.flip() == false);
@@ -952,7 +892,7 @@ public abstract class Game {
 			if (firstTime) {
 				// workaround for OpenGL mode
 				firstTime = false;
-				dummyTimer.reset();
+				dummyTimer.beginSynchronization();
 			}
 			
 			long elapsedTime = dummyTimer.delayForFrame();
@@ -988,8 +928,7 @@ public abstract class Game {
 			
 			try {
 				Thread.sleep(50L);
-			}
-			catch (InterruptedException e) {
+			} catch (InterruptedException e) {
 			}
 			
 			if (this.isSkip(50)) {
@@ -1002,7 +941,7 @@ public abstract class Game {
 		
 		// gradually disappeared
 		alpha = 1.0f;
-		dummyTimer.reset();
+		dummyTimer.beginSynchronization();
 		while (alpha > 0.0f) {
 			do {
 				if (!this.running) {
@@ -1013,8 +952,7 @@ public abstract class Game {
 				g.setColor(Color.BLACK);
 				g.fillRect(0, 0, this.getWidth(), this.getHeight());
 				Composite old = g.getComposite();
-				g.setComposite(AlphaComposite.getInstance(
-				        AlphaComposite.SRC_OVER, alpha));
+				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
 				g.drawImage(logo, 0, 0, null);
 				g.setComposite(old);
 			} while (this.bsGraphics.flip() == false);
@@ -1036,21 +974,17 @@ public abstract class Game {
 		
 		logo.flush();
 		logo = null;
-		dummyTimer.stopTimer();
-		dummyTimer = null;
 		
 		// black wait before playing
 		try {
 			this.clearScreen(Color.BLACK);
 			Thread.sleep(100L);
-		}
-		catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 		}
 	}
 	
 	private boolean isSkip(long elapsedTime) {
-		boolean skip = (this.bsInput.getKeyPressed() != BaseInput.NO_KEY || this.bsInput
-		        .getMousePressed() != BaseInput.NO_BUTTON);
+		boolean skip = (this.bsInput.getKeyPressed() != BaseInput.NO_KEY || this.bsInput.getMousePressed() != BaseInput.NO_BUTTON);
 		this.bsInput.update(elapsedTime);
 		
 		return skip;
@@ -1102,19 +1036,16 @@ public abstract class Game {
 					Thread.sleep(50L);
 				} while (++i < 160 && this.isSkip(50) == false); // 160 x 50
 				// = 800
-			}
-			catch (InterruptedException e) {
+			} catch (InterruptedException e) {
 			}
 			
 			this.finish();
-		}
-		catch (Throwable e) {
+		} catch (Throwable e) {
 			// e.printStackTrace();
 		}
 		
 		System.out.println("THIS GAME IS USING GTGE CRACKED VERSION!!");
-		System.out
-		        .println("PLEASE REPORT THIS GAME TO HTTP://WWW.GOLDENSTUDIOS.OR.ID/");
+		System.out.println("PLEASE REPORT THIS GAME TO HTTP://WWW.GOLDENSTUDIOS.OR.ID/");
 		System.out.println("THANK YOU....");
 		
 		System.exit(-1);
@@ -1130,8 +1061,7 @@ public abstract class Game {
 	/** ************************************************************************* */
 	// -> com.golden.gamedev.util.Utility
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.util.Utility#getRandom(int, int)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.util.Utility#getRandom(int, int)
 	 * Utility.getRandom(int, int)}
 	 */
 	public int getRandom(int low, int hi) {
@@ -1147,8 +1077,7 @@ public abstract class Game {
 	/** ************************************************************************* */
 	// -> com.golden.gamedev.engine.BaseGraphics
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
 	 * bsGraphics.getSize().width}.
 	 */
 	public int getWidth() {
@@ -1156,8 +1085,7 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
 	 * bsGraphics.getSize().height}.
 	 */
 	public int getHeight() {
@@ -1165,12 +1093,10 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Returns a new created buffered image which the current game state is
-	 * rendered into it.
+	 * Returns a new created buffered image which the current game state is rendered into it.
 	 */
 	public BufferedImage takeScreenShot() {
-		BufferedImage screen = ImageUtil.createImage(this.getWidth(), this
-		        .getHeight(), Transparency.OPAQUE);
+		BufferedImage screen = ImageUtil.createImage(this.getWidth(), this.getHeight(), Transparency.OPAQUE);
 		Graphics2D g = screen.createGraphics();
 		this.render(g);
 		g.dispose();
@@ -1192,8 +1118,7 @@ public abstract class Game {
 	/** ************************************************************************* */
 	// -> com.golden.gamedev.engine.BaseAudio
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseAudio#play(String)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseAudio#play(String)
 	 * bsMusic.play(String)}.
 	 * 
 	 * @see com.golden.gamedev.engine.BaseAudio#setBaseRenderer(com.golden.gamedev.engine.BaseAudioRenderer)
@@ -1204,8 +1129,7 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseAudio#play(String)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseAudio#play(String)
 	 * bsSound.play(String)}.
 	 * 
 	 * @see com.golden.gamedev.engine.BaseAudio#setBaseRenderer(com.golden.gamedev.engine.BaseAudioRenderer)
@@ -1220,8 +1144,7 @@ public abstract class Game {
 	/** ************************************************************************* */
 	// -> com.golden.gamedev.engine.BaseTimer
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseTimer#setFps(int)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.FrameRateSynchronizer#setFps(int)
 	 * bsTimer.setFPS(int)}.
 	 */
 	public void setFPS(int fps) {
@@ -1229,8 +1152,7 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseTimer#getCurrentFPS()
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.FrameRateSynchronizer#getCurrentFPS()
 	 * bsTimer.getCurrentFPS()}.
 	 */
 	public int getCurrentFPS() {
@@ -1238,8 +1160,7 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseTimer#getFps()}.
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.FrameRateSynchronizer#getFps()}.
 	 */
 	public int getFPS() {
 		return this.bsTimer.getFps();
@@ -1249,8 +1170,7 @@ public abstract class Game {
 	 * Draws game frame-per-second (FPS) to specified location.
 	 */
 	public void drawFPS(Graphics2D g, int x, int y) {
-		this.fontManager.getFont("FPS Font").drawString(g,
-		        "FPS = " + this.getCurrentFPS() + "/" + this.getFPS(), x, y);
+		this.fontManager.getFont("FPS Font").drawString(g, "FPS = " + this.getCurrentFPS() + "/" + this.getFPS(), x, y);
 	}
 	
 	/** ************************************************************************* */
@@ -1258,8 +1178,7 @@ public abstract class Game {
 	/** ************************************************************************* */
 	// -> com.golden.gamedev.engine.BaseInput
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#getMouseX()
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#getMouseX()
 	 * bsInput.getMouseX()}.
 	 */
 	public int getMouseX() {
@@ -1267,8 +1186,7 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#getMouseY()
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#getMouseY()
 	 * bsInput.getMouseY()}.
 	 */
 	public int getMouseY() {
@@ -1279,24 +1197,24 @@ public abstract class Game {
 	 * Returns whether the mouse pointer is inside specified screen boundary.
 	 */
 	public boolean checkPosMouse(int x1, int y1, int x2, int y2) {
-		return (this.getMouseX() >= x1 && this.getMouseY() >= y1
-		        && this.getMouseX() <= x2 && this.getMouseY() <= y2);
+		return (this.getMouseX() >= x1 && this.getMouseY() >= y1 && this.getMouseX() <= x2 && this.getMouseY() <= y2);
 	}
 	
 	/**
 	 * Returns whether the mouse pointer is inside specified sprite boundary.
 	 * 
-	 * @param sprite sprite to check its intersection with mouse pointer
-	 * @param pixelCheck true, checking the sprite image with pixel precision
+	 * @param sprite
+	 *            sprite to check its intersection with mouse pointer
+	 * @param pixelCheck
+	 *            true, checking the sprite image with pixel precision
 	 */
 	public boolean checkPosMouse(Sprite sprite, boolean pixelCheck) {
 		Background bg = sprite.getBackground();
 		
 		// check whether the mouse is in background clip area
-		if (this.getMouseX() < bg.getClip().x
-		        || this.getMouseY() < bg.getClip().y
-		        || this.getMouseX() > bg.getClip().x + bg.getClip().width
-		        || this.getMouseY() > bg.getClip().y + bg.getClip().height) {
+		if (this.getMouseX() < bg.getClip().x || this.getMouseY() < bg.getClip().y
+				|| this.getMouseX() > bg.getClip().x + bg.getClip().width
+				|| this.getMouseY() > bg.getClip().y + bg.getClip().height) {
 			return false;
 		}
 		
@@ -1305,36 +1223,32 @@ public abstract class Game {
 		
 		if (pixelCheck) {
 			try {
-				return ((sprite.getImage().getRGB((int) (mosx - sprite.getX()),
-				        (int) (mosy - sprite.getY())) & 0xFF000000) != 0x00);
-			}
-			catch (Exception e) {
+				return ((sprite.getImage().getRGB((int) (mosx - sprite.getX()), (int) (mosy - sprite.getY())) & 0xFF000000) != 0x00);
+			} catch (Exception e) {
 				return false;
 			}
 			
-		}
-		else {
-			return (mosx >= sprite.getX() && mosy >= sprite.getY()
-			        && mosx <= sprite.getX() + sprite.getWidth() && mosy <= sprite
-			        .getY()
-			        + sprite.getHeight());
+		} else {
+			return (mosx >= sprite.getX() && mosy >= sprite.getY() && mosx <= sprite.getX() + sprite.getWidth() && mosy <= sprite
+					.getY() + sprite.getHeight());
 		}
 	}
 	
 	/**
-	 * Returns sprite in specified sprite group that intersected with mouse
-	 * pointer, or null if no sprite intersected with mouse pointer.
+	 * Returns sprite in specified sprite group that intersected with mouse pointer, or null if no sprite intersected
+	 * with mouse pointer.
 	 * 
-	 * @param field playfield to check its intersection with mouse pointer
-	 * @param pixelCheck true, checking the sprite image with pixel precision
+	 * @param field
+	 *            playfield to check its intersection with mouse pointer
+	 * @param pixelCheck
+	 *            true, checking the sprite image with pixel precision
 	 */
 	public Sprite checkPosMouse(SpriteGroup group, boolean pixelCheck) {
 		Sprite[] sprites = group.getSprites();
 		int size = group.getSize();
 		
 		for (int i = 0; i < size; i++) {
-			if (sprites[i].isActive()
-			        && this.checkPosMouse(sprites[i], pixelCheck)) {
+			if (sprites[i].isActive() && this.checkPosMouse(sprites[i], pixelCheck)) {
 				return sprites[i];
 			}
 		}
@@ -1343,11 +1257,13 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Returns sprite in specified playfield that intersected with mouse
-	 * pointer, or null if no sprite intersected with mouse pointer.
+	 * Returns sprite in specified playfield that intersected with mouse pointer, or null if no sprite intersected with
+	 * mouse pointer.
 	 * 
-	 * @param field playfield to check its intersection with mouse pointer
-	 * @param pixelCheck true, checking the sprite image with pixel precision
+	 * @param field
+	 *            playfield to check its intersection with mouse pointer
+	 * @param pixelCheck
+	 *            true, checking the sprite image with pixel precision
 	 */
 	public Sprite checkPosMouse(PlayField field, boolean pixelCheck) {
 		SpriteGroup[] groups = field.getGroups();
@@ -1366,8 +1282,7 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
 	 * bsInput.isMousePressed(java.awt.event.MouseEvent.BUTTON1)}.
 	 */
 	public boolean click() {
@@ -1375,8 +1290,7 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
 	 * bsInput.isMousePressed(java.awt.event.MouseEvent.BUTTON3)}.
 	 */
 	public boolean rightClick() {
@@ -1384,8 +1298,7 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#isKeyDown(int)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#isKeyDown(int)
 	 * bsInput.isKeyDown(int)}.
 	 */
 	public boolean keyDown(int keyCode) {
@@ -1393,8 +1306,7 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#isKeyPressed(int)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#isKeyPressed(int)
 	 * bsInput.isKeyPressed(int)}.
 	 */
 	public boolean keyPressed(int keyCode) {
@@ -1402,8 +1314,7 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
 	 * bsInput.setMouseVisible(false)}.
 	 */
 	public void hideCursor() {
@@ -1411,8 +1322,7 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
 	 * bsInput.setMouseVisible(true)}.
 	 */
 	public void showCursor() {
@@ -1424,8 +1334,7 @@ public abstract class Game {
 	/** ************************************************************************* */
 	// com.golden.gamedev.engine.BaseLoader
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#setMaskColor(Color)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseLoader#setMaskColor(Color)
 	 * bsLoader.setMaskColor(java.awt.Color)}.
 	 */
 	public void setMaskColor(Color c) {
@@ -1433,8 +1342,7 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImage(String, boolean)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseLoader#getImage(String, boolean)
 	 * bsLoader.getImage(String, boolean)}.
 	 */
 	public BufferedImage getImage(String imagefile, boolean useMask) {
@@ -1442,8 +1350,7 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImage(String)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseLoader#getImage(String)
 	 * bsLoader.getImage(String)}.
 	 */
 	public BufferedImage getImage(String imagefile) {
@@ -1452,16 +1359,15 @@ public abstract class Game {
 	
 	/**
 	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImages(String, int, int, boolean)
-	 * bsLoader.getImages(String, int, int, boolean)}.
+	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImages(String, int, int, boolean) bsLoader.getImages(String,
+	 * int, int, boolean)}.
 	 */
 	public BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask) {
 		return this.bsLoader.getImages(imagefile, col, row, useMask);
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImages(String, int, int)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseLoader#getImages(String, int, int)
 	 * bsLoader.getImages(String, int, int)}.
 	 */
 	public BufferedImage[] getImages(String imagefile, int col, int row) {
@@ -1472,9 +1378,9 @@ public abstract class Game {
 	 * Returns stripped images with specified sequence.
 	 * <p>
 	 * 
-	 * First the image is stripped by column and row, and then the images is
-	 * arranged with specified sequence order. The images then stored into cache ({@linkplain com.golden.gamedev.engine.BaseLoader bsLoader})
-	 * with key as followed: the image file + sequence + digit.
+	 * First the image is stripped by column and row, and then the images is arranged with specified sequence order. The
+	 * images then stored into cache ({@linkplain com.golden.gamedev.engine.BaseLoader bsLoader}) with key as followed:
+	 * the image file + sequence + digit.
 	 * <p>
 	 * 
 	 * For example:
@@ -1503,8 +1409,7 @@ public abstract class Game {
 			int count = sequence.length() / digit;
 			image = new BufferedImage[count];
 			for (int i = 0; i < count; i++) {
-				image[i] = src[Integer.parseInt(sequence.substring(i * digit,
-				        ((i + 1) * digit)))];
+				image[i] = src[Integer.parseInt(sequence.substring(i * digit, ((i + 1) * digit)))];
 			}
 			this.bsLoader.storeImages(mapping, image);
 		}
@@ -1513,9 +1418,8 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Same as {@linkplain #getImages(String, int, int, boolean, String, int)
-	 * getImages(imagefile, col, row, useMask, sequence, digit)} with mask color
-	 * is turned on by default.
+	 * Same as {@linkplain #getImages(String, int, int, boolean, String, int) getImages(imagefile, col, row, useMask,
+	 * sequence, digit)} with mask color is turned on by default.
 	 */
 	public BufferedImage[] getImages(String imagefile, int col, int row, String sequence, int digit) {
 		return this.getImages(imagefile, col, row, true, sequence, digit);
@@ -1525,10 +1429,9 @@ public abstract class Game {
 	 * Returns stripped images with cropped sequence.
 	 * <p>
 	 * 
-	 * First the image is stripped by column and row, and then the images is
-	 * arranged with specified series sequence order. The images then stored
-	 * into cache ({@linkplain com.golden.gamedev.engine.BaseLoader bsLoader}
-	 * with key as followed: start sequence + the image file + end sequence.
+	 * First the image is stripped by column and row, and then the images is arranged with specified series sequence
+	 * order. The images then stored into cache ({@linkplain com.golden.gamedev.engine.BaseLoader bsLoader} with key as
+	 * followed: start sequence + the image file + end sequence.
 	 * <p>
 	 * 
 	 * For example:
@@ -1558,9 +1461,8 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Same as {@linkplain #getImages(String, int, int, int, int)
-	 * getImages(imagefile, col, row, useMask, start, end)} with mask color is
-	 * turned on by default.
+	 * Same as {@linkplain #getImages(String, int, int, int, int) getImages(imagefile, col, row, useMask, start, end)}
+	 * with mask color is turned on by default.
 	 */
 	public BufferedImage[] getImages(String imagefile, int col, int row, int start, int end) {
 		return this.getImages(imagefile, col, row, true, start, end);

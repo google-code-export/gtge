@@ -42,10 +42,10 @@ package com.golden.gamedev.engine;
  *    }
  * </pre>
  */
-public interface BaseTimer {
+public interface FrameRateSynchronizer {
 	
 	/**
-	 * Starts the {@link BaseTimer timer} running, and optionally {@link #reset() resets} its state. Because a
+	 * Starts the {@link FrameRateSynchronizer timer} running, and optionally {@link #reset() resets} its state. Because a
 	 * constructor may provide the ability to set the requested frames per second directly, this method will not throw
 	 * an exception if {@link #setFps(int)} is not invoked prior to its invocation, but unanticipated side effects may
 	 * occur if the requested frames per second is not set beforehand.
@@ -53,45 +53,23 @@ public interface BaseTimer {
 	 * @see #setFps() To set the requested frames per second.
 	 * @see #reset() To reset a running BaseTimer instance.
 	 */
-	public void startTimer();
-	
-	/**
-	 * Stops this {@link BaseTimer timer} instance from {@link #isRunning() running}.
-	 */
-	public void stopTimer();
+	public void beginSynchronization();
 	
 	/**
 	 * Delays the execution of the current {@link Thread} in order for a frame to be rendered in a bounded amount of
-	 * time. If this method is invoked on a {@link BaseTimer} that is not {@link #isRunning() running}, an
+	 * time. If this method is invoked on a {@link FrameRateSynchronizer} that is not {@link #isRunning() running}, an
 	 * {@link IllegalStateException} will be thrown.
 	 * 
 	 * @return The amount of time delay that occurred, in milliseconds, in order to allow for the current frame to be
 	 *         rendered for a single interval in order to support the {@link #setFps(int) requested frames per second}.
 	 * @see #isRunning() Whether or not this BaseTimer instance is running.
 	 * @throws IllegalStateException
-	 *             Throws an {@link IllegalStateException} if this {@link BaseTimer} instance is not
+	 *             Throws an {@link IllegalStateException} if this {@link FrameRateSynchronizer} instance is not
 	 *             {@link #isRunning() running}.
 	 * @throws RuntimeException
 	 *             Throws a {@link RuntimeException} if the delay cannot be executed due to an unexpected error.
 	 */
 	public long delayForFrame();
-	
-	/**
-	 * Resets this {@link BaseTimer} instances state without affecting whether or not it is {@link #isRunning() running}
-	 * .
-	 */
-	public void reset();
-	
-	/**
-	 * Gets whether or not this {@link BaseTimer} instance is running. If this {@link BaseTimer} instance is not
-	 * running, an {@link IllegalStateException} will be thrown if {@link #delayForFrame()} is invoked.
-	 * 
-	 * 
-	 * @return True if this {@link BaseTimer} is running, false otherwise.
-	 * @see #startTimer() To start the BaseTimer running.
-	 * @see #stopTimer() To stop the BaseTimer from running.
-	 */
-	public boolean isRunning();
 	
 	/**
 	 * Gets the number of frames actually rendered for the previous second.
@@ -112,10 +90,10 @@ public interface BaseTimer {
 	public int getFps();
 	
 	/**
-	 * Sets the requested number of frames per second for this {@link BaseTimer} instance. This value is a requested
+	 * Sets the requested number of frames per second for this {@link FrameRateSynchronizer} instance. This value is a requested
 	 * number of frames per second because due to system processing and hardware the current machine may not be capable
-	 * of meeting this frame rate. The {@link BaseTimer#reset() reset} method should be invoked on a
-	 * {@link BaseTimer#isRunning() running} {@link BaseTimer} instance to ensure consistent results after this method
+	 * of meeting this frame rate. The {@link FrameRateSynchronizer#reset() reset} method should be invoked on a
+	 * {@link FrameRateSynchronizer#isRunning() running} {@link FrameRateSynchronizer} instance to ensure consistent results after this method
 	 * is invoked.
 	 * 
 	 * @param fps

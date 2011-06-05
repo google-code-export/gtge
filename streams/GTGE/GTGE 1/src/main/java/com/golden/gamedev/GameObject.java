@@ -30,7 +30,7 @@ import com.golden.gamedev.engine.BaseGraphics;
 import com.golden.gamedev.engine.BaseIO;
 import com.golden.gamedev.engine.BaseInput;
 import com.golden.gamedev.engine.BaseLoader;
-import com.golden.gamedev.engine.BaseTimer;
+import com.golden.gamedev.engine.FrameRateSynchronizer;
 import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.GameFont;
 import com.golden.gamedev.object.GameFontManager;
@@ -39,18 +39,16 @@ import com.golden.gamedev.util.ImageUtil;
 import com.golden.gamedev.util.Utility;
 
 /**
- * Similar like <code>Game</code> class except this class is working under
- * <code>GameEngine</code> frame work.
+ * Similar like <code>Game</code> class except this class is working under <code>GameEngine</code> frame work.
  * <p>
  * 
- * <code>GameObject</code> class is plain same with <code>Game</code> class,
- * you can first create the game as <code>Game</code> class, run it, test it,
- * and then rename it to <code>GameObject</code> and attach it to
+ * <code>GameObject</code> class is plain same with <code>Game</code> class, you can first create the game as
+ * <code>Game</code> class, run it, test it, and then rename it to <code>GameObject</code> and attach it to
  * <code>GameEngine</code> frame work as one of game entities.
  * <p>
  * 
- * Please read {@link GameEngine} documentation for more information about how
- * to work with <code>GameObject</code> class.
+ * Please read {@link GameEngine} documentation for more information about how to work with <code>GameObject</code>
+ * class.
  * 
  * @see com.golden.gamedev.GameEngine
  * @see com.golden.gamedev.Game
@@ -75,7 +73,7 @@ public abstract class GameObject {
 	/** Input engine. */
 	public BaseInput bsInput;
 	/** Timer engine. */
-	public BaseTimer bsTimer;
+	public FrameRateSynchronizer bsTimer;
 	/** Audio engine for music. */
 	public BaseAudio bsMusic;
 	/** Audio engine for sound. */
@@ -99,8 +97,7 @@ public abstract class GameObject {
 	/** ************************************************************************* */
 	
 	/**
-	 * Creates new <code>GameObject</code> with specified
-	 * <code>GameEngine</code> as the master engine.
+	 * Creates new <code>GameObject</code> with specified <code>GameEngine</code> as the master engine.
 	 */
 	public GameObject(GameEngine parent) {
 		this.parent = parent;
@@ -121,9 +118,8 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Starts the game main loop, this method will not return until the game is
-	 * finished playing/running. To end the game call {@linkplain #finish()}
-	 * method.
+	 * Starts the game main loop, this method will not return until the game is finished playing/running. To end the
+	 * game call {@linkplain #finish()} method.
 	 */
 	public final void start() {
 		// grabbing engines from master engine
@@ -142,7 +138,7 @@ public abstract class GameObject {
 		System.runFinalization();
 		
 		this.bsInput.refresh();
-		this.bsTimer.reset();
+		this.bsTimer.beginSynchronization();
 		
 		long elapsedTime = 0;
 		out: while (true) {
@@ -152,13 +148,11 @@ public abstract class GameObject {
 				this.parent.update(elapsedTime); // update common variables
 				this.bsInput.update(elapsedTime);
 				
-			}
-			else {
+			} else {
 				// the game is not in focus!
 				try {
 					Thread.sleep(300);
-				}
-				catch (InterruptedException e) {
+				} catch (InterruptedException e) {
 				}
 			}
 			
@@ -189,8 +183,8 @@ public abstract class GameObject {
 						}
 					}
 					
-					fpsFont.drawString(g, "FPS = " + this.getCurrentFPS() + "/"
-					        + this.getFPS(), 9, this.getHeight() - 21);
+					fpsFont.drawString(g, "FPS = " + this.getCurrentFPS() + "/" + this.getFPS(), 9,
+							this.getHeight() - 21);
 					
 					fpsFont.drawString(g, "GTGE", this.getWidth() - 65, 9);
 				}
@@ -211,8 +205,7 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * End this game, and back to
-	 * {@linkplain GameEngine#getGame(int) game object chooser}.
+	 * End this game, and back to {@linkplain GameEngine#getGame(int) game object chooser}.
 	 * 
 	 * @see GameEngine#nextGameID
 	 * @see GameEngine#nextGame
@@ -226,12 +219,10 @@ public abstract class GameObject {
 	/** ************************************************************************* */
 	
 	/**
-	 * All game resources initialization, everything that usually goes to
-	 * constructor should be put in here.
+	 * All game resources initialization, everything that usually goes to constructor should be put in here.
 	 * <p>
 	 * 
-	 * This method is called only once for every newly created
-	 * <code>GameObject</code> class.
+	 * This method is called only once for every newly created <code>GameObject</code> class.
 	 * 
 	 * @see #getImage(String)
 	 * @see #getImages(String, int, int)
@@ -252,7 +243,8 @@ public abstract class GameObject {
 	/**
 	 * Renders game to the screen.
 	 * 
-	 * @param g backbuffer graphics context
+	 * @param g
+	 *            backbuffer graphics context
 	 */
 	public abstract void render(Graphics2D g);
 	
@@ -272,8 +264,7 @@ public abstract class GameObject {
 	/** ************************************************************************* */
 	// -> com.golden.gamedev.util.Utility
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.util.Utility#getRandom(int, int)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.util.Utility#getRandom(int, int)
 	 * Utility.getRandom(int, int)}
 	 */
 	public int getRandom(int low, int hi) {
@@ -289,8 +280,7 @@ public abstract class GameObject {
 	/** ************************************************************************* */
 	// -> com.golden.gamedev.engine.BaseGraphics
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
 	 * bsGraphics.getSize().width}.
 	 */
 	public int getWidth() {
@@ -298,8 +288,7 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
 	 * bsGraphics.getSize().height}.
 	 */
 	public int getHeight() {
@@ -307,12 +296,10 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Returns a new created buffered image which the current game state is
-	 * rendered into it.
+	 * Returns a new created buffered image which the current game state is rendered into it.
 	 */
 	public BufferedImage takeScreenShot() {
-		BufferedImage screen = ImageUtil.createImage(this.getWidth(), this
-		        .getHeight(), Transparency.OPAQUE);
+		BufferedImage screen = ImageUtil.createImage(this.getWidth(), this.getHeight(), Transparency.OPAQUE);
 		Graphics2D g = screen.createGraphics();
 		this.render(g);
 		g.dispose();
@@ -334,8 +321,7 @@ public abstract class GameObject {
 	/** ************************************************************************* */
 	// -> com.golden.gamedev.engine.BaseAudio
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseAudio#play(String)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseAudio#play(String)
 	 * bsMusic.play(String)}.
 	 * 
 	 * @see com.golden.gamedev.engine.BaseAudio#setBaseRenderer(com.golden.gamedev.engine.BaseAudioRenderer)
@@ -346,8 +332,7 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseAudio#play(String)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseAudio#play(String)
 	 * bsSound.play(String)}.
 	 * 
 	 * @see com.golden.gamedev.engine.BaseAudio#setBaseRenderer(com.golden.gamedev.engine.BaseAudioRenderer)
@@ -362,8 +347,7 @@ public abstract class GameObject {
 	/** ************************************************************************* */
 	// -> com.golden.gamedev.engine.BaseTimer
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseTimer#setFps(int)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.FrameRateSynchronizer#setFps(int)
 	 * bsTimer.setFPS(int)}.
 	 */
 	public void setFPS(int fps) {
@@ -371,8 +355,7 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseTimer#getCurrentFPS()
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.FrameRateSynchronizer#getCurrentFPS()
 	 * bsTimer.getCurrentFPS()}.
 	 */
 	public int getCurrentFPS() {
@@ -380,8 +363,7 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseTimer#getFps()}.
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.FrameRateSynchronizer#getFps()}.
 	 */
 	public int getFPS() {
 		return this.bsTimer.getFps();
@@ -391,8 +373,7 @@ public abstract class GameObject {
 	 * Draws game frame-per-second (FPS) to specified location.
 	 */
 	public void drawFPS(Graphics2D g, int x, int y) {
-		this.fontManager.getFont("FPS Font").drawString(g,
-		        "FPS = " + this.getCurrentFPS() + "/" + this.getFPS(), x, y);
+		this.fontManager.getFont("FPS Font").drawString(g, "FPS = " + this.getCurrentFPS() + "/" + this.getFPS(), x, y);
 	}
 	
 	/** ************************************************************************* */
@@ -400,8 +381,7 @@ public abstract class GameObject {
 	/** ************************************************************************* */
 	// -> com.golden.gamedev.engine.BaseInput
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#getMouseX()
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#getMouseX()
 	 * bsInput.getMouseX()}.
 	 */
 	public int getMouseX() {
@@ -409,8 +389,7 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#getMouseY()
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#getMouseY()
 	 * bsInput.getMouseY()}.
 	 */
 	public int getMouseY() {
@@ -421,24 +400,24 @@ public abstract class GameObject {
 	 * Returns whether the mouse pointer is inside specified screen boundary.
 	 */
 	public boolean checkPosMouse(int x1, int y1, int x2, int y2) {
-		return (this.getMouseX() >= x1 && this.getMouseY() >= y1
-		        && this.getMouseX() <= x2 && this.getMouseY() <= y2);
+		return (this.getMouseX() >= x1 && this.getMouseY() >= y1 && this.getMouseX() <= x2 && this.getMouseY() <= y2);
 	}
 	
 	/**
 	 * Returns whether the mouse pointer is inside specified sprite boundary.
 	 * 
-	 * @param sprite sprite to check its intersection with mouse pointer
-	 * @param pixelCheck true, checking the sprite image with pixel precision
+	 * @param sprite
+	 *            sprite to check its intersection with mouse pointer
+	 * @param pixelCheck
+	 *            true, checking the sprite image with pixel precision
 	 */
 	public boolean checkPosMouse(Sprite sprite, boolean pixelCheck) {
 		Background bg = sprite.getBackground();
 		
 		// check whether the mouse is in background clip area
-		if (this.getMouseX() < bg.getClip().x
-		        || this.getMouseY() < bg.getClip().y
-		        || this.getMouseX() > bg.getClip().x + bg.getClip().width
-		        || this.getMouseY() > bg.getClip().y + bg.getClip().height) {
+		if (this.getMouseX() < bg.getClip().x || this.getMouseY() < bg.getClip().y
+				|| this.getMouseX() > bg.getClip().x + bg.getClip().width
+				|| this.getMouseY() > bg.getClip().y + bg.getClip().height) {
 			return false;
 		}
 		
@@ -447,25 +426,19 @@ public abstract class GameObject {
 		
 		if (pixelCheck) {
 			try {
-				return ((sprite.getImage().getRGB((int) (mosx - sprite.getX()),
-				        (int) (mosy - sprite.getY())) & 0xFF000000) != 0x00);
-			}
-			catch (Exception e) {
+				return ((sprite.getImage().getRGB((int) (mosx - sprite.getX()), (int) (mosy - sprite.getY())) & 0xFF000000) != 0x00);
+			} catch (Exception e) {
 				return false;
 			}
 			
-		}
-		else {
-			return (mosx >= sprite.getX() && mosy >= sprite.getY()
-			        && mosx <= sprite.getX() + sprite.getWidth() && mosy <= sprite
-			        .getY()
-			        + sprite.getHeight());
+		} else {
+			return (mosx >= sprite.getX() && mosy >= sprite.getY() && mosx <= sprite.getX() + sprite.getWidth() && mosy <= sprite
+					.getY() + sprite.getHeight());
 		}
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
 	 * bsInput.isMousePressed(java.awt.event.MouseEvent.BUTTON1)}.
 	 */
 	public boolean click() {
@@ -473,8 +446,7 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
 	 * bsInput.isMousePressed(java.awt.event.MouseEvent.BUTTON3)}.
 	 */
 	public boolean rightClick() {
@@ -482,8 +454,7 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#isKeyDown(int)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#isKeyDown(int)
 	 * bsInput.isKeyDown(int)}.
 	 */
 	public boolean keyDown(int keyCode) {
@@ -491,8 +462,7 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#isKeyPressed(int)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#isKeyPressed(int)
 	 * bsInput.isKeyPressed(int)}.
 	 */
 	public boolean keyPressed(int keyCode) {
@@ -500,8 +470,7 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
 	 * bsInput.setMouseVisible(false)}.
 	 */
 	public void hideCursor() {
@@ -509,8 +478,7 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
 	 * bsInput.setMouseVisible(true)}.
 	 */
 	public void showCursor() {
@@ -522,8 +490,7 @@ public abstract class GameObject {
 	/** ************************************************************************* */
 	// com.golden.gamedev.engine.BaseLoader
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#setMaskColor(Color)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseLoader#setMaskColor(Color)
 	 * bsLoader.setMaskColor(java.awt.Color)}.
 	 */
 	public void setMaskColor(Color c) {
@@ -531,8 +498,7 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImage(String, boolean)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseLoader#getImage(String, boolean)
 	 * bsLoader.getImage(String, boolean)}.
 	 */
 	public BufferedImage getImage(String imagefile, boolean useMask) {
@@ -540,8 +506,7 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImage(String)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseLoader#getImage(String)
 	 * bsLoader.getImage(String)}.
 	 */
 	public BufferedImage getImage(String imagefile) {
@@ -550,16 +515,15 @@ public abstract class GameObject {
 	
 	/**
 	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImages(String, int, int, boolean)
-	 * bsLoader.getImages(String, int, int, boolean)}.
+	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImages(String, int, int, boolean) bsLoader.getImages(String,
+	 * int, int, boolean)}.
 	 */
 	public BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask) {
 		return this.bsLoader.getImages(imagefile, col, row, useMask);
 	}
 	
 	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImages(String, int, int)
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseLoader#getImages(String, int, int)
 	 * bsLoader.getImages(String, int, int)}.
 	 */
 	public BufferedImage[] getImages(String imagefile, int col, int row) {
@@ -570,9 +534,9 @@ public abstract class GameObject {
 	 * Returns stripped images with specified sequence.
 	 * <p>
 	 * 
-	 * First the image is stripped by column and row, and then the images is
-	 * arranged with specified sequence order. The images then stored into cache ({@linkplain com.golden.gamedev.engine.BaseLoader bsLoader})
-	 * with key as followed: the image file + sequence + digit.
+	 * First the image is stripped by column and row, and then the images is arranged with specified sequence order. The
+	 * images then stored into cache ({@linkplain com.golden.gamedev.engine.BaseLoader bsLoader}) with key as followed:
+	 * the image file + sequence + digit.
 	 * <p>
 	 * 
 	 * For example:
@@ -601,8 +565,7 @@ public abstract class GameObject {
 			int count = sequence.length() / digit;
 			image = new BufferedImage[count];
 			for (int i = 0; i < count; i++) {
-				image[i] = src[Integer.parseInt(sequence.substring(i * digit,
-				        ((i + 1) * digit)))];
+				image[i] = src[Integer.parseInt(sequence.substring(i * digit, ((i + 1) * digit)))];
 			}
 			this.bsLoader.storeImages(mapping, image);
 		}
@@ -611,9 +574,8 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Same as {@linkplain #getImages(String, int, int, boolean, String, int)
-	 * getImages(imagefile, col, row, useMask, sequence, digit)} with mask color
-	 * is turned on by default.
+	 * Same as {@linkplain #getImages(String, int, int, boolean, String, int) getImages(imagefile, col, row, useMask,
+	 * sequence, digit)} with mask color is turned on by default.
 	 */
 	public BufferedImage[] getImages(String imagefile, int col, int row, String sequence, int digit) {
 		return this.getImages(imagefile, col, row, true, sequence, digit);
@@ -623,10 +585,9 @@ public abstract class GameObject {
 	 * Returns stripped images with cropped sequence.
 	 * <p>
 	 * 
-	 * First the image is stripped by column and row, and then the images is
-	 * arranged with specified series sequence order. The images then stored
-	 * into cache ({@linkplain com.golden.gamedev.engine.BaseLoader bsLoader}
-	 * with key as followed: start sequence + the image file + end sequence.
+	 * First the image is stripped by column and row, and then the images is arranged with specified series sequence
+	 * order. The images then stored into cache ({@linkplain com.golden.gamedev.engine.BaseLoader bsLoader} with key as
+	 * followed: start sequence + the image file + end sequence.
 	 * <p>
 	 * 
 	 * For example:
@@ -656,9 +617,8 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Same as {@linkplain #getImages(String, int, int, int, int)
-	 * getImages(imagefile, col, row, useMask, start, end)} with mask color is
-	 * turned on by default.
+	 * Same as {@linkplain #getImages(String, int, int, int, int) getImages(imagefile, col, row, useMask, start, end)}
+	 * with mask color is turned on by default.
 	 */
 	public BufferedImage[] getImages(String imagefile, int col, int row, int start, int end) {
 		return this.getImages(imagefile, col, row, true, start, end);

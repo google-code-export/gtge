@@ -46,7 +46,8 @@ import com.golden.gamedev.engine.BaseTimer;
 import com.golden.gamedev.engine.audio.MidiRenderer;
 import com.golden.gamedev.engine.audio.WaveRenderer;
 import com.golden.gamedev.engine.input.AWTInput;
-import com.golden.gamedev.engine.timer.SystemTimer;
+import com.golden.gamedev.engine.timer.BaseFrameRateSynchronizer;
+import com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer;
 import com.golden.gamedev.funbox.ErrorNotificationDialog;
 import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.GameFont;
@@ -423,7 +424,7 @@ public abstract class Game {
 		
 		// start the timer
 		this.bsTimer.startTimer();
-		this.bsTimer.refresh();
+		this.bsTimer.reset();
 		
 		long elapsedTime = 0;
 		out: while (true) {
@@ -470,7 +471,7 @@ public abstract class Game {
 				
 			} while (this.bsGraphics.flip() == false);
 			
-			elapsedTime = this.bsTimer.sleep();
+			elapsedTime = this.bsTimer.delayForFrame();
 			
 			if (elapsedTime > 100) {
 				// the elapsedTime can't be lower than 100 (10 fps)
@@ -572,7 +573,7 @@ public abstract class Game {
 	 * List of default game engines initialized in this method :
 	 * <ul>
 	 * <li> Timer Engine : uses
-	 * {@link com.golden.gamedev.engine.timer.SystemTimer}</li>
+	 * {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer}</li>
 	 * <li> Input Engine : uses {@link com.golden.gamedev.engine.input.AWTInput}</li>
 	 * <li> Music Engine : uses
 	 * {@link com.golden.gamedev.engine.audio.MidiRenderer}</li>
@@ -608,7 +609,7 @@ public abstract class Game {
 	protected void initEngine() {
 		// game engine initilialization
 		if (this.bsTimer == null) {
-			this.bsTimer = new SystemTimer(); // GageTimer(); // LoraxTimer();
+			this.bsTimer = new SystemTimeFrameRateSynchronizer(); // GageTimer(); // LoraxTimer();
 			// //
 		}
 		if (this.bsIO == null) {
@@ -631,7 +632,7 @@ public abstract class Game {
 		
 		// miscellanous
 		// set default fps
-		this.bsTimer.setFPS(Game.DEFAULT_FPS);
+		this.bsTimer.setFps(Game.DEFAULT_FPS);
 		
 		// set background screen size
 		Background.screen = this.bsGraphics.getSize();
@@ -873,8 +874,8 @@ public abstract class Game {
 	 */
 	public final void showLogo() {
 		this.hideCursor();
-		SystemTimer dummyTimer = new SystemTimer();
-		dummyTimer.setFPS(20);
+		BaseFrameRateSynchronizer dummyTimer = new SystemTimeFrameRateSynchronizer();
+		dummyTimer.setFps(20);
 		this.bsInput.refresh();
 		
 		// loading GTGE logo for splash screen
@@ -951,10 +952,10 @@ public abstract class Game {
 			if (firstTime) {
 				// workaround for OpenGL mode
 				firstTime = false;
-				dummyTimer.refresh();
+				dummyTimer.reset();
 			}
 			
-			long elapsedTime = dummyTimer.sleep();
+			long elapsedTime = dummyTimer.delayForFrame();
 			double increment = 0.00065 * elapsedTime;
 			if (increment > 0.22) {
 				increment = 0.22 + (increment / 6);
@@ -1001,7 +1002,7 @@ public abstract class Game {
 		
 		// gradually disappeared
 		alpha = 1.0f;
-		dummyTimer.refresh();
+		dummyTimer.reset();
 		while (alpha > 0.0f) {
 			do {
 				if (!this.running) {
@@ -1018,7 +1019,7 @@ public abstract class Game {
 				g.setComposite(old);
 			} while (this.bsGraphics.flip() == false);
 			
-			long elapsedTime = dummyTimer.sleep();
+			long elapsedTime = dummyTimer.delayForFrame();
 			double decrement = 0.00055 * elapsedTime;
 			if (decrement > 0.15) {
 				decrement = 0.15 + ((decrement - 0.04) / 2);
@@ -1220,11 +1221,11 @@ public abstract class Game {
 	// -> com.golden.gamedev.engine.BaseTimer
 	/**
 	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseTimer#setFPS(int)
+	 * {@linkplain com.golden.gamedev.engine.BaseTimer#setFps(int)
 	 * bsTimer.setFPS(int)}.
 	 */
 	public void setFPS(int fps) {
-		this.bsTimer.setFPS(fps);
+		this.bsTimer.setFps(fps);
 	}
 	
 	/**
@@ -1238,10 +1239,10 @@ public abstract class Game {
 	
 	/**
 	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseTimer#getFPS()}.
+	 * {@linkplain com.golden.gamedev.engine.BaseTimer#getFps()}.
 	 */
 	public int getFPS() {
-		return this.bsTimer.getFPS();
+		return this.bsTimer.getFps();
 	}
 	
 	/**

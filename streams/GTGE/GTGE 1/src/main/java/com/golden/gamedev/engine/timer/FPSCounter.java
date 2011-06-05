@@ -18,15 +18,15 @@
 package com.golden.gamedev.engine.timer;
 
 /**
- * The {@link FPSCounter} class counts the frames rendered for the current second, and keeps the value for retrieval of
- * the frames rendered for the last second for retrieval purposes.
+ * The {@link FPSCounter} class counts the frames rendered for the current second, and keeps the value of the frames
+ * rendered for the last second for retrieval purposes.
  * 
- * @author MetroidFan2002 - Changed to be package-private to support the {@link SystemTimer} class only, and made the
+ * @author MetroidFan2002 - Changed to be package-private to support the {@link SystemTimeFrameRateSynchronizer} class only, and made the
  *         class final.
  * @author Paulus Tuerah - Original Author
  * @version 1.0
  * @since 1.0
- * @see SystemTimer For the use of this class.
+ * @see SystemTimeFrameRateSynchronizer For the use of this class.
  */
 final class FPSCounter {
 	

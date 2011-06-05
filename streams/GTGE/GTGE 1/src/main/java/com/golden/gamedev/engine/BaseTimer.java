@@ -17,8 +17,7 @@
 package com.golden.gamedev.engine;
 
 /**
- * <code>BaseTimer</code> interface is an interface for running a loop
- * constantly in a requested frame per second.
+ * <code>BaseTimer</code> interface is an interface for running a loop constantly in a requested frame per second.
  * <p>
  * 
  * Common methods of how-to-use <code>BaseTimer</code>:
@@ -45,115 +44,88 @@ package com.golden.gamedev.engine;
  */
 public interface BaseTimer {
 	
-	/** ************************************************************************* */
-	/** ******************** START/STOP TIMER OPERATION ************************* */
-	/** ************************************************************************* */
-	
 	/**
-	 * Starts the timer, please set appropriate frame per second first before
-	 * calling this method.
+	 * Starts the {@link BaseTimer timer} running, and optionally {@link #reset() resets} its state. Because a
+	 * constructor may provide the ability to set the requested frames per second directly, this method will not throw
+	 * an exception if {@link #setFps(int)} is not invoked prior to its invocation, but unanticipated side effects may
+	 * occur if the requested frames per second is not set beforehand.
 	 * 
-	 * @see #getCurrentFPS()
-	 * @see #getFPS()
+	 * @see #setFps() To set the requested frames per second.
+	 * @see #reset() To reset a running BaseTimer instance.
 	 */
 	public void startTimer();
 	
 	/**
-	 * Stops this timer.
+	 * Stops this {@link BaseTimer timer} instance from {@link #isRunning() running}.
 	 */
 	public void stopTimer();
 	
-	/** ************************************************************************* */
-	/** ********************** MAIN FUNCTION: SLEEP() *************************** */
-	/** ************************************************************************* */
-	
 	/**
-	 * Sleeps for awhile to achieve requested frame per second and returns the
-	 * elapsed time since last sleep.
-	 * <p>
+	 * Delays the execution of the current {@link Thread} in order for a frame to be rendered in a bounded amount of
+	 * time. If this method is invoked on a {@link BaseTimer} that is not {@link #isRunning() running}, an
+	 * {@link IllegalStateException} will be thrown.
 	 * 
-	 * To call this method, timer must be in {@linkplain #isRunning() running}
-	 * state.
+	 * @return The amount of time delay that occurred, in milliseconds, in order to allow for the current frame to be
+	 *         rendered for a single interval in order to support the {@link #setFps(int) requested frames per second}.
+	 * @see #isRunning() Whether or not this BaseTimer instance is running.
+	 * @throws IllegalStateException
+	 *             Throws an {@link IllegalStateException} if this {@link BaseTimer} instance is not
+	 *             {@link #isRunning() running}.
+	 * @throws RuntimeException
+	 *             Throws a {@link RuntimeException} if the delay cannot be executed due to an unexpected error.
+	 */
+	public long delayForFrame();
+	
+	/**
+	 * Resets this {@link BaseTimer} instances state without affecting whether or not it is {@link #isRunning() running}
+	 * .
+	 */
+	public void reset();
+	
+	/**
+	 * Gets whether or not this {@link BaseTimer} instance is running. If this {@link BaseTimer} instance is not
+	 * running, an {@link IllegalStateException} will be thrown if {@link #delayForFrame()} is invoked.
 	 * 
-	 * @return Elapsed time since last sleep.
-	 * @see #startTimer()
-	 * @see #getFPS()
-	 */
-	public long sleep();
-	
-	/**
-	 * Returns timer current time in milliseconds.
-	 * @return The current time.
-	 */
-	public long getTime();
-	
-	/**
-	 * Refreshs timer elapsed time.
-	 */
-	public void refresh();
-	
-	/** ************************************************************************* */
-	/** ****************************** TIMER FPS ******************************** */
-	/** ************************************************************************* */
-	
-	/**
-	 * Returns whether the timer is currently running or not.
-	 * <p>
 	 * 
-	 * Timer is running when {@link #startTimer()} is called.
-	 * @return If the timer is running.
-	 * @see #startTimer()
+	 * @return True if this {@link BaseTimer} is running, false otherwise.
+	 * @see #startTimer() To start the BaseTimer running.
+	 * @see #stopTimer() To stop the BaseTimer from running.
 	 */
 	public boolean isRunning();
 	
 	/**
-	 * Returns timer <b>current</b> frame per second.
-	 * <p>
+	 * Gets the number of frames actually rendered for the previous second.
 	 * 
-	 * Current frame per second is the actual frame per second the player
-	 * machine could achieve.
-	 * <p>
-	 * 
-	 * Because of one and many things (ie: the incapability of the player
-	 * machine), the current frame per second can be differ from the
-	 * {@linkplain #getFPS() requested frame per second}.
-	 * 
-	 * @return Timer current frame per second.
-	 * @see #getFPS()
-	 * @see #startTimer()
+	 * @return The number of frames actually rendered for the previous second.
+	 * @see #getFps() To retrieve the requested number of frames per second.
 	 */
 	public int getCurrentFPS();
 	
 	/**
-	 * Returns the <b>requested</b> frame per second.
-	 * <p>
+	 * Gets the requested number of frames per second. To retrieve the number of frames actually rendered for the
+	 * previous second, use {@link #getCurrentFPS()}.
 	 * 
-	 * Requested frame per second is the target frame per second to achieve (the
-	 * number set in {@link #setFPS(int)} method).
-	 * <p>
-	 * 
-	 * Because of one and many things (ie: the incapability of the player
-	 * machine), a high requested frame per second may not always be achieved.
-	 * <p>
-	 * 
-	 * To get the actual fps see {@link #getCurrentFPS()}.
-	 * 
-	 * @return Requested frame per second.
-	 * @see #getCurrentFPS()
-	 * @see #setFPS(int)
+	 * @return The requested number of frames per second.
+	 * @see #getCurrentFPS() To retrieve the number of frames actually rendered for the previous second.
+	 * @see #setFps(int) To set the requested number of frames per second.
 	 */
-	public int getFPS();
+	public int getFps();
 	
 	/**
-	 * Sets this timer target frame per second to specified frame per second.
-	 * <p>
+	 * Sets the requested number of frames per second for this {@link BaseTimer} instance. This value is a requested
+	 * number of frames per second because due to system processing and hardware the current machine may not be capable
+	 * of meeting this frame rate. The {@link BaseTimer#reset() reset} method should be invoked on a
+	 * {@link BaseTimer#isRunning() running} {@link BaseTimer} instance to ensure consistent results after this method
+	 * is invoked.
 	 * 
-	 * This timer is ordered to run as fast as this frame per second, but the
-	 * actual fps achieved is depending of the player machine ability.
-	 * 
-	 * @param fps requested frame per second
-	 * @see #getCurrentFPS()
+	 * @param fps
+	 *            The requested number of frames per second, which must be greater than or equal to 1.
+	 * @throws IllegalArgumentException
+	 *             Throws an {@link IllegalArgumentException} if the requested number of frames per second is less than
+	 *             or equal to 0.
+	 * @see #getCurrentFPS() To retrieve the number of frames actually rendered for the previous second.
+	 * @see #reset() To reset this BaseTimer instance after this method is invoked.
 	 */
-	public void setFPS(int fps);
+	public void setFps(int fps);
 	
 }

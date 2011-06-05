@@ -142,7 +142,7 @@ public abstract class GameObject {
 		System.runFinalization();
 		
 		this.bsInput.refresh();
-		this.bsTimer.refresh();
+		this.bsTimer.reset();
 		
 		long elapsedTime = 0;
 		out: while (true) {
@@ -201,7 +201,7 @@ public abstract class GameObject {
 				
 			} while (this.bsGraphics.flip() == false);
 			
-			elapsedTime = this.bsTimer.sleep();
+			elapsedTime = this.bsTimer.delayForFrame();
 			
 			if (elapsedTime > 100) {
 				// can't lower than 10 fps (1000/100)
@@ -363,11 +363,11 @@ public abstract class GameObject {
 	// -> com.golden.gamedev.engine.BaseTimer
 	/**
 	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseTimer#setFPS(int)
+	 * {@linkplain com.golden.gamedev.engine.BaseTimer#setFps(int)
 	 * bsTimer.setFPS(int)}.
 	 */
 	public void setFPS(int fps) {
-		this.bsTimer.setFPS(fps);
+		this.bsTimer.setFps(fps);
 	}
 	
 	/**
@@ -381,10 +381,10 @@ public abstract class GameObject {
 	
 	/**
 	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseTimer#getFPS()}.
+	 * {@linkplain com.golden.gamedev.engine.BaseTimer#getFps()}.
 	 */
 	public int getFPS() {
-		return this.bsTimer.getFPS();
+		return this.bsTimer.getFps();
 	}
 	
 	/**

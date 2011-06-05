@@ -43,10 +43,10 @@ import com.golden.gamedev.engine.BaseIO;
 import com.golden.gamedev.engine.BaseInput;
 import com.golden.gamedev.engine.BaseLoader;
 import com.golden.gamedev.engine.FrameRateSynchronizer;
+import com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer;
 import com.golden.gamedev.engine.audio.MidiRenderer;
 import com.golden.gamedev.engine.audio.WaveRenderer;
 import com.golden.gamedev.engine.input.AWTInput;
-import com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer;
 import com.golden.gamedev.funbox.ErrorNotificationDialog;
 import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.GameFont;
@@ -541,7 +541,7 @@ public abstract class Game {
 	 * 
 	 * List of default game engines initialized in this method :
 	 * <ul>
-	 * <li>Timer Engine : uses {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer}</li>
+	 * <li>Timer Engine : uses {@link com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer}</li>
 	 * <li>Input Engine : uses {@link com.golden.gamedev.engine.input.AWTInput}</li>
 	 * <li>Music Engine : uses {@link com.golden.gamedev.engine.audio.MidiRenderer}</li>
 	 * <li>Sound Engine : uses {@link com.golden.gamedev.engine.audio.WaveRenderer}</li>
@@ -1139,10 +1139,6 @@ public abstract class Game {
 		return this.bsSound.play(audiofile);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** TIMER UTILITY ******************************** */
-	/** ************************************************************************* */
-	// -> com.golden.gamedev.engine.BaseTimer
 	/**
 	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.FrameRateSynchronizer#setFps(int)
 	 * bsTimer.setFPS(int)}.
@@ -1152,11 +1148,11 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.FrameRateSynchronizer#getCurrentFPS()
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.FrameRateSynchronizer#getRenderedFps()
 	 * bsTimer.getCurrentFPS()}.
 	 */
 	public int getCurrentFPS() {
-		return this.bsTimer.getCurrentFPS();
+		return this.bsTimer.getRenderedFps();
 	}
 	
 	/**
@@ -1238,8 +1234,8 @@ public abstract class Game {
 	 * Returns sprite in specified sprite group that intersected with mouse pointer, or null if no sprite intersected
 	 * with mouse pointer.
 	 * 
-	 * @param field
-	 *            playfield to check its intersection with mouse pointer
+	 * @param group
+	 *            {@link SpriteGroup} to check its intersection with mouse pointer
 	 * @param pixelCheck
 	 *            true, checking the sprite image with pixel precision
 	 */

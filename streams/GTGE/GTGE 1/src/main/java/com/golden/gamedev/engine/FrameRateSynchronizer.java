@@ -16,56 +16,67 @@
  */
 package com.golden.gamedev.engine;
 
+import com.golden.gamedev.Game;
+
 /**
- * <code>BaseTimer</code> interface is an interface for running a loop constantly in a requested frame per second.
- * <p>
- * 
- * Common methods of how-to-use <code>BaseTimer</code>:
+ * The {@link FrameRateSynchronizer} interface provides a strategy for synchronizing a {@link Game} instance to render a
+ * requested number of frames per second. This is needed because without this strategy, {@link Game} instances will
+ * simply run with the computer's allowable processing speed, which can result in games rendering frames too fast for a
+ * player to play them on newer machines.<br />
+ * <br />
+ * The {@link FrameRateSynchronizer} interface is typically used in a loop as in the following example:
  * 
  * <pre>
- *    public class TimerEngine implements BaseTimer {
+ *    public class LoopExample {
  *       .....
  *       public static void main(String[] args) {
- *          BaseTimer engine = new TimerEngine(...);
- *          // set the target frame-per-second
- *          engine.setFPS(50); // 50 fps
- *          // start the timer!!
- *          engine.startTimer();
- *          // game loop
+ *          FrameRaterSynchronizer engine;  // Initialization not shown.
+ *          // Set the desired frames per second.
+ *          // This value may not be able to be achieved due to the hardware performance of the current machine.
+ *          engine.setFps(50); // 50 FPS desired.
+ *          // Begin synchronization for the desired framerate.
+ *          engine.beginSynchronization();
+ *          // Loop to render frames and react to user input.
  *          while (true) {
- *             // sleep to achieve the target frame-per-second
- *             long elapsedTime = engine.sleep();
+ *             // Do some tasks and render a single frame.
+ *             
+ *             // After frame rendering, call the delayForFrame() method and capture the delayTime.
+ *             long delayTime = engine.delayForFrame();
+ *             
+ *             // This time represents the delay needed to ensure the frame gets enough clock cycles to render at the desired rate.
+ *             // It is typically passed to updating code for the next frame's display.
  *          }
- *          // stop the timer
- *          engine.stopTimer();
  *       }
  *    }
  * </pre>
+ * 
+ * @version 1.0
+ * @since 1.0
+ * @author MetroidFan2002 - Changed interface name and methods to reflect the actual intent of the interface, which is
+ *         not to time operations but rather to maintain a constant, synchronized frame rate.
+ * @author Paulus Tuerah - Original Author
+ * 
+ * @see SystemTimeFrameRateSynchronizer The default FrameRateSynchronizer implementation which uses the system time for
+ *      frame rate delay.
  */
 public interface FrameRateSynchronizer {
 	
 	/**
-	 * Starts the {@link FrameRateSynchronizer timer} running, and optionally {@link #reset() resets} its state. Because a
-	 * constructor may provide the ability to set the requested frames per second directly, this method will not throw
-	 * an exception if {@link #setFps(int)} is not invoked prior to its invocation, but unanticipated side effects may
-	 * occur if the requested frames per second is not set beforehand.
+	 * Starts the {@link FrameRateSynchronizer} instance to synchronize with the current requested {@link #setFps(int)
+	 * frame rate}. Because a constructor may provide the ability to set the requested frames per second directly, this
+	 * method will not throw an exception if {@link #setFps(int)} is not invoked prior to its invocation, but
+	 * unanticipated side effects may occur if the requested frames per second is not set beforehand.
 	 * 
-	 * @see #setFps() To set the requested frames per second.
-	 * @see #reset() To reset a running BaseTimer instance.
+	 * @see #setFps(int) To set the requested frames per second.
 	 */
 	public void beginSynchronization();
 	
 	/**
 	 * Delays the execution of the current {@link Thread} in order for a frame to be rendered in a bounded amount of
-	 * time. If this method is invoked on a {@link FrameRateSynchronizer} that is not {@link #isRunning() running}, an
-	 * {@link IllegalStateException} will be thrown.
+	 * time.
 	 * 
 	 * @return The amount of time delay that occurred, in milliseconds, in order to allow for the current frame to be
 	 *         rendered for a single interval in order to support the {@link #setFps(int) requested frames per second}.
-	 * @see #isRunning() Whether or not this BaseTimer instance is running.
-	 * @throws IllegalStateException
-	 *             Throws an {@link IllegalStateException} if this {@link FrameRateSynchronizer} instance is not
-	 *             {@link #isRunning() running}.
 	 * @throws RuntimeException
 	 *             Throws a {@link RuntimeException} if the delay cannot be executed due to an unexpected error.
 	 */
@@ -77,33 +88,34 @@ public interface FrameRateSynchronizer {
 	 * @return The number of frames actually rendered for the previous second.
 	 * @see #getFps() To retrieve the requested number of frames per second.
 	 */
-	public int getCurrentFPS();
+	public int getRenderedFps();
 	
 	/**
 	 * Gets the requested number of frames per second. To retrieve the number of frames actually rendered for the
-	 * previous second, use {@link #getCurrentFPS()}.
+	 * previous second, use {@link #getRenderedFps()}.
 	 * 
 	 * @return The requested number of frames per second.
-	 * @see #getCurrentFPS() To retrieve the number of frames actually rendered for the previous second.
+	 * @see #getRenderedFps() To retrieve the number of frames actually rendered for the previous second.
 	 * @see #setFps(int) To set the requested number of frames per second.
 	 */
 	public int getFps();
 	
 	/**
-	 * Sets the requested number of frames per second for this {@link FrameRateSynchronizer} instance. This value is a requested
-	 * number of frames per second because due to system processing and hardware the current machine may not be capable
-	 * of meeting this frame rate. The {@link FrameRateSynchronizer#reset() reset} method should be invoked on a
-	 * {@link FrameRateSynchronizer#isRunning() running} {@link FrameRateSynchronizer} instance to ensure consistent results after this method
-	 * is invoked.
+	 * Sets the requested number of frames per second for this {@link FrameRateSynchronizer} instance. This value is a
+	 * requested number of frames per second because due to system processing and hardware the current machine may not
+	 * be capable of meeting this frame rate. The {@link FrameRateSynchronizer#beginSynchronization()} method should be
+	 * invoked on a {@link FrameRateSynchronizer} instance immediately after changing the requested frame rate to ensure
+	 * consistent results after this method is invoked.
 	 * 
 	 * @param fps
 	 *            The requested number of frames per second, which must be greater than or equal to 1.
 	 * @throws IllegalArgumentException
 	 *             Throws an {@link IllegalArgumentException} if the requested number of frames per second is less than
 	 *             or equal to 0.
-	 * @see #getCurrentFPS() To retrieve the number of frames actually rendered for the previous second.
-	 * @see #reset() To reset this BaseTimer instance after this method is invoked.
+	 * @see #getRenderedFps() To retrieve the number of frames actually rendered for the previous second.
+	 * @see #beginSynchronization() To begin synchronization of this FrameRateSynchronizer instance after this method is
+	 *      invoked.
 	 */
-	public void setFps(int fps);
+	public void setFps(final int fps);
 	
 }

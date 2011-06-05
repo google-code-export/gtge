@@ -11,7 +11,7 @@
 <ul>
 	<li>Graphics Engine ({@link com.golden.gamedev.engine.BaseGraphics}), the engine that handle graphics hardware rendering to the screen.</li>
 	<li>Input Engine ({@link com.golden.gamedev.engine.BaseInput}), polling keyboard, mouse, etc, input device.</li>
-	<li>Timer Engine ({@link com.golden.gamedev.engine.BaseTimer}) to synchronize game frame rate.</li>
+	<li>Frame Rate Synchronizer Engine ({@link com.golden.gamedev.engine.FrameRateSynchronizer}) to synchronize game frame rate.</li>
 	<li>Audio Engine ({@link com.golden.gamedev.engine.BaseAudioRenderer}), a simple abstraction to use audio hardware.</li>
 	<li>I/O Engine ({@link com.golden.gamedev.engine.BaseIO}) provides the input and output of file system or data stream.</li>
 	<li>Image Engine ({@link com.golden.gamedev.engine.BaseLoader}), the engine that handle image loading in the game.</li>
@@ -37,7 +37,6 @@
 
 @see com.golden.gamedev.engine.graphics
 @see com.golden.gamedev.engine.input
-@see com.golden.gamedev.engine.timer
 @see com.golden.gamedev.engine.audio
 </body>
 

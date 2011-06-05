@@ -342,10 +342,6 @@ public abstract class GameObject {
 		return this.bsSound.play(audiofile);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** TIMER UTILITY ******************************** */
-	/** ************************************************************************* */
-	// -> com.golden.gamedev.engine.BaseTimer
 	/**
 	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.FrameRateSynchronizer#setFps(int)
 	 * bsTimer.setFPS(int)}.
@@ -355,11 +351,11 @@ public abstract class GameObject {
 	}
 	
 	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.FrameRateSynchronizer#getCurrentFPS()
+	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.FrameRateSynchronizer#getRenderedFps()
 	 * bsTimer.getCurrentFPS()}.
 	 */
 	public int getCurrentFPS() {
-		return this.bsTimer.getCurrentFPS();
+		return this.bsTimer.getRenderedFps();
 	}
 	
 	/**

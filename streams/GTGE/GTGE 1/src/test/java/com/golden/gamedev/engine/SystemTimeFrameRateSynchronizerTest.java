@@ -1,10 +1,11 @@
-package com.golden.gamedev.engine.timer;
+package com.golden.gamedev.engine;
 
 import static org.junit.Assert.*;
 
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.junit.Before;
 import org.junit.Test;
+
 
 /**
  * The {@link SystemTimeFrameRateSynchronizerTest} class provides a test case to verify the functionality of the
@@ -33,7 +34,7 @@ public class SystemTimeFrameRateSynchronizerTest {
 	
 	/**
 	 * Test method for
-	 * {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer#SystemTimeFrameRateSynchronizer()}.
+	 * {@link com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer#SystemTimeFrameRateSynchronizer()}.
 	 * 
 	 * @throws Exception
 	 *             Throws an {@link Exception} if the test fails.
@@ -48,7 +49,7 @@ public class SystemTimeFrameRateSynchronizerTest {
 	
 	/**
 	 * Test method for
-	 * {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer#SystemTimeFrameRateSynchronizer(int)}.
+	 * {@link com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer#SystemTimeFrameRateSynchronizer(int)}.
 	 * 
 	 * @throws Exception
 	 *             Throws an {@link Exception} if the test fails.
@@ -64,7 +65,7 @@ public class SystemTimeFrameRateSynchronizerTest {
 	
 	/**
 	 * Test method for
-	 * {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer#SystemTimeFrameRateSynchronizer(int)},
+	 * {@link com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer#SystemTimeFrameRateSynchronizer(int)},
 	 * providing a zero (invalid) integer for the frame rate.
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -74,7 +75,7 @@ public class SystemTimeFrameRateSynchronizerTest {
 	
 	/**
 	 * Test method for
-	 * {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer#SystemTimeFrameRateSynchronizer(int)},
+	 * {@link com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer#SystemTimeFrameRateSynchronizer(int)},
 	 * providing a negative (invalid) integer for the frame rate.
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -84,7 +85,7 @@ public class SystemTimeFrameRateSynchronizerTest {
 	
 	/**
 	 * Test method for
-	 * {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer#SystemTimeFrameRateSynchronizer(int, boolean)}
+	 * {@link com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer#SystemTimeFrameRateSynchronizer(int, boolean)}
 	 * .
 	 * 
 	 * @throws Exception
@@ -106,7 +107,7 @@ public class SystemTimeFrameRateSynchronizerTest {
 	
 	/**
 	 * Test method for
-	 * {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer#SystemTimeFrameRateSynchronizer(int, boolean)}
+	 * {@link com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer#SystemTimeFrameRateSynchronizer(int, boolean)}
 	 * , providing a zero (invalid) integer for the frame rate.
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -116,7 +117,7 @@ public class SystemTimeFrameRateSynchronizerTest {
 	
 	/**
 	 * Test method for
-	 * {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer#SystemTimeFrameRateSynchronizer(int, boolean)}
+	 * {@link com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer#SystemTimeFrameRateSynchronizer(int, boolean)}
 	 * , providing a negative (invalid) integer for the frame rate.
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -125,7 +126,7 @@ public class SystemTimeFrameRateSynchronizerTest {
 	}
 	
 	/**
-	 * Test method for {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer#beginSynchronization()}.
+	 * Test method for {@link com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer#beginSynchronization()}.
 	 */
 	@Test
 	public final void testBeginSynchronization() {
@@ -133,7 +134,7 @@ public class SystemTimeFrameRateSynchronizerTest {
 	}
 	
 	/**
-	 * Test method for {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer#delayForFrame()}.
+	 * Test method for {@link com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer#delayForFrame()}.
 	 */
 	@Test
 	public final void testDelayForFrame() {
@@ -198,7 +199,7 @@ public class SystemTimeFrameRateSynchronizerTest {
 	}
 	
 	/**
-	 * Test method for {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer#delayForFrame()} that
+	 * Test method for {@link com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer#delayForFrame()} that
 	 * ensures the InterruptedException thrown is ignored.
 	 * 
 	 * @throws Exception
@@ -216,7 +217,7 @@ public class SystemTimeFrameRateSynchronizerTest {
 	}
 	
 	/**
-	 * Test method for {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer#delayForFrame()} that
+	 * Test method for {@link com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer#delayForFrame()} that
 	 * ensures the InterruptedException thrown is not ignored, but is thrown as a {@link RuntimeException}.
 	 * 
 	 * @throws Exception
@@ -234,28 +235,28 @@ public class SystemTimeFrameRateSynchronizerTest {
 	}
 	
 	/**
-	 * Test method for {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer#getCurrentFPS()}.
+	 * Test method for {@link com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer#getRenderedFps()}.
 	 * 
 	 * @throws Exception
 	 *             Throws an {@link Exception} if the test fails.
 	 */
 	@Test
 	public final void testGetCurrentFPS() throws Exception {
-		assertEquals(0, synchronizer.getCurrentFPS());
+		assertEquals(0, synchronizer.getRenderedFps());
 		synchronizer.beginSynchronization();
 		Thread.sleep(1100);
 		synchronizer.delayForFrame();
-		assertEquals(1, synchronizer.getCurrentFPS());
+		assertEquals(1, synchronizer.getRenderedFps());
 		synchronizer.delayForFrame();
 		synchronizer.delayForFrame();
 		synchronizer.delayForFrame();
 		Thread.sleep(1100);
 		synchronizer.delayForFrame();
-		assertTrue("Expected the frames to be greater than zero.", synchronizer.getCurrentFPS() > 0);
+		assertTrue("Expected the frames to be greater than zero.", synchronizer.getRenderedFps() > 0);
 	}
 	
 	/**
-	 * Test method for {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer#getFps()}.
+	 * Test method for {@link com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer#getFps()}.
 	 */
 	@Test
 	public final void testGetFps() {
@@ -263,7 +264,7 @@ public class SystemTimeFrameRateSynchronizerTest {
 	}
 	
 	/**
-	 * Test method for {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer#setFps(int)}.
+	 * Test method for {@link com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer#setFps(int)}.
 	 */
 	@Test
 	public final void testSetFps() {
@@ -272,7 +273,7 @@ public class SystemTimeFrameRateSynchronizerTest {
 	}
 	
 	/**
-	 * Test method for {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer#setFps(int)}, giving a
+	 * Test method for {@link com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer#setFps(int)}, giving a
 	 * zero (invalid) value.
 	 */
 	@Test(expected = IllegalArgumentException.class)
@@ -281,7 +282,7 @@ public class SystemTimeFrameRateSynchronizerTest {
 	}
 	
 	/**
-	 * Test method for {@link com.golden.gamedev.engine.timer.SystemTimeFrameRateSynchronizer#setFps(int)}, giving a
+	 * Test method for {@link com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer#setFps(int)}, giving a
 	 * negative (invalid) value.
 	 */
 	@Test(expected = IllegalArgumentException.class)

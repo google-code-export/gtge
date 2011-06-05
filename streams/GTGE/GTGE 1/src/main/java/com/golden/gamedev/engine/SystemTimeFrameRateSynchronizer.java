@@ -14,16 +14,14 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.golden.gamedev.engine.timer;
+package com.golden.gamedev.engine;
 
 import org.apache.commons.lang.Validate;
 
-import com.golden.gamedev.engine.FrameRateSynchronizer;
-
 /**
  * The {@link SystemTimeFrameRateSynchronizer} class provides a {@link FrameRateSynchronizer} implementation that uses
- * the {@link System#currentTimeMillis() current system time}, in milliseconds, to provide for the
- * {@link #delayForFrame() delay} for a frame to be rendered.
+ * the {@link System#currentTimeMillis() current system time} to provide for the {@link #delayForFrame() delay} for a
+ * frame to be rendered.
  * 
  * @version 1.0
  * @since 1.0
@@ -38,8 +36,8 @@ public final class SystemTimeFrameRateSynchronizer implements FrameRateSynchroni
 	 * The {@link FPSCounter} class counts the frames rendered for the current second, and keeps the value of the frames
 	 * rendered for the last second for retrieval purposes.
 	 * 
-	 * @author MetroidFan2002 - Changed to be private and static to support the {@link SystemTimeFrameRateSynchronizer}
-	 *         class only, and made the class final.
+	 * @author MetroidFan2002 - Changed to be private, static and final to support the
+	 *         {@link SystemTimeFrameRateSynchronizer} class only.
 	 * @author Paulus Tuerah - Original Author
 	 * @version 1.0
 	 * @since 1.0
@@ -78,9 +76,9 @@ public final class SystemTimeFrameRateSynchronizer implements FrameRateSynchroni
 		
 		/**
 		 * Calculates the current frames per second by incrementing the frame count. If the time elapsed since the last
-		 * time this method was invoked was greater than a second, the count is stored into the {@link #getCurrentFPS()
-		 * frames per second interval} and the timestamp of the timer is reset to the current time to begin counting for
-		 * the next second.
+		 * time this method was invoked was greater than a second, the count is stored into the
+		 * {@link #getRenderedFps() frames per second interval} and the timestamp of the timer is reset to the current
+		 * time to begin counting for the next second.
 		 */
 		private void calculateFPS() {
 			frameCountForCurrentSecond++;
@@ -181,7 +179,7 @@ public final class SystemTimeFrameRateSynchronizer implements FrameRateSynchroni
 	
 	@Override
 	public long delayForFrame() {
-		long end = System.currentTimeMillis();
+		final long end = System.currentTimeMillis();
 		
 		final long sleepTime = (delayForFrame - (end - timeOfLastSleep)) - overSleepTime;
 		
@@ -206,7 +204,7 @@ public final class SystemTimeFrameRateSynchronizer implements FrameRateSynchroni
 	}
 	
 	@Override
-	public int getCurrentFPS() {
+	public int getRenderedFps() {
 		return fpsCounter.framesCountForLastSecond;
 	}
 	

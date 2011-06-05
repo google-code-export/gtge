@@ -27,7 +27,8 @@ import com.golden.gamedev.engine.FrameRateSynchronizer;
  * 
  * @version 1.0
  * @since 1.0
- * @author MetroidFan2002 - Changed to extend the {@link BaseFrameRateSynchronizer} class, some internal refactoring.
+ * @author MetroidFan2002 - Now implements the {@link FrameRateSynchronizer} interface, internal refactoring to improve
+ *         performance.
  * @author Paulus Tuerah - Original Author
  * 
  */
@@ -88,15 +89,6 @@ public final class SystemTimeFrameRateSynchronizer implements FrameRateSynchroni
 				framesCountForLastSecond = frameCountForCurrentSecond;
 				frameCountForCurrentSecond = 0;
 			}
-		}
-		
-		/**
-		 * Gets the number of frames counted for the last second interval.
-		 * 
-		 * @return The number of frames counted for the last second interval.
-		 */
-		private int getCurrentFPS() {
-			return framesCountForLastSecond;
 		}
 	}
 	
@@ -215,16 +207,16 @@ public final class SystemTimeFrameRateSynchronizer implements FrameRateSynchroni
 	
 	@Override
 	public int getCurrentFPS() {
-		return fpsCounter.getCurrentFPS();
+		return fpsCounter.framesCountForLastSecond;
 	}
 	
 	@Override
-	public final int getFps() {
+	public int getFps() {
 		return fps;
 	}
 	
 	@Override
-	public final void setFps(final int fps) {
+	public void setFps(final int fps) {
 		Validate.isTrue(fps >= 1, "FPS must be greater than or equal to 1!");
 		this.fps = fps;
 	}

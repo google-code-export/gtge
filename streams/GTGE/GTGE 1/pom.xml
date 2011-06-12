@@ -161,7 +161,7 @@
 								<displayName>Code Review - Low Priority</displayName>
 								<tags>
 									<tag>
-										<matchString>REVIEW - LOW</matchString>
+										<matchString>REVIEW-LOW</matchString>
 										<matchType>ignoreCase</matchType>
 									</tag>
 								</tags>
@@ -170,7 +170,7 @@
 								<displayName>Code Review - Medium Priority</displayName>
 								<tags>
 									<tag>
-										<matchString>REVIEW - MEDIUM</matchString>
+										<matchString>REVIEW-MEDIUM</matchString>
 										<matchType>ignoreCase</matchType>
 									</tag>
 								</tags>
@@ -179,7 +179,7 @@
 								<displayName>Code Review - High Priority</displayName>
 								<tags>
 									<tag>
-										<matchString>REVIEW - HIGH</matchString>
+										<matchString>REVIEW-HIGH</matchString>
 										<matchType>ignoreCase</matchType>
 									</tag>
 								</tags>

@@ -17,21 +17,27 @@
 package com.golden.gamedev.object.font;
 
 // JFC
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 
+import org.apache.commons.lang.Validate;
+
+import com.golden.gamedev.util.ImageUtil;
+
 /**
- * Game font that use images for the letter, each images can have different
- * width but must have same height.
+ * Game font that use images for the letter, each images can have different width but must have same height.
  * <p>
  * 
- * <code>AdvanceBitmapFont</code> takes up two parameters, the array of images
- * font and the sequence of the images, for example if the images font array
- * sequence is ordered as follow: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", specify the
- * parameter letter sequence as is.
+ * <code>AdvanceBitmapFont</code> takes up two parameters, the array of images font and the sequence of the images, for
+ * example if the images font array sequence is ordered as follow: "ABCDEFGHIJKLMNOPQRSTUVWXYZ", specify the parameter
+ * letter sequence as is.
  * <p>
  * 
- * If the images font have same width, use the standard
- * {@link com.golden.gamedev.object.font.BitmapFont}.
+ * If the images font have same width, use the standard {@link com.golden.gamedev.object.font.BitmapFont}.
  */
 public class AdvanceBitmapFont extends BitmapFont {
 	
@@ -42,11 +48,12 @@ public class AdvanceBitmapFont extends BitmapFont {
 	/** ************************************************************************* */
 	
 	/**
-	 * Creates new <code>AdvanceBitmapFont</code> with specified images font
-	 * and letter sequence.
+	 * Creates new <code>AdvanceBitmapFont</code> with specified images font and letter sequence.
 	 * 
-	 * @param imagefont the images font, all images must have same height
-	 * @param letterSequence the order sequence of the images font
+	 * @param imagefont
+	 *            the images font, all images must have same height
+	 * @param letterSequence
+	 *            the order sequence of the images font
 	 */
 	public AdvanceBitmapFont(BufferedImage[] imagefont, String letterSequence) {
 		super(imagefont, letterSequence);
@@ -59,8 +66,7 @@ public class AdvanceBitmapFont extends BitmapFont {
 	}
 	
 	/**
-	 * Creates new <code>AdvanceBitmapFont</code> with specified images font
-	 * and default letter sequence :
+	 * Creates new <code>AdvanceBitmapFont</code> with specified images font and default letter sequence :
 	 * 
 	 * <pre>
 	 *         ! &quot; # $ % &amp; ' ( ) * + , - . / 0 1 2 3
@@ -70,12 +76,12 @@ public class AdvanceBitmapFont extends BitmapFont {
 	 *       p q r s t u v w x y z { | } &tilde;
 	 * </pre>
 	 * 
-	 * @param imagefont the images font, all images must have same height
+	 * @param imagefont
+	 *            the images font, all images must have same height
 	 */
 	public AdvanceBitmapFont(BufferedImage[] imagefont) {
-		this(imagefont, " !\"#$%&'()*+,-./0123" + "456789:;<=>?@ABCDEFG"
-		        + "HIJKLMNOPQRSTUVWXYZ[" + "\\]^_`abcdefghijklmno"
-		        + "pqrstuvwxyz{|}~");
+		this(imagefont, " !\"#$%&'()*+,-./0123" + "456789:;<=>?@ABCDEFG" + "HIJKLMNOPQRSTUVWXYZ["
+				+ "\\]^_`abcdefghijklmno" + "pqrstuvwxyz{|}~");
 	}
 	
 	public void setImageFont(BufferedImage[] imagefont, String letterSequence) {
@@ -101,6 +107,84 @@ public class AdvanceBitmapFont extends BitmapFont {
 		}
 		
 		return width;
+	}
+	
+	/**
+	 * Creates a {@link BufferedImage} from the given {@link Font} and {@link Color} with the standard sequence of
+	 * printable ASCII characters. The {@link BufferedImage} returned is compatible with the image format the <a
+	 * href="http://www.stefan-pettersson.nu/site/bmpfont/" title="Bitmap Font Writer Link" >Bitmap Font Writer</a>
+	 * application created by <a href="http://www.stefan-pettersson.nu">Stefan Pettersson</a> can use, so that it can be
+	 * previewed and used externally.
+	 * 
+	 * @param sourceFont
+	 *            The non-null source {@link Font} to use to print the characters to the {@link BufferedImage}.
+	 * @param characterColor
+	 *            The non-null {@link Color} representing the color that should be used to print each character.
+	 * @return A {@link BufferedImage} containing an image with the standard sequence of printable ASCII characters.
+	 * @throws IllegalArgumentException
+	 *             Throws an {@link IllegalArgumentException} if either argument is null.
+	 * 
+	 * @see com.golden.gamedev.object.GameFontManager#getFont(BufferedImage) The standard sequence of printable ASCII
+	 *      characters.
+	 */
+	public static BufferedImage createBitmapFont(Font sourceFont, Color characterColor) {
+		Validate.notNull(sourceFont, "The source font may not be null!");
+		Validate.notNull(characterColor, "The character color may not be null!");
+		// REVIEW-LOW: rename g to throwAwayGraphicsContext, or, nest the calls to remove g entirely.
+		Graphics2D g = ImageUtil.createImage(1, 1).createGraphics();
+		// REVIEW-LOW: rename fm to fontMetricsForSelectedFont
+		FontMetrics fm = g.getFontMetrics(sourceFont);
+		g.dispose();
+		
+		// REVIEW-MEDIUM - The construction of this string should be done in a static initialization method and kept for
+		// the lifetime of the AdvanceBitmapFont class. Also, rename the string.
+		byte[] bytes = new byte[95];
+		for (int i = 0; i < bytes.length; i++) {
+			bytes[i] = (byte) (32 + i);
+		}
+		String st = new String(bytes); // all letters
+		
+		// REVIEW-LOW: separate declarations on their own line. Rename variables to avoid using comments which can be
+		// expressed via their name.
+		int w = fm.stringWidth(st), // image width
+		h = fm.getHeight(), // and height
+		// REVIEW-LOW: no need for a variable since you have the string (repeated calls to length() will be inlined).
+		len = st.length(), // total letter count
+		x = 0, // draw letter to <x, y>
+		// REVIEW-HIGH: looks like getMaxDescent() should be used here instead!
+		y = h - fm.getDescent() + 1;
+		
+		// REVIEW-LOW: rename to characterSpacingDelimiterColor
+		// REVIEW-LOW: use the ternary operator to perform the check of green or yellow to shorten the code.
+		Color delim = Color.GREEN; // delimiter at <0, 0>
+		
+		// to avoid the color same like font color
+		if (delim.equals(characterColor)) {
+			delim = Color.YELLOW;
+		}
+		
+		// draw all letters to the bitmap
+		// REVIEW-MEDIUM - this screams out as a refactorable function.
+		BufferedImage bitmap = ImageUtil.createImage(w, h, Transparency.BITMASK);
+		g = bitmap.createGraphics();
+		g.setFont(sourceFont);
+		
+		for (int i = 0; i < len; i++) {
+			char c = st.charAt(i);
+			
+			// draw delimiter
+			g.setColor(delim);
+			g.drawLine(x, 0, x, 0);
+			
+			// draw letter
+			g.setColor(characterColor);
+			g.drawString(String.valueOf(c), x, y);
+			x += fm.charWidth(c);
+		}
+		
+		g.dispose();
+		
+		return bitmap;
 	}
 	
 }

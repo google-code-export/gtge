@@ -96,21 +96,12 @@
 						<target>1.6</target>
 					</configuration>
 				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>cobertura-maven-plugin</artifactId>
-					<version>${version.cobertura}</version>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
@@ -135,6 +126,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>${version.cobertura}</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -146,6 +138,54 @@
 					<overview>
 						${basedir}/src/main/java/overview.html
 					</overview>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>javancss-maven-plugin</artifactId>
+				<version>${version.javancss}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>${version.jxr}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>taglist-maven-plugin</artifactId>
+				<version>${version.taglist}</version>
+				<configuration>
+					<tagListOptions>
+						<tagClasses>
+							<tagClass>
+								<displayName>Code Review - Low Priority</displayName>
+								<tags>
+									<tag>
+										<matchString>REVIEW - LOW</matchString>
+										<matchType>ignoreCase</matchType>
+									</tag>
+								</tags>
+							</tagClass>
+							<tagClass>
+								<displayName>Code Review - Medium Priority</displayName>
+								<tags>
+									<tag>
+										<matchString>REVIEW - MEDIUM</matchString>
+										<matchType>ignoreCase</matchType>
+									</tag>
+								</tags>
+							</tagClass>
+							<tagClass>
+								<displayName>Code Review - High Priority</displayName>
+								<tags>
+									<tag>
+										<matchString>REVIEW - HIGH</matchString>
+										<matchType>ignoreCase</matchType>
+									</tag>
+								</tags>
+							</tagClass>
+						</tagClasses>
+					</tagListOptions>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -174,10 +214,14 @@
 	</dependencyManagement>
 
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<version.cobertura>2.5.1</version.cobertura>
 		<version.commons-lang>2.6</version.commons-lang>
 		<version.compiler>2.3.2</version.compiler>
 		<version.mockito>1.8.5</version.mockito>
+		<version.javancss>2.0</version.javancss>
 		<version.junit>4.8.2</version.junit>
+		<version.jxr>2.2</version.jxr>
+		<version.taglist>2.4</version.taglist>
 	</properties>
 </project>

@@ -68,24 +68,18 @@ public class WaveRenderer extends BaseAudioRenderer implements LineListener {
 				
 				public final void run() {
 					try {
-						URL sample = WaveRenderer.class
-						        .getResource("Sample.wav");
-						AudioInputStream ain = AudioSystem
-						        .getAudioInputStream(sample);
+						URL sample = WaveRenderer.class.getResource("Sample.wav");
+						AudioInputStream ain = AudioSystem.getAudioInputStream(sample);
 						AudioFormat format = ain.getFormat();
 						
-						DataLine.Info info = new DataLine.Info(Clip.class, ain
-						        .getFormat(),
-						        ((int) ain.getFrameLength() * format
-						                .getFrameSize()));
+						DataLine.Info info = new DataLine.Info(Clip.class, ain.getFormat(),
+								((int) ain.getFrameLength() * format.getFrameSize()));
 						Clip clip = (Clip) AudioSystem.getLine(info);
 						
 						clip.open(ain);
 						
-						WaveRenderer.volumeSupported = clip
-						        .isControlSupported(FloatControl.Type.VOLUME)
-						        || clip
-						                .isControlSupported(FloatControl.Type.MASTER_GAIN);
+						WaveRenderer.volumeSupported = clip.isControlSupported(FloatControl.Type.VOLUME)
+								|| clip.isControlSupported(FloatControl.Type.MASTER_GAIN);
 						
 						clip.drain();
 						clip.close();
@@ -93,18 +87,14 @@ public class WaveRenderer extends BaseAudioRenderer implements LineListener {
 						// workaround for Java 1.5
 						Mixer.Info[] mixers = AudioSystem.getMixerInfo();
 						for (int i = 0; i < mixers.length; i++) {
-							if ("Java Sound Audio Engine".equals(mixers[i]
-							        .getName())) {
-								WaveRenderer.mixer = AudioSystem
-								        .getMixer(mixers[i]);
+							if ("Java Sound Audio Engine".equals(mixers[i].getName())) {
+								WaveRenderer.mixer = AudioSystem.getMixer(mixers[i]);
 							}
 						}
 						
 						WaveRenderer.available = true;
-					}
-					catch (Throwable e) {
-						System.err
-						        .println("WARNING: Wave audio playback is not available!");
+					} catch (Throwable e) {
+						System.err.println("WARNING: Wave audio playback is not available!");
 						WaveRenderer.available = false;
 					}
 					
@@ -119,12 +109,10 @@ public class WaveRenderer extends BaseAudioRenderer implements LineListener {
 	public boolean isAvailable() {
 		if (WaveRenderer.rendererStatus != WaveRenderer.INITIALIZED) {
 			int i = 0;
-			while (WaveRenderer.rendererStatus != WaveRenderer.INITIALIZED
-			        && i++ < 50) {
+			while (WaveRenderer.rendererStatus != WaveRenderer.INITIALIZED && i++ < 50) {
 				try {
 					Thread.sleep(50L);
-				}
-				catch (InterruptedException e) {
+				} catch (InterruptedException e) {
 				}
 			}
 			
@@ -141,38 +129,34 @@ public class WaveRenderer extends BaseAudioRenderer implements LineListener {
 	/** ********************** AUDIO PLAYBACK FUNCTION ************************** */
 	/** ************************************************************************* */
 	
-	protected void playSound(URL audiofile) {
+	protected void playSound() {
 		try {
 			if (this.clip != null) {
 				this.clip.drain();
 				this.clip.close();
 			}
 			
-			AudioInputStream ain = AudioSystem.getAudioInputStream(this
-			        .getAudioFile());
+			AudioInputStream ain = AudioSystem.getAudioInputStream(this.getAudioFile());
 			AudioFormat format = ain.getFormat();
 			
 			if ((format.getEncoding() == AudioFormat.Encoding.ULAW)
-			        || (format.getEncoding() == AudioFormat.Encoding.ALAW)) {
+					|| (format.getEncoding() == AudioFormat.Encoding.ALAW)) {
 				// we can't yet open the device for ALAW/ULAW playback,
 				// convert ALAW/ULAW to PCM
-				AudioFormat temp = new AudioFormat(
-				        AudioFormat.Encoding.PCM_SIGNED,
-				        format.getSampleRate(),
-				        format.getSampleSizeInBits() * 2, format.getChannels(),
-				        format.getFrameSize() * 2, format.getFrameRate(), true);
+				AudioFormat temp = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, format.getSampleRate(),
+						format.getSampleSizeInBits() * 2, format.getChannels(), format.getFrameSize() * 2,
+						format.getFrameRate(), true);
 				ain = AudioSystem.getAudioInputStream(temp, ain);
 				format = temp;
 			}
 			
 			DataLine.Info info = new DataLine.Info(Clip.class, ain.getFormat(),
-			        ((int) ain.getFrameLength() * format.getFrameSize()));
+					((int) ain.getFrameLength() * format.getFrameSize()));
 			// workaround for Java 1.5
 			if (WaveRenderer.mixer != null) {
 				this.clip = (Clip) WaveRenderer.mixer.getLine(info);
 				
-			}
-			else {
+			} else {
 				this.clip = (Clip) AudioSystem.getLine(info);
 			}
 			// clip = (Clip) AudioSystem.getLine(info);
@@ -182,18 +166,16 @@ public class WaveRenderer extends BaseAudioRenderer implements LineListener {
 			this.clip.start();
 			
 			// the volume of newly loaded audio is always 1.0f
-			if (this.volume != 1.0f) {
-				this.setSoundVolume(this.volume);
+			if (this.getVolume() != 1.0f) {
+				this.setSoundVolume(this.getVolume());
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			this.status = BaseAudioRenderer.ERROR;
-			System.err.println("ERROR: Can not playing " + this.getAudioFile()
-			        + " caused by: " + e);
+			System.err.println("ERROR: Can not playing " + getAudioFile() + " caused by: " + e);
 		}
 	}
 	
-	protected void replaySound(URL audiofile) {
+	protected void resumeSound() {
 		this.clip.setMicrosecondPosition(0);
 		this.clip.start();
 		this.clip.addLineListener(this);
@@ -233,16 +215,12 @@ public class WaveRenderer extends BaseAudioRenderer implements LineListener {
 		Control.Type vol1 = FloatControl.Type.VOLUME, vol2 = FloatControl.Type.MASTER_GAIN;
 		
 		if (this.clip.isControlSupported(vol1)) {
-			FloatControl volumeControl = (FloatControl) this.clip
-			        .getControl(vol1);
+			FloatControl volumeControl = (FloatControl) this.clip.getControl(vol1);
 			volumeControl.setValue(volume);
 			
-		}
-		else if (this.clip.isControlSupported(vol2)) {
-			FloatControl gainControl = (FloatControl) this.clip
-			        .getControl(vol2);
-			float dB = (float) (Math.log(((volume == 0.0) ? 0.0001 : volume))
-			        / Math.log(10.0) * 20.0);
+		} else if (this.clip.isControlSupported(vol2)) {
+			FloatControl gainControl = (FloatControl) this.clip.getControl(vol2);
+			float dB = (float) (Math.log(((volume == 0.0) ? 0.0001 : volume)) / Math.log(10.0) * 20.0);
 			gainControl.setValue(dB);
 		}
 	}

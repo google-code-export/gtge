@@ -17,7 +17,6 @@
 package com.golden.gamedev.engine.audio;
 
 // JFC
-import java.net.URL;
 
 import javax.sound.midi.MetaEventListener;
 import javax.sound.midi.MetaMessage;
@@ -33,17 +32,12 @@ import com.golden.gamedev.engine.BaseAudioRenderer;
  * Play midi sound (*.mid).
  * <p>
  * 
- * Note: Midi sound use soundbank that not delivered in JRE, only JDK can play
- * midi sound properly. <br>
- * In order to play midi sound properly in JRE you must explicitly install
- * soundbank. <br>
- * Download soundbank from java sun website (<a
- * href="http://java.sun.com/products/java-media/sound/soundbanks.html">
- * http://java.sun.com/products/java-media/sound/soundbanks.html</a>) and refer
- * to the manual how to install it.
+ * Note: Midi sound use soundbank that not delivered in JRE, only JDK can play midi sound properly. <br>
+ * In order to play midi sound properly in JRE you must explicitly install soundbank. <br>
+ * Download soundbank from java sun website (<a href="http://java.sun.com/products/java-media/sound/soundbanks.html">
+ * http://java.sun.com/products/java-media/sound/soundbanks.html</a>) and refer to the manual how to install it.
  */
-public class MidiRenderer extends BaseAudioRenderer implements
-        MetaEventListener {
+public class MidiRenderer extends BaseAudioRenderer implements MetaEventListener {
 	
 	/** ************************* MIDI CONSTANTS ******************************** */
 	
@@ -91,10 +85,8 @@ public class MidiRenderer extends BaseAudioRenderer implements
 						sequencer.close();
 						
 						MidiRenderer.available = true;
-					}
-					catch (Throwable e) {
-						System.err
-						        .println("WARNING: Midi audio playback is not available!");
+					} catch (Throwable e) {
+						System.err.println("WARNING: Midi audio playback is not available!");
 						MidiRenderer.available = false;
 					}
 					
@@ -109,12 +101,10 @@ public class MidiRenderer extends BaseAudioRenderer implements
 	public boolean isAvailable() {
 		if (MidiRenderer.rendererStatus != MidiRenderer.INITIALIZED) {
 			int i = 0;
-			while (MidiRenderer.rendererStatus != MidiRenderer.INITIALIZED
-			        && i++ < 50) {
+			while (MidiRenderer.rendererStatus != MidiRenderer.INITIALIZED && i++ < 50) {
 				try {
 					Thread.sleep(50L);
-				}
-				catch (InterruptedException e) {
+				} catch (InterruptedException e) {
 				}
 			}
 			if (MidiRenderer.rendererStatus != MidiRenderer.INITIALIZED) {
@@ -130,7 +120,7 @@ public class MidiRenderer extends BaseAudioRenderer implements
 	/** ********************** AUDIO PLAYBACK FUNCTION ************************** */
 	/** ************************************************************************* */
 	
-	protected void playSound(URL audiofile) {
+	protected void playSound() {
 		try {
 			if (this.sequencer == null) {
 				this.sequencer = MidiSystem.getSequencer();
@@ -139,23 +129,22 @@ public class MidiRenderer extends BaseAudioRenderer implements
 				}
 			}
 			
-			Sequence seq = MidiSystem.getSequence(this.getAudioFile());
+			Sequence seq = MidiSystem.getSequence(getAudioFile());
 			this.sequencer.setSequence(seq);
 			this.sequencer.start();
 			this.sequencer.addMetaEventListener(MidiRenderer.this);
 			
 			// the volume of newly loaded audio is always 1.0f
-			if (this.volume != 1.0f) {
-				this.setSoundVolume(this.volume);
+			if (this.getVolume() != 1.0f) {
+				this.setSoundVolume(this.getVolume());
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			this.status = BaseAudioRenderer.ERROR;
 		}
 	}
 	
-	protected void replaySound(URL audiofile) {
+	protected void resumeSound() {
 		this.sequencer.start();
 		this.sequencer.addMetaEventListener(this);
 	}
@@ -192,8 +181,7 @@ public class MidiRenderer extends BaseAudioRenderer implements
 		
 		MidiChannel[] channels = ((Synthesizer) this.sequencer).getChannels();
 		for (int i = 0; i < channels.length; i++) {
-			channels[i].controlChange(MidiRenderer.GAIN_CONTROLLER,
-			        (int) (volume * 127));
+			channels[i].controlChange(MidiRenderer.GAIN_CONTROLLER, (int) (volume * 127));
 		}
 	}
 	

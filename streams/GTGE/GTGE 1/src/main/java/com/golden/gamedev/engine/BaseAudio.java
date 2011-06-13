@@ -145,7 +145,7 @@ public class BaseAudio implements Runnable {
 			for (int i = 0; i < this.renderer.length; i++) {
 				if (this.renderer[i].isLoop()
 				        && this.renderer[i].getStatus() == BaseAudioRenderer.END_OF_SOUND) {
-					this.renderer[i].play();
+					this.renderer[i].resumePlayback();
 				}
 			}
 		}
@@ -196,7 +196,7 @@ public class BaseAudio implements Runnable {
 				if (policy == BaseAudio.MULTIPLE && !this.exclusive) {
 					if (this.renderer[i].getStatus() != BaseAudioRenderer.PLAYING) {
 						this.renderer[i].setVolume(this.volume);
-						this.renderer[i].play();
+						this.renderer[i].resumePlayback();
 						return i;
 					}
 					
@@ -211,7 +211,7 @@ public class BaseAudio implements Runnable {
 					}
 					
 					this.renderer[i].setVolume(this.volume);
-					this.renderer[i].play();
+					this.renderer[i].resumePlayback();
 					
 					return i;
 					
@@ -226,7 +226,7 @@ public class BaseAudio implements Runnable {
 					
 					if (this.renderer[i].getStatus() != BaseAudioRenderer.PLAYING) {
 						this.renderer[i].setVolume(this.volume);
-						this.renderer[i].play();
+						this.renderer[i].resumePlayback();
 					}
 					
 					return i;

@@ -119,6 +119,14 @@
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+		</dependency>
 	</dependencies>
 
 	<reporting>
@@ -210,6 +218,17 @@
 				<artifactId>commons-lang</artifactId>
 				<version>${version.commons-lang}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${version.slf4j}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-simple</artifactId>
+				<version>${version.slf4j}</version>
+				<optional>true</optional>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -222,6 +241,7 @@
 		<version.javancss>2.0</version.javancss>
 		<version.junit>4.8.2</version.junit>
 		<version.jxr>2.2</version.jxr>
+		<version.slf4j>1.6.1</version.slf4j>
 		<version.taglist>2.4</version.taglist>
 	</properties>
 </project>

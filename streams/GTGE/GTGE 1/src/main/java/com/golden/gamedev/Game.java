@@ -37,8 +37,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
 
-import org.apache.commons.lang.math.RandomUtils;
-
 import com.golden.gamedev.engine.BaseAudio;
 import com.golden.gamedev.engine.BaseGraphics;
 import com.golden.gamedev.engine.BaseIO;

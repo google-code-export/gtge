@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
@@ -249,7 +250,8 @@ public final class PlayField {
 	public SpriteGroup addGroup(final SpriteGroup group) {
 		// extra group always at behind!
 		final SpriteGroup extra = groups[groups.length - 1];
-		groups = Utility.cut(groups, groups.length - 1);
+		SpriteGroup[] array = (SpriteGroup[]) ArrayUtils.remove(groups, (groups.length - 1));
+		groups = array;
 		
 		groups = Utility.expand(groups, 2, true);
 		group.setBackground(background);
@@ -272,7 +274,8 @@ public final class PlayField {
 		// it can't be removed!
 		for (int i = 0; i < groups.length - 1; i++) {
 			if (groups[i] == group) {
-				groups = Utility.cut(groups, i);
+				SpriteGroup[] array = (SpriteGroup[]) ArrayUtils.remove(groups, i);
+				groups = array;
 				
 				// sprite group has been removed
 				// therefore, any collision group registered

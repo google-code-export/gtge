@@ -19,6 +19,7 @@ package com.golden.gamedev.util;
 // JFC
 import java.lang.reflect.Array;
 
+import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.math.RandomUtils;
 
 /**
@@ -27,75 +28,44 @@ import org.apache.commons.lang.math.RandomUtils;
  */
 public class Utility {
 	
+	/**
+	 * This constructor would creates a new {@link Utility} instance, but as it's a utility class, it throws a new
+	 * {@link UnsupportedOperationException} to prevent this.
+	 * 
+	 * @throws UnsupportedOperationException
+	 *             Throws an {@link UnsupportedOperationException} to prevent instantiation of the {@link Utility}
+	 *             class.
+	 */
 	private Utility() {
-		throw new UnsupportedOperationException("Cannot instantiate the Utility class!");
+		throw new UnsupportedOperationException("The Utility class may not be instantiated!");
 	}
 	
+	// TODO: When arrays are thrown out of GTGE in preference to Lists, delete this method.
 	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ************************ ARRAY ENLARGEMENT ******************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
-	/**
-	 * Expands an array of object by specified size, <code>src</code> can not be <code>null</code>.
-	 * <p>
+	 * Generates and returns an array of objects with an expanded size, with the elements of the given array copied to
+	 * it. The original array is not changed as a result of this operation.
 	 * 
-	 * The original array is not changed, this method creates and returns a new expanded array.
-	 * 
+	 * @param <T>
+	 *            The component type of the array to be expanded.
 	 * @param src
-	 *            the array to be expanded (non-primitive)
+	 *            The non-null, non-primitive array to be expanded.
 	 * @param increase
-	 *            array size increment
+	 *            The amount of size to expand this array by, which must be greater than zero.
 	 * @param bottom
-	 *            true, the expanded array is at the bottom
+	 *            If this is set to true, the expanded array space is at the bottom (higher indices) of the array,
+	 *            otherwise, the expanded space is at the top (lower indices) of the array.
 	 * @return The expanded array.
+	 * @throws NullPointerException
+	 *             Throws a {@link NullPointerException} if the given array is null.
+	 * @throws IllegalArgumentException
+	 *             Throws an {@link IllegalArgumentException} if the given increase is less than or equal to zero.
 	 */
 	public static <T> T[] expand(T[] src, int increase, boolean bottom) {
-		int size = Array.getLength(src);
+		Validate.isTrue(increase >= 1, "The increase must be greater than zero!");
+		int size = src.length;
 		@SuppressWarnings("unchecked")
 		T[] dest = (T[]) Array.newInstance(src.getClass().getComponentType(), size + increase);
 		System.arraycopy(src, 0, dest, (bottom) ? 0 : increase, size);
-		
-		return dest;
-	}
-	
-	/**
-	 * Cuts an array of object from specified position.
-	 * <p>
-	 * 
-	 * The original array is not changed, this method creates and returns a new shrinked array.
-	 * 
-	 * @param src
-	 *            the array to be cut (non-primitive)
-	 * @param position
-	 *            index position to be cut
-	 * @return The shrinked array.
-	 */
-	public static <T> T[] cut(T[] src, int position) {
-		int size = Array.getLength(src);
-		if (size == 1) {
-			// the array size is 1
-			// return a empty array new Class[0];
-			@SuppressWarnings("unchecked")
-			T[] result = (T[]) Array.newInstance(src.getClass().getComponentType(), 0);
-			return result;
-		}
-		
-		int numMoved = size - position - 1;
-		if (numMoved > 0) {
-			System.arraycopy(src, position + 1, src, position, numMoved);
-		}
-		
-		size--;
-		@SuppressWarnings("unchecked")
-		T[] dest = (T[]) Array.newInstance(src.getClass().getComponentType(), size);
-		System.arraycopy(src, 0, dest, 0, size);
-		
 		return dest;
 	}
 	
@@ -103,27 +73,18 @@ public class Utility {
 	 * Shuffles elements in an array.
 	 * 
 	 * @param src
-	 *            the array to be mixed, could be an array of primitive or an array of Object
+	 *            The array to be shuffled, which may be either a primitive or non-primitive array.
+	 * @throws IllegalArgumentException
+	 *             Throws an {@link IllegalArgumentException} if the given array is null or is not an array.
 	 */
 	public static void shuffle(Object src) {
-		// size of the array
 		int size = Array.getLength(src);
 		
-		// temporary for swapping value
-		Object tempVal;
-		// position to be swapped
-		int tempPos;
-		
-		for (int i = 0; i < size; i++) {
-			// get position in random
-			tempPos = i + RandomUtils.nextInt(size - 1 - i + 1);
-			
-			// store the value
-			tempVal = Array.get(src, tempPos);
-			
-			// swap the value in random position with current position
-			Array.set(src, tempPos, Array.get(src, i));
-			Array.set(src, i, tempVal);
+		for (int valueIndex = 0; valueIndex < size - 1; valueIndex++) {
+			int swapIndex = valueIndex + RandomUtils.nextInt(size - valueIndex);
+			Object swappedValue = Array.get(src, swapIndex);
+			Array.set(src, swapIndex, Array.get(src, valueIndex));
+			Array.set(src, valueIndex, swappedValue);
 		}
 	}
 }

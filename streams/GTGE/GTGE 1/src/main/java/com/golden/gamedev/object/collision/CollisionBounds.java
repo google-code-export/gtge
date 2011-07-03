@@ -18,16 +18,22 @@ package com.golden.gamedev.object.collision;
 
 // JFC
 import java.awt.Rectangle;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.commons.lang.Validate;
 
 import com.golden.gamedev.object.Background;
-import com.golden.gamedev.object.CollisionManager;
 import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
+import com.golden.gamedev.object.collision.CollisionManager.CollisionListener;
+import static com.golden.gamedev.object.collision.CollisionManager.CollisionSide.*;
 
+// REVIEW-HIGH: - CollisionBounds' boundary is EXCLUSIVE - only sprites OUTSIDE of this boundary are considered to have a collision!
 /**
  * Checks collision for specified boundary.
  */
-public abstract class CollisionBounds extends CollisionManager {
+public abstract class CollisionBounds implements CollisionManager {
 	
 	/** ********************* COLLISION SIDE CONSTANTS ************************** */
 	
@@ -51,21 +57,19 @@ public abstract class CollisionBounds extends CollisionManager {
 	 */
 	public static final int BOTTOM_COLLISION = 8;
 	
-	/** ************************ COLLISION PROPERTIES *************************** */
-	
-	private static final SpriteGroup DUMMY = new SpriteGroup("Dummy");
-	
 	private final Rectangle boundary = new Rectangle();
 	
-	private Sprite sprite1;
 	private int collisionSide;
-	private int collisionX1, collisionY1;
-	
 	// sprite bounding box
 	/**
 	 * Default sprite bounding box used in {@link #getCollisionShape1(Sprite)}.
 	 */
 	protected final CollisionRect rect1 = new CollisionRect();
+	
+	/**
+	 * The non-null {@link List} of {@link CollisionListener} instances to notify when a collision occurred.
+	 */
+	private final List<CollisionListener> listeners;
 	
 	/** ************************************************************************* */
 	/** ***************************** CONSTRUCTOR ******************************* */
@@ -74,136 +78,93 @@ public abstract class CollisionBounds extends CollisionManager {
 	/**
 	 * Creates new <code>CollisionBounds</code> with specified boundary.
 	 */
-	public CollisionBounds(int x, int y, int width, int height) {
-		this.boundary.setBounds(x, y, width, height);
+	public CollisionBounds(final List<? extends CollisionListener> listeners, final int x, final int y,
+			final int width, final int height) {
+		super();
+		Validate.notEmpty(
+				listeners,
+				"The CollisionListener list may not be empty - listeners must be registered or else creating a CollisionManager instance is pointless!");
+		this.listeners = new LinkedList<CollisionListener>(listeners);
+		boundary.setBounds(x, y, width, height);
 	}
 	
 	/**
-	 * Creates new <code>CollisionBounds</code> with specified background as
-	 * the boundary.
+	 * Creates new <code>CollisionBounds</code> with specified background as the boundary.
 	 */
-	public CollisionBounds(Background backgr) {
-		this.boundary.setBounds(0, 0, backgr.getWidth(), backgr.getHeight());
+	public CollisionBounds(final List<? extends CollisionListener> listeners, final Background backgr) {
+		super();
+		Validate.notEmpty(
+				listeners,
+				"The CollisionListener list may not be empty - listeners must be registered or else creating a CollisionManager instance is pointless!");
+		this.listeners = new LinkedList<CollisionListener>(listeners);
+		boundary.setBounds(0, 0, backgr.getWidth(), backgr.getHeight());
 	}
 	
-	public void setCollisionGroup(SpriteGroup group1, SpriteGroup group2) {
-		super.setCollisionGroup(group1, CollisionBounds.DUMMY);
-	}
-	
-	/** ************************************************************************* */
-	/** ****************** MAIN-METHOD: CHECKING COLLISION ********************** */
-	/** ************************************************************************* */
-	
-	public void checkCollision() {
-		SpriteGroup group1 = this.getGroup1();
-		if (!group1.isActive()) {
+	@Override
+	public void checkCollision(final SpriteGroup first, final SpriteGroup second) {
+		if (!first.isActive()) {
 			// the group is not active, no need to check collision
 			return;
 		}
 		
-		Sprite[] member1 = group1.getSprites();
-		int size1 = group1.getSize();
-		
-		CollisionShape shape1;
-		
-		// sprite 1 collision rectangle -> rect1
-		for (int i = 0; i < size1; i++) {
-			this.sprite1 = member1[i];
+		for (Sprite sprite1 : first.getSprites()) {
+			if (!sprite1.isActive()) {
+				continue;
+			}
+			CollisionShape shape1 = sprite1.getDefaultCollisionShape();
 			
-			if (!this.sprite1.isActive()
-			        || (shape1 = this.getCollisionShape1(this.sprite1)) == null) {
-				// sprite do not want collision check
+			if (shape1 == null) {
+				// Sprite does not wish to be considered in a collision - null collision shape retrieved.
 				continue;
 			}
 			
-			this.collisionSide = 0;
-			this.collisionX1 = (int) this.sprite1.getX();
-			this.collisionY1 = (int) this.sprite1.getY();
+			final List<CollisionSide> collisionSides = new LinkedList<CollisionSide>();
 			
-			if (shape1.getX() < this.boundary.x) {
-				this.collisionX1 = this.boundary.x;
-				this.collisionSide |= CollisionBounds.LEFT_COLLISION;
+			if (shape1.getX() < boundary.x) {
+				collisionSides.add(LEFT);
 			}
-			if (shape1.getY() < this.boundary.y) {
-				this.collisionY1 = this.boundary.y;
-				this.collisionSide |= CollisionBounds.TOP_COLLISION;
+			if (shape1.getY() < boundary.y) {
+				collisionSides.add(TOP);
 			}
-			if (shape1.getX() + shape1.getWidth() > this.boundary.x
-			        + this.boundary.width) {
-				this.collisionX1 = this.boundary.x + this.boundary.width
-				        - shape1.getWidth();
-				this.collisionSide |= CollisionBounds.RIGHT_COLLISION;
+			if (shape1.getX() + shape1.getWidth() > boundary.x + boundary.width) {
+				collisionSides.add(RIGHT);
 			}
-			if (shape1.getY() + shape1.getHeight() > this.boundary.y
-			        + this.boundary.height) {
-				this.collisionY1 = this.boundary.y + this.boundary.height
-				        - shape1.getHeight();
-				this.collisionSide |= CollisionBounds.BOTTOM_COLLISION;
+			if (shape1.getY() + shape1.getHeight() > boundary.y + boundary.height) {
+				collisionSides.add(BOTTOM);
 			}
 			
-			// fire collision event
-			if (this.collisionSide != 0) {
-				this.collided(this.sprite1);
+			if (!collisionSides.isEmpty()) {
+				CollisionDetails details = new CollisionDetails(collisionSides);
+				for (CollisionListener listener : listeners) {
+					listener.collisionOccurred(first, null, details);
+				}
 			}
 		}
-	}
-	
-	/**
-	 * Reverts the sprite position before the collision occured.
-	 */
-	public void revertPosition1() {
-		this.sprite1.forceX(this.collisionX1);
-		this.sprite1.forceY(this.collisionY1);
-	}
-	
-	/**
-	 * Sets specified <code>Sprite</code> collision rectangle (sprite bounding
-	 * box) into <code>rect</code>.
-	 * <p>
-	 * In this implementation, the sprite bounding box is as large as
-	 * <code>Sprite</code> dimension :
-	 * 
-	 * <pre>
-	 * public boolean getCollisionRect1(Sprite s1, CollisionRect rect) {
-	 * 	rect.setBounds(s1.getX(), s1.getY(), s1.getWidth(), s1.getHeight());
-	 * 	return rect;
-	 * }
-	 * </pre>
-	 * 
-	 * @return false, to skip collision check.
-	 * @see CollisionRect#intersects(CollisionShape)
-	 */
-	public CollisionShape getCollisionShape1(Sprite s1) {
-		this.rect1.setBounds(s1.getX(), s1.getY(), s1.getWidth(), s1
-		        .getHeight());
-		
-		return this.rect1;
 	}
 	
 	/**
 	 * Returns true, the sprite is collide at it <code>side</code> side.
 	 */
-	public boolean isCollisionSide(int side) {
-		return (this.collisionSide & side) != 0;
+	public boolean isCollisionSide(final int side) {
+		return (collisionSide & side) != 0;
 	}
 	
 	/**
 	 * Sets the collision boundary, the sprite is bounded to this boundary.
 	 */
-	public void setBoundary(int x, int y, int width, int height) {
-		this.boundary.setBounds(x, y, width, height);
+	public void setBoundary(final int x, final int y, final int width, final int height) {
+		boundary.setBounds(x, y, width, height);
 	}
 	
 	/**
 	 * Returns the boundary of the sprites.
 	 */
 	public Rectangle getBoundary() {
-		return this.boundary;
+		return boundary;
 	}
 	
 	/**
-	 * Sprite <code>sprite</code> hit collision boundary, perform collided
-	 * implementation.
+	 * Sprite <code>sprite</code> hit collision boundary, perform collided implementation.
 	 */
 	public abstract void collided(Sprite sprite);
 	

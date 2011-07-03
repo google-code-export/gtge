@@ -20,6 +20,7 @@ package com.golden.gamedev.object.collision;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -28,28 +29,24 @@ import com.golden.gamedev.object.SpriteGroup;
 import com.golden.gamedev.util.Utility;
 
 /**
- * Accurates collision check that able to check collision between one sprite
- * with many sprites (one to many collision check).
+ * Accurates collision check that able to check collision between one sprite with many sprites (one to many collision
+ * check).
  * <p>
  * 
- * This collision check is the most advance among all other collision check, it
- * checking is the collision really occured or not.
+ * This collision check is the most advance among all other collision check, it checking is the collision really occured
+ * or not.
  * <p>
  * 
  * For example: <br>
- * A sprite is checked its collision with three other sprites, if the checking
- * only based on the sprite position, the sprite is collided with the three
- * other sprites. But if the sprite is collided with the first sprite and stop,
- * the sprite actually only collide with the first, because the second and the
- * third is right behind the first sprite.
+ * A sprite is checked its collision with three other sprites, if the checking only based on the sprite position, the
+ * sprite is collided with the three other sprites. But if the sprite is collided with the first sprite and stop, the
+ * sprite actually only collide with the first, because the second and the third is right behind the first sprite.
  * <p>
  * 
- * This collision group is suitable for collision that using physics heavily,
- * like in platformer game, where a sprite could collide with many blocks at one
- * time.
+ * This collision group is suitable for collision that using physics heavily, like in platformer game, where a sprite
+ * could collide with many blocks at one time.
  */
-public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
-        implements Comparator<Sprite> {
+public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup implements Comparator<Sprite> {
 	
 	private final Map<Sprite, Sprite[]> storage = new HashMap<Sprite, Sprite[]>();
 	
@@ -68,7 +65,8 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 	/**
 	 * Constructs new <code>AdvanceCollisionGroup</code>.
 	 */
-	public AdvanceCollisionGroup() {
+	public AdvanceCollisionGroup(final List<? extends CollisionListener> listeners) {
+		super(listeners);
 	}
 	
 	/**
@@ -81,21 +79,21 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 	 * *************************************************************************
 	 */
 	
-	public void checkCollision() {
+	@Override
+	public void checkCollision(final SpriteGroup first, final SpriteGroup second) {
 		// clear previous collision event
 		this.storage.clear();
 		
 		// the usual collision check
-		SpriteGroup group1 = this.getGroup1(), group2 = this.getGroup2();
-		if (!group1.isActive() || !group2.isActive()) {
+		if (!first.isActive() || !second.isActive()) {
 			// one of the group is not active
 			return;
 		}
 		
-		Sprite[] member1 = group1.getSprites(), // members group one
-		member2 = group2.getSprites();
-		int size1 = group1.getSize(), // total non-null members
-		size2 = group2.getSize();
+		Sprite[] member1 = first.getSprites(), // members group one
+		member2 = second.getSprites();
+		int size1 = first.getSize(), // total non-null members
+		size2 = second.getSize();
 		
 		Sprite sprite1, sprite2; // sprite reference
 		CollisionShape shape1, shape2; // sprite collision rect
@@ -104,8 +102,7 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 		for (int i = 0; i < size1; i++) {
 			sprite1 = member1[i];
 			
-			if (!sprite1.isActive()
-			        || (shape1 = this.getCollisionShape1(sprite1)) == null) {
+			if (!sprite1.isActive() || (shape1 = sprite1.getDefaultCollisionShape()) == null) {
 				// sprite do not want collision check
 				continue;
 			}
@@ -113,10 +110,8 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 			for (int j = 0; j < size2; j++) {
 				sprite2 = member2[j];
 				
-				if (!sprite2.isActive()
-				        || // !sprite1.isActive() ||
-				        sprite1 == sprite2
-				        || (shape2 = this.getCollisionShape2(sprite2)) == null) {
+				if (!sprite2.isActive() || // !sprite1.isActive() ||
+						sprite1 == sprite2 || (shape2 = sprite2.getDefaultCollisionShape()) == null) {
 					// sprite do not want collision check
 					continue;
 				}
@@ -128,8 +123,7 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 					// store sprites collided with sprite1
 					Sprite[] other = (Sprite[]) this.storage.get(sprite1);
 					
-					other = (Sprite[]) Utility.expand(other, 1, true,
-					        Sprite.class);
+					other = (Sprite[]) Utility.expand(other, 1, true, Sprite.class);
 					other[other.length - 1] = sprite2;
 					
 					this.storage.put(sprite1, other);
@@ -148,8 +142,7 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 				
 				// need to reset revert positions- this is left at last
 				// test,
-				this.isCollide(s1, s2[0], this.getCollisionShape1(s1),
-				        this.getCollisionShape2(s2[0]));
+				this.isCollide(s1, s2[0], s1.getDefaultCollisionShape(), s2[0].getDefaultCollisionShape());
 				
 				// fire collision event
 				this.collided(s1, s2[0]);
@@ -177,8 +170,7 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 					// System.out.print(s2[i]+"
 					// "+s2[i].getX()+","+s2[i].getY()+"--");
 					
-					if (this.isCollide(s1, s2[i], this.getCollisionShape1(s1),
-					        this.getCollisionShape2(s2[i]))) {
+					if (this.isCollide(s1, s2[i], s1.getDefaultCollisionShape(), s2[i].getDefaultCollisionShape())) {
 						// fire collision event
 						// System.out.print("Yes");
 						this.collided(s1, s2[i]);
@@ -191,14 +183,13 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 	}
 	
 	/**
-	 * Determines all sprites that collided with Sprite <code>source</code>
-	 * should be sorted or not before checking the actual collision.
+	 * Determines all sprites that collided with Sprite <code>source</code> should be sorted or not before checking the
+	 * actual collision.
 	 * <p>
 	 * 
 	 * By default this method return true in order to sort the collided sprites.
 	 * 
-	 * @return true, collided sprites will be sorted before checking the actual
-	 *         collision.
+	 * @return true, collided sprites will be sorted before checking the actual collision.
 	 * @see #compare(Object, Object)
 	 */
 	protected boolean sort(Sprite source) {
@@ -206,15 +197,13 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 	}
 	
 	/**
-	 * Sorts two sprites (<code>o1</code> and <code>o2</code>) that collided
-	 * with {@linkplain #getSourceSprite() the object sprite} to determine which
-	 * one should be checked first.
+	 * Sorts two sprites (<code>o1</code> and <code>o2</code>) that collided with {@linkplain #getSourceSprite() the
+	 * object sprite} to determine which one should be checked first.
 	 * <p>
 	 * 
-	 * By default when the {@linkplain #getSourceSprite() object sprite} is
-	 * falling ({@linkplain Sprite#getVerticalSpeed() vertical speed} >= 0), all
-	 * collided sprites are sorted by greater y at bottom, otherwise it sort by
-	 * greater y at top.
+	 * By default when the {@linkplain #getSourceSprite() object sprite} is falling (
+	 * {@linkplain Sprite#getVerticalSpeed() vertical speed} >= 0), all collided sprites are sorted by greater y at
+	 * bottom, otherwise it sort by greater y at top.
 	 */
 	public int compare(Sprite s1, Sprite s2) {
 		if (this.source.getHorizontalSpeed() != 0 && s1.getX() != s2.getX()) {
@@ -222,8 +211,8 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 			return (this.source.getHorizontalSpeed() >= 0) ? // if source
 			// heading right
 			(int) Math.floor(s1.getX() - s2.getX())
-			        : // most lefterly
-			        (int) Math.floor(s2.getX() - s1.getX());// most righterly
+					: // most lefterly
+					(int) Math.floor(s2.getX() - s1.getX());// most righterly
 		}
 		
 		// // sort by sprite y position
@@ -232,8 +221,8 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 		// (int) Math.ceil(s2.getY() - s1.getY());
 		
 		// sort by sprite y position
-		return (this.source.getVerticalSpeed() >= 0) ? (int) Math.floor(s1
-		        .getY() - s2.getY()) : (int) Math.floor(s2.getY() - s1.getY());
+		return (this.source.getVerticalSpeed() >= 0) ? (int) Math.floor(s1.getY() - s2.getY()) : (int) Math.floor(s2
+				.getY() - s1.getY());
 		
 	}
 	
@@ -241,8 +230,7 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup
 	 * Returns the source sprite to be checked at the moment.
 	 * <p>
 	 * 
-	 * Source sprite is the sprite from group 1 that will be checked its actual
-	 * collision with sprite from group 2.
+	 * Source sprite is the sprite from group 1 that will be checked its actual collision with sprite from group 2.
 	 */
 	protected Sprite getSourceSprite() {
 		return this.source;

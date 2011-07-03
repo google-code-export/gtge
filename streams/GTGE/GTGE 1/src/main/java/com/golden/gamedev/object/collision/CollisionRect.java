@@ -41,6 +41,9 @@ public class CollisionRect implements CollisionShape {
 	 * The height of this collision rect.
 	 */
 	public int height;
+
+	// ////////// optimization ///////////
+	public final static CollisionRect iRect = new CollisionRect();
 	
 	/**
 	 * Creates new <code>CollisionRect</code>.
@@ -170,6 +173,35 @@ public class CollisionRect implements CollisionShape {
 	public String toString() {
 		return super.toString() + " " + "[x=" + this.x + ", y=" + this.y
 		        + ", width=" + this.width + ", height=" + this.height + "]";
+	}
+
+	/**
+	 * Returns the intersection rect of two rectangle.
+	 */
+	public static CollisionRect getIntersectionRect(double x1, double y1, int width1, int height1, double x2, double y2, int width2, int height2) {
+		double x12 = x1 + width1, y12 = y1 + height1, x22 = x2 + width2, y22 = y2
+		        + height2;
+		
+		if (x1 < x2) {
+			x1 = x2;
+		}
+		if (y1 < y2) {
+			y1 = y2;
+		}
+		if (x12 > x22) {
+			x12 = x22;
+		}
+		if (y12 > y22) {
+			y12 = y22;
+		}
+		x12 -= x1;
+		y12 -= y1;
+		// x12,y12 will never overflow (they will never be
+		// larger than the smallest of the two source w,h)
+		// they might underflow, though...
+		CollisionRect.iRect.setBounds(x1, y1, (int) x12, (int) y12);
+		
+		return CollisionRect.iRect;
 	}
 	
 }

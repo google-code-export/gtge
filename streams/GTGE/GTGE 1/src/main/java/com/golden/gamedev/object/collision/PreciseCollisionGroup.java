@@ -17,10 +17,11 @@
 package com.golden.gamedev.object.collision;
 
 // GTGE
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.golden.gamedev.object.CollisionManager;
 import com.golden.gamedev.object.PlayField;
 import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
@@ -79,10 +80,8 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 	/***************************************************************************
 	 * Default constructor.
 	 **************************************************************************/
-	public PreciseCollisionGroup() {
-		// sets log to false;
-		// set true for debugging
-		// log=true;
+	public PreciseCollisionGroup(final List<? extends CollisionListener> listeners) {
+		super(listeners);
 	}
 	
 	/**
@@ -105,7 +104,7 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 	public boolean isCollide(Sprite s1, Sprite s2, CollisionShape shape1, CollisionShape shape2) {
 		
 		// if (shape1.intersects(shape2)) {
-		if ((this.pixelPerfectCollision && CollisionManager.isPixelCollide(s1.getX(), s1.getY(), s1.getImage(),
+		if ((this.pixelPerfectCollision && BasicCollisionGroup.isPixelCollide(s1.getX(), s1.getY(), s1.getImage(),
 				s2.getX(), s2.getY(), s2.getImage()))
 				|| (!this.pixelPerfectCollision && shape1.intersects(shape2))) {
 			// basic check to see if collision occurred
@@ -397,7 +396,7 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 			boolean includePixelPerfect) {
 		
 		if (includePixelPerfect && this.pixelPerfectCollision) {
-			return CollisionManager.isPixelCollide(x1, y1, s1.getImage(), x2, y2, s2.getImage());
+			return BasicCollisionGroup.isPixelCollide(x1, y1, s1.getImage(), x2, y2, s2.getImage());
 		} else {// check using normal method
 			this.shape3 = this.getCollisionShape1(s1);
 			this.shape3.setLocation(x1, y1);
@@ -425,7 +424,7 @@ public abstract class PreciseCollisionGroup extends CollisionGroup {
 		}
 		
 		if (includePixelPerfect && this.pixelPerfectCollision) {
-			return CollisionManager.isPixelCollide(x1 + dx, y1 + dy, s1.getImage(), x2, y2, s2.getImage());
+			return BasicCollisionGroup.isPixelCollide(x1 + dx, y1 + dy, s1.getImage(), x2, y2, s2.getImage());
 		} else {// check using default collision shapes
 			this.shape3 = this.getCollisionShape1(s1);
 			this.shape3.setLocation(x1 + dx, y1 + dy);

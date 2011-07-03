@@ -192,7 +192,7 @@ public class GameFontManager {
 	// construction only.
 	private BufferedImage[] cutLetter(BufferedImage bitmap) {
 		int delimiter = bitmap.getRGB(0, 0); // pixel <0,0> : delimiter
-		int[] width = new int[100]; // assumption : 100 letter
+		Integer[] width = new Integer[100]; // assumption : 100 letter
 		int ctr = 0;
 		int last = 0; // last width point
 		
@@ -203,7 +203,7 @@ public class GameFontManager {
 				last = i;
 				
 				if (ctr >= width.length) {
-					width = (int[]) Utility.expand(width, 50);
+					width = Utility.expand(width, 50, true);
 				}
 			}
 		}

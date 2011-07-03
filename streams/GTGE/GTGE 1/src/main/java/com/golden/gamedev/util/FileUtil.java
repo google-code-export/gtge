@@ -30,8 +30,8 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Utility class provides functions for processing <code>java.io.File</code>
- * object, such as renaming file extension, reading and writing text file, etc.
+ * Utility class provides functions for processing <code>java.io.File</code> object, such as renaming file extension,
+ * reading and writing text file, etc.
  */
 public class FileUtil {
 	
@@ -51,8 +51,10 @@ public class FileUtil {
 	/**
 	 * Writes an array of String to specified text file.
 	 * 
-	 * @param text an array of string to write to the file
-	 * @param file a text file to be written the text to
+	 * @param text
+	 *            an array of string to write to the file
+	 * @param file
+	 *            a text file to be written the text to
 	 * @return true, if the text successfuly write to the file.
 	 */
 	public static boolean fileWrite(String[] text, File file) {
@@ -67,21 +69,18 @@ public class FileUtil {
 			
 			writeOut.close();
 			return true;
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
 	
 	/**
-	 * Read an array of String from specified text file. Returns a
-	 * {@linkplain Utility#compactStrings(String[]) compact string}. Each
-	 * returned string represent each line in the file.
+	 * Read an array of String from specified text file. Each returned string represent each line in the file.
 	 * 
-	 * @param file file to be read
-	 * @return An array of string read from the file, or null if the file cannot
-	 *         be read.
+	 * @param file
+	 *            file to be read
+	 * @return An array of string read from the file, or null if the file cannot be read.
 	 */
 	public static String[] fileRead(File file) {
 		try {
@@ -98,23 +97,19 @@ public class FileUtil {
 			
 			readIn.close();
 			
-			return Utility
-			        .compactStrings(list.toArray(new String[list.size()]));
-		}
-		catch (IOException e) {
+			return list.toArray(new String[list.size()]);
+		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 	
 	/**
-	 * Read an array of String from specified stream. Returns a
-	 * {@linkplain Utility#compactStrings(String[]) compact string}. Each
-	 * returned string represent each line in the file.
+	 * Read an array of String from specified stream. Each returned string represent each line in the file.
 	 * 
-	 * @param stream input stream to be read
-	 * @return An array of string read from the stream, or null if the stream
-	 *         cannot be read.
+	 * @param stream
+	 *            input stream to be read
+	 * @return An array of string read from the stream, or null if the stream cannot be read.
 	 */
 	public static String[] fileRead(InputStream stream) {
 		try {
@@ -130,29 +125,24 @@ public class FileUtil {
 			}
 			
 			readIn.close();
-			return Utility
-			        .compactStrings(list.toArray(new String[list.size()]));
-		}
-		catch (IOException e) {
+			return list.toArray(new String[list.size()]);
+		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 	
 	/**
-	 * Read an array of String from specified URL. Returns a
-	 * {@linkplain Utility#compactStrings(String[]) compact string}. Each
-	 * returned string represent each line in the file.
+	 * Read an array of String from specified URL. Each returned string represent each line in the file.
 	 * 
-	 * @param url url to be read
-	 * @return An array of string read from the stream, or null if the url
-	 *         cannot be read.
+	 * @param url
+	 *            url to be read
+	 * @return An array of string read from the stream, or null if the url cannot be read.
 	 */
 	public static String[] fileRead(URL url) {
 		try {
 			return FileUtil.fileRead(url.openStream());
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -182,8 +172,10 @@ public class FileUtil {
 	 * File newFile = setExtension(f, &quot;bin&quot;);
 	 * </pre>
 	 * 
-	 * @param f file that it's extension to be renamed
-	 * @param ext the new file extension
+	 * @param f
+	 *            file that it's extension to be renamed
+	 * @param ext
+	 *            the new file extension
 	 * @return The file with new extension.
 	 */
 	public static File setExtension(File f, String ext) {
@@ -193,8 +185,7 @@ public class FileUtil {
 			// file f doesn't have extension
 			return new File(s + "." + ext);
 			
-		}
-		else {
+		} else {
 			return new File(s.substring(0, i) + "." + ext);
 		}
 	}
@@ -203,7 +194,8 @@ public class FileUtil {
 	 * Returns extension of a file. <br>
 	 * A file with name <code>"paul.dat"</code> will return <code>"dat"</code>.
 	 * 
-	 * @param f file to get it's extension
+	 * @param f
+	 *            file to get it's extension
 	 * @return The file extension.
 	 */
 	public static String getExtension(File f) {
@@ -214,7 +206,8 @@ public class FileUtil {
 	 * Returns extension of a string. <br>
 	 * A string with <code>"paul.dat"</code> will return <code>"dat"</code>.
 	 * 
-	 * @param st string to get its extension
+	 * @param st
+	 *            string to get its extension
 	 * @return The file extension.
 	 */
 	public static String getExtension(String st) {
@@ -234,7 +227,8 @@ public class FileUtil {
 	 * Returns name of a file without its extension. <br>
 	 * A file with name <code>"paul.dat"</code> will return <code>"paul"</code>.
 	 * 
-	 * @param f file to get it's name
+	 * @param f
+	 *            file to get it's name
 	 * @return The file name.
 	 */
 	public static String getName(File f) {
@@ -245,7 +239,8 @@ public class FileUtil {
 	 * Returns name of a string without its extension. <br>
 	 * A string <code>"paul.dat"</code> will return <code>"paul"</code>.
 	 * 
-	 * @param st string to get its name
+	 * @param st
+	 *            string to get its name
 	 * @return The file name.
 	 */
 	public static String getName(String st) {
@@ -262,17 +257,16 @@ public class FileUtil {
 	
 	/**
 	 * Returns the path of specified file. <br>
-	 * A file with path <code>"c:\src\res\paul.dat"</code> will return
-	 * <code>"c:\src\res\"</code>.
+	 * A file with path <code>"c:\src\res\paul.dat"</code> will return <code>"c:\src\res\"</code>.
 	 * 
-	 * @param f file to get its path
+	 * @param f
+	 *            file to get its path
 	 * @return The file path.
 	 */
 	public static String getPath(File f) {
 		try {
 			return FileUtil.getPath(f.getCanonicalPath());
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -280,10 +274,10 @@ public class FileUtil {
 	
 	/**
 	 * Returns path of a string. <br>
-	 * A string <code>"c:\src\res\paul.dat"</code> will return
-	 * <code>"c:\src\res\"</code>.
+	 * A string <code>"c:\src\res\paul.dat"</code> will return <code>"c:\src\res\"</code>.
 	 * 
-	 * @param st string to get its path
+	 * @param st
+	 *            string to get its path
 	 * @return The file path.
 	 */
 	public static String getPath(String st) {
@@ -298,17 +292,16 @@ public class FileUtil {
 	
 	/**
 	 * Returns path and name of a file without its extension. <br>
-	 * A file with path <code>"c:\src\res\paul.dat"</code> will return
-	 * <code>"c:\src\res\paul"</code>.
+	 * A file with path <code>"c:\src\res\paul.dat"</code> will return <code>"c:\src\res\paul"</code>.
 	 * 
-	 * @param f file to get its pathname
+	 * @param f
+	 *            file to get its pathname
 	 * @return The file pathname.
 	 */
 	public static String getPathName(File f) {
 		try {
 			return FileUtil.getPathName(f.getCanonicalPath());
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -316,10 +309,10 @@ public class FileUtil {
 	
 	/**
 	 * Returns path and name of a string without its extension. <br>
-	 * A string <code>"c:\src\res\paul.dat"</code> will return
-	 * <code>"c:\src\res\paul"</code>.
+	 * A string <code>"c:\src\res\paul.dat"</code> will return <code>"c:\src\res\paul"</code>.
 	 * 
-	 * @param st string to get its pathname
+	 * @param st
+	 *            string to get its pathname
 	 * @return The file pathname.
 	 */
 	public static String getPathName(String st) {
@@ -327,8 +320,7 @@ public class FileUtil {
 		int index = FileUtil.getIndex(st);
 		if (index > 0) {
 			path = st.substring(0, index + 1);
-		}
-		else {
+		} else {
 			index = 0;
 		}
 		

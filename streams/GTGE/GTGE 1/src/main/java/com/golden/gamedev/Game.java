@@ -37,6 +37,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
 
+import org.apache.commons.lang.math.RandomUtils;
+
 import com.golden.gamedev.engine.BaseAudio;
 import com.golden.gamedev.engine.BaseGraphics;
 import com.golden.gamedev.engine.BaseIO;
@@ -55,7 +57,6 @@ import com.golden.gamedev.object.PlayField;
 import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
 import com.golden.gamedev.util.ImageUtil;
-import com.golden.gamedev.util.Utility;
 
 /**
  * <code>Game</code> class is <b>Golden T Game Engine (GTGE) core class</b> that initializes all GTGE game engines, wrap
@@ -1049,23 +1050,6 @@ public abstract class Game {
 		System.out.println("THANK YOU....");
 		
 		System.exit(-1);
-	}
-	
-	/** ************************************************************************* */
-	/** ***************** BELOW THIS LINE IS ENGINES UTILIZE ******************** */
-	/** ***************** (PASTE INTO GAME OBJECT CLASS) ******************** */
-	/** ************************************************************************* */
-	
-	/** ************************************************************************* */
-	/** *********************** ESSENTIAL GAME UTILITY ************************** */
-	/** ************************************************************************* */
-	// -> com.golden.gamedev.util.Utility
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.util.Utility#getRandom(int, int)
-	 * Utility.getRandom(int, int)}
-	 */
-	public int getRandom(int low, int hi) {
-		return Utility.getRandom(low, hi);
 	}
 	
 	// INTERNATIONALIZATION UTILITY

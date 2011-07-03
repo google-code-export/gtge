@@ -122,8 +122,7 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup implem
 					
 					// store sprites collided with sprite1
 					Sprite[] other = (Sprite[]) this.storage.get(sprite1);
-					
-					other = (Sprite[]) Utility.expand(other, 1, true, Sprite.class);
+					other = other == null ? new Sprite[1] : Utility.expand(other, 1, true);
 					other[other.length - 1] = sprite2;
 					
 					this.storage.put(sprite1, other);

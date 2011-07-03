@@ -249,9 +249,9 @@ public final class PlayField {
 	public SpriteGroup addGroup(final SpriteGroup group) {
 		// extra group always at behind!
 		final SpriteGroup extra = groups[groups.length - 1];
-		groups = (SpriteGroup[]) Utility.cut(groups, groups.length - 1);
+		groups = Utility.cut(groups, groups.length - 1);
 		
-		groups = (SpriteGroup[]) Utility.expand(groups, 2);
+		groups = Utility.expand(groups, 2, true);
 		group.setBackground(background);
 		groups[groups.length - 2] = group;
 		groups[groups.length - 1] = extra; // move extra group to
@@ -272,7 +272,7 @@ public final class PlayField {
 		// it can't be removed!
 		for (int i = 0; i < groups.length - 1; i++) {
 			if (groups[i] == group) {
-				groups = (SpriteGroup[]) Utility.cut(groups, i);
+				groups = Utility.cut(groups, i);
 				
 				// sprite group has been removed
 				// therefore, any collision group registered
@@ -535,7 +535,7 @@ public final class PlayField {
 				
 					if (num >= len) {
 						// expand sprite storage
-						cacheSprite = (Sprite[]) Utility.expand(cacheSprite, 20);
+						cacheSprite = Utility.expand(cacheSprite, 20, true);
 						len = cacheSprite.length;
 					}
 					

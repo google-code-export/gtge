@@ -25,6 +25,8 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+import org.apache.commons.lang.math.RandomUtils;
+
 import com.golden.gamedev.engine.BaseAudio;
 import com.golden.gamedev.engine.BaseGraphics;
 import com.golden.gamedev.engine.BaseIO;
@@ -36,7 +38,6 @@ import com.golden.gamedev.object.GameFont;
 import com.golden.gamedev.object.GameFontManager;
 import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.util.ImageUtil;
-import com.golden.gamedev.util.Utility;
 
 /**
  * Similar like <code>Game</code> class except this class is working under <code>GameEngine</code> frame work.
@@ -253,23 +254,6 @@ public abstract class GameObject {
 	// System.out.println("Finalization " + this + " GameObject");
 	// super.finalize();
 	// }
-	
-	/** ************************************************************************* */
-	/** ***************** BELOW THIS LINE IS ENGINES UTILIZE ******************** */
-	/** ***************** (PASTED FROM GAME CLASS) ******************** */
-	/** ************************************************************************* */
-	
-	/** ************************************************************************* */
-	/** *********************** ESSENTIAL GAME UTILITY ************************** */
-	/** ************************************************************************* */
-	// -> com.golden.gamedev.util.Utility
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.util.Utility#getRandom(int, int)
-	 * Utility.getRandom(int, int)}
-	 */
-	public int getRandom(int low, int hi) {
-		return Utility.getRandom(low, hi);
-	}
 	
 	// INTERNATIONALIZATION UTILITY
 	// public Locale getLocale() { return locale; }

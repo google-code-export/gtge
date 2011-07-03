@@ -21,10 +21,9 @@ import com.golden.gamedev.engine.BaseInput;
 import com.golden.gamedev.object.Timer;
 
 /**
- * <code>KeyTyped</code> class is a class to simulate key typing. Key typed is
- * a key that pressed for some time and the key event is fired following
- * {@link #getRepeatDelay() initial repeat delay} and
- * {@link #getRepeatRate() repeat rate delay}.
+ * <code>KeyTyped</code> class is a class to simulate key typing. Key typed is a key that pressed for some time and the
+ * key event is fired following {@link #getRepeatDelay() initial repeat delay} and {@link #getRepeatRate() repeat rate
+ * delay}.
  * 
  * @see #update(long)
  * @see #getKeyTyped()
@@ -33,22 +32,23 @@ public class KeyTyped {
 	
 	private BaseInput bsInput;
 	
+	// REVIEW-MEDIUM: expose the timers in the constructor so that clients can choose which timer to instantiate.
 	private Timer repeatDelayTimer; // timer for starting repeat key
 	private Timer repeatRateTimer; // timer for repeating repeat key
 	
 	private int key; // store last pressed key
 	private int keyTyped; // currently typed key
 	
-	/** ************************************************************************* */
-	/** ***************************** CONSTRUCTOR ******************************* */
-	/** ************************************************************************* */
-	
 	/**
-	 * Constructs new <code>KeyTyped</code> using following input engine, and
-	 * specified initial repeat delay and repeat rate delay.
-	 * @param bsInput The {@link BaseInput} to use.
-	 * @param repeatDelay The repeat delay.
-	 * @param repeatRate The repeat rate.
+	 * Constructs new <code>KeyTyped</code> using following input engine, and specified initial repeat delay and repeat
+	 * rate delay.
+	 * 
+	 * @param bsInput
+	 *            The {@link BaseInput} to use.
+	 * @param repeatDelay
+	 *            The repeat delay.
+	 * @param repeatRate
+	 *            The repeat rate.
 	 */
 	public KeyTyped(BaseInput bsInput, int repeatDelay, int repeatRate) {
 		this.bsInput = bsInput;
@@ -62,21 +62,20 @@ public class KeyTyped {
 	}
 	
 	/**
-	 * Constructs new <code>KeyTyped</code> with 450 ms repeat delay and 40 ms
-	 * repeat rate.
-	 * @param bsInput The {@link BaseInput} to use.
+	 * Constructs new <code>KeyTyped</code> with 450 ms repeat delay and 40 ms repeat rate.
+	 * 
+	 * @param bsInput
+	 *            The {@link BaseInput} to use.
 	 */
 	public KeyTyped(BaseInput bsInput) {
 		this(bsInput, 450, 40);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* UPDATE KEY TYPED ****************************** */
-	/** ************************************************************************* */
-	
 	/**
 	 * Updates key typing.
-	 * @param elapsedTime The elapsed time since last update.
+	 * 
+	 * @param elapsedTime
+	 *            The elapsed time since last update.
 	 */
 	public void update(long elapsedTime) {
 		this.keyTyped = this.bsInput.getKeyPressed();
@@ -86,16 +85,14 @@ public class KeyTyped {
 			this.key = this.keyTyped;
 			this.repeatDelayTimer.setActive(true);
 			
-		}
-		else {
+		} else {
 			// check whether repeat key has been released or not
 			if (this.bsInput.getKeyReleased() == this.key) {
 				// repeat key has been released
 				this.key = BaseInput.NO_KEY;
 				this.repeatDelayTimer.setActive(false);
 				
-			}
-			else if (this.key != BaseInput.NO_KEY) {
+			} else if (this.key != BaseInput.NO_KEY) {
 				// check for first time repeatness
 				if (this.repeatDelayTimer.isActive()) {
 					// first time delay
@@ -105,8 +102,7 @@ public class KeyTyped {
 						this.keyTyped = this.key;
 					}
 					
-				}
-				else {
+				} else {
 					// repeat key
 					if (this.repeatRateTimer.action(elapsedTime)) {
 						this.keyTyped = this.key;
@@ -116,6 +112,9 @@ public class KeyTyped {
 		}
 	}
 	
+	// REVIEW-LOW: Rename to reset();
+	// REVIEW-MEDIUM: Is there really a need for this, or can it be done simply by instantiating a new KeyTyped
+	// instance?
 	/**
 	 * Refresh and clears key typing input.
 	 */
@@ -128,12 +127,9 @@ public class KeyTyped {
 		this.key = this.keyTyped = BaseInput.NO_KEY;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* GETTING KEY TYPED ***************************** */
-	/** ************************************************************************* */
-	
 	/**
 	 * Returns key typed or {@link BaseInput#NO_KEY} if no key is being typed.
+	 * 
 	 * @return The typed key or {@link BaseInput#NO_KEY}.
 	 * @see java.awt.event.KeyEvent#VK_1
 	 */
@@ -143,7 +139,9 @@ public class KeyTyped {
 	
 	/**
 	 * Returns true if the specified key is being typed.
-	 * @param keyCode The code of the key to check.
+	 * 
+	 * @param keyCode
+	 *            The code of the key to check.
 	 * @return If the given key is pressed.
 	 * @see java.awt.event.KeyEvent#VK_1
 	 */
@@ -151,12 +149,11 @@ public class KeyTyped {
 		return (this.keyTyped == keyCode);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************* REPEAT RATE DELAY ***************************** */
-	/** ************************************************************************* */
-	
+	// REVIEW-MEDIUM: Eliminate these accessors/mutators, allow direct access to the timer instead - throw
+	// IllegalArgumentException if null is set.
 	/**
 	 * Returns the key typed initial delay.
+	 * 
 	 * @return The repeat delay.
 	 * @see #getKeyTyped()
 	 */
@@ -166,7 +163,9 @@ public class KeyTyped {
 	
 	/**
 	 * Sets the key typed initial delay.
-	 * @param delay The repeat delay.
+	 * 
+	 * @param delay
+	 *            The repeat delay.
 	 * @see #getKeyTyped()
 	 */
 	public void setRepeatDelay(long delay) {
@@ -175,6 +174,7 @@ public class KeyTyped {
 	
 	/**
 	 * Returns the key typed repeat rate delay.
+	 * 
 	 * @return The repeat rate.
 	 * @see #getKeyTyped()
 	 */
@@ -184,7 +184,9 @@ public class KeyTyped {
 	
 	/**
 	 * Sets the key typed repeat rate delay.
-	 * @param rate The repat rate.
+	 * 
+	 * @param rate
+	 *            The repat rate.
 	 * @see #getKeyTyped()
 	 */
 	public void setRepeatRate(long rate) {

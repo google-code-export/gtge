@@ -24,19 +24,19 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.golden.gamedev.util.ImageUtil;
 
 /**
- * Class for loading and masking images, and also behave as storage of the
- * loaded images.
+ * Class for loading and masking images, and also behave as storage of the loaded images.
  * <p>
  * 
  * Supported image format: png (*.png), gif (*.gif), and jpeg (*.jpg).
  * <p>
  * 
- * <code>BaseLoader</code> class is using functions from
- * {@link com.golden.gamedev.util.ImageUtil} class for loading and masking
- * images in convenient way.
+ * <code>BaseLoader</code> class is using functions from {@link com.golden.gamedev.util.ImageUtil} class for loading and
+ * masking images in convenient way.
  * <p>
  * 
  * This class is using {@link BaseIO} to get the external resources.
@@ -66,25 +66,15 @@ public class BaseLoader {
 	private Map<String, BufferedImage[]> imagesBank;
 	
 	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ***************************** CONSTRUCTOR *******************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
-	/**
-	 * Constructs new <code>BaseLoader</code> with specified I/O loader, and
-	 * masking color.
+	 * Constructs new <code>BaseLoader</code> with specified I/O loader, and masking color.
 	 * <p>
 	 * 
-	 * Masking color is the color of the images that will be converted to
-	 * transparent.
+	 * Masking color is the color of the images that will be converted to transparent.
 	 * 
-	 * @param base I/O resource loader
-	 * @param maskColor the mask color
+	 * @param base
+	 *            I/O resource loader
+	 * @param maskColor
+	 *            the mask color
 	 */
 	public BaseLoader(BaseIO base, Color maskColor) {
 		this.base = base;
@@ -95,23 +85,13 @@ public class BaseLoader {
 	}
 	
 	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * *********************** INSERTION OPERATION *****************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
-	/**
-	 * Loads and returns an image from the file location. If useMask is set to
-	 * true, then the default masking colour will be used. Images that have been
-	 * previously loaded will return immediately from the image cache.
+	 * Loads and returns an image from the file location. If useMask is set to true, then the default masking colour
+	 * will be used. Images that have been previously loaded will return immediately from the image cache.
 	 * 
-	 * @param imagefile The image filename to be loaded
-	 * @param useMask If true, then the image is loaded using the default
-	 *        transparent color
+	 * @param imagefile
+	 *            The image filename to be loaded
+	 * @param useMask
+	 *            If true, then the image is loaded using the default transparent color
 	 * @return Requested image.
 	 */
 	public BufferedImage getImage(String imagefile, boolean useMask) {
@@ -120,8 +100,7 @@ public class BaseLoader {
 		if (image == null) {
 			URL url = this.base.getURL(imagefile);
 			
-			image = (useMask) ? ImageUtil.getImage(url, this.maskColor)
-			        : ImageUtil.getImage(url);
+			image = (useMask) ? ImageUtil.getImage(url, this.maskColor) : ImageUtil.getImage(url);
 			
 			this.imageBank.put(imagefile, image);
 		}
@@ -130,10 +109,11 @@ public class BaseLoader {
 	}
 	
 	/**
-	 * Loads and returns an image with specified file using masking color. Image
-	 * that have been loaded before will return immediately from cache.
+	 * Loads and returns an image with specified file using masking color. Image that have been loaded before will
+	 * return immediately from cache.
 	 * 
-	 * @param imagefile the image filename to be loaded
+	 * @param imagefile
+	 *            the image filename to be loaded
 	 * @return Requested image.
 	 * 
 	 * @see #getImage(String, boolean)
@@ -143,25 +123,26 @@ public class BaseLoader {
 	}
 	
 	/**
-	 * Loads and returns image strip with specified file and whether using
-	 * masking color or not. Images that have been loaded before will return
-	 * immediately from cache.
+	 * Loads and returns image strip with specified file and whether using masking color or not. Images that have been
+	 * loaded before will return immediately from cache.
 	 * 
-	 * @param imagefile the image filename to be loaded
-	 * @param col image strip column
-	 * @param row image strip row
-	 * @param useMask true, the image is using transparent color
+	 * @param imagefile
+	 *            the image filename to be loaded
+	 * @param col
+	 *            image strip column
+	 * @param row
+	 *            image strip row
+	 * @param useMask
+	 *            true, the image is using transparent color
 	 * @return Requested image.
 	 */
 	public BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask) {
-		BufferedImage[] image = (BufferedImage[]) this.imagesBank
-		        .get(imagefile);
+		BufferedImage[] image = (BufferedImage[]) this.imagesBank.get(imagefile);
 		
 		if (image == null) {
 			URL url = this.base.getURL(imagefile);
 			
-			image = (useMask) ? ImageUtil.getImages(url, col, row,
-			        this.maskColor) : ImageUtil.getImages(url, col, row);
+			image = (useMask) ? ImageUtil.getImages(url, col, row, this.maskColor) : ImageUtil.getImages(url, col, row);
 			
 			this.imagesBank.put(imagefile, image);
 		}
@@ -170,12 +151,15 @@ public class BaseLoader {
 	}
 	
 	/**
-	 * Loads and returns image strip with specified file using masking color.
-	 * Images that have been loaded before will return immediately from cache.
+	 * Loads and returns image strip with specified file using masking color. Images that have been loaded before will
+	 * return immediately from cache.
 	 * 
-	 * @param imagefile the image filename to be loaded
-	 * @param col image strip column
-	 * @param row image strip row
+	 * @param imagefile
+	 *            the image filename to be loaded
+	 * @param col
+	 *            image strip column
+	 * @param row
+	 *            image strip row
 	 * @return Requested image.
 	 * 
 	 * @see #getImages(String, int, int, boolean)
@@ -185,18 +169,10 @@ public class BaseLoader {
 	}
 	
 	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ************************ REMOVAL OPERATION ******************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
-	/**
 	 * Removes specified image from cache.
-	 * @param image The image to remove from cache.
+	 * 
+	 * @param image
+	 *            The image to remove from cache.
 	 * @return If removing the image from cache worked.
 	 */
 	public boolean removeImage(BufferedImage image) {
@@ -214,7 +190,9 @@ public class BaseLoader {
 	
 	/**
 	 * Removes specified images from cache.
-	 * @param images The images to remove from cache.
+	 * 
+	 * @param images
+	 *            The images to remove from cache.
 	 * @return If removing the images from cache worked.
 	 */
 	public boolean removeImages(BufferedImage[] images) {
@@ -232,7 +210,9 @@ public class BaseLoader {
 	
 	/**
 	 * Removes image with specified image filename from cache.
-	 * @param imagefile The file name of the image to remove.
+	 * 
+	 * @param imagefile
+	 *            The file name of the image to remove.
 	 * @return The removed image.
 	 */
 	public BufferedImage removeImage(String imagefile) {
@@ -241,7 +221,9 @@ public class BaseLoader {
 	
 	/**
 	 * Removes images with specified image filename from cache.
-	 * @param imagefile The file name of the image to remove.
+	 * 
+	 * @param imagefile
+	 *            The file name of the image to remove.
 	 * @return The removed images.
 	 */
 	public BufferedImage[] removeImages(String imagefile) {
@@ -257,24 +239,16 @@ public class BaseLoader {
 	}
 	
 	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ************************* CUSTOM OPERATION ******************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
-	/**
 	 * Stores image into cache with specified key.
-	 * @param key The key used to store the image.
-	 * @param image The image to store.
+	 * 
+	 * @param key
+	 *            The key used to store the image.
+	 * @param image
+	 *            The image to store.
 	 */
 	public void storeImage(String key, BufferedImage image) {
 		if (this.imageBank.get(key) != null) {
-			throw new ArrayStoreException("Key -> " + key + " is bounded to "
-			        + this.imageBank.get(key));
+			throw new ArrayStoreException("Key -> " + key + " is bounded to " + this.imageBank.get(key));
 		}
 		
 		this.imageBank.put(key, image);
@@ -282,13 +256,15 @@ public class BaseLoader {
 	
 	/**
 	 * Stores images into cache with specified key.
-	 * @param key The key used to store the images.
-	 * @param images The images to store.
+	 * 
+	 * @param key
+	 *            The key used to store the images.
+	 * @param images
+	 *            The images to store.
 	 */
 	public void storeImages(String key, BufferedImage[] images) {
 		if (this.imagesBank.get(key) != null) {
-			throw new ArrayStoreException("Key -> " + key + " is bounded to "
-			        + this.imagesBank.get(key));
+			throw new ArrayStoreException("Key -> " + key + " is bounded to " + this.imagesBank.get(key));
 		}
 		
 		this.imagesBank.put(key, images);
@@ -296,7 +272,9 @@ public class BaseLoader {
 	
 	/**
 	 * Returns cache image with specified key.
-	 * @param key The key of the image wanted.
+	 * 
+	 * @param key
+	 *            The key of the image wanted.
 	 * @return The image with the given key or <code>null</code>.
 	 */
 	public BufferedImage getStoredImage(String key) {
@@ -305,7 +283,9 @@ public class BaseLoader {
 	
 	/**
 	 * Returns cache images with specified key.
-	 * @param key The key of the images wanted.
+	 * 
+	 * @param key
+	 *            The key of the images wanted.
 	 * @return The images with the given key.
 	 */
 	public BufferedImage[] getStoredImages(String key) {
@@ -313,17 +293,8 @@ public class BaseLoader {
 	}
 	
 	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ********************** BASE LOADER PROPERTIES ***************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
-	/**
 	 * Returns {@link BaseIO} associated with this image loader.
+	 * 
 	 * @return The {@link BaseIO} used by the loader.
 	 * @see #setBaseIO(BaseIO)
 	 */
@@ -333,7 +304,9 @@ public class BaseLoader {
 	
 	/**
 	 * Sets {@link BaseIO} where the image resources is loaded from.
-	 * @param base The new {@link BaseIO} used by the loader.
+	 * 
+	 * @param base
+	 *            The new {@link BaseIO} used by the loader.
 	 */
 	public void setBaseIO(BaseIO base) {
 		this.base = base;
@@ -341,6 +314,7 @@ public class BaseLoader {
 	
 	/**
 	 * Returns image loader masking color.
+	 * 
 	 * @return The masking color.
 	 * @see #setMaskColor(Color)
 	 */
@@ -352,50 +326,24 @@ public class BaseLoader {
 	 * Sets image loader masking color.
 	 * <p>
 	 * 
-	 * Masking color is the color of the images that will be converted to
-	 * transparent.
-	 * @param c The new masking color.
+	 * Masking color is the color of the images that will be converted to transparent.
+	 * 
+	 * @param c
+	 *            The new masking color.
 	 * @see #getMaskColor()
 	 */
 	public void setMaskColor(Color c) {
 		this.maskColor = c;
 	}
 	
-	/**
-	 * @see java.lang.Object#toString()
-	 */
+	@Override
 	public String toString() {
-		StringBuffer imageKey = new StringBuffer(), imagesKey = new StringBuffer();
-		
-		Iterator<String> imageIt = this.imageBank.keySet().iterator(), imagesIt = this.imagesBank
-		        .keySet().iterator();
-		
-		imageKey.append("\"");
-		while (imageIt.hasNext()) {
-			imageKey.append(imageIt.next());
-			
-			if (imageIt.hasNext()) {
-				imageKey.append(",");
-			}
-		}
-		imageKey.append("\"");
-		
-		imagesKey.append("\"");
-		while (imagesIt.hasNext()) {
-			String key = (String) imagesIt.next();
-			BufferedImage[] image = (BufferedImage[]) this.imagesBank.get(key);
-			int len = (image == null) ? -1 : image.length;
-			imagesKey.append(key).append("(").append(len).append(")");
-			
-			if (imagesIt.hasNext()) {
-				imagesKey.append(",");
-			}
-		}
-		imagesKey.append("\"");
-		
-		return super.toString() + " " + "[maskColor=" + this.maskColor
-		        + ", BaseIO=" + this.base + ", imageLoaded=" + imageKey
-		        + ", imagesLoaded=" + imagesKey + "]";
+		ToStringBuilder builder = new ToStringBuilder(this);
+		builder.append("base", base);
+		builder.append("maskColor", maskColor);
+		builder.append("imageBank", imageBank);
+		builder.append("imagesBank", imagesBank);
+		return builder.toString();
 	}
 	
 }

@@ -1307,51 +1307,6 @@ public abstract class Game {
 		this.bsInput.setMouseVisible(true);
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** IMAGE UTILITY ******************************** */
-	/** ************************************************************************* */
-	// com.golden.gamedev.engine.BaseLoader
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseLoader#setMaskColor(Color)
-	 * bsLoader.setMaskColor(java.awt.Color)}.
-	 */
-	public void setMaskColor(Color c) {
-		this.bsLoader.setMaskColor(c);
-	}
-	
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseLoader#getImage(String, boolean)
-	 * bsLoader.getImage(String, boolean)}.
-	 */
-	public BufferedImage getImage(String imagefile, boolean useMask) {
-		return this.bsLoader.getImage(imagefile, useMask);
-	}
-	
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseLoader#getImage(String)
-	 * bsLoader.getImage(String)}.
-	 */
-	public BufferedImage getImage(String imagefile) {
-		return this.bsLoader.getImage(imagefile);
-	}
-	
-	/**
-	 * Effectively equivalent to the call
-	 * {@linkplain com.golden.gamedev.engine.BaseLoader#getImages(String, int, int, boolean) bsLoader.getImages(String,
-	 * int, int, boolean)}.
-	 */
-	public BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask) {
-		return this.bsLoader.getImages(imagefile, col, row, useMask);
-	}
-	
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseLoader#getImages(String, int, int)
-	 * bsLoader.getImages(String, int, int)}.
-	 */
-	public BufferedImage[] getImages(String imagefile, int col, int row) {
-		return this.bsLoader.getImages(imagefile, col, row);
-	}
-	
 	/**
 	 * Returns stripped images with specified sequence.
 	 * <p>
@@ -1377,30 +1332,26 @@ public abstract class Game {
 	 * <p>
 	 * 
 	 * This is used to make custom animation (012321).
+	 * 
+	 * @param bsLoader
+	 *            TODO
 	 */
-	public BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask, String sequence, int digit) {
+	public static BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask, String sequence,
+			int digit, BaseLoader bsLoader) {
 		String mapping = imagefile + sequence + digit;
-		BufferedImage[] image = this.bsLoader.getStoredImages(mapping);
+		BufferedImage[] image = bsLoader.getStoredImages(mapping);
 		
 		if (image == null) {
-			BufferedImage[] src = this.getImages(imagefile, col, row, useMask);
+			BufferedImage[] src = bsLoader.getImages(imagefile, col, row, useMask);
 			int count = sequence.length() / digit;
 			image = new BufferedImage[count];
 			for (int i = 0; i < count; i++) {
 				image[i] = src[Integer.parseInt(sequence.substring(i * digit, ((i + 1) * digit)))];
 			}
-			this.bsLoader.storeImages(mapping, image);
+			bsLoader.storeImages(mapping, image);
 		}
 		
 		return image;
-	}
-	
-	/**
-	 * Same as {@linkplain #getImages(String, int, int, boolean, String, int) getImages(imagefile, col, row, useMask,
-	 * sequence, digit)} with mask color is turned on by default.
-	 */
-	public BufferedImage[] getImages(String imagefile, int col, int row, String sequence, int digit) {
-		return this.getImages(imagefile, col, row, true, sequence, digit);
 	}
 	
 	/**
@@ -1420,30 +1371,25 @@ public abstract class Game {
 	 * </pre>
 	 * 
 	 * Notice that the first image is start from 0 (zero).
+	 * 
+	 * @param bsLoader
+	 *            TODO
 	 */
-	public BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask, int start, int end) {
+	public static BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask, int start, int end,
+			BaseLoader bsLoader) {
 		String mapping = start + imagefile + end;
-		BufferedImage[] image = this.bsLoader.getStoredImages(mapping);
+		BufferedImage[] image = bsLoader.getStoredImages(mapping);
 		
 		if (image == null) {
-			BufferedImage[] src = this.getImages(imagefile, col, row, useMask);
+			BufferedImage[] src = bsLoader.getImages(imagefile, col, row, useMask);
 			int count = end - start + 1;
 			image = new BufferedImage[count];
 			for (int i = 0; i < count; i++) {
 				image[i] = src[start + i];
 			}
-			this.bsLoader.storeImages(mapping, image);
+			bsLoader.storeImages(mapping, image);
 		}
 		
 		return image;
 	}
-	
-	/**
-	 * Same as {@linkplain #getImages(String, int, int, int, int) getImages(imagefile, col, row, useMask, start, end)}
-	 * with mask color is turned on by default.
-	 */
-	public BufferedImage[] getImages(String imagefile, int col, int row, int start, int end) {
-		return this.getImages(imagefile, col, row, true, start, end);
-	}
-	
 }

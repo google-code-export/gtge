@@ -16,7 +16,6 @@
  */
 package com.golden.gamedev.engine;
 
-// JFC
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.net.URL;
@@ -24,159 +23,88 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.golden.gamedev.util.ImageUtil;
 
 /**
- * Class for loading and masking images, and also behave as storage of the loaded images.
- * <p>
+ * The {@link BaseLoader} class provides the default implementation of the {@link BufferedImageCache} interface that
+ * uses a {@link BaseIO} instance in combination with {@link ImageUtil} to retrieve images when needed to store into the
+ * cache.
  * 
- * Supported image format: png (*.png), gif (*.gif), and jpeg (*.jpg).
- * <p>
- * 
- * <code>BaseLoader</code> class is using functions from {@link com.golden.gamedev.util.ImageUtil} class for loading and
- * masking images in convenient way.
- * <p>
- * 
- * This class is using {@link BaseIO} to get the external resources.
- * 
- * @see com.golden.gamedev.util.ImageUtil
+ * @author MetroidFan2002 (Refactoring, implemented the {@link BufferedImageCache} interface)
+ * @author Paupau (Original Author)
+ * @version 1.0
+ * @since 1.0
+ * @see BufferedImageCache
  */
-public class BaseLoader {
+public final class BaseLoader implements BufferedImageCache {
 	
 	/**
-	 * ************************** LOADER PROPERTIES ****************************
+	 * The non-null {@link BaseIO} instance to use to retrieve {@link BaseIO#getURL(String) URLs} for image filenames
+	 * from.
 	 */
-	
-	// Base IO to get external resources
 	private BaseIO base;
 	
-	// masking color
-	private Color maskColor;
-	
 	/**
-	 * **************************** IMAGE STORAGE ******************************
+	 * The {@link Map} of {@link String} file name keys to {@link BufferedImage} instances to cache.
 	 */
-	
-	// store single image
-	private Map<String, BufferedImage> imageBank;
-	
-	// store multiple images
-	private Map<String, BufferedImage[]> imagesBank;
+	private Map<String, BufferedImage> imageStore = new HashMap<String, BufferedImage>();
 	
 	/**
-	 * Constructs new <code>BaseLoader</code> with specified I/O loader, and masking color.
-	 * <p>
-	 * 
-	 * Masking color is the color of the images that will be converted to transparent.
+	 * The {@link Map} of {@link String} file name keys to {@link BufferedImage} array instances to cache.
+	 */
+	private Map<String, BufferedImage[]> arrayStore = new HashMap<String, BufferedImage[]>();
+	
+	/**
+	 * Creates a new {@link BaseLoader} instance.
 	 * 
 	 * @param base
-	 *            I/O resource loader
-	 * @param maskColor
-	 *            the mask color
+	 *            The non-null {@link BaseIO} instance to use to retrieve {@link BaseIO#getURL(String) URLs} for image
+	 *            filenames from.
+	 * @throws IllegalArgumentException
+	 *             Throws an {@link IllegalArgumentException} if the given {@link BaseIO} instance is null.
 	 */
-	public BaseLoader(BaseIO base, Color maskColor) {
-		this.base = base;
-		this.maskColor = maskColor;
-		
-		this.imageBank = new HashMap<String, BufferedImage>(5);
-		this.imagesBank = new HashMap<String, BufferedImage[]>(30);
+	public BaseLoader(final BaseIO base) {
+		super();
+		setBaseIO(base);
 	}
 	
-	/**
-	 * Loads and returns an image from the file location. If useMask is set to true, then the default masking colour
-	 * will be used. Images that have been previously loaded will return immediately from the image cache.
-	 * 
-	 * @param imagefile
-	 *            The image filename to be loaded
-	 * @param useMask
-	 *            If true, then the image is loaded using the default transparent color
-	 * @return Requested image.
-	 */
-	public BufferedImage getImage(String imagefile, boolean useMask) {
-		BufferedImage image = this.imageBank.get(imagefile);
+	@Override
+	public BufferedImage getImage(final String imagefile, Color maskColor) {
+		BufferedImage image = imageStore.get(imagefile);
 		
 		if (image == null) {
-			URL url = this.base.getURL(imagefile);
+			final URL url = base.getURL(imagefile);
 			
-			image = (useMask) ? ImageUtil.getImage(url, this.maskColor) : ImageUtil.getImage(url);
+			image = (maskColor != null) ? ImageUtil.getImage(url, maskColor) : ImageUtil.getImage(url);
 			
-			this.imageBank.put(imagefile, image);
+			imageStore.put(imagefile, image);
 		}
 		
 		return image;
 	}
 	
-	/**
-	 * Loads and returns an image with specified file using masking color. Image that have been loaded before will
-	 * return immediately from cache.
-	 * 
-	 * @param imagefile
-	 *            the image filename to be loaded
-	 * @return Requested image.
-	 * 
-	 * @see #getImage(String, boolean)
-	 */
-	public BufferedImage getImage(String imagefile) {
-		return this.getImage(imagefile, true);
-	}
-	
-	/**
-	 * Loads and returns image strip with specified file and whether using masking color or not. Images that have been
-	 * loaded before will return immediately from cache.
-	 * 
-	 * @param imagefile
-	 *            the image filename to be loaded
-	 * @param col
-	 *            image strip column
-	 * @param row
-	 *            image strip row
-	 * @param useMask
-	 *            true, the image is using transparent color
-	 * @return Requested image.
-	 */
-	public BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask) {
-		BufferedImage[] image = (BufferedImage[]) this.imagesBank.get(imagefile);
+	@Override
+	public BufferedImage[] getImages(final String imagefile, final int col, final int row, Color maskColor) {
+		BufferedImage[] image = arrayStore.get(imagefile);
 		
 		if (image == null) {
-			URL url = this.base.getURL(imagefile);
+			final URL url = base.getURL(imagefile);
 			
-			image = (useMask) ? ImageUtil.getImages(url, col, row, this.maskColor) : ImageUtil.getImages(url, col, row);
+			image = (maskColor != null) ? ImageUtil.getImages(url, col, row, maskColor) : ImageUtil.getImages(url, col,
+					row);
 			
-			this.imagesBank.put(imagefile, image);
+			arrayStore.put(imagefile, image);
 		}
 		
 		return image;
 	}
 	
-	/**
-	 * Loads and returns image strip with specified file using masking color. Images that have been loaded before will
-	 * return immediately from cache.
-	 * 
-	 * @param imagefile
-	 *            the image filename to be loaded
-	 * @param col
-	 *            image strip column
-	 * @param row
-	 *            image strip row
-	 * @return Requested image.
-	 * 
-	 * @see #getImages(String, int, int, boolean)
-	 */
-	public BufferedImage[] getImages(String imagefile, int col, int row) {
-		return this.getImages(imagefile, col, row, true);
-	}
-	
-	/**
-	 * Removes specified image from cache.
-	 * 
-	 * @param image
-	 *            The image to remove from cache.
-	 * @return If removing the image from cache worked.
-	 */
-	public boolean removeImage(BufferedImage image) {
-		Iterator<BufferedImage> it = this.imageBank.values().iterator();
+	@Override
+	public boolean removeImage(final BufferedImage image) {
+		final Iterator<BufferedImage> it = imageStore.values().iterator();
 		
 		while (it.hasNext()) {
 			if (it.next() == image) {
@@ -188,15 +116,9 @@ public class BaseLoader {
 		return false;
 	}
 	
-	/**
-	 * Removes specified images from cache.
-	 * 
-	 * @param images
-	 *            The images to remove from cache.
-	 * @return If removing the images from cache worked.
-	 */
-	public boolean removeImages(BufferedImage[] images) {
-		Iterator<BufferedImage[]> it = this.imagesBank.values().iterator();
+	@Override
+	public boolean removeImages(final BufferedImage[] images) {
+		final Iterator<BufferedImage[]> it = arrayStore.values().iterator();
 		
 		while (it.hasNext()) {
 			if (it.next() == images) {
@@ -208,142 +130,74 @@ public class BaseLoader {
 		return false;
 	}
 	
-	/**
-	 * Removes image with specified image filename from cache.
-	 * 
-	 * @param imagefile
-	 *            The file name of the image to remove.
-	 * @return The removed image.
-	 */
-	public BufferedImage removeImage(String imagefile) {
-		return (BufferedImage) this.imageBank.remove(imagefile);
+	@Override
+	public BufferedImage removeImage(final String imagefile) {
+		return imageStore.remove(imagefile);
 	}
 	
-	/**
-	 * Removes images with specified image filename from cache.
-	 * 
-	 * @param imagefile
-	 *            The file name of the image to remove.
-	 * @return The removed images.
-	 */
-	public BufferedImage[] removeImages(String imagefile) {
-		return (BufferedImage[]) this.imagesBank.remove(imagefile);
+	@Override
+	public BufferedImage[] removeImages(final String imagefile) {
+		return arrayStore.remove(imagefile);
 	}
 	
-	/**
-	 * Clear all cached images.
-	 */
+	@Override
 	public void clearCache() {
-		this.imageBank.clear();
-		this.imagesBank.clear();
+		imageStore = new HashMap<String, BufferedImage>();
+		arrayStore = new HashMap<String, BufferedImage[]>();
+	}
+	
+	@Override
+	public void storeImage(final String key, final BufferedImage image) {
+		imageStore.put(key, image);
+	}
+	
+	@Override
+	public void storeImages(final String key, final BufferedImage[] images) {
+		arrayStore.put(key, images);
+	}
+	
+	@Override
+	public BufferedImage getStoredImage(final String key) {
+		return imageStore.get(key);
+	}
+	
+	@Override
+	public BufferedImage[] getStoredImages(final String key) {
+		return arrayStore.get(key);
 	}
 	
 	/**
-	 * Stores image into cache with specified key.
+	 * Gets the non-null {@link BaseIO} instance to use to retrieve {@link BaseIO#getURL(String) URLs} for image
+	 * filenames from.
 	 * 
-	 * @param key
-	 *            The key used to store the image.
-	 * @param image
-	 *            The image to store.
-	 */
-	public void storeImage(String key, BufferedImage image) {
-		if (this.imageBank.get(key) != null) {
-			throw new ArrayStoreException("Key -> " + key + " is bounded to " + this.imageBank.get(key));
-		}
-		
-		this.imageBank.put(key, image);
-	}
-	
-	/**
-	 * Stores images into cache with specified key.
-	 * 
-	 * @param key
-	 *            The key used to store the images.
-	 * @param images
-	 *            The images to store.
-	 */
-	public void storeImages(String key, BufferedImage[] images) {
-		if (this.imagesBank.get(key) != null) {
-			throw new ArrayStoreException("Key -> " + key + " is bounded to " + this.imagesBank.get(key));
-		}
-		
-		this.imagesBank.put(key, images);
-	}
-	
-	/**
-	 * Returns cache image with specified key.
-	 * 
-	 * @param key
-	 *            The key of the image wanted.
-	 * @return The image with the given key or <code>null</code>.
-	 */
-	public BufferedImage getStoredImage(String key) {
-		return (BufferedImage) this.imageBank.get(key);
-	}
-	
-	/**
-	 * Returns cache images with specified key.
-	 * 
-	 * @param key
-	 *            The key of the images wanted.
-	 * @return The images with the given key.
-	 */
-	public BufferedImage[] getStoredImages(String key) {
-		return (BufferedImage[]) this.imagesBank.get(key);
-	}
-	
-	/**
-	 * Returns {@link BaseIO} associated with this image loader.
-	 * 
-	 * @return The {@link BaseIO} used by the loader.
-	 * @see #setBaseIO(BaseIO)
+	 * @return The non-null {@link BaseIO} instance to use to retrieve {@link BaseIO#getURL(String) URLs} for image
+	 *         filenames from.
 	 */
 	public BaseIO getBaseIO() {
-		return this.base;
+		return base;
 	}
 	
 	/**
-	 * Sets {@link BaseIO} where the image resources is loaded from.
+	 * Sets the non-null {@link BaseIO} instance to use to retrieve {@link BaseIO#getURL(String) URLs} for image
+	 * filenames from.
 	 * 
 	 * @param base
-	 *            The new {@link BaseIO} used by the loader.
+	 *            The non-null {@link BaseIO} instance to use to retrieve {@link BaseIO#getURL(String) URLs} for image
+	 *            filenames from.
+	 * @throws IllegalArgumentException
+	 *             Throws an {@link IllegalArgumentException} if the given {@link BaseIO} instance is null.
 	 */
-	public void setBaseIO(BaseIO base) {
+	public void setBaseIO(final BaseIO base) {
+		Validate.notNull(base, "The BaseIO instance may not be null!");
 		this.base = base;
-	}
-	
-	/**
-	 * Returns image loader masking color.
-	 * 
-	 * @return The masking color.
-	 * @see #setMaskColor(Color)
-	 */
-	public Color getMaskColor() {
-		return this.maskColor;
-	}
-	
-	/**
-	 * Sets image loader masking color.
-	 * <p>
-	 * 
-	 * Masking color is the color of the images that will be converted to transparent.
-	 * 
-	 * @param c
-	 *            The new masking color.
-	 * @see #getMaskColor()
-	 */
-	public void setMaskColor(Color c) {
-		this.maskColor = c;
 	}
 	
 	@Override
 	public String toString() {
-		ToStringBuilder builder = new ToStringBuilder(this);
+		final ToStringBuilder builder = new ToStringBuilder(this);
 		builder.append("base", base);
-		builder.append("maskColor", maskColor);
-		builder.append("imageBank", imageBank);
-		builder.append("imagesBank", imagesBank);
+		builder.append("imageBank", imageStore);
+		builder.append("imagesBank", arrayStore);
 		return builder.toString();
 	}
-	
 }

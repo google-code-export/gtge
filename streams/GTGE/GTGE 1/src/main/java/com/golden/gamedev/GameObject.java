@@ -29,8 +29,8 @@ import com.golden.gamedev.engine.BaseAudio;
 import com.golden.gamedev.engine.BaseGraphics;
 import com.golden.gamedev.engine.BaseIO;
 import com.golden.gamedev.engine.BaseInput;
-import com.golden.gamedev.engine.BaseLoader;
 import com.golden.gamedev.engine.FrameRateSynchronizer;
+import com.golden.gamedev.engine.BufferedImageCache;
 import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.GameFont;
 import com.golden.gamedev.object.GameFontManager;
@@ -68,7 +68,7 @@ public abstract class GameObject {
 	/** I/O file engine. */
 	public BaseIO bsIO;
 	/** Image loader engine. */
-	public BaseLoader bsLoader;
+	public BufferedImageCache bsLoader;
 	/** Input engine. */
 	public BaseInput bsInput;
 	/** Timer engine. */

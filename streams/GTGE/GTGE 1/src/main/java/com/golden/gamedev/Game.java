@@ -43,6 +43,7 @@ import com.golden.gamedev.engine.BaseIO;
 import com.golden.gamedev.engine.BaseInput;
 import com.golden.gamedev.engine.BaseLoader;
 import com.golden.gamedev.engine.FrameRateSynchronizer;
+import com.golden.gamedev.engine.BufferedImageCache;
 import com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer;
 import com.golden.gamedev.engine.audio.MidiRenderer;
 import com.golden.gamedev.engine.audio.WaveRenderer;
@@ -155,7 +156,7 @@ public abstract class Game {
 	/** I/O file engine. */
 	public BaseIO bsIO;
 	/** Image loader engine. */
-	public BaseLoader bsLoader;
+	public BufferedImageCache bsLoader;
 	/** Input engine. */
 	public BaseInput bsInput;
 	/** Timer engine. */
@@ -581,7 +582,7 @@ public abstract class Game {
 			this.bsIO = new BaseIO(this.getClass());
 		}
 		if (this.bsLoader == null) {
-			this.bsLoader = new BaseLoader(this.bsIO, Color.MAGENTA);
+			this.bsLoader = new BaseLoader(this.bsIO);
 		}
 		if (this.bsInput == null) {
 			this.bsInput = new AWTInput(this.bsGraphics.getComponent());
@@ -1335,14 +1336,16 @@ public abstract class Game {
 	 * 
 	 * @param bsLoader
 	 *            TODO
+	 * @param maskColor
+	 *            TODO
 	 */
-	public static BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask, String sequence,
-			int digit, BaseLoader bsLoader) {
+	public static BufferedImage[] getImages(String imagefile, int col, int row, String sequence, int digit,
+			BufferedImageCache bsLoader, Color maskColor) {
 		String mapping = imagefile + sequence + digit;
 		BufferedImage[] image = bsLoader.getStoredImages(mapping);
 		
 		if (image == null) {
-			BufferedImage[] src = bsLoader.getImages(imagefile, col, row, useMask);
+			BufferedImage[] src = bsLoader.getImages(imagefile, col, row, maskColor);
 			int count = sequence.length() / digit;
 			image = new BufferedImage[count];
 			for (int i = 0; i < count; i++) {
@@ -1374,14 +1377,16 @@ public abstract class Game {
 	 * 
 	 * @param bsLoader
 	 *            TODO
+	 * @param maskColor
+	 *            TODO
 	 */
-	public static BufferedImage[] getImages(String imagefile, int col, int row, boolean useMask, int start, int end,
-			BaseLoader bsLoader) {
+	public static BufferedImage[] getImages(String imagefile, int col, int row, int start, int end,
+			BufferedImageCache bsLoader, Color maskColor) {
 		String mapping = start + imagefile + end;
 		BufferedImage[] image = bsLoader.getStoredImages(mapping);
 		
 		if (image == null) {
-			BufferedImage[] src = bsLoader.getImages(imagefile, col, row, useMask);
+			BufferedImage[] src = bsLoader.getImages(imagefile, col, row, maskColor);
 			int count = end - start + 1;
 			image = new BufferedImage[count];
 			for (int i = 0; i < count; i++) {

@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
@@ -73,6 +74,7 @@ public final class BaseLoader implements BufferedImageCache {
 	
 	@Override
 	public BufferedImage getImage(final String imagefile, Color maskColor) {
+		Validate.isTrue(StringUtils.isNotBlank(imagefile), "The file name may not be blank!");
 		BufferedImage image = imageStore.get(imagefile);
 		
 		if (image == null) {

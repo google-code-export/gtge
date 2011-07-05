@@ -127,6 +127,10 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.dspace.dependencies.jmockit</groupId>
+			<artifactId>dspace-jmockit</artifactId>
+		</dependency>
 	</dependencies>
 
 	<reporting>
@@ -229,6 +233,12 @@
 				<version>${version.slf4j}</version>
 				<optional>true</optional>
 			</dependency>
+			<dependency>
+				<groupId>org.dspace.dependencies.jmockit</groupId>
+				<artifactId>dspace-jmockit</artifactId>
+				<version>${version.jmockit}</version>
+				<scope>test</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -243,5 +253,6 @@
 		<version.jxr>2.2</version.jxr>
 		<version.slf4j>1.6.1</version.slf4j>
 		<version.taglist>2.4</version.taglist>
+		<version.jmockit>0.999.4</version.jmockit>
 	</properties>
 </project>

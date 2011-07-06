@@ -67,13 +67,14 @@ public interface BufferedImageCache {
 	 * @return A non-null {@link BufferedImage} array from the given {@link String} file name.
 	 * @throws IllegalArgumentException
 	 *             Throws an {@link IllegalArgumentException} if the given {@link String} file name is
-	 *             {@link StringUtils#isBlank(String) blank}.
+	 *             {@link StringUtils#isBlank(String) blank}, or the col or row arguments are less than one.
 	 * 
 	 */
 	BufferedImage[] getImages(final String imagefile, final int col, final int row, Color maskColor);
 	
 	/**
-	 * Removes the given {@link BufferedImage} instance from the cache.
+	 * Removes the given {@link BufferedImage} instance from the cache once. This method may be invoked multiple times
+	 * in order to remove all references to this image from the cache.
 	 * 
 	 * @param image
 	 *            The {@link BufferedImage} instance to remove from cache.
@@ -82,7 +83,8 @@ public interface BufferedImageCache {
 	boolean removeImage(final BufferedImage image);
 	
 	/**
-	 * Removes the specified {@link BufferedImage} array from the cache.
+	 * Removes the specified {@link BufferedImage} array from the cache once. This method may be invoked multiple times
+	 * in order to remove all references to this array from the cache.
 	 * 
 	 * @param images
 	 *            The {@link BufferedImage} array to remove from cache.

@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -90,6 +91,10 @@ public final class BaseLoader implements BufferedImageCache {
 	
 	@Override
 	public BufferedImage[] getImages(final String imagefile, final int col, final int row, Color maskColor) {
+		Validate.isTrue(StringUtils.isNotBlank(imagefile), "The file name may not be blank!");
+		Validate.isTrue(col > 0, "The columns to cut the image with must be greater than zero!");
+		Validate.isTrue(row > 0, "The rows to cut the image with must be greater than zero!");
+		
 		BufferedImage[] image = arrayStore.get(imagefile);
 		
 		if (image == null) {
@@ -106,25 +111,28 @@ public final class BaseLoader implements BufferedImageCache {
 	
 	@Override
 	public boolean removeImage(final BufferedImage image) {
-		final Iterator<BufferedImage> it = imageStore.values().iterator();
-		
-		while (it.hasNext()) {
-			if (it.next() == image) {
-				it.remove();
-				return true;
-			}
-		}
-		
-		return false;
+		return removeIfMatched(image, imageStore.values().iterator());
 	}
 	
 	@Override
 	public boolean removeImages(final BufferedImage[] images) {
-		final Iterator<BufferedImage[]> it = arrayStore.values().iterator();
-		
-		while (it.hasNext()) {
-			if (it.next() == images) {
-				it.remove();
+		return removeIfMatched(images, arrayStore.values().iterator());
+	}
+	
+	/**
+	 * Removes the given {@link Object} from the given {@link Iterator} if it is matched via
+	 * {@link Object#equals(Object) equals} once, returning whether or not an {@link Object} is removed.
+	 * 
+	 * @param toCheck
+	 *            The possibly-null {@link Object} to check for a match.
+	 * @param iterator
+	 *            The non-null {@link Iterator} to use to remove the {@link Object} if a match is found.
+	 * @return True if the {@link Object} was removed from the {@link Iterator} once, false otherwise.
+	 */
+	private static boolean removeIfMatched(final Object toCheck, final Iterator<?> iterator) {
+		while (iterator.hasNext()) {
+			if (ObjectUtils.equals(iterator.next(), toCheck)) {
+				iterator.remove();
 				return true;
 			}
 		}

@@ -130,7 +130,7 @@ public interface BaseGraphics {
 	 * example applet graphics engine.
 	 * 
 	 * @param icon The new window icon image.
-	 * @see com.golden.gamedev.util.ImageUtil#getImage(java.net.URL)
+	 * @see com.golden.gamedev.util.BufferedImageUtil#getImage(java.net.URL)
 	 */
 	public void setWindowIcon(Image icon);
 	

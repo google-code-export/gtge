@@ -23,19 +23,18 @@ import java.awt.Graphics2D;
 import java.awt.Transparency;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
 import com.golden.gamedev.engine.BaseAudio;
 import com.golden.gamedev.engine.BaseGraphics;
 import com.golden.gamedev.engine.BaseIO;
 import com.golden.gamedev.engine.BaseInput;
-import com.golden.gamedev.engine.FrameRateSynchronizer;
 import com.golden.gamedev.engine.BufferedImageCache;
+import com.golden.gamedev.engine.FrameRateSynchronizer;
 import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.GameFont;
 import com.golden.gamedev.object.GameFontManager;
 import com.golden.gamedev.object.Sprite;
-import com.golden.gamedev.util.ImageUtil;
+import com.golden.gamedev.util.BufferedImageUtil;
 
 /**
  * Similar like <code>Game</code> class except this class is working under <code>GameEngine</code> frame work.
@@ -281,21 +280,12 @@ public abstract class GameObject {
 	 * Returns a new created buffered image which the current game state is rendered into it.
 	 */
 	public BufferedImage takeScreenShot() {
-		BufferedImage screen = ImageUtil.createImage(this.getWidth(), this.getHeight(), Transparency.OPAQUE);
+		BufferedImage screen = BufferedImageUtil.createImage(this.getWidth(), this.getHeight(), Transparency.OPAQUE);
 		Graphics2D g = screen.createGraphics();
 		this.render(g);
 		g.dispose();
 		
 		return screen;
-	}
-	
-	/**
-	 * Captures current game screen into specified file.
-	 * 
-	 * @see #takeScreenShot()
-	 */
-	public void takeScreenShot(File f) {
-		ImageUtil.saveImage(this.takeScreenShot(), f);
 	}
 	
 	/** ************************************************************************* */

@@ -18,21 +18,24 @@ package com.golden.gamedev.engine;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import com.golden.gamedev.util.ImageUtil;
+import com.golden.gamedev.util.BufferedImageUtil;
 
 /**
  * The {@link BaseLoader} class provides the default implementation of the {@link BufferedImageCache} interface that
- * uses a {@link BaseIO} instance in combination with {@link ImageUtil} to retrieve images when needed to store into the
+ * uses a {@link BaseIO} instance in combination with {@link BufferedImageUtil} to retrieve images when needed to store into the
  * cache.
  * 
  * @author MetroidFan2002 (Refactoring, implemented the {@link BufferedImageCache} interface)
@@ -81,7 +84,12 @@ public final class BaseLoader implements BufferedImageCache {
 		if (image == null) {
 			final URL url = base.getURL(imagefile);
 			
-			image = (maskColor != null) ? ImageUtil.getImage(url, maskColor) : ImageUtil.getImage(url);
+			try {
+				image = (maskColor != null) ? BufferedImageUtil.applyMask(ImageIO.read(url), maskColor) : ImageIO.read(url);
+			} catch (IOException e) {
+				throw new RuntimeException("Unexpected IOException occurred when retrieving the image for URL " + url,
+						e);
+			}
 			
 			imageStore.put(imagefile, image);
 		}
@@ -100,8 +108,13 @@ public final class BaseLoader implements BufferedImageCache {
 		if (image == null) {
 			final URL url = base.getURL(imagefile);
 			
-			image = (maskColor != null) ? ImageUtil.getImages(url, col, row, maskColor) : ImageUtil.getImages(url, col,
-					row);
+			try {
+				image = (maskColor != null) ? BufferedImageUtil.splitImages(BufferedImageUtil.applyMask(ImageIO.read(url), maskColor), col, row)
+						: BufferedImageUtil.splitImages(ImageIO.read(url), col, row);
+			} catch (IOException e) {
+				throw new RuntimeException("Unexpected IOException occurred when retrieving the image for URL " + url,
+						e);
+			}
 			
 			arrayStore.put(imagefile, image);
 		}

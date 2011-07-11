@@ -27,6 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -38,20 +39,18 @@ import javax.swing.WindowConstants;
 import javax.swing.border.Border;
 
 import com.golden.gamedev.engine.graphics.WindowExitListener;
-import com.golden.gamedev.util.ImageUtil;
 
 /**
- * <code>GameSettings</code> is a dialog UI to show the user the basic game
- * options for the player to choose of.
+ * <code>GameSettings</code> is a dialog UI to show the user the basic game options for the player to choose of.
  * <p>
  * 
  * The options includes : <br>
- * Option to play between fullscreen or windowed mode, option to play using
- * bufferstrategy or not, and option turn on or turn off the sound.
+ * Option to play between fullscreen or windowed mode, option to play using bufferstrategy or not, and option turn on or
+ * turn off the sound.
  * <p>
  * 
- * To give the user more options or remove some options, subclass this class and
- * override the {@link #initSettings() initSettings()} method.
+ * To give the user more options or remove some options, subclass this class and override the {@link #initSettings()
+ * initSettings()} method.
  * <p>
  * 
  * Example of how-to-use <code>GameSettings</code> class :
@@ -71,8 +70,7 @@ import com.golden.gamedev.util.ImageUtil;
  * 				bsSound.setActive(sound.isSelected());
  * 				bsMusic.setActive(sound.isSelected());
  * 			}
- * 		}, new Dimension(640, 480), fullscreen.isSelected(),
- * 		        bufferstrategy.isSelected());
+ * 		}, new Dimension(640, 480), fullscreen.isSelected(), bufferstrategy.isSelected());
  * 		game.start();
  * 	}
  * 	
@@ -93,8 +91,7 @@ import com.golden.gamedev.util.ImageUtil;
  * 
  * @see #initSettings()
  */
-public abstract class GameSettings extends JDialog implements ActionListener,
-        Runnable {
+public abstract class GameSettings extends JDialog implements ActionListener, Runnable {
 	
 	/**
 	 * *************************** CHECK BOX UI ********************************
@@ -150,8 +147,7 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 	 */
 	
 	/**
-	 * Builds up the game settings/options dialog for the user with specified
-	 * splash image URL or null .
+	 * Builds up the game settings/options dialog for the user with specified splash image URL or null .
 	 * <p>
 	 * 
 	 * For example :
@@ -165,7 +161,8 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 	 * };
 	 * </pre>
 	 * 
-	 * @param splashImage The {@link URL} of the splash image or null.
+	 * @param splashImage
+	 *            The {@link URL} of the splash image or null.
 	 * @see com.golden.gamedev.GameLoader
 	 */
 	public GameSettings(URL splashImage) {
@@ -187,22 +184,22 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 	}
 	
 	/**
-	 * Builds up the game settings/options dialog for the player without splash
-	 * image.
+	 * Builds up the game settings/options dialog for the player without splash image.
 	 */
 	public GameSettings() {
 		this(null);
 	}
 	
 	/**
-	 * Skips the option dialog, and start the game with specified mode and
-	 * bufferstrategy.
+	 * Skips the option dialog, and start the game with specified mode and bufferstrategy.
 	 * <p>
 	 * 
-	 * Used for direct play without specifying the game option everytime running
-	 * the game while in developing stage.
-	 * @param fullscreen If fullscreen is used.
-	 * @param bufferStrategy If a buffer strategy is used.
+	 * Used for direct play without specifying the game option everytime running the game while in developing stage.
+	 * 
+	 * @param fullscreen
+	 *            If fullscreen is used.
+	 * @param bufferStrategy
+	 *            If a buffer strategy is used.
 	 */
 	public GameSettings(boolean fullscreen, boolean bufferStrategy) {
 		this.initGUI();
@@ -215,13 +212,14 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 	}
 	
 	/**
-	 * Skips the option dialog, and directly init the game with specified mode
-	 * and using bufferstrategy by default.
+	 * Skips the option dialog, and directly init the game with specified mode and using bufferstrategy by default.
 	 * <p>
 	 * 
-	 * Used in game development, so no need to always specify the game option
-	 * everytime running the game while in developing stage.
-	 * @param fullscreen If fullscreen is used.
+	 * Used in game development, so no need to always specify the game option everytime running the game while in
+	 * developing stage.
+	 * 
+	 * @param fullscreen
+	 *            If fullscreen is used.
 	 */
 	public GameSettings(boolean fullscreen) {
 		this(fullscreen, true);
@@ -238,14 +236,13 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 	 */
 	
 	/**
-	 * Initializes the content of the settings, by default consists of splash
-	 * image (if any), {@linkplain #initSettings() settings panel}, and launch
-	 * panel.
+	 * Initializes the content of the settings, by default consists of splash image (if any),
+	 * {@linkplain #initSettings() settings panel}, and launch panel.
 	 * <p>
 	 * 
 	 * Example of modifying some UI components : <br>
-	 * The first component is splash image (JLabel), settings panel (JPanel),
-	 * and launch panel (JPanel), using BorderLayout
+	 * The first component is splash image (JLabel), settings panel (JPanel), and launch panel (JPanel), using
+	 * BorderLayout
 	 * 
 	 * <pre>
 	 * 
@@ -272,10 +269,8 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 		JLabel splashLabel = null;
 		if (this.splashImage != null) {
 			try {
-				splashLabel = new JLabel(new ImageIcon(
-				        ImageUtil.getImage(this.splashImage)));
-			}
-			catch (Exception e) {
+				splashLabel = new JLabel(new ImageIcon(ImageIO.read(this.splashImage)));
+			} catch (Exception e) {
 				splashLabel = null;
 			}
 		}
@@ -310,8 +305,7 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 	}
 	
 	/**
-	 * Initializes and return the settings GUI, override this method to insert
-	 * new option or remove some options.
+	 * Initializes and return the settings GUI, override this method to insert new option or remove some options.
 	 * <p>
 	 * 
 	 * For example :
@@ -338,30 +332,25 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 		optionPane.setLayout(new GridLayout(0, 2));
 		Border border = BorderFactory.createEmptyBorder(6, 4, 3, 4);
 		optionPane.setBorder(BorderFactory.createCompoundBorder(border,
-		        BorderFactory.createTitledBorder("Game Settings")));
+				BorderFactory.createTitledBorder("Game Settings")));
 		
-		GraphicsDevice device = GraphicsEnvironment
-		        .getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		
 		// full screen
 		boolean supportFSEM = true;
 		try {
 			supportFSEM = device.isFullScreenSupported();
-		}
-		catch (Throwable e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 			supportFSEM = false;
 		}
 		this.fullscreen = new JCheckBox("Fullscreen", supportFSEM);
 		this.fullscreen.setEnabled(supportFSEM);
-		this.fullscreen
-		        .setToolTipText((supportFSEM) ? "fullscreen/windowed mode"
-		                : "fullscreen mode not supported");
+		this.fullscreen.setToolTipText((supportFSEM) ? "fullscreen/windowed mode" : "fullscreen mode not supported");
 		
 		// buffer strategy
 		this.bufferstrategy = new JCheckBox("Bufferstrategy", true);
-		this.bufferstrategy
-		        .setToolTipText("turn this off if the game experiencing graphics problem");
+		this.bufferstrategy.setToolTipText("turn this off if the game experiencing graphics problem");
 		
 		// sound
 		this.sound = new JCheckBox("Sound", true);
@@ -378,8 +367,7 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 	 * Notified when the user press 'OK' or 'Cancel' button.
 	 * <p>
 	 * 
-	 * Pressing 'OK' will launch the game, while pressing 'Cancel' will
-	 * immediatelly close the app.
+	 * Pressing 'OK' will launch the game, while pressing 'Cancel' will immediatelly close the app.
 	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == this.btnOK) {
@@ -388,15 +376,13 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 			
 			new Thread(this).start();
 			
-		}
-		else if (e.getSource() == this.btnCancel) {
+		} else if (e.getSource() == this.btnCancel) {
 			System.exit(0);
 		}
 	}
 	
 	/**
-	 * Thread implementation when the user pressing 'OK' button, directly called
-	 * {@link #start()} method.
+	 * Thread implementation when the user pressing 'OK' button, directly called {@link #start()} method.
 	 */
 	public void run() {
 		this.start();
@@ -413,8 +399,7 @@ public abstract class GameSettings extends JDialog implements ActionListener,
 	 */
 	
 	/**
-	 * Starts the game with all the defined settings, the game is actually
-	 * created in this method.
+	 * Starts the game with all the defined settings, the game is actually created in this method.
 	 * <p>
 	 * 
 	 * This method is called when the user is pressing the 'OK' button.

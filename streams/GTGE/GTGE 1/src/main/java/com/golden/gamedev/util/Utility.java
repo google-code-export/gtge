@@ -26,7 +26,7 @@ import org.apache.commons.lang.math.RandomUtils;
  * Utility class provides general functions, such as array enlargement/shrinkment operation, array mixed, randomize, and
  * other functions that categorized as common functions.
  */
-public class Utility {
+public final class Utility {
 	
 	/**
 	 * This constructor would creates a new {@link Utility} instance, but as it's a utility class, it throws a new

@@ -29,7 +29,7 @@ import java.util.Map;
 import com.golden.gamedev.object.font.AdvanceBitmapFont;
 import com.golden.gamedev.object.font.BitmapFont;
 import com.golden.gamedev.object.font.SystemFont;
-import com.golden.gamedev.util.ImageUtil;
+import com.golden.gamedev.util.BufferedImageUtil;
 import com.golden.gamedev.util.Utility;
 
 /**
@@ -214,7 +214,7 @@ public class GameFontManager {
 		int height = bitmap.getHeight() - 1;
 		int w = 0;
 		for (int i = 0; i < imagefont.length; i++) {
-			imagefont[i] = ImageUtil.applyMask(bitmap.getSubimage(w, 1, width[i], height), backgr);
+			imagefont[i] = BufferedImageUtil.applyMask(bitmap.getSubimage(w, 1, width[i], height), backgr);
 			
 			w += width[i];
 		}

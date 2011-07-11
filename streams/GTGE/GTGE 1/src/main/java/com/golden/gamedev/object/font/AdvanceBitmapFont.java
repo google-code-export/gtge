@@ -26,7 +26,7 @@ import java.awt.image.BufferedImage;
 
 import org.apache.commons.lang.Validate;
 
-import com.golden.gamedev.util.ImageUtil;
+import com.golden.gamedev.util.BufferedImageUtil;
 
 /**
  * Game font that use images for the letter, each images can have different width but must have same height.
@@ -131,7 +131,7 @@ public class AdvanceBitmapFont extends BitmapFont {
 		Validate.notNull(sourceFont, "The source font may not be null!");
 		Validate.notNull(characterColor, "The character color may not be null!");
 		// REVIEW-LOW: rename g to throwAwayGraphicsContext, or, nest the calls to remove g entirely.
-		Graphics2D g = ImageUtil.createImage(1, 1).createGraphics();
+		Graphics2D g = BufferedImageUtil.createImage(1, 1, Transparency.OPAQUE).createGraphics();
 		// REVIEW-LOW: rename fm to fontMetricsForSelectedFont
 		FontMetrics fm = g.getFontMetrics(sourceFont);
 		g.dispose();
@@ -165,7 +165,7 @@ public class AdvanceBitmapFont extends BitmapFont {
 		
 		// draw all letters to the bitmap
 		// REVIEW-MEDIUM - this screams out as a refactorable function.
-		BufferedImage bitmap = ImageUtil.createImage(w, h, Transparency.BITMASK);
+		BufferedImage bitmap = BufferedImageUtil.createImage(w, h, Transparency.BITMASK);
 		g = bitmap.createGraphics();
 		g.setFont(sourceFont);
 		

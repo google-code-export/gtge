@@ -21,9 +21,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
+import java.awt.Transparency;
 
 import com.golden.gamedev.object.GameFont;
-import com.golden.gamedev.util.ImageUtil;
+import com.golden.gamedev.util.BufferedImageUtil;
 
 /**
  * <code>SystemFont</code> is standard AWT Font wrapped in game font interface
@@ -56,7 +57,7 @@ public class SystemFont implements GameFont {
 		this.color = color;
 		
 		// dummy graphics only to get system font metrics
-		Graphics2D g = ImageUtil.createImage(1, 1).createGraphics();
+		Graphics2D g = BufferedImageUtil.createImage(1, 1, Transparency.OPAQUE).createGraphics();
 		
 		this.fm = g.getFontMetrics(font);
 		this.height = this.fm.getMaxAscent() + this.fm.getMaxDescent()

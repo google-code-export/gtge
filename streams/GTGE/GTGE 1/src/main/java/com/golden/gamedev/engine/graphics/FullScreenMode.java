@@ -33,15 +33,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import javax.imageio.ImageIO;
+
 import com.golden.gamedev.engine.BaseGraphics;
-import com.golden.gamedev.util.ImageUtil;
 
 /**
  * Graphics engine for Full Screen Exclusive Environment (FSEM).
  * <p>
  * 
- * See {@link com.golden.gamedev.engine.BaseGraphics} for how to use graphics
- * engine separated from Golden T Game Engine (GTGE) Frame Work.
+ * See {@link com.golden.gamedev.engine.BaseGraphics} for how to use graphics engine separated from Golden T Game Engine
+ * (GTGE) Frame Work.
  */
 public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 	
@@ -52,14 +53,13 @@ public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 	/**
 	 * The graphics device that constructs this graphics engine.
 	 */
-	public static final GraphicsDevice DEVICE = GraphicsEnvironment
-	        .getLocalGraphicsEnvironment().getDefaultScreenDevice();
+	public static final GraphicsDevice DEVICE = GraphicsEnvironment.getLocalGraphicsEnvironment()
+			.getDefaultScreenDevice();
 	
 	/**
 	 * The graphics configuration that constructs this graphics engine.
 	 */
-	public static final GraphicsConfiguration CONFIG = FullScreenMode.DEVICE
-	        .getDefaultConfiguration();
+	public static final GraphicsConfiguration CONFIG = FullScreenMode.DEVICE.getDefaultConfiguration();
 	
 	/**
 	 * *************************** AWT COMPONENT *******************************
@@ -91,18 +91,20 @@ public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 	 */
 	
 	/**
-	 * Creates new instance of Full Screen Graphics Engine with specified size,
-	 * and whether want to use bufferstrategy or volatile image.
-	 * @param d The resolution of fullscreen mode.
-	 * @param bufferstrategy If a buffer stratagy shall be used.
+	 * Creates new instance of Full Screen Graphics Engine with specified size, and whether want to use bufferstrategy
+	 * or volatile image.
+	 * 
+	 * @param d
+	 *            The resolution of fullscreen mode.
+	 * @param bufferstrategy
+	 *            If a buffer stratagy shall be used.
 	 */
 	public FullScreenMode(Dimension d, boolean bufferstrategy) {
 		this.size = d;
 		
 		// checking for FSEM hardware support
 		if (!FullScreenMode.DEVICE.isFullScreenSupported()) {
-			throw new RuntimeException(
-			        "Full Screen Exclusive Mode is not supported");
+			throw new RuntimeException("Full Screen Exclusive Mode is not supported");
 		}
 		
 		// sets the game frame
@@ -110,10 +112,8 @@ public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 		
 		try {
 			// set frame icon
-			this.frame.setIconImage(ImageUtil.getImage(FullScreenMode.class
-			        .getResource("Icon.png")));
-		}
-		catch (Exception e) {
+			this.frame.setIconImage(ImageIO.read(FullScreenMode.class.getResource("Icon.png")));
+		} catch (Exception e) {
 		}
 		
 		this.frame.addWindowListener(WindowExitListener.getInstance());
@@ -138,9 +138,8 @@ public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 		if (bestDisplay == null) {
 			FullScreenMode.DEVICE.setFullScreenWindow(null);
 			this.frame.dispose();
-			throw new RuntimeException("Changing Display Mode to "
-			        + this.size.width + "x" + this.size.height
-			        + " is not supported");
+			throw new RuntimeException("Changing Display Mode to " + this.size.width + "x" + this.size.height
+					+ " is not supported");
 		}
 		
 		// change screen display mode
@@ -149,8 +148,7 @@ public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 		// sleep for a while, let awt do her job
 		try {
 			Thread.sleep(1000L);
-		}
-		catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 		}
 		
 		// create backbuffer
@@ -184,14 +182,12 @@ public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 			try {
 				// create bufferstrategy
 				this.frame.createBufferStrategy(2);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				// unable to create bufferstrategy!
 				bufferCreated = false;
 				try {
 					Thread.sleep(200);
-				}
-				catch (InterruptedException excp) {
+				} catch (InterruptedException excp) {
 				}
 			}
 			
@@ -209,8 +205,7 @@ public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 		while (this.strategy == null) {
 			try {
 				this.strategy = this.frame.getBufferStrategy();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 			}
 		}
 		
@@ -221,8 +216,7 @@ public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 			// if the backbuffer has not been created yet
 			try {
 				gfx = this.getBackBuffer();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 			}
 		}
 		
@@ -239,8 +233,7 @@ public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 			this.offscreen = null;
 		}
 		
-		this.offscreen = FullScreenMode.CONFIG.createCompatibleVolatileImage(
-		        this.size.width, this.size.height);
+		this.offscreen = FullScreenMode.CONFIG.createCompatibleVolatileImage(this.size.width, this.size.height);
 	}
 	
 	public Graphics2D getBackBuffer() {
@@ -258,11 +251,9 @@ public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 				
 				this.currentGraphics = this.offscreen.createGraphics();
 				
-			}
-			else {
+			} else {
 				// using buffer strategy
-				this.currentGraphics = (Graphics2D) this.strategy
-				        .getDrawGraphics();
+				this.currentGraphics = (Graphics2D) this.strategy.getDrawGraphics();
 			}
 		}
 		
@@ -284,8 +275,7 @@ public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 			
 			return (!this.offscreen.contentsLost());
 			
-		}
-		else {
+		} else {
 			this.strategy.show();
 			
 			// sync the display on some systems.
@@ -309,8 +299,7 @@ public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 	public void cleanup() {
 		try {
 			Thread.sleep(500L);
-		}
-		catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 		}
 		
 		try {
@@ -323,8 +312,7 @@ public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 			if (this.frame != null) {
 				this.frame.dispose();
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.err.println("ERROR: Shutting down graphics context " + e);
 			System.exit(-1);
 		}
@@ -350,6 +338,7 @@ public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 	
 	/**
 	 * Returns the top level frame where this graphics engine is being put on.
+	 * 
 	 * @return The top level frame.
 	 */
 	public Frame getFrame() {
@@ -357,8 +346,8 @@ public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 	}
 	
 	/**
-	 * Returns whether this graphics engine is using buffer strategy or volatile
-	 * image.
+	 * Returns whether this graphics engine is using buffer strategy or volatile image.
+	 * 
 	 * @return If a buffer strategy or a volatile image is used.
 	 */
 	public boolean isBufferStrategy() {
@@ -366,9 +355,8 @@ public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 	}
 	
 	public String getGraphicsDescription() {
-		return "Full Screen Mode [" + this.getSize().width + "x"
-		        + this.getSize().height + "]"
-		        + ((this.strategy != null) ? " with BufferStrategy" : "");
+		return "Full Screen Mode [" + this.getSize().width + "x" + this.getSize().height + "]"
+				+ ((this.strategy != null) ? " with BufferStrategy" : "");
 	}
 	
 	public void setWindowTitle(String st) {
@@ -382,8 +370,7 @@ public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 	public void setWindowIcon(Image icon) {
 		try {
 			this.frame.setIconImage(icon);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 		}
 	}
 	
@@ -407,8 +394,7 @@ public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 		
 		ArrayList<DisplayMode> modeList = new ArrayList<DisplayMode>();
 		for (int i = 0; i < mode.length; i++) {
-			if (mode[i].getWidth() == size.width
-			        && mode[i].getHeight() == size.height) {
+			if (mode[i].getWidth() == size.width && mode[i].getHeight() == size.height) {
 				modeList.add(mode[i]);
 			}
 		}
@@ -418,32 +404,26 @@ public class FullScreenMode implements BaseGraphics, Comparator<DisplayMode> {
 			return null;
 		}
 		
-		DisplayMode[] match = modeList
-		        .toArray(new DisplayMode[modeList.size()]);
+		DisplayMode[] match = modeList.toArray(new DisplayMode[modeList.size()]);
 		Arrays.sort(match, this);
 		
 		return match[0];
 	}
 	
 	/**
-	 * Sorts display mode, display mode in the first stack will be used by this
-	 * graphics engine. The <code>o1</code> and <code>o2</code> are instance of
-	 * <code>java.awt.DisplayMode</code>.
+	 * Sorts display mode, display mode in the first stack will be used by this graphics engine. The <code>o1</code> and
+	 * <code>o2</code> are instance of <code>java.awt.DisplayMode</code>.
 	 * <p>
 	 * 
-	 * In this comparator, the first stack (the one that this graphics engine
-	 * will be used) will be display mode that has the biggest bits per pixel
-	 * (bpp) and has the biggest but limited to 75Hz frequency (refresh rate).
+	 * In this comparator, the first stack (the one that this graphics engine will be used) will be display mode that
+	 * has the biggest bits per pixel (bpp) and has the biggest but limited to 75Hz frequency (refresh rate).
 	 */
 	public int compare(DisplayMode mode1, DisplayMode mode2) {
-		int removed1 = (mode1.getRefreshRate() > 75) ? 5000 * mode1
-		        .getRefreshRate() : 0;
-		int removed2 = (mode2.getRefreshRate() > 75) ? 5000 * mode2
-		        .getRefreshRate() : 0;
+		int removed1 = (mode1.getRefreshRate() > 75) ? 5000 * mode1.getRefreshRate() : 0;
+		int removed2 = (mode2.getRefreshRate() > 75) ? 5000 * mode2.getRefreshRate() : 0;
 		
-		return ((mode2.getBitDepth() - mode1.getBitDepth()) * 1000)
-		        + (mode2.getRefreshRate() - mode1.getRefreshRate())
-		        - (removed2 - removed1);
+		return ((mode2.getBitDepth() - mode1.getBitDepth()) * 1000) + (mode2.getRefreshRate() - mode1.getRefreshRate())
+				- (removed2 - removed1);
 	}
 	
 }

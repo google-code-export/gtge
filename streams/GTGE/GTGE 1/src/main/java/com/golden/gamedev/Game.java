@@ -37,13 +37,15 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
 
+import javax.imageio.ImageIO;
+
 import com.golden.gamedev.engine.BaseAudio;
 import com.golden.gamedev.engine.BaseGraphics;
 import com.golden.gamedev.engine.BaseIO;
 import com.golden.gamedev.engine.BaseInput;
 import com.golden.gamedev.engine.BaseLoader;
-import com.golden.gamedev.engine.FrameRateSynchronizer;
 import com.golden.gamedev.engine.BufferedImageCache;
+import com.golden.gamedev.engine.FrameRateSynchronizer;
 import com.golden.gamedev.engine.SystemTimeFrameRateSynchronizer;
 import com.golden.gamedev.engine.audio.MidiRenderer;
 import com.golden.gamedev.engine.audio.WaveRenderer;
@@ -55,7 +57,7 @@ import com.golden.gamedev.object.GameFontManager;
 import com.golden.gamedev.object.PlayField;
 import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
-import com.golden.gamedev.util.ImageUtil;
+import com.golden.gamedev.util.BufferedImageUtil;
 
 /**
  * <code>Game</code> class is <b>Golden T Game Engine (GTGE) core class</b> that initializes all GTGE game engines, wrap
@@ -367,7 +369,7 @@ public abstract class Game {
 		// load fps font
 		try {
 			URL fontURL = com.golden.gamedev.Game.class.getResource("Game.fnt");
-			BufferedImage fpsImage = ImageUtil.getImage(fontURL);
+			BufferedImage fpsImage = ImageIO.read(fontURL);
 			
 			this.fpsFont = this.fontManager.getFont(fpsImage);
 			this.fontManager.removeFont(fpsImage); // unload the image
@@ -668,7 +670,7 @@ public abstract class Game {
 			// applet game should display to the user
 			// that the game has been ended
 			final Applet applet = (Applet) this.bsGraphics;
-			BufferedImage src = ImageUtil.createImage(this.getWidth(), this.getHeight());
+			BufferedImage src = BufferedImageUtil.createImage(this.getWidth(), this.getHeight(), Transparency.OPAQUE);
 			Graphics2D g = src.createGraphics();
 			
 			try {
@@ -827,9 +829,9 @@ public abstract class Game {
 		BufferedImage logo = null;
 		try {
 			URL logoURL = com.golden.gamedev.Game.class.getResource("Game.dat");
-			BufferedImage orig = ImageUtil.getImage(logoURL);
+			BufferedImage orig = ImageIO.read(logoURL);
 			
-			logo = ImageUtil.resize(orig, this.getWidth(), this.getHeight());
+			logo = BufferedImageUtil.resize(orig, this.getWidth(), this.getHeight());
 			
 			orig.flush();
 			orig = null;
@@ -1009,7 +1011,7 @@ public abstract class Game {
 	private void bailOut() {
 		try {
 			URL fontURL = com.golden.gamedev.Game.class.getResource("Game.fnt");
-			BufferedImage fpsImage = ImageUtil.getImage(fontURL);
+			BufferedImage fpsImage = ImageIO.read(fontURL);
 			
 			this.fontManager = new GameFontManager();
 			GameFont font = this.fontManager.getFont(fpsImage);
@@ -1076,24 +1078,23 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Returns a new created buffered image which the current game state is rendered into it.
+	 * Returns a new created buffered image which the current game state is rendered into it. <br />
+	 * <br />
+	 * This {@link BufferedImage} could then be saved as a PNG via ImageIO with the following command, where file is the
+	 * {@link File} object to place the image:
+	 * 
+	 * <pre>
+	 * BufferedImage image = takeScreenShot();
+	 * ImageIO.write(image, &quot;png&quot;, file);
+	 * </pre>
 	 */
 	public BufferedImage takeScreenShot() {
-		BufferedImage screen = ImageUtil.createImage(this.getWidth(), this.getHeight(), Transparency.OPAQUE);
+		BufferedImage screen = BufferedImageUtil.createImage(this.getWidth(), this.getHeight(), Transparency.OPAQUE);
 		Graphics2D g = screen.createGraphics();
 		this.render(g);
 		g.dispose();
 		
 		return screen;
-	}
-	
-	/**
-	 * Captures current game screen into specified file.
-	 * 
-	 * @see #takeScreenShot()
-	 */
-	public void takeScreenShot(File f) {
-		ImageUtil.saveImage(this.takeScreenShot(), f);
 	}
 	
 	/** ************************************************************************* */

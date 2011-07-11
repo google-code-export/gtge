@@ -31,15 +31,16 @@ import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.awt.image.VolatileImage;
 
+import javax.imageio.ImageIO;
+
 import com.golden.gamedev.engine.BaseGraphics;
-import com.golden.gamedev.util.ImageUtil;
 
 /**
  * Graphics engine for Windowed Environment.
  * <p>
  * 
- * See {@link com.golden.gamedev.engine.BaseGraphics} for how to use graphics
- * engine separated from Golden T Game Engine (GTGE) Frame Work.
+ * See {@link com.golden.gamedev.engine.BaseGraphics} for how to use graphics engine separated from Golden T Game Engine
+ * (GTGE) Frame Work.
  */
 public class WindowedMode implements BaseGraphics {
 	
@@ -48,14 +49,13 @@ public class WindowedMode implements BaseGraphics {
 	/**
 	 * The graphics device that constructs this graphics engine.
 	 */
-	public static final GraphicsDevice DEVICE = GraphicsEnvironment
-	        .getLocalGraphicsEnvironment().getDefaultScreenDevice();
+	public static final GraphicsDevice DEVICE = GraphicsEnvironment.getLocalGraphicsEnvironment()
+			.getDefaultScreenDevice();
 	
 	/**
 	 * The graphics configuration that constructs this graphics engine.
 	 */
-	public static final GraphicsConfiguration CONFIG = WindowedMode.DEVICE
-	        .getDefaultConfiguration();
+	public static final GraphicsConfiguration CONFIG = WindowedMode.DEVICE.getDefaultConfiguration();
 	
 	/** *************************** AWT COMPONENT ******************************* */
 	
@@ -78,10 +78,13 @@ public class WindowedMode implements BaseGraphics {
 	/** ************************************************************************* */
 	
 	/**
-	 * Creates new instance of Windowed Graphics Engine with specified size, and
-	 * whether want to use bufferstrategy or volatile image.
-	 * @param d The resolution of the window.
-	 * @param bufferstrategy If a buffer strategy shall be used.
+	 * Creates new instance of Windowed Graphics Engine with specified size, and whether want to use bufferstrategy or
+	 * volatile image.
+	 * 
+	 * @param d
+	 *            The resolution of the window.
+	 * @param bufferstrategy
+	 *            If a buffer strategy shall be used.
 	 */
 	public WindowedMode(Dimension d, boolean bufferstrategy) {
 		this.size = d;
@@ -91,10 +94,8 @@ public class WindowedMode implements BaseGraphics {
 		
 		try {
 			// set frame icon
-			this.frame.setIconImage(ImageUtil.getImage(WindowedMode.class
-			        .getResource("Icon.png")));
-		}
-		catch (Exception e) {
+			this.frame.setIconImage(ImageIO.read(WindowedMode.class.getResource("Icon.png")));
+		} catch (Exception e) {
 		}
 		
 		this.frame.addWindowListener(WindowExitListener.getInstance());
@@ -113,8 +114,7 @@ public class WindowedMode implements BaseGraphics {
 		this.frame.setVisible(true);
 		Insets inset = this.frame.getInsets();
 		this.frame.setVisible(false);
-		this.frame.setSize(this.size.width + inset.left + inset.right,
-		        this.size.height + inset.top + inset.bottom);
+		this.frame.setSize(this.size.width + inset.left + inset.right, this.size.height + inset.top + inset.bottom);
 		this.frame.add(this.canvas);
 		this.frame.pack();
 		this.frame.setLayout(null);
@@ -151,14 +151,12 @@ public class WindowedMode implements BaseGraphics {
 			try {
 				// create bufferstrategy
 				this.canvas.createBufferStrategy(2);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				// unable to create bufferstrategy!
 				bufferCreated = false;
 				try {
 					Thread.sleep(200);
-				}
-				catch (InterruptedException excp) {
+				} catch (InterruptedException excp) {
 				}
 			}
 			
@@ -176,8 +174,7 @@ public class WindowedMode implements BaseGraphics {
 		while (this.strategy == null) {
 			try {
 				this.strategy = this.canvas.getBufferStrategy();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 			}
 		}
 		
@@ -188,8 +185,7 @@ public class WindowedMode implements BaseGraphics {
 			// if the backbuffer has not been created yet
 			try {
 				gfx = this.getBackBuffer();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 			}
 		}
 		
@@ -206,8 +202,7 @@ public class WindowedMode implements BaseGraphics {
 			this.offscreen = null;
 		}
 		
-		this.offscreen = WindowedMode.CONFIG.createCompatibleVolatileImage(
-		        this.size.width, this.size.height);
+		this.offscreen = WindowedMode.CONFIG.createCompatibleVolatileImage(this.size.width, this.size.height);
 	}
 	
 	public Graphics2D getBackBuffer() {
@@ -223,11 +218,9 @@ public class WindowedMode implements BaseGraphics {
 				}
 				this.currentGraphics = this.offscreen.createGraphics();
 				
-			}
-			else {
+			} else {
 				// using buffer strategy
-				this.currentGraphics = (Graphics2D) this.strategy
-				        .getDrawGraphics();
+				this.currentGraphics = (Graphics2D) this.strategy.getDrawGraphics();
 			}
 		}
 		
@@ -249,8 +242,7 @@ public class WindowedMode implements BaseGraphics {
 			
 			return (!this.offscreen.contentsLost());
 			
-		}
-		else {
+		} else {
 			this.strategy.show();
 			
 			// sync the display on some systems.
@@ -268,8 +260,7 @@ public class WindowedMode implements BaseGraphics {
 	public void cleanup() {
 		try {
 			Thread.sleep(200L);
-		}
-		catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 		}
 		
 		try {
@@ -277,8 +268,7 @@ public class WindowedMode implements BaseGraphics {
 			if (this.frame != null) {
 				this.frame.dispose();
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			System.err.println("ERROR: Shutting down graphics context " + e);
 			System.exit(-1);
 		}
@@ -298,6 +288,7 @@ public class WindowedMode implements BaseGraphics {
 	
 	/**
 	 * Returns the top level frame where this graphics engine is being put on.
+	 * 
 	 * @return The top level frame.
 	 */
 	public Frame getFrame() {
@@ -305,8 +296,8 @@ public class WindowedMode implements BaseGraphics {
 	}
 	
 	/**
-	 * Returns whether this graphics engine is using buffer strategy or volatile
-	 * image.
+	 * Returns whether this graphics engine is using buffer strategy or volatile image.
+	 * 
 	 * @return If a buffer strategy or a volatile image is used.
 	 */
 	public boolean isBufferStrategy() {
@@ -314,9 +305,8 @@ public class WindowedMode implements BaseGraphics {
 	}
 	
 	public String getGraphicsDescription() {
-		return "Windowed Mode [" + this.getSize().width + "x"
-		        + this.getSize().height + "]"
-		        + ((this.strategy != null) ? " with BufferStrategy" : "");
+		return "Windowed Mode [" + this.getSize().width + "x" + this.getSize().height + "]"
+				+ ((this.strategy != null) ? " with BufferStrategy" : "");
 	}
 	
 	public void setWindowTitle(String st) {
@@ -330,8 +320,7 @@ public class WindowedMode implements BaseGraphics {
 	public void setWindowIcon(Image icon) {
 		try {
 			this.frame.setIconImage(icon);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 		}
 	}
 	

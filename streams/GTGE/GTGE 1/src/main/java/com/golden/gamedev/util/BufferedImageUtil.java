@@ -21,7 +21,7 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
-import java.awt.Image;
+import java.awt.HeadlessException;
 import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -58,51 +58,60 @@ public final class BufferedImageUtil {
 		throw new UnsupportedOperationException("The ImageUtil class may not be instantiated!");
 	}
 	
-	// REVIEW-HIGH: Since this method is used all over, it needs better documentation.
 	/**
-	 * Creates blank image with specified width, height, and transparency.
+	 * Creates a blank image compatible with rendering on the {@link GraphicsEnvironment#getLocalGraphicsEnvironment()
+	 * local graphics environment} with the given width, height and {@link Transparency}.
 	 * 
 	 * @param width
-	 *            image width
+	 *            The width of the image to be created, which must be greater than zero.
 	 * @param height
-	 *            image height
+	 *            The height of the image to be created, which must be greater than zero.
 	 * @param transparency
-	 *            image transparency
-	 * @return Blank image.
-	 * @see Transparency#OPAQUE
-	 * @see Transparency#BITMASK
-	 * @see Transparency#TRANSLUCENT
+	 *            The {@link Transparency} of the image to be created.
+	 * @return The blank {@link BufferedImage} compatible with the current
+	 *         {@link GraphicsEnvironment#getLocalGraphicsEnvironment() local graphics environment}.
+	 * @throws HeadlessException
+	 *             Throws a {@link HeadlessException} if the current machine is unable to display an image.
+	 * @throws IllegalArgumentException
+	 *             Throws an {@link IllegalArgumentException} if the width or height is less than or equal to zero, or
+	 *             the given {@link Transparency} value is invalid.
+	 * @see Transparency For the values that are supported for the transparency value.
 	 */
 	public static BufferedImage createImage(final int width, final int height, final int transparency) {
+		Validate.isTrue(width > 0, "The width must be greater than zero!");
+		Validate.isTrue(height > 0, "The height must be greater than zero!");
 		return GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration()
 				.createCompatibleImage(width, height, transparency);
 	}
 	
 	/**
-	 * Applying mask into image using specified masking color. Any Color in the image that matches the masking color
-	 * will be converted to transparent.
+	 * Creates a new {@link BufferedImage} which is the same as the original {@link BufferedImage} with a mask that
+	 * makes the given {@link Color} converted to a transparent value.
 	 * 
-	 * @param img
-	 *            The source image
-	 * @param keyColor
-	 *            Masking color
-	 * @return Masked image
+	 * @param image
+	 *            The non-null source {@link BufferedImage} instance to apply the mask to.
+	 * @param colorToMask
+	 *            The non-null {@link Color} to be masked.
+	 * @return The {@link BufferedImage} instance with the given {@link Color} value converted to transparent.
+	 * @throws IllegalArgumentException
+	 *             Throws an {@link IllegalArgumentException} if either argument is null.
 	 */
-	public static BufferedImage applyMask(final Image img, final Color keyColor) {
-		final BufferedImage alpha = BufferedImageUtil.createImage(img.getWidth(null), img.getHeight(null),
+	public static BufferedImage applyMask(final BufferedImage image, final Color colorToMask) {
+		Validate.notNull(image, "The image may not be null!");
+		Validate.notNull(colorToMask, "The color to mask may not be null!");
+		final BufferedImage alpha = BufferedImageUtil.createImage(image.getWidth(), image.getHeight(),
 				Transparency.BITMASK);
 		
 		final Graphics2D g = alpha.createGraphics();
 		g.setComposite(AlphaComposite.Src);
-		g.drawImage(img, 0, 0, null);
+		g.drawImage(image, 0, 0, null);
 		g.dispose();
 		
-		final int transparentPixelColorToMask = keyColor.getRGB();
+		final int transparentPixelColorToMask = colorToMask.getRGB();
 		for (int y = 0; y < alpha.getHeight(); y++) {
 			for (int x = 0; x < alpha.getWidth(); x++) {
 				final int pixelColor = alpha.getRGB(x, y);
 				if (pixelColor == transparentPixelColorToMask) {
-					// make transparent
 					alpha.setRGB(x, y, pixelColor & 0x00ffffff);
 				}
 			}
@@ -112,7 +121,7 @@ public final class BufferedImageUtil {
 	}
 	
 	/**
-	 * Splits a single image into an array of images. The image is cut by specified column and row.
+	 * Splits a single image into an array of images based on the specified number of columns and rows.
 	 * 
 	 * @param image
 	 *            the source image
@@ -121,8 +130,15 @@ public final class BufferedImageUtil {
 	 * @param rows
 	 *            image row
 	 * @return Array of images cutted by specified column and row.
+	 * @throws IllegalArgumentException
+	 *             Throws an {@link IllegalArgumentException} if the given image is null, or either the columns or the
+	 *             rows specified is less than or equal to zero.
 	 */
 	public static BufferedImage[] splitImages(final BufferedImage image, final int columns, final int rows) {
+		Validate.notNull(image, "The given image may not be null!");
+		Validate.isTrue(columns > 0, "The number of columns to split the image into must be greater than zero!");
+		Validate.isTrue(rows > 0, "The number of rows to split the image into must be greater than zero!");
+		
 		final int sourceImageWidth = image.getWidth() / columns;
 		final int sourceImageHeight = image.getHeight() / rows;
 		final int transparency = image.getColorModel().getTransparency();
@@ -147,6 +163,8 @@ public final class BufferedImageUtil {
 		return returnedImages;
 	}
 	
+	// REVIEW-HIGH: Make a utility that expressly tests this class so that it can be shown that the image rotation is
+	// working properly.
 	/**
 	 * Rotates an image by specified angle (clockwise).
 	 * <p>

@@ -32,7 +32,6 @@ import com.golden.gamedev.engine.BufferedImageCache;
 import com.golden.gamedev.engine.FrameRateSynchronizer;
 import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.GameFont;
-import com.golden.gamedev.object.GameFontManager;
 import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.util.BufferedImageUtil;
 
@@ -77,9 +76,6 @@ public abstract class GameObject {
 	/** Audio engine for sound. */
 	public BaseAudio bsSound;
 	
-	/** Font manager. */
-	public GameFontManager fontManager;
-	
 	/** ************************* OTHER PROPERTIES ****************************** */
 	
 	private boolean finish; // true, to back to game chooser
@@ -111,8 +107,6 @@ public abstract class GameObject {
 		this.bsTimer = this.parent.bsTimer;
 		this.bsMusic = this.parent.bsMusic;
 		this.bsSound = this.parent.bsSound;
-		
-		this.fontManager = this.parent.fontManager;
 	}
 	
 	/**
@@ -335,13 +329,6 @@ public abstract class GameObject {
 	 */
 	public int getFPS() {
 		return this.bsTimer.getFps();
-	}
-	
-	/**
-	 * Draws game frame-per-second (FPS) to specified location.
-	 */
-	public void drawFPS(Graphics2D g, int x, int y) {
-		this.fontManager.getFont("FPS Font").drawString(g, "FPS = " + this.getCurrentFPS() + "/" + this.getFPS(), x, y);
 	}
 	
 	/** ************************************************************************* */

@@ -17,7 +17,11 @@
 package com.golden.gamedev.util;
 
 // JFC
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.io.IOException;
 import java.lang.reflect.Array;
+import java.net.URL;
 
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.math.RandomUtils;
@@ -86,5 +90,31 @@ public final class Utility {
 			Array.set(src, swapIndex, Array.get(src, valueIndex));
 			Array.set(src, valueIndex, swappedValue);
 		}
+	}
+	
+	// REVIEW-MEDIUM: better documentation needed, enforce non-nullality for the URL.
+	// REVIEW-HIGH: Alter the signature of this method to simply "createFont" and allow the type to be passed in as a
+	// nullable integer. Specify that if it is null, it will default to a TrueType font.
+	// REVIEW-HIGH: Instead of catching the exceptions, throw them - this is a deficiency in Java that GTGE won't cure,
+	// and this method
+	// shouldn't simply use verdana fonts as defaults as it is completely unspecified. Can be rethrown as
+	// RuntimeExceptions, though.
+	/**
+	 * Creates java.awt.Font from specified True Type Font URL (*.ttf).
+	 */
+	public static Font createTrueTypeFont(URL url, int style, float size) {
+		Font f = null;
+		
+		try {
+			f = Font.createFont(Font.TRUETYPE_FONT, url.openStream());
+		} catch (IOException e) {
+			System.err.println("ERROR: " + url + " is not found or can not be read");
+			f = new Font("Verdana", 0, 0);
+		} catch (FontFormatException e) {
+			System.err.println("ERROR: " + url + " is not a valid true type font");
+			f = new Font("Verdana", 0, 0);
+		}
+		
+		return f.deriveFont(style, size);
 	}
 }

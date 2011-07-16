@@ -53,10 +53,10 @@ import com.golden.gamedev.engine.input.AWTInput;
 import com.golden.gamedev.funbox.ErrorNotificationDialog;
 import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.GameFont;
-import com.golden.gamedev.object.GameFontManager;
 import com.golden.gamedev.object.PlayField;
 import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.object.SpriteGroup;
+import com.golden.gamedev.object.font.AdvanceBitmapFont;
 import com.golden.gamedev.util.BufferedImageUtil;
 
 /**
@@ -167,9 +167,6 @@ public abstract class Game {
 	public BaseAudio bsMusic;
 	/** Audio engine for sound. */
 	public BaseAudio bsSound;
-	
-	/** Font manager. */
-	public GameFontManager fontManager;
 	
 	/** **************************** GAME VARIABLES ***************************** */
 	
@@ -371,18 +368,7 @@ public abstract class Game {
 			URL fontURL = com.golden.gamedev.Game.class.getResource("Game.fnt");
 			BufferedImage fpsImage = ImageIO.read(fontURL);
 			
-			this.fpsFont = this.fontManager.getFont(fpsImage);
-			this.fontManager.removeFont(fpsImage); // unload the image
-			this.fontManager.putFont("FPS Font", this.fpsFont);
-			
-			if (this.development == false) {
-				// if splash screen is shown (distribute = true)
-				// fps font is not used anymore
-				// remove the reference!
-				// however the font still exists via fontManager.getFont("FPS
-				// Font");
-				this.fpsFont = null;
-			}
+			this.fpsFont = new AdvanceBitmapFont(fpsImage);
 			
 		} catch (Exception e) {
 			// someone is trying to hack GTGE here!
@@ -571,7 +557,6 @@ public abstract class Game {
 	 * @see #bsTimer
 	 * @see #bsMusic
 	 * @see #bsSound
-	 * @see #fontManager
 	 * @see com.golden.gamedev.engine
 	 */
 	protected void initEngine() {
@@ -605,12 +590,6 @@ public abstract class Game {
 		// set background screen size
 		Background.screen = this.bsGraphics.getSize();
 		
-		// creates font manager
-		if (this.fontManager == null) {
-			this.fontManager = new GameFontManager();
-		}
-		
-		// locale = Locale.getDefault();
 	}
 	
 	/** ************************************************************************* */
@@ -1013,8 +992,7 @@ public abstract class Game {
 			URL fontURL = com.golden.gamedev.Game.class.getResource("Game.fnt");
 			BufferedImage fpsImage = ImageIO.read(fontURL);
 			
-			this.fontManager = new GameFontManager();
-			GameFont font = this.fontManager.getFont(fpsImage);
+			GameFont font = new AdvanceBitmapFont(fpsImage);
 			
 			// clear background with red color
 			// and write cracked version!
@@ -1147,10 +1125,20 @@ public abstract class Game {
 	}
 	
 	/**
-	 * Draws game frame-per-second (FPS) to specified location.
+	 * Draws game frame-per-second (FPS) to specified location with the currently registered {@link #fpsFont Frames Per
+	 * Second GameFont} instance.
+	 * 
+	 * @throws NullPointerException
+	 *             Throws a {@link NullPointerException} if the currently initialized {@link #fpsFont Frames Per Second
+	 *             GameFont} instance is null.
 	 */
 	public void drawFPS(Graphics2D g, int x, int y) {
-		this.fontManager.getFont("FPS Font").drawString(g, "FPS = " + this.getCurrentFPS() + "/" + this.getFPS(), x, y);
+		drawFps(fpsFont, g, x, y, bsTimer.getRenderedFps(), bsTimer.getFps());
+	}
+	
+	public static void drawFps(final GameFont fpsFont, final Graphics2D g, final int x, final int y,
+			final int currentFramesPerSecond, final int requestedFramesPerSecond) {
+		fpsFont.drawString(g, "FPS = " + currentFramesPerSecond + "/" + requestedFramesPerSecond, x, y);
 	}
 	
 	/** ************************************************************************* */

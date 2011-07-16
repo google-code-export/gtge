@@ -27,6 +27,7 @@ import java.awt.image.BufferedImage;
 import org.apache.commons.lang.Validate;
 
 import com.golden.gamedev.util.BufferedImageUtil;
+import com.golden.gamedev.util.Utility;
 
 /**
  * Game font that use images for the letter, each images can have different width but must have same height.
@@ -39,7 +40,7 @@ import com.golden.gamedev.util.BufferedImageUtil;
  * 
  * If the images font have same width, use the standard {@link com.golden.gamedev.object.font.BitmapFont}.
  */
-public class AdvanceBitmapFont extends BitmapFont {
+public final class AdvanceBitmapFont extends BitmapFont {
 	
 	private int[] w;
 	
@@ -84,6 +85,16 @@ public class AdvanceBitmapFont extends BitmapFont {
 				+ "\\]^_`abcdefghijklmno" + "pqrstuvwxyz{|}~");
 	}
 	
+	// REVIEW-HIGH: Document this constructor.
+	public AdvanceBitmapFont(BufferedImage image) {
+		this(cutLetter(image));
+	}
+	
+	// REVIEW-HIGH: Document this constructor.
+	public AdvanceBitmapFont(BufferedImage image, String letterSequence) {
+		this(cutLetter(image), letterSequence);
+	}
+	
 	public void setImageFont(BufferedImage[] imagefont, String letterSequence) {
 		super.setImageFont(imagefont, letterSequence);
 		
@@ -109,6 +120,68 @@ public class AdvanceBitmapFont extends BitmapFont {
 		return width;
 	}
 	
+	// REVIEW-MEDIUM: - This method needs to be moved inside the AdvanceBitmapFont class because it is applicable for
+	// its
+	// construction only.
+	public static BufferedImage[] cutLetter(BufferedImage bitmap) {
+		int delimiter = bitmap.getRGB(0, 0); // pixel <0,0> : delimiter
+		Integer[] width = new Integer[100]; // assumption : 100 letter
+		int ctr = 0;
+		int last = 0; // last width point
+		
+		for (int i = 1; i < bitmap.getWidth(); i++) {
+			if (bitmap.getRGB(i, 0) == delimiter) {
+				// found delimiter
+				width[ctr++] = i - last;
+				last = i;
+				
+				if (ctr >= width.length) {
+					width = Utility.expand(width, 50, true);
+				}
+			}
+		}
+		
+		// create bitmap font
+		BufferedImage[] imagefont = new BufferedImage[ctr];
+		Color backgr = new Color(bitmap.getRGB(1, 0));
+		int height = bitmap.getHeight() - 1;
+		int w = 0;
+		for (int i = 0; i < imagefont.length; i++) {
+			imagefont[i] = BufferedImageUtil.applyMask(bitmap.getSubimage(w, 1, width[i], height), backgr);
+			
+			w += width[i];
+		}
+		
+		return imagefont;
+	}
+	
+	// REVIEW-HIGH: Place this documentation somewhere appropriate in this class.
+	/**
+	 * Returns default {@link com.golden.gamedev.object.font.AdvanceBitmapFont} that using standard <i>Bitmap Font
+	 * Writer</i>, created by Stefan Pettersson. Bitmap Font Writer is freeware font editor, visit Bitmap Font Writer
+	 * website (http://www.stefan-pettersson.nu) for updates and additional information.
+	 * <p>
+	 * 
+	 * The images should be following this letter sequence :
+	 * 
+	 * <pre>
+	 *         ! &quot; # $ % &amp; ' ( ) * + , - . / 0 1 2 3
+	 *       4 5 6 7 8 9 : ; &lt; = &gt; ? @ A B C D E F G
+	 *       H I J K L M N O P Q R S T U V W X Y Z [
+	 *       \ ] &circ; _ a b c d e f g h i j k l m n o p
+	 *       q r s t u v w x y z { | } &tilde;
+	 * </pre>
+	 * 
+	 * How to: Creating <i>Bitmap Font Writer</i> Font <br>
+	 * The image size shall be cut exactly according to the font size, but leaving one pixel row above the characters. <br>
+	 * This row of pixels is used to define each characters width. <br>
+	 * The first pixel (0,0) will be used as the font width delimiters.
+	 * 
+	 * @param bitmap
+	 *            the font images
+	 * @return Bitmap <code>GameFont</code>.
+	 */
+	
 	/**
 	 * Creates a {@link BufferedImage} from the given {@link Font} and {@link Color} with the standard sequence of
 	 * printable ASCII characters. The {@link BufferedImage} returned is compatible with the image format the <a
@@ -123,9 +196,6 @@ public class AdvanceBitmapFont extends BitmapFont {
 	 * @return A {@link BufferedImage} containing an image with the standard sequence of printable ASCII characters.
 	 * @throws IllegalArgumentException
 	 *             Throws an {@link IllegalArgumentException} if either argument is null.
-	 * 
-	 * @see com.golden.gamedev.object.GameFontManager#getFont(BufferedImage) The standard sequence of printable ASCII
-	 *      characters.
 	 */
 	public static BufferedImage createBitmapFont(Font sourceFont, Color characterColor) {
 		Validate.notNull(sourceFont, "The source font may not be null!");

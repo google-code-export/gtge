@@ -20,37 +20,33 @@ package com.golden.gamedev.object;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.util.Comparator;
+import java.util.List;
 
+// REVIEW-HIGH: This shouldn't be a subclass, but rather an implementation of SpriteGroup.
 /**
- * Subclass of <code>SpriteGroup</code> that designed to update and render
- * visible on the screen sprites only.
+ * Subclass of <code>SpriteGroup</code> that designed to update and render visible on the screen sprites only.
  * <p>
  * 
- * In standard sprite group, all registered sprites in the group is updated,
- * rendered, and check for collision in every game loop. If the game has many
- * sprites and many of them are not visible, it is not efficient to update,
- * render, and check for collision all of the sprites.
+ * In standard sprite group, all registered sprites in the group is updated, rendered, and check for collision in every
+ * game loop. If the game has many sprites and many of them are not visible, it is not efficient to update, render, and
+ * check for collision all of the sprites.
  * <p>
  * 
- * <code>AdvanceSpriteGroup</code> is designed to optimize the sprite updating
- * and rendering by updating and rendering sprites that only visible on screen,
- * sprites that outside the game view area are not checked.
+ * <code>AdvanceSpriteGroup</code> is designed to optimize the sprite updating and rendering by updating and rendering
+ * sprites that only visible on screen, sprites that outside the game view area are not checked.
  * <p>
  * 
- * The main operation is storing sprites that
- * {@linkplain com.golden.gamedev.object.Sprite#isOnScreen() visible on screen}
- * into an inner sprite group, and the inner sprite group that will be update,
- * render, and check for collision.
+ * The main operation is storing sprites that {@linkplain com.golden.gamedev.object.Sprite#isOnScreen() visible on
+ * screen} into an inner sprite group, and the inner sprite group that will be update, render, and check for collision.
  */
-public class AdvanceSpriteGroup extends SpriteGroup {
+public class AdvanceSpriteGroup extends BasicSpriteGroup {
 	
 	/**
-	 * Inner sprite group that hold on screen sprites (inside view area sprites)
-	 * of this group.
+	 * Inner sprite group that hold on screen sprites (inside view area sprites) of this group.
 	 */
-	protected SpriteGroup ONSCREEN_GROUP;
+	protected BasicSpriteGroup ONSCREEN_GROUP;
 	
-	private Insets offset;
+	private final Insets offset;
 	
 	/**
 	 * *************************************************************************
@@ -63,36 +59,31 @@ public class AdvanceSpriteGroup extends SpriteGroup {
 	 */
 	
 	/**
-	 * Creates new <code>AdvanceSpriteGroup</code> with specified name, and
-	 * specified screen offset on each side.
+	 * Creates new <code>AdvanceSpriteGroup</code> with specified name, and specified screen offset on each side.
 	 */
-	public AdvanceSpriteGroup(String name, int topOffset, int leftOffset,
-	        int bottomOffset, int rightOffset) {
+	public AdvanceSpriteGroup(final String name, final int topOffset, final int leftOffset, final int bottomOffset,
+			final int rightOffset) {
 		super(name);
 		
-		this.offset = new Insets(topOffset, leftOffset, bottomOffset,
-		        rightOffset);
+		offset = new Insets(topOffset, leftOffset, bottomOffset, rightOffset);
 		
-		this.ONSCREEN_GROUP = new SpriteGroup(name + " #ONSCREEN");
-		this.ONSCREEN_GROUP.setExpandFactor(50);
+		ONSCREEN_GROUP = new BasicSpriteGroup(name + " #ONSCREEN");
 		// this group has done the scanning
 		// on_screen_group no need to do the scanning anymore
-		this.ONSCREEN_GROUP.getScanFrequence().setActive(false);
+		ONSCREEN_GROUP.getScanFrequence().setActive(false);
 	}
 	
 	/**
-	 * Creates new <code>AdvanceSpriteGroup</code> with specified name, and
-	 * specified screen offset.
+	 * Creates new <code>AdvanceSpriteGroup</code> with specified name, and specified screen offset.
 	 */
-	public AdvanceSpriteGroup(String name, int screenOffset) {
+	public AdvanceSpriteGroup(final String name, final int screenOffset) {
 		this(name, screenOffset, screenOffset, screenOffset, screenOffset);
 	}
 	
 	/**
-	 * Creates new <code>AdvanceSpriteGroup</code> with specified name without
-	 * screen offset (0, 0, 0, 0).
+	 * Creates new <code>AdvanceSpriteGroup</code> with specified name without screen offset (0, 0, 0, 0).
 	 */
-	public AdvanceSpriteGroup(String name) {
+	public AdvanceSpriteGroup(final String name) {
 		this(name, 0);
 	}
 	
@@ -106,30 +97,26 @@ public class AdvanceSpriteGroup extends SpriteGroup {
 	 * *************************************************************************
 	 */
 	
-	public void update(long elapsedTime) {
+	@Override
+	public void update(final long elapsedTime) {
 		// clear previous on screen sprites
-		this.ONSCREEN_GROUP.clear();
+		ONSCREEN_GROUP.clear();
 		
 		// scanning on screen sprites
-		Sprite[] s = this.getGroupSprites();
-		int size = this.getGroupSize();
-		
-		for (int i = 0; i < size; i++) {
-			if (s[i].isActive()
-			        && s[i].isOnScreen(this.offset.left, this.offset.top,
-			                this.offset.right, this.offset.bottom)) {
-				this.ONSCREEN_GROUP.add(s[i]);
+		for (Sprite sprite : getGroupSprites()) {
+			if (sprite.isActive() && sprite.isOnScreen(offset.left, offset.top, offset.right, offset.bottom)) {
+				ONSCREEN_GROUP.add(sprite);
 			}
 		}
 		
 		// update only on screen sprites
-		this.ONSCREEN_GROUP.update(elapsedTime);
+		ONSCREEN_GROUP.update(elapsedTime);
 		
 		// schedule to scan inactive sprite
 		// since we override update(), we must schedule this manually
 		// or inactive sprites in this group will never be thrown !!
-		if (this.getScanFrequence().action(elapsedTime)) {
-			this.removeInactiveSprites();
+		if (getScanFrequence().action(elapsedTime)) {
+			removeInactiveSprites();
 		}
 	}
 	
@@ -143,9 +130,10 @@ public class AdvanceSpriteGroup extends SpriteGroup {
 	 * *************************************************************************
 	 */
 	
-	public void render(Graphics2D g) {
+	@Override
+	public void render(final Graphics2D g) {
 		// render only on screen sprites
-		this.ONSCREEN_GROUP.render(g);
+		ONSCREEN_GROUP.render(g);
 	}
 	
 	/**
@@ -158,24 +146,26 @@ public class AdvanceSpriteGroup extends SpriteGroup {
 	 * *************************************************************************
 	 */
 	
-	public void setBackground(Background backgr) {
+	@Override
+	public void setBackground(final Background backgr) {
 		super.setBackground(backgr);
 		
-		this.ONSCREEN_GROUP.setBackground(backgr);
+		ONSCREEN_GROUP.setBackground(backgr);
 	}
 	
-	public void setComparator(Comparator<Sprite> c) {
+	@Override
+	public void setComparator(final Comparator<Sprite> c) {
 		super.setComparator(c);
 		
-		this.ONSCREEN_GROUP.setComparator(c);
+		ONSCREEN_GROUP.setComparator(c);
 	}
 	
 	/**
-	 * Returns screen offset of this group. Sprites that outside of screen
-	 * bounds that still in this offset still categorized as on screen sprites.
+	 * Returns screen offset of this group. Sprites that outside of screen bounds that still in this offset still
+	 * categorized as on screen sprites.
 	 */
 	public Insets getScreenOffset() {
-		return this.offset;
+		return offset;
 	}
 	
 	/**
@@ -188,32 +178,36 @@ public class AdvanceSpriteGroup extends SpriteGroup {
 	 * *************************************************************************
 	 */
 	
-	public Sprite remove(int index) {
-		Sprite s = super.remove(index);
+	@Override
+	public Sprite remove(final int index) {
+		final Sprite s = super.remove(index);
 		
 		if (s != null) {
-			this.ONSCREEN_GROUP.remove(s);
+			ONSCREEN_GROUP.remove(s);
 		}
 		
 		return s;
 	}
 	
-	public boolean remove(Sprite s) {
-		this.ONSCREEN_GROUP.remove(s);
+	@Override
+	public boolean remove(final Sprite s) {
+		ONSCREEN_GROUP.remove(s);
 		
 		return super.remove(s);
 	}
 	
+	@Override
 	public void clear() {
 		super.clear();
 		
-		this.ONSCREEN_GROUP.clear();
+		ONSCREEN_GROUP.clear();
 	}
 	
+	@Override
 	public void reset() {
 		super.reset();
 		
-		this.ONSCREEN_GROUP.reset();
+		ONSCREEN_GROUP.reset();
 	}
 	
 	/**
@@ -227,21 +221,21 @@ public class AdvanceSpriteGroup extends SpriteGroup {
 	 */
 	
 	/**
-	 * Returns all <i>on-screen sprites</i> (active, inactive, and also
-	 * <b>null</b> sprite) in this group.
+	 * Returns all <i>on-screen sprites</i> (active, inactive, and also <b>null</b> sprite) in this group.
 	 * 
 	 * @see #getSize()
 	 */
-	public Sprite[] getSprites() {
-		return this.ONSCREEN_GROUP.getSprites();
+	@Override
+	public List<Sprite> getSprites() {
+		return ONSCREEN_GROUP.getSprites();
 	}
 	
 	/**
-	 * Returns total <b>non-null</b> <i>on-screen sprites</i> (active + inactive
-	 * sprites) in this group.
+	 * Returns total <b>non-null</b> <i>on-screen sprites</i> (active + inactive sprites) in this group.
 	 */
+	@Override
 	public int getSize() {
-		return this.ONSCREEN_GROUP.getSize();
+		return ONSCREEN_GROUP.getSize();
 	}
 	
 	/**
@@ -255,12 +249,11 @@ public class AdvanceSpriteGroup extends SpriteGroup {
 	 */
 	
 	/**
-	 * Returns all sprites (active, inactive, and also <b>null</b> sprite) in
-	 * this group.
+	 * Returns all sprites (active, inactive, and also <b>null</b> sprite) in this group.
 	 * 
 	 * @see #getGroupSize()
 	 */
-	public Sprite[] getGroupSprites() {
+	public List<Sprite> getGroupSprites() {
 		return super.getSprites();
 	}
 	

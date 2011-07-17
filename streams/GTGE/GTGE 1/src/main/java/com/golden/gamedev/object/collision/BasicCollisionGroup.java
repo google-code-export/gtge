@@ -25,7 +25,7 @@ import org.apache.commons.lang.Validate;
 
 import com.golden.gamedev.object.PlayField;
 import com.golden.gamedev.object.Sprite;
-import com.golden.gamedev.object.SpriteGroup;
+import com.golden.gamedev.object.BasicSpriteGroup;
 
 /**
  * Basic collision check, only check whether a collision occured or not.
@@ -53,7 +53,7 @@ import com.golden.gamedev.object.SpriteGroup;
  * });
  * </pre>
  * 
- * @see PlayField#addCollisionGroup(SpriteGroup, SpriteGroup, CollisionManager)
+ * @see PlayField#addCollisionGroup(BasicSpriteGroup, BasicSpriteGroup, CollisionManager)
  */
 public abstract class BasicCollisionGroup implements CollisionManager {
 	
@@ -161,31 +161,24 @@ public abstract class BasicCollisionGroup implements CollisionManager {
 	}
 	
 	@Override
-	public void checkCollision(final SpriteGroup first, final SpriteGroup second) {
+	public void checkCollision(final BasicSpriteGroup first, final BasicSpriteGroup second) {
 		if (!first.isActive() || !second.isActive()) {
 			// one of the group is not active
 			return;
 		}
 		
-		Sprite[] member1 = first.getSprites(), // group one members
+		List<Sprite> member1 = first.getSprites(), // group one members
 		member2 = second.getSprites();
-		int size1 = first.getSize(), // size of non-null members
-		size2 = second.getSize();
 		
-		Sprite sprite1, sprite2; // sprite reference
 		CollisionShape shape1, shape2; // sprite collision rect
 		
-		for (int i = 0; i < size1; i++) {
-			sprite1 = member1[i];
-			
+		for (Sprite sprite1 : member1) {
 			if (!sprite1.isActive() || (shape1 = this.getCollisionShape1(sprite1)) == null) {
 				// sprite do not want collision check
 				continue;
 			}
 			
-			for (int j = 0; j < size2; j++) {
-				sprite2 = member2[j];
-				
+			for (Sprite sprite2 : member2) {
 				if (!sprite2.isActive() || sprite1 == sprite2 || (shape2 = this.getCollisionShape2(sprite2)) == null) {
 					// sprite do not want collision check
 					continue;

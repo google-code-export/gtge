@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.golden.gamedev.object.Sprite;
-import com.golden.gamedev.object.SpriteGroup;
+import com.golden.gamedev.object.BasicSpriteGroup;
 import com.golden.gamedev.util.Utility;
 
 /**
@@ -80,7 +80,7 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup implem
 	 */
 	
 	@Override
-	public void checkCollision(final SpriteGroup first, final SpriteGroup second) {
+	public void checkCollision(final BasicSpriteGroup first, final BasicSpriteGroup second) {
 		// clear previous collision event
 		this.storage.clear();
 		
@@ -90,26 +90,20 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup implem
 			return;
 		}
 		
-		Sprite[] member1 = first.getSprites(), // members group one
+		List<Sprite> member1 = first.getSprites(), // members group one
 		member2 = second.getSprites();
-		int size1 = first.getSize(), // total non-null members
-		size2 = second.getSize();
 		
-		Sprite sprite1, sprite2; // sprite reference
 		CollisionShape shape1, shape2; // sprite collision rect
 		
 		// sprite 1, 2 collision rectangle -> rect1, rect2
-		for (int i = 0; i < size1; i++) {
-			sprite1 = member1[i];
+		for (Sprite sprite1 : member1) {
 			
 			if (!sprite1.isActive() || (shape1 = sprite1.getDefaultCollisionShape()) == null) {
 				// sprite do not want collision check
 				continue;
 			}
 			
-			for (int j = 0; j < size2; j++) {
-				sprite2 = member2[j];
-				
+			for (Sprite sprite2 : member2) {
 				if (!sprite2.isActive() || // !sprite1.isActive() ||
 						sprite1 == sprite2 || (shape2 = sprite2.getDefaultCollisionShape()) == null) {
 					// sprite do not want collision check

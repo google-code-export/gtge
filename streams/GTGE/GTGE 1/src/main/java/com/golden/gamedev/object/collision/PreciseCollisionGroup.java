@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import com.golden.gamedev.object.PlayField;
 import com.golden.gamedev.object.Sprite;
-import com.golden.gamedev.object.SpriteGroup;
+import com.golden.gamedev.object.BasicSpriteGroup;
 
 /**
  * <p>
@@ -49,7 +49,7 @@ import com.golden.gamedev.object.SpriteGroup;
  * of smaller convex <code>Sprite</code>s.
  * </p>
  * 
- * @see PlayField#addCollisionGroup(SpriteGroup, SpriteGroup, CollisionManager)
+ * @see PlayField#addCollisionGroup(BasicSpriteGroup, BasicSpriteGroup, CollisionManager)
  * 
  */
 public abstract class PreciseCollisionGroup extends CollisionGroup {

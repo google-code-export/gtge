@@ -36,6 +36,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -55,7 +56,7 @@ import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.GameFont;
 import com.golden.gamedev.object.PlayField;
 import com.golden.gamedev.object.Sprite;
-import com.golden.gamedev.object.SpriteGroup;
+import com.golden.gamedev.object.BasicSpriteGroup;
 import com.golden.gamedev.object.font.AdvanceBitmapFont;
 import com.golden.gamedev.util.BufferedImageUtil;
 
@@ -1207,17 +1208,16 @@ public abstract class Game {
 	 * with mouse pointer.
 	 * 
 	 * @param group
-	 *            {@link SpriteGroup} to check its intersection with mouse pointer
+	 *            {@link BasicSpriteGroup} to check its intersection with mouse pointer
 	 * @param pixelCheck
 	 *            true, checking the sprite image with pixel precision
 	 */
-	public Sprite checkPosMouse(SpriteGroup group, boolean pixelCheck) {
-		Sprite[] sprites = group.getSprites();
-		int size = group.getSize();
+	public Sprite checkPosMouse(BasicSpriteGroup group, boolean pixelCheck) {
+		List<Sprite> sprites = group.getSprites();
 		
-		for (int i = 0; i < size; i++) {
-			if (sprites[i].isActive() && this.checkPosMouse(sprites[i], pixelCheck)) {
-				return sprites[i];
+		for (Sprite sprite : sprites) {
+			if (sprite.isActive() && this.checkPosMouse(sprite, pixelCheck)) {
+				return sprite;
 			}
 		}
 		
@@ -1234,7 +1234,7 @@ public abstract class Game {
 	 *            true, checking the sprite image with pixel precision
 	 */
 	public Sprite checkPosMouse(PlayField field, boolean pixelCheck) {
-		SpriteGroup[] groups = field.getGroups();
+		BasicSpriteGroup[] groups = field.getGroups();
 		int size = groups.length;
 		
 		for (int i = 0; i < size; i++) {

@@ -31,7 +31,7 @@ import com.golden.gamedev.object.collision.CollisionShape;
  * 
  * Every sprite is lived in a background, by default sprite is attached to
  * {@linkplain Background#getDefaultBackground default background}, always
- * remember to set the sprite to the game background or use {@link SpriteGroup}
+ * remember to set the sprite to the game background or use {@link BasicSpriteGroup}
  * class in {@link PlayField} to take care the sprite background set
  * automatically.
  * <p>
@@ -52,7 +52,7 @@ import com.golden.gamedev.object.collision.CollisionShape;
  * To create sprite behaviour, always use {@link Timer} class utility in order
  * to make the sprite behaviour independent of frame rate.
  * 
- * @see com.golden.gamedev.object.SpriteGroup
+ * @see com.golden.gamedev.object.BasicSpriteGroup
  * @see com.golden.gamedev.object.PlayField
  * @see com.golden.gamedev.object.Timer
  */
@@ -794,7 +794,7 @@ public class Sprite implements java.io.Serializable {
 	 * 
 	 * Layer is used for z-order rendering. Use this along with
 	 * {@link PlayField#setComparator(Comparator)} or
-	 * {@link SpriteGroup#setComparator(Comparator)} for that purpose.
+	 * {@link BasicSpriteGroup#setComparator(Comparator)} for that purpose.
 	 * 
 	 * @see #getLayer()
 	 */
@@ -834,6 +834,7 @@ public class Sprite implements java.io.Serializable {
 		return this.immutable;
 	}
 	
+	// REVIEW-HIGH: Rename to reusable. 
 	/**
 	 * Sets immutable state of this sprite, immutable sprite means the sprite
 	 * won't be removed from its group even though the sprite is not active.
@@ -851,10 +852,10 @@ public class Sprite implements java.io.Serializable {
 	 * 
 	 * <b>WARNING:</b> Immutable sprite won't be disposed by Java garbage
 	 * collector until the sprite is manually removed from its group using
-	 * {@link com.golden.gamedev.object.SpriteGroup#removeImmutableSprites()}.
+	 * {@link com.golden.gamedev.object.BasicSpriteGroup#removeImmutableSprites()}.
 	 * 
-	 * @see com.golden.gamedev.object.SpriteGroup#getInactiveSprite()
-	 * @see com.golden.gamedev.object.SpriteGroup#removeImmutableSprites()
+	 * @see com.golden.gamedev.object.BasicSpriteGroup#getInactiveSprite()
+	 * @see com.golden.gamedev.object.BasicSpriteGroup#removeImmutableSprites()
 	 * @see #setActive(boolean)
 	 */
 	public void setImmutable(boolean b) {

@@ -21,7 +21,6 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Transparency;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import com.golden.gamedev.engine.BaseAudio;
@@ -30,83 +29,73 @@ import com.golden.gamedev.engine.BaseIO;
 import com.golden.gamedev.engine.BaseInput;
 import com.golden.gamedev.engine.BufferedImageCache;
 import com.golden.gamedev.engine.FrameRateSynchronizer;
-import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.GameFont;
-import com.golden.gamedev.object.Sprite;
 import com.golden.gamedev.util.BufferedImageUtil;
 
 /**
- * Similar like <code>Game</code> class except this class is working under <code>GameEngine</code> frame work.
- * <p>
- * 
- * <code>GameObject</code> class is plain same with <code>Game</code> class, you can first create the game as
- * <code>Game</code> class, run it, test it, and then rename it to <code>GameObject</code> and attach it to
- * <code>GameEngine</code> frame work as one of game entities.
- * <p>
- * 
- * Please read {@link GameEngine} documentation for more information about how to work with <code>GameObject</code>
- * class.
- * 
- * @see com.golden.gamedev.GameEngine
- * @see com.golden.gamedev.Game
+ * In its current form, a {@link GameObject} is tied to a {@link GameEngine} instance, and one must exist in order to
+ * create a {@link GameObject}. Refactoring will take place once {@link GameEngine} is treated to break this apart - a
+ * {@link GameObject} may exist independently of a {@link GameEngine}, but if one is provided, it will exhibit the same
+ * behavior as it currently does, which is beneficial in some cases (such as combining {@link GameObject} instances for
+ * execution) but harmful in others (such as developer testing a single {@link GameObject} in isolation). <br />
+ * <br />
+ * Helper methods have been deleted and they will not return. Subclasses may, later on, include these helper methods if
+ * they are deemed useful, but {@link Game}, {@link GameObject} and {@link GameEngine} are core classes which should be
+ * as small as possible. <br />
+ * <br />
+ * Currently, {@link Game} is much more powerful than {@link GameObject}, but only {@link GameObject} can be used with
+ * {@link GameEngine} - refactoring will fix this so that *either* object can be used with a {@link GameEngine}
+ * instance, and perhaps in time {@link GameObject} will simply cease to exist (as {@link Game} may replace it).
  */
 public abstract class GameObject {
 	
-	/** **************************** MASTER ENGINE ****************************** */
-	
+	// REVIEW-HIGH: Make GameEngine have an interface that provides the engines via getters.
+	// REVIEW-HIGH: Get rid of the dependency on GameEngine - make GameEngine provide its abilities via interfaces.
 	/**
 	 * The master <code>GameEngine</code> frame work.
 	 */
 	public final GameEngine parent;
 	
-	/** **************************** GAME ENGINE ******************************** */
-	
 	/** Graphics engine. */
-	public BaseGraphics bsGraphics;
+	private BaseGraphics baseGraphics;
 	/** I/O file engine. */
-	public BaseIO bsIO;
+	private BaseIO baseIo;
 	/** Image loader engine. */
-	public BufferedImageCache bsLoader;
+	private BufferedImageCache bufferedImageCache;
 	/** Input engine. */
-	public BaseInput bsInput;
+	private BaseInput baseInput;
 	/** Timer engine. */
-	public FrameRateSynchronizer bsTimer;
+	private FrameRateSynchronizer frameRateSynchronizer;
 	/** Audio engine for music. */
-	public BaseAudio bsMusic;
+	private BaseAudio musicEngine;
 	/** Audio engine for sound. */
-	public BaseAudio bsSound;
+	private BaseAudio soundEngine;
 	
-	/** ************************* OTHER PROPERTIES ****************************** */
-	
+	/**
+	 * Whether or not this {@link GameObject} instance has finished execution.
+	 */
 	private boolean finish; // true, to back to game chooser
-	private boolean initialized; // true, indicates the game has been
 	
-	// initialized
-	
-	// to avoid double initialization
-	// if the game is replaying
-	
-	/** ************************************************************************* */
-	/** ************************* CONSTRUCTOR *********************************** */
-	/** ************************************************************************* */
+	/**
+	 * Whether or not {@link #initResources()} has been called for this {@link GameObject} instance.
+	 * {@link #initResources()} should be invoked once and only once when a {@link GameObject} instance is first
+	 * {@link #start() started}.
+	 */
+	private boolean initialized;
 	
 	/**
 	 * Creates new <code>GameObject</code> with specified <code>GameEngine</code> as the master engine.
 	 */
-	public GameObject(GameEngine parent) {
+	public GameObject(final GameEngine parent) {
 		this.parent = parent;
 		
-		this.grabEngines();
-	}
-	
-	private void grabEngines() {
-		this.bsGraphics = this.parent.bsGraphics;
-		this.bsIO = this.parent.bsIO;
-		this.bsLoader = this.parent.bsLoader;
-		this.bsInput = this.parent.bsInput;
-		this.bsTimer = this.parent.bsTimer;
-		this.bsMusic = this.parent.bsMusic;
-		this.bsSound = this.parent.bsSound;
+		baseGraphics = this.parent.bsGraphics;
+		baseIo = this.parent.bsIO;
+		bufferedImageCache = this.parent.bsLoader;
+		baseInput = this.parent.bsInput;
+		frameRateSynchronizer = this.parent.bsTimer;
+		musicEngine = this.parent.bsMusic;
+		soundEngine = this.parent.bsSound;
 	}
 	
 	/**
@@ -114,101 +103,128 @@ public abstract class GameObject {
 	 * game call {@linkplain #finish()} method.
 	 */
 	public final void start() {
-		// grabbing engines from master engine
-		this.grabEngines();
-		GameFont fpsFont = this.parent.fpsFont;
-		if (!this.initialized) {
-			this.initResources();
-			this.initialized = true;
+		if (!initialized) {
+			initResources();
+			initialized = true;
 		}
 		
-		this.finish = false;
+		baseInput.refresh();
+		frameRateSynchronizer.beginSynchronization();
 		
-		// start game loop!
-		// before play, clear memory (runs garbage collector)
-		System.gc();
-		System.runFinalization();
-		
-		this.bsInput.refresh();
-		this.bsTimer.beginSynchronization();
-		
+		executeGameLoop();
+	}
+	
+	/**
+	 * 
+	 */
+	private void executeGameLoop() {
+		boolean firstFrameRendered = false;
 		long elapsedTime = 0;
-		out: while (true) {
-			if (this.parent.inFocus) {
-				// update game
-				this.update(elapsedTime);
-				this.parent.update(elapsedTime); // update common variables
-				this.bsInput.update(elapsedTime);
+		while (continueGameExecution()) {
+			if (parent.inFocus) {
+				updateCallbacks(elapsedTime);
 				
-			} else {
-				// the game is not in focus!
-				try {
-					Thread.sleep(300);
-				} catch (InterruptedException e) {
-				}
+			}
+			
+			if (firstFrameRendered) {
+				elapsedTime = updateTimeForFrameRendering();
 			}
 			
 			do {
-				if (this.finish || !this.parent.isRunning()) {
-					// if finish, quit this game
-					break out;
+				if (!continueGameExecution()) {
+					break;
 				}
 				
-				// graphics operation
-				Graphics2D g = this.bsGraphics.getBackBuffer();
-				
-				this.render(g); // render game
-				this.parent.render(g); // render global game
-				
-				if (!this.parent.isDistribute()) {
-					// if the game is still under development
-					// draw game FPS and other stuff
-					
-					// to make sure the FPS is drawn!
-					// remove any clipping and alpha composite
-					if (g.getClip() != null) {
-						g.setClip(null);
-					}
-					if (g.getComposite() != null) {
-						if (g.getComposite() != AlphaComposite.SrcOver) {
-							g.setComposite(AlphaComposite.SrcOver);
-						}
-					}
-					
-					fpsFont.drawString(g, "FPS = " + this.getCurrentFPS() + "/" + this.getFPS(), 9,
-							this.getHeight() - 21);
-					
-					fpsFont.drawString(g, "GTGE", this.getWidth() - 65, 9);
-				}
-				
-				if (!this.parent.inFocus) {
-					this.parent.renderLostFocus(g);
-				}
-				
-			} while (this.bsGraphics.flip() == false);
-			
-			elapsedTime = this.bsTimer.delayForFrame();
-			
-			if (elapsedTime > 100) {
-				// can't lower than 10 fps (1000/100)
-				elapsedTime = 100;
-			}
+				renderFrame();
+				firstFrameRendered = true;
+			} while (baseGraphics.flip() == false);
 		}
 	}
 	
 	/**
-	 * End this game, and back to {@linkplain GameEngine#getGame(int) game object chooser}.
-	 * 
-	 * @see GameEngine#nextGameID
-	 * @see GameEngine#nextGame
 	 */
-	public void finish() {
-		this.finish = true;
+	private void renderFrame() {
+		final Graphics2D g = baseGraphics.getBackBuffer();
+		
+		render(g);
+		parent.render(g);
+		
+		drawFPSForNonDistributableGame(g);
+		
+		if (!parent.inFocus) {
+			parent.renderLostFocus(g);
+		}
 	}
 	
-	/** ************************************************************************* */
-	/** ***************************** MAIN METHODS ****************************** */
-	/** ************************************************************************* */
+	// REVIEW-HIGH: Consider moving this to an explicit subclass (its render method can do this after the game draws its
+	// frame).
+	/**
+	 * @param g
+	 */
+	private void drawFPSForNonDistributableGame(final Graphics2D g) {
+		if (!parent.isDistribute()) {
+			// if the game is still under development
+			// draw game FPS and other stuff
+			
+			// to make sure the FPS is drawn!
+			// remove any clipping and alpha composite
+			if (g.getClip() != null) {
+				g.setClip(null);
+			}
+			if (g.getComposite() != null) {
+				if (g.getComposite() != AlphaComposite.SrcOver) {
+					g.setComposite(AlphaComposite.SrcOver);
+				}
+			}
+			
+			final GameFont fpsFont = parent.fpsFont;
+			fpsFont.drawString(g,
+					"FPS = " + frameRateSynchronizer.getRenderedFps() + "/" + frameRateSynchronizer.getFps(), 9,
+					baseGraphics.getSize().height - 21);
+			
+			fpsFont.drawString(g, "GTGE", baseGraphics.getSize().width - 65, 9);
+		}
+	}
+	
+	/**
+	 * @param elapsedTime
+	 */
+	private void updateCallbacks(final long elapsedTime) {
+		update(elapsedTime);
+		parent.update(elapsedTime);
+		baseInput.update(elapsedTime);
+	}
+	
+	// REVIEW-MEDIUM - Since the hack is here, why is this a long?
+	/**
+	 * @return
+	 */
+	private long updateTimeForFrameRendering() {
+		long elapsedTime;
+		elapsedTime = frameRateSynchronizer.delayForFrame();
+		
+		if (elapsedTime > 100) {
+			elapsedTime = 100;
+		}
+		return elapsedTime;
+	}
+	
+	/**
+	 * @return
+	 */
+	private boolean continueGameExecution() {
+		return !finish && parent.isRunning();
+	}
+	
+	/**
+	 * Finishes the execution of this {@link GameObject} instance. {@link GameObject} instances that have been finished
+	 * are unable to be restarted. Note that the given {@link GameEngine} associated with this {@link GameObject}
+	 * instance can be temporarily paused in order to allow for a pause and restart of a {@link GameObject} instance
+	 * (via {@link GameEngine#stop()}.
+	 */
+	public void finish() {
+		finish = true;
+	}
 	
 	/**
 	 * All game resources initialization, everything that usually goes to constructor should be put in here.
@@ -232,6 +248,7 @@ public abstract class GameObject {
 	 */
 	public abstract void update(long elapsedTime);
 	
+	// REVIEW-HIGH: This method must be kept.
 	/**
 	 * Renders game to the screen.
 	 * 
@@ -240,203 +257,72 @@ public abstract class GameObject {
 	 */
 	public abstract void render(Graphics2D g);
 	
-	// for debugging that this game object is properly disposed
-	// protected void finalize() throws Throwable {
-	// System.out.println("Finalization " + this + " GameObject");
-	// super.finalize();
-	// }
-	
-	// INTERNATIONALIZATION UTILITY
-	// public Locale getLocale() { return locale; }
-	// public void setLocale(Locale locale) { this.locale = locale; }
-	
-	/** ************************************************************************* */
-	/** ************************* GRAPHICS UTILITY ****************************** */
-	/** ************************************************************************* */
-	// -> com.golden.gamedev.engine.BaseGraphics
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
-	 * bsGraphics.getSize().width}.
-	 */
-	public int getWidth() {
-		return this.bsGraphics.getSize().width;
-	}
-	
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseGraphics#getSize()
-	 * bsGraphics.getSize().height}.
-	 */
-	public int getHeight() {
-		return this.bsGraphics.getSize().height;
-	}
-	
 	/**
 	 * Returns a new created buffered image which the current game state is rendered into it.
 	 */
 	public BufferedImage takeScreenShot() {
-		BufferedImage screen = BufferedImageUtil.createImage(this.getWidth(), this.getHeight(), Transparency.OPAQUE);
-		Graphics2D g = screen.createGraphics();
-		this.render(g);
+		final BufferedImage screen = BufferedImageUtil.createImage(baseGraphics.getSize().width,
+				baseGraphics.getSize().height, Transparency.OPAQUE);
+		final Graphics2D g = screen.createGraphics();
+		render(g);
 		g.dispose();
 		
 		return screen;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** AUDIO UTILITY ******************************** */
-	/** ************************************************************************* */
-	// -> com.golden.gamedev.engine.BaseAudio
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseAudio#play(String)
-	 * bsMusic.play(String)}.
-	 * 
-	 * @see com.golden.gamedev.engine.BaseAudio#setBaseRenderer(com.golden.gamedev.engine.BaseAudioRenderer)
-	 * @see com.golden.gamedev.engine.audio
-	 */
-	public int playMusic(String audiofile) {
-		return this.bsMusic.play(audiofile);
+	public void setBaseGraphics(BaseGraphics baseGraphics) {
+		this.baseGraphics = baseGraphics;
 	}
 	
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseAudio#play(String)
-	 * bsSound.play(String)}.
-	 * 
-	 * @see com.golden.gamedev.engine.BaseAudio#setBaseRenderer(com.golden.gamedev.engine.BaseAudioRenderer)
-	 * @see com.golden.gamedev.engine.audio
-	 */
-	public int playSound(String audiofile) {
-		return this.bsSound.play(audiofile);
+	public BaseGraphics getBaseGraphics() {
+		return baseGraphics;
 	}
 	
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.FrameRateSynchronizer#setFps(int)
-	 * bsTimer.setFPS(int)}.
-	 */
-	public void setFPS(int fps) {
-		this.bsTimer.setFps(fps);
+	public void setBaseIo(BaseIO baseIo) {
+		this.baseIo = baseIo;
 	}
 	
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.FrameRateSynchronizer#getRenderedFps()
-	 * bsTimer.getCurrentFPS()}.
-	 */
-	public int getCurrentFPS() {
-		return this.bsTimer.getRenderedFps();
+	public BaseIO getBaseIo() {
+		return baseIo;
 	}
 	
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.FrameRateSynchronizer#getFps()}.
-	 */
-	public int getFPS() {
-		return this.bsTimer.getFps();
+	public void setBufferedImageCache(BufferedImageCache bufferedImageCache) {
+		this.bufferedImageCache = bufferedImageCache;
 	}
 	
-	/** ************************************************************************* */
-	/** ************************** INPUT UTILITY ******************************** */
-	/** ************************************************************************* */
-	// -> com.golden.gamedev.engine.BaseInput
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#getMouseX()
-	 * bsInput.getMouseX()}.
-	 */
-	public int getMouseX() {
-		return this.bsInput.getMouseX();
+	public BufferedImageCache getBufferedImageCache() {
+		return bufferedImageCache;
 	}
 	
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#getMouseY()
-	 * bsInput.getMouseY()}.
-	 */
-	public int getMouseY() {
-		return this.bsInput.getMouseY();
+	public void setBaseInput(BaseInput baseInput) {
+		this.baseInput = baseInput;
 	}
 	
-	/**
-	 * Returns whether the mouse pointer is inside specified screen boundary.
-	 */
-	public boolean checkPosMouse(int x1, int y1, int x2, int y2) {
-		return (this.getMouseX() >= x1 && this.getMouseY() >= y1 && this.getMouseX() <= x2 && this.getMouseY() <= y2);
+	public BaseInput getBaseInput() {
+		return baseInput;
 	}
 	
-	/**
-	 * Returns whether the mouse pointer is inside specified sprite boundary.
-	 * 
-	 * @param sprite
-	 *            sprite to check its intersection with mouse pointer
-	 * @param pixelCheck
-	 *            true, checking the sprite image with pixel precision
-	 */
-	public boolean checkPosMouse(Sprite sprite, boolean pixelCheck) {
-		Background bg = sprite.getBackground();
-		
-		// check whether the mouse is in background clip area
-		if (this.getMouseX() < bg.getClip().x || this.getMouseY() < bg.getClip().y
-				|| this.getMouseX() > bg.getClip().x + bg.getClip().width
-				|| this.getMouseY() > bg.getClip().y + bg.getClip().height) {
-			return false;
-		}
-		
-		double mosx = this.getMouseX() + bg.getX() - bg.getClip().x;
-		double mosy = this.getMouseY() + bg.getY() - bg.getClip().y;
-		
-		if (pixelCheck) {
-			try {
-				return ((sprite.getImage().getRGB((int) (mosx - sprite.getX()), (int) (mosy - sprite.getY())) & 0xFF000000) != 0x00);
-			} catch (Exception e) {
-				return false;
-			}
-			
-		} else {
-			return (mosx >= sprite.getX() && mosy >= sprite.getY() && mosx <= sprite.getX() + sprite.getWidth() && mosy <= sprite
-					.getY() + sprite.getHeight());
-		}
+	public void setFrameRateSynchronizer(FrameRateSynchronizer frameRateSynchronizer) {
+		this.frameRateSynchronizer = frameRateSynchronizer;
 	}
 	
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
-	 * bsInput.isMousePressed(java.awt.event.MouseEvent.BUTTON1)}.
-	 */
-	public boolean click() {
-		return this.bsInput.isMousePressed(MouseEvent.BUTTON1);
+	public FrameRateSynchronizer getFrameRateSynchronizer() {
+		return frameRateSynchronizer;
 	}
 	
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#isMousePressed(int)
-	 * bsInput.isMousePressed(java.awt.event.MouseEvent.BUTTON3)}.
-	 */
-	public boolean rightClick() {
-		return this.bsInput.isMousePressed(MouseEvent.BUTTON3);
+	public void setMusicEngine(BaseAudio musicEngine) {
+		this.musicEngine = musicEngine;
 	}
 	
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#isKeyDown(int)
-	 * bsInput.isKeyDown(int)}.
-	 */
-	public boolean keyDown(int keyCode) {
-		return this.bsInput.isKeyDown(keyCode);
+	public BaseAudio getMusicEngine() {
+		return musicEngine;
 	}
 	
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#isKeyPressed(int)
-	 * bsInput.isKeyPressed(int)}.
-	 */
-	public boolean keyPressed(int keyCode) {
-		return this.bsInput.isKeyPressed(keyCode);
+	public void setSoundEngine(BaseAudio soundEngine) {
+		this.soundEngine = soundEngine;
 	}
 	
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
-	 * bsInput.setMouseVisible(false)}.
-	 */
-	public void hideCursor() {
-		this.bsInput.setMouseVisible(false);
-	}
-	
-	/**
-	 * Effectively equivalent to the call {@linkplain com.golden.gamedev.engine.BaseInput#setMouseVisible(boolean)
-	 * bsInput.setMouseVisible(true)}.
-	 */
-	public void showCursor() {
-		this.bsInput.setMouseVisible(true);
+	public BaseAudio getSoundEngine() {
+		return soundEngine;
 	}
 }

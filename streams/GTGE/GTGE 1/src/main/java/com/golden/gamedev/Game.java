@@ -1164,9 +1164,14 @@ public abstract class Game {
 	
 	/**
 	 * Returns whether the mouse pointer is inside specified screen boundary.
+	 * 
+	 * @param mouseX
+	 *            TODO
+	 * @param mouseY
+	 *            TODO
 	 */
-	public boolean checkPosMouse(int x1, int y1, int x2, int y2) {
-		return (this.getMouseX() >= x1 && this.getMouseY() >= y1 && this.getMouseX() <= x2 && this.getMouseY() <= y2);
+	public static boolean checkPosMouse(int x1, int y1, int x2, int y2, int mouseX, int mouseY) {
+		return (mouseX >= x1 && mouseY >= y1 && mouseX <= x2 && mouseY <= y2);
 	}
 	
 	/**
@@ -1176,19 +1181,22 @@ public abstract class Game {
 	 *            sprite to check its intersection with mouse pointer
 	 * @param pixelCheck
 	 *            true, checking the sprite image with pixel precision
+	 * @param mouseX
+	 *            TODO
+	 * @param mouseY
+	 *            TODO
 	 */
-	public boolean checkPosMouse(Sprite sprite, boolean pixelCheck) {
+	public static boolean checkPosMouse(Sprite sprite, boolean pixelCheck, int mouseX, int mouseY) {
 		Background bg = sprite.getBackground();
 		
 		// check whether the mouse is in background clip area
-		if (this.getMouseX() < bg.getClip().x || this.getMouseY() < bg.getClip().y
-				|| this.getMouseX() > bg.getClip().x + bg.getClip().width
-				|| this.getMouseY() > bg.getClip().y + bg.getClip().height) {
+		if (mouseX < bg.getClip().x || mouseY < bg.getClip().y || mouseX > bg.getClip().x + bg.getClip().width
+				|| mouseY > bg.getClip().y + bg.getClip().height) {
 			return false;
 		}
 		
-		double mosx = this.getMouseX() + bg.getX() - bg.getClip().x;
-		double mosy = this.getMouseY() + bg.getY() - bg.getClip().y;
+		double mosx = mouseX + bg.getX() - bg.getClip().x;
+		double mosy = mouseY + bg.getY() - bg.getClip().y;
 		
 		if (pixelCheck) {
 			try {
@@ -1216,7 +1224,7 @@ public abstract class Game {
 		List<Sprite> sprites = group.getSprites();
 		
 		for (Sprite sprite : sprites) {
-			if (sprite.isActive() && this.checkPosMouse(sprite, pixelCheck)) {
+			if (sprite.isActive() && Game.checkPosMouse(sprite, pixelCheck, getMouseX(), getMouseY())) {
 				return sprite;
 			}
 		}

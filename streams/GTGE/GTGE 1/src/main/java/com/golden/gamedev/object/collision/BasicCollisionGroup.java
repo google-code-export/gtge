@@ -25,7 +25,7 @@ import org.apache.commons.lang.Validate;
 
 import com.golden.gamedev.object.PlayField;
 import com.golden.gamedev.object.Sprite;
-import com.golden.gamedev.object.BasicSpriteGroup;
+import com.golden.gamedev.object.SpriteGroup;
 
 /**
  * Basic collision check, only check whether a collision occured or not.
@@ -53,7 +53,7 @@ import com.golden.gamedev.object.BasicSpriteGroup;
  * });
  * </pre>
  * 
- * @see PlayField#addCollisionGroup(BasicSpriteGroup, BasicSpriteGroup, CollisionManager)
+ * @see PlayField#addCollisionGroup(SpriteGroup, SpriteGroup, CollisionManager)
  */
 public abstract class BasicCollisionGroup implements CollisionManager {
 	
@@ -161,7 +161,7 @@ public abstract class BasicCollisionGroup implements CollisionManager {
 	}
 	
 	@Override
-	public void checkCollision(final BasicSpriteGroup first, final BasicSpriteGroup second) {
+	public void checkCollision(final SpriteGroup first, final SpriteGroup second) {
 		if (!first.isActive() || !second.isActive()) {
 			// one of the group is not active
 			return;

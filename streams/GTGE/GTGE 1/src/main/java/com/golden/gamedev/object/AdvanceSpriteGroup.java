@@ -49,25 +49,14 @@ public class AdvanceSpriteGroup extends BasicSpriteGroup {
 	private final Insets offset;
 	
 	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ***************************** CONSTRUCTOR *******************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
-	/**
 	 * Creates new <code>AdvanceSpriteGroup</code> with specified name, and specified screen offset on each side.
 	 */
-	public AdvanceSpriteGroup(final String name, final int topOffset, final int leftOffset, final int bottomOffset,
-			final int rightOffset) {
-		super(name);
+	public AdvanceSpriteGroup(final int topOffset, final int leftOffset, final int bottomOffset, final int rightOffset) {
+		super();
 		
 		offset = new Insets(topOffset, leftOffset, bottomOffset, rightOffset);
 		
-		ONSCREEN_GROUP = new BasicSpriteGroup(name + " #ONSCREEN");
+		ONSCREEN_GROUP = new BasicSpriteGroup();
 		// this group has done the scanning
 		// on_screen_group no need to do the scanning anymore
 		ONSCREEN_GROUP.getScanFrequence().setActive(false);
@@ -76,26 +65,9 @@ public class AdvanceSpriteGroup extends BasicSpriteGroup {
 	/**
 	 * Creates new <code>AdvanceSpriteGroup</code> with specified name, and specified screen offset.
 	 */
-	public AdvanceSpriteGroup(final String name, final int screenOffset) {
-		this(name, screenOffset, screenOffset, screenOffset, screenOffset);
+	public AdvanceSpriteGroup(final int screenOffset) {
+		this(screenOffset, screenOffset, screenOffset, screenOffset);
 	}
-	
-	/**
-	 * Creates new <code>AdvanceSpriteGroup</code> with specified name without screen offset (0, 0, 0, 0).
-	 */
-	public AdvanceSpriteGroup(final String name) {
-		this(name, 0);
-	}
-	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ************************* UPDATE THIS GROUP *****************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
 	
 	@Override
 	public void update(final long elapsedTime) {
@@ -120,31 +92,11 @@ public class AdvanceSpriteGroup extends BasicSpriteGroup {
 		}
 	}
 	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ******************** RENDER TO GRAPHICS CONTEXT *************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
 	@Override
 	public void render(final Graphics2D g) {
 		// render only on screen sprites
 		ONSCREEN_GROUP.render(g);
 	}
-	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ************************** GROUP PROPERTIES *****************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
 	
 	@Override
 	public void setBackground(final Background backgr) {
@@ -203,23 +155,8 @@ public class AdvanceSpriteGroup extends BasicSpriteGroup {
 		ONSCREEN_GROUP.clear();
 	}
 	
-	@Override
-	public void reset() {
-		super.reset();
-		
-		ONSCREEN_GROUP.reset();
-	}
-	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * ************************* ON-SCREEN SPRITES *****************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
-	
+	// REVIEW-HIGH: Just return the contained list.
+	// REVIEW-HIGH; Provide access to the on screen sprites in a separate list.
 	/**
 	 * Returns all <i>on-screen sprites</i> (active, inactive, and also <b>null</b> sprite) in this group.
 	 * 
@@ -230,6 +167,8 @@ public class AdvanceSpriteGroup extends BasicSpriteGroup {
 		return ONSCREEN_GROUP.getSprites();
 	}
 	
+	// REVIEW_HIGH: Use the "groupSprites" method's implementation instead (i.e. keep a list).
+	// REVIEW-HIGH: Make the onscreen group's sprites visible in a different method.
 	/**
 	 * Returns total <b>non-null</b> <i>on-screen sprites</i> (active + inactive sprites) in this group.
 	 */
@@ -237,16 +176,6 @@ public class AdvanceSpriteGroup extends BasicSpriteGroup {
 	public int getSize() {
 		return ONSCREEN_GROUP.getSize();
 	}
-	
-	/**
-	 * *************************************************************************
-	 */
-	/**
-	 * *************************** SPRITES GETTER ******************************
-	 */
-	/**
-	 * *************************************************************************
-	 */
 	
 	/**
 	 * Returns all sprites (active, inactive, and also <b>null</b> sprite) in this group.

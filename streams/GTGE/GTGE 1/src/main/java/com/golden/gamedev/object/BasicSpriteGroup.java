@@ -28,7 +28,6 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-// REVIEW-HIGH: SpriteGroup needs to be an interface, not an implementation.
 /**
  * Group of sprites with common behaviour, for example PLAYER_GROUP, ENEMY_GROUP, etc. This class maintain a growable
  * sprite list (array of sprites). Each time a sprite is added into this group, this group automatically adjust the size
@@ -72,20 +71,14 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @see com.golden.gamedev.object.PlayField
  * @see com.golden.gamedev.object.collision.CollisionGroup
  */
-public class BasicSpriteGroup {
+public class BasicSpriteGroup implements SpriteGroup {
 	
 	// removes inactive sprites every 15 seconds
 	private Timer scanFrequence = new Timer(15000);
 	
-	/**
-	 * ************************ GROUP PROPERTIES *******************************
-	 */
-	// REVIEW-HIGH: This "name" is completely useless to the end user - they'll name the variable. Delete this field
-	// when classes that use it have been refactored to get rid of its reference (Playfield).
-	private String name; // group name (for identifier only)
 	private boolean active = true;
 	
-	private Background background;
+	private Background background = Background.getDefaultBackground();
 	
 	private Comparator<Sprite> comparator; // comparator for sorting sprite
 	
@@ -98,9 +91,8 @@ public class BasicSpriteGroup {
 	/**
 	 * Creates a new sprite group, with specified name. Name is used for group identifier only.
 	 */
-	public BasicSpriteGroup(final String name) {
-		this.name = name;
-		background = Background.getDefaultBackground();
+	public BasicSpriteGroup() {
+		super();
 	}
 	
 	// REVIEW-HIGH: Method must be kept (subclass uses it)
@@ -113,6 +105,7 @@ public class BasicSpriteGroup {
 	 * 
 	 * @see #add(int, Sprite)
 	 */
+	@Override
 	public final void add(final Sprite member) {
 		member.setBackground(background);
 		sprites.add(member);
@@ -156,6 +149,7 @@ public class BasicSpriteGroup {
 	 * @see com.golden.gamedev.object.Sprite#setActive(boolean)
 	 * @see #getScanFrequence()
 	 */
+	@Override
 	public boolean remove(final Sprite s) {
 		return sprites.remove(s);
 	}
@@ -182,23 +176,8 @@ public class BasicSpriteGroup {
 	 * 
 	 * @see #reset()
 	 */
+	@Override
 	public void clear() {
-		sprites = new ArrayList<Sprite>();
-	}
-	
-	// REVIEW-HIGH: This method must be kept (subclass uses it)
-	/**
-	 * Removes all group members, same with {@link #clear()}, except this method also removes sprite memory reference
-	 * immediately.
-	 * <p>
-	 * 
-	 * Use this method if only the size of the removed sprites is taking too big memory and you need to reclaim the used
-	 * memory immediately.
-	 * 
-	 * @see #clear()
-	 */
-	public void reset() {
-		sprites = null;
 		sprites = new ArrayList<Sprite>();
 	}
 	
@@ -208,6 +187,7 @@ public class BasicSpriteGroup {
 	 * 
 	 * @see #getScanFrequence()
 	 */
+	@Override
 	public void update(final long elapsedTime) {
 		for (Sprite sprite : sprites) {
 			if (sprite.isActive()) {
@@ -250,6 +230,7 @@ public class BasicSpriteGroup {
 	 * 
 	 * @see #setComparator(Comparator)
 	 */
+	@Override
 	public void render(final Graphics2D g) {
 		if (comparator != null) {
 			Collections.sort(sprites, comparator);
@@ -262,21 +243,12 @@ public class BasicSpriteGroup {
 		}
 	}
 	
-	// REVIEW-HIGH: When Playfield is altered, remove this method and its field.
-	/**
-	 * Returns the name of this group. Name is used for group identifier only.
-	 * 
-	 * @see #setName(String)
-	 */
-	public final String getName() {
-		return name;
-	}
-	
 	/**
 	 * Returns the background of this group.
 	 * 
 	 * @see #setBackground(Background)
 	 */
+	@Override
 	public final Background getBackground() {
 		return background;
 	}
@@ -287,6 +259,7 @@ public class BasicSpriteGroup {
 	 * 
 	 * @see #getBackground()
 	 */
+	@Override
 	public void setBackground(final Background backgr) {
 		background = (Background) ObjectUtils.defaultIfNull(backgr, Background.getDefaultBackground());
 		
@@ -301,6 +274,7 @@ public class BasicSpriteGroup {
 	 * 
 	 * @see #setActive(boolean)
 	 */
+	@Override
 	public final boolean isActive() {
 		return active;
 	}
@@ -311,6 +285,7 @@ public class BasicSpriteGroup {
 	 * 
 	 * @see #isActive()
 	 */
+	@Override
 	public final void setActive(final boolean b) {
 		active = b;
 	}
@@ -384,6 +359,7 @@ public class BasicSpriteGroup {
 	 * 
 	 * @see #getSize()
 	 */
+	@Override
 	public List<Sprite> getSprites() {
 		return sprites;
 	}
@@ -392,6 +368,7 @@ public class BasicSpriteGroup {
 	 * @param sprites
 	 *            the sprites to set
 	 */
+	@Override
 	public void setSprites(List<Sprite> sprites) {
 		Validate.notNull(sprites, "The List of Sprites may not be null!");
 		this.sprites = sprites;
@@ -404,6 +381,7 @@ public class BasicSpriteGroup {
 	 * 
 	 * @see #getSprites()
 	 */
+	@Override
 	public int getSize() {
 		return sprites.size();
 	}

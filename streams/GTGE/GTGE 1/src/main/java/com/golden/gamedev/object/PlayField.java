@@ -44,13 +44,12 @@ import com.golden.gamedev.util.Utility;
  * By calling {@link #update(long)} all sprites within this playfield will be updated and collision will be check. <br>
  * By calling {@link #render(Graphics2D)} all sprites will be rendered to the screen.
  * 
- * @see com.golden.gamedev.object.BasicSpriteGroup
  * @see com.golden.gamedev.object.CollisionManager
  */
 public final class PlayField {
 	
 	/**
-	 * A key denoting a registered {@link CollisionManager} for two {@link BasicSpriteGroup} instances.
+	 * A key denoting a registered {@link CollisionManager} for two {@link SpriteGroup} instances.
 	 * 
 	 * @author MetroidFan2002
 	 * @version 1.0
@@ -60,28 +59,28 @@ public final class PlayField {
 	private static final class SpriteGroupCollisionManagerKey {
 		
 		/**
-		 * The first (possibly null) {@link BasicSpriteGroup} instance registered via this
+		 * The first (possibly null) {@link SpriteGroup} instance registered via this
 		 * {@link SpriteGroupCollisionManagerKey key}.
 		 */
-		private final BasicSpriteGroup first;
+		private final SpriteGroup first;
 		
 		/**
-		 * The second (possibly null) {@link BasicSpriteGroup} instance registered via this
+		 * The second (possibly null) {@link SpriteGroup} instance registered via this
 		 * {@link SpriteGroupCollisionManagerKey key}.
 		 */
-		private final BasicSpriteGroup second;
+		private final SpriteGroup second;
 		
 		/**
 		 * Creates a new {@link SpriteGroupCollisionManagerKey} instance.
 		 * 
 		 * @param first
-		 *            The first (possibly null) {@link BasicSpriteGroup} instance registered via this
+		 *            The first (possibly null) {@link SpriteGroup} instance registered via this
 		 *            {@link SpriteGroupCollisionManagerKey key}.
 		 * @param second
-		 *            The second (possibly null) {@link BasicSpriteGroup} instance registered via this
+		 *            The second (possibly null) {@link SpriteGroup} instance registered via this
 		 *            {@link SpriteGroupCollisionManagerKey key}.
 		 */
-		private SpriteGroupCollisionManagerKey(BasicSpriteGroup first, BasicSpriteGroup second) {
+		private SpriteGroupCollisionManagerKey(SpriteGroup first, SpriteGroup second) {
 			super();
 			this.first = first;
 			this.second = second;
@@ -126,14 +125,14 @@ public final class PlayField {
 		
 		/**
 		 * Gets whether or not this {@link SpriteGroupCollisionManagerKey} instance contains the specified
-		 * {@link BasicSpriteGroup} instance.
+		 * {@link SpriteGroup} instance.
 		 * 
 		 * @param group
-		 *            The possibly-null {@link BasicSpriteGroup} instance to check for.
+		 *            The possibly-null {@link SpriteGroup} instance to check for.
 		 * @return True if this {@link SpriteGroupCollisionManagerKey} instance contains the specified
-		 *         {@link BasicSpriteGroup} instance, false otherwise.
+		 *         {@link SpriteGroup} instance, false otherwise.
 		 */
-		private boolean containsGroup(final BasicSpriteGroup group) {
+		private boolean containsGroup(final SpriteGroup group) {
 			if (group == null) {
 				return first == null || second == null;
 			} else {
@@ -146,7 +145,7 @@ public final class PlayField {
 	 * ********************** PLAYFIELD PROPERTIES *****************************
 	 */
 	
-	private BasicSpriteGroup[] groups;
+	private SpriteGroup[] groups;
 	private Background background;
 	
 	/**
@@ -179,10 +178,10 @@ public final class PlayField {
 		this.background = background;
 		
 		// preserve one group for the extra group
-		final BasicSpriteGroup extra = new BasicSpriteGroup("Extra Group");
+		final SpriteGroup extra = new BasicSpriteGroup();
 		extra.setBackground(background);
 		
-		groups = new BasicSpriteGroup[1];
+		groups = new SpriteGroup[1];
 		groups[0] = extra;
 		
 		cacheSprite = new Sprite[0];
@@ -210,7 +209,7 @@ public final class PlayField {
 	 * <p>
 	 * 
 	 * This method is a convenient way to add sprites directly into screen without have to creates new
-	 * {@link BasicSpriteGroup}.
+	 * {@link SpriteGroup}.
 	 * <p>
 	 * 
 	 * The sprite is inserted to 'extra group' and all sprites on extra group will always on top of other sprites.
@@ -248,10 +247,10 @@ public final class PlayField {
 	 *            sprite group to be inserted into this playfield
 	 * @return Reference of the inserted sprite group.
 	 */
-	public BasicSpriteGroup addGroup(final BasicSpriteGroup group) {
+	public SpriteGroup addGroup(final SpriteGroup group) {
 		// extra group always at behind!
-		final BasicSpriteGroup extra = groups[groups.length - 1];
-		BasicSpriteGroup[] array = (BasicSpriteGroup[]) ArrayUtils.remove(groups, (groups.length - 1));
+		final SpriteGroup extra = groups[groups.length - 1];
+		SpriteGroup[] array = (SpriteGroup[]) ArrayUtils.remove(groups, (groups.length - 1));
 		groups = array;
 		
 		groups = Utility.expand(groups, 2, true);
@@ -270,12 +269,12 @@ public final class PlayField {
 	 *            sprite group to be removed from this playfield
 	 * @return true, if the sprite group is successfuly removed.
 	 */
-	public boolean removeGroup(final BasicSpriteGroup group) {
+	public boolean removeGroup(final SpriteGroup group) {
 		// last group is exclusive for extra group
 		// it can't be removed!
 		for (int i = 0; i < groups.length - 1; i++) {
 			if (groups[i] == group) {
-				BasicSpriteGroup[] array = (BasicSpriteGroup[]) ArrayUtils.remove(groups, i);
+				SpriteGroup[] array = (SpriteGroup[]) ArrayUtils.remove(groups, i);
 				groups = array;
 				
 				// sprite group has been removed
@@ -297,22 +296,9 @@ public final class PlayField {
 	}
 	
 	/**
-	 * Returns sprite group with specified name associated with this playfield.
-	 */
-	public BasicSpriteGroup getGroup(final String name) {
-		for (final BasicSpriteGroup group : groups) {
-			if (group.getName().equals(name)) {
-				return group;
-			}
-		}
-		
-		return null;
-	}
-	
-	/**
 	 * Returns all sprite group associated with this playfield.
 	 */
-	public BasicSpriteGroup[] getGroups() {
+	public SpriteGroup[] getGroups() {
 		return groups;
 	}
 	
@@ -328,7 +314,7 @@ public final class PlayField {
 	 * 
 	 * @see #add(Sprite)
 	 */
-	public BasicSpriteGroup getExtraGroup() {
+	public SpriteGroup getExtraGroup() {
 		return groups[groups.length - 1];
 	}
 	
@@ -337,10 +323,10 @@ public final class PlayField {
 	 * <p>
 	 * 
 	 * This method iterates all groups in this playfield and remove all sprites inside it by calling
-	 * {@link com.golden.gamedev.object.BasicSpriteGroup#clear()}
+	 * {@link SpriteGroup#clear()}
 	 */
 	public void clearPlayField() {
-		for (final BasicSpriteGroup group : groups) {
+		for (final SpriteGroup group : groups) {
 			group.clear();
 		}
 	}
@@ -358,7 +344,7 @@ public final class PlayField {
 	/**
 	 * Associates specified collision group to this playfield.
 	 */
-	public void addCollisionGroup(final BasicSpriteGroup group1, final BasicSpriteGroup group2,
+	public void addCollisionGroup(final SpriteGroup group1, final SpriteGroup group2,
 			final CollisionManager collisionGroup) {
 		Validate.notNull(collisionGroup, "The collision manager to add may not be null!");
 		collisionManagers.put(new SpriteGroupCollisionManagerKey(group1, group2), collisionGroup);
@@ -393,14 +379,14 @@ public final class PlayField {
 	 *            the second group of the collision group to be find
 	 * @return CollisionGroup that checks group1 and group2 for collision, or null if no collision group can be found.
 	 */
-	public CollisionManager getCollisionGroup(final BasicSpriteGroup group1, final BasicSpriteGroup group2) {
+	public CollisionManager getCollisionGroup(final SpriteGroup group1, final SpriteGroup group2) {
 		return collisionManagers.get(new SpriteGroupCollisionManagerKey(group1, group2));
 	}
 	
 	/**
 	 * Returns any collision group associated with specified sprite group.
 	 */
-	private CollisionManager getCollisionGroup(final BasicSpriteGroup group) {
+	private CollisionManager getCollisionGroup(final SpriteGroup group) {
 		for (Entry<SpriteGroupCollisionManagerKey, CollisionManager> entry : collisionManagers.entrySet()) {
 			if (entry.getKey().containsGroup(group)) {
 				return entry.getValue();
@@ -448,7 +434,7 @@ public final class PlayField {
 	 * Updates sprites in sprite groups on this playfield.
 	 */
 	protected void updateSpriteGroups(final long elapsedTime) {
-		for (final BasicSpriteGroup group : groups) {
+		for (final SpriteGroup group : groups) {
 			if (group.isActive()) {
 				group.update(elapsedTime);
 			}
@@ -499,7 +485,7 @@ public final class PlayField {
 	 * Renders sprite groups to specified graphics context.
 	 */
 	protected void renderSpriteGroups(final Graphics2D g) {
-		for (final BasicSpriteGroup group : groups) {
+		for (final SpriteGroup group : groups) {
 			if (group.isActive()) {
 				group.render(g);
 			}
@@ -600,7 +586,7 @@ public final class PlayField {
 		}
 		
 		// force all sprites to use same background
-		for (final BasicSpriteGroup group : groups) {
+		for (final SpriteGroup group : groups) {
 			group.setBackground(backgr);
 		}
 	}

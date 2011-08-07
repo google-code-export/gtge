@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.golden.gamedev.object.Sprite;
-import com.golden.gamedev.object.BasicSpriteGroup;
+import com.golden.gamedev.object.SpriteGroup;
 import com.golden.gamedev.util.Utility;
 
 /**
@@ -80,7 +80,7 @@ public abstract class AdvanceCollisionGroup extends PreciseCollisionGroup implem
 	 */
 	
 	@Override
-	public void checkCollision(final BasicSpriteGroup first, final BasicSpriteGroup second) {
+	public void checkCollision(final SpriteGroup first, final SpriteGroup second) {
 		// clear previous collision event
 		this.storage.clear();
 		

@@ -56,7 +56,7 @@ import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.GameFont;
 import com.golden.gamedev.object.PlayField;
 import com.golden.gamedev.object.Sprite;
-import com.golden.gamedev.object.BasicSpriteGroup;
+import com.golden.gamedev.object.SpriteGroup;
 import com.golden.gamedev.object.font.AdvanceBitmapFont;
 import com.golden.gamedev.util.BufferedImageUtil;
 
@@ -1208,11 +1208,11 @@ public abstract class Game {
 	 * with mouse pointer.
 	 * 
 	 * @param group
-	 *            {@link BasicSpriteGroup} to check its intersection with mouse pointer
+	 *            {@link SpriteGroup} to check its intersection with mouse pointer
 	 * @param pixelCheck
 	 *            true, checking the sprite image with pixel precision
 	 */
-	public Sprite checkPosMouse(BasicSpriteGroup group, boolean pixelCheck) {
+	public Sprite checkPosMouse(SpriteGroup group, boolean pixelCheck) {
 		List<Sprite> sprites = group.getSprites();
 		
 		for (Sprite sprite : sprites) {
@@ -1234,7 +1234,7 @@ public abstract class Game {
 	 *            true, checking the sprite image with pixel precision
 	 */
 	public Sprite checkPosMouse(PlayField field, boolean pixelCheck) {
-		BasicSpriteGroup[] groups = field.getGroups();
+		SpriteGroup[] groups = field.getGroups();
 		int size = groups.length;
 		
 		for (int i = 0; i < size; i++) {

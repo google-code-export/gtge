@@ -6,11 +6,11 @@ import java.util.List;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.golden.gamedev.object.Sprite;
-import com.golden.gamedev.object.BasicSpriteGroup;
+import com.golden.gamedev.object.SpriteGroup;
 
 /**
- * The {@link CollisionManager} interface specifies an {@link Object} that is able to check one {@link BasicSpriteGroup}
- * instance against another {@link BasicSpriteGroup} and notify registered {@link CollisionListener} instances if they
+ * The {@link CollisionManager} interface specifies an {@link Object} that is able to check one {@link SpriteGroup}
+ * instance against another {@link SpriteGroup} and notify registered {@link CollisionListener} instances if they
  * collided. <br />
  * <br />
  * The process of registering {@link CollisionListener} instances is implementation-dependent.
@@ -162,21 +162,21 @@ public interface CollisionManager {
 	public interface CollisionListener {
 		
 		/**
-		 * Event callback which is fired when a collision between the given {@link BasicSpriteGroup} instances has occurred.
-		 * Typically, at least one of the two {@link BasicSpriteGroup} instances received via this callback are non-null, but
+		 * Event callback which is fired when a collision between the given {@link SpriteGroup} instances has occurred.
+		 * Typically, at least one of the two {@link SpriteGroup} instances received via this callback are non-null, but
 		 * this is not an absolute requirement.
 		 * 
 		 * @param first
-		 *            The possibly-null {@link BasicSpriteGroup} representing the first {@link BasicSpriteGroup} that collided
+		 *            The possibly-null {@link SpriteGroup} representing the first {@link SpriteGroup} that collided
 		 *            with the second.
 		 * @param second
-		 *            The possibly-null {@link BasicSpriteGroup} representing the second {@link BasicSpriteGroup} that collided
+		 *            The possibly-null {@link SpriteGroup} representing the second {@link SpriteGroup} that collided
 		 *            with the first.
 		 * @param details
 		 *            The possibly-null {@link CollisionDetails} instance that provides extra details about the
 		 *            collision between the two groups.
 		 */
-		void collisionOccurred(BasicSpriteGroup first, BasicSpriteGroup second, final CollisionDetails details);
+		void collisionOccurred(SpriteGroup first, SpriteGroup second, final CollisionDetails details);
 		
 		/**
 		 * Event callback on a specific {@link Sprite} to {@link Sprite} collision. Typically, at least one of the two
@@ -193,22 +193,22 @@ public interface CollisionManager {
 	}
 	
 	/**
-	 * Checks for a collision between the first and second {@link BasicSpriteGroup} instances, notifying all registered
+	 * Checks for a collision between the first and second {@link SpriteGroup} instances, notifying all registered
 	 * {@link CollisionListener listeners} if a collision occurred. <br />
 	 * <br />
-	 * Typically, at least one of the given {@link BasicSpriteGroup} instances is non-null, but this is not an absolute
+	 * Typically, at least one of the given {@link SpriteGroup} instances is non-null, but this is not an absolute
 	 * requirement. {@link CollisionManager} instances may throw an {@link IllegalArgumentException} if a null argument
 	 * is provided and the {@link CollisionManager} cannot handle the null argument.
 	 * 
 	 * @param first
-	 *            The possibly-null first {@link BasicSpriteGroup} instance to check against the second {@link BasicSpriteGroup}
+	 *            The possibly-null first {@link SpriteGroup} instance to check against the second {@link SpriteGroup}
 	 *            for a collision.
 	 * @param second
-	 *            The possibly-null second {@link BasicSpriteGroup} instance to check against the first {@link BasicSpriteGroup}
+	 *            The possibly-null second {@link SpriteGroup} instance to check against the first {@link SpriteGroup}
 	 *            for a collision.
 	 * @throws IllegalArgumentException
 	 *             Throws an {@link IllegalArgumentException} if the {@link CollisionManager} instance encounters an
 	 *             unsupported null argument.
 	 */
-	void checkCollision(final BasicSpriteGroup first, final BasicSpriteGroup second);
+	void checkCollision(final SpriteGroup first, final SpriteGroup second);
 }

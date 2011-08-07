@@ -25,34 +25,29 @@ import com.golden.gamedev.object.collision.CollisionRect;
 import com.golden.gamedev.object.collision.CollisionShape;
 
 /**
- * <code>Sprite</code> is the object in game that has graphical look and has
- * its own behaviour.
+ * <code>Sprite</code> is the object in game that has graphical look and has its own behaviour.
  * <p>
  * 
- * Every sprite is lived in a background, by default sprite is attached to
- * {@linkplain Background#getDefaultBackground default background}, always
- * remember to set the sprite to the game background or use {@link BasicSpriteGroup}
- * class in {@link PlayField} to take care the sprite background set
- * automatically.
+ * Every sprite is lived in a background, by default sprite is attached to {@linkplain Background#getDefaultBackground
+ * default background}, always remember to set the sprite to the game background or use a {@link SpriteGroup}
+ * implementation in {@link PlayField} to take care the sprite background set automatically.
  * <p>
  * 
- * Sprite is located somewhere in the background, to set sprite location simply
- * use {@linkplain #setLocation(double, double)}. <br>
- * And to move the sprite use either by moving the sprite directly by using
- * {@linkplain #move(double, double)} or give speed to the sprite by using
- * {@linkplain #setSpeed(double, double)}.
+ * Sprite is located somewhere in the background, to set sprite location simply use
+ * {@linkplain #setLocation(double, double)}. <br>
+ * And to move the sprite use either by moving the sprite directly by using {@linkplain #move(double, double)} or give
+ * speed to the sprite by using {@linkplain #setSpeed(double, double)}.
  * <p>
  * 
- * In conjunction with sprite group/playfield, every sprite has active state,
- * this active state that determine whether the sprite is alive or not. Thus to
- * remove a sprite from playfield, simply set the sprite active state to false
- * by using {@linkplain #setActive(boolean) setActive(false)}.
+ * In conjunction with sprite group/playfield, every sprite has active state, this active state that determine whether
+ * the sprite is alive or not. Thus to remove a sprite from playfield, simply set the sprite active state to false by
+ * using {@linkplain #setActive(boolean) setActive(false)}.
  * <p>
  * 
- * To create sprite behaviour, always use {@link Timer} class utility in order
- * to make the sprite behaviour independent of frame rate.
+ * To create sprite behaviour, always use {@link Timer} class utility in order to make the sprite behaviour independent
+ * of frame rate.
  * 
- * @see com.golden.gamedev.object.BasicSpriteGroup
+ * @see SpriteGroup
  * @see com.golden.gamedev.object.PlayField
  * @see com.golden.gamedev.object.Timer
  */
@@ -76,10 +71,10 @@ public class Sprite implements java.io.Serializable {
 	private double x, y;
 	private double horizontalSpeed, verticalSpeed; // in pixels per millisecond
 	private double oldX, oldY; // old position before this sprite moves
-	        
+			
 	// ///////// optimization ///////////
 	private static double screenX, screenY; // screen position = x-background.x
-	        
+			
 	/** **************************** SPRITE IMAGES ****************************** */
 	
 	private transient BufferedImage image;
@@ -95,8 +90,7 @@ public class Sprite implements java.io.Serializable {
 	protected int height;
 	
 	/**
-	 * Default collision shape used in {@link #getDefaultCollisionShape()}, can
-	 * be used in along with collision manager.
+	 * Default collision shape used in {@link #getDefaultCollisionShape()}, can be used in along with collision manager.
 	 */
 	protected CollisionShape defaultCollisionShape = null;
 	
@@ -135,8 +129,7 @@ public class Sprite implements java.io.Serializable {
 	}
 	
 	/**
-	 * Creates new <code>Sprite</code> with specified image and located at (0,
-	 * 0).
+	 * Creates new <code>Sprite</code> with specified image and located at (0, 0).
 	 * <p>
 	 * 
 	 * @see #setLocation(double, double)
@@ -149,8 +142,7 @@ public class Sprite implements java.io.Serializable {
 	 * Creates new <code>Sprite</code> with specified position and null image.
 	 * <p>
 	 * 
-	 * <b>Note: the image must be set before rendering by using
-	 * {@link #setImage(BufferedImage)}.</b>
+	 * <b>Note: the image must be set before rendering by using {@link #setImage(BufferedImage)}.</b>
 	 * 
 	 * @see #setImage(BufferedImage)
 	 */
@@ -162,8 +154,7 @@ public class Sprite implements java.io.Serializable {
 	 * Creates new <code>Sprite</code> with null image and located at (0, 0).
 	 * <p>
 	 * 
-	 * <b>Note: the image must be set before rendering by using
-	 * {@link #setImage(BufferedImage)}.</b>
+	 * <b>Note: the image must be set before rendering by using {@link #setImage(BufferedImage)}.</b>
 	 * 
 	 * @see #setImage(BufferedImage)
 	 * @see #setLocation(double, double)
@@ -232,16 +223,14 @@ public class Sprite implements java.io.Serializable {
 	}
 	
 	/**
-	 * Returns default {@linkplain #defaultCollisionShape collision shape}, can
-	 * be used along with collision manager.
+	 * Returns default {@linkplain #defaultCollisionShape collision shape}, can be used along with collision manager.
 	 */
 	public CollisionShape getDefaultCollisionShape() {
 		if (this.defaultCollisionShape == null) {
 			this.defaultCollisionShape = new CollisionRect();
 		}
 		
-		this.defaultCollisionShape.setBounds(this.getX(), this.getY(), this
-		        .getWidth(), this.getHeight());
+		this.defaultCollisionShape.setBounds(this.getX(), this.getY(), this.getWidth(), this.getHeight());
 		
 		return this.defaultCollisionShape;
 	}
@@ -251,9 +240,8 @@ public class Sprite implements java.io.Serializable {
 	/** ************************************************************************* */
 	
 	/**
-	 * Attempts to move this sprite to specified <code>xs</code>,
-	 * <code>ys</code> location, if the sprite is right on specified location,
-	 * this method will return true.
+	 * Attempts to move this sprite to specified <code>xs</code>, <code>ys</code> location, if the sprite is right on
+	 * specified location, this method will return true.
 	 * <p>
 	 * 
 	 * For example :
@@ -273,13 +261,10 @@ public class Sprite implements java.io.Serializable {
 			return true;
 		}
 		
-		double angle = 90 + Math
-		        .toDegrees(Math.atan2(ys - this.y, xs - this.x));
+		double angle = 90 + Math.toDegrees(Math.atan2(ys - this.y, xs - this.x));
 		double radians = Math.toRadians(angle);
 		
-		double vx = Math.sin(radians) * speed * elapsedTime, vy = -Math
-		        .cos(radians)
-		        * speed * elapsedTime;
+		double vx = Math.sin(radians) * speed * elapsedTime, vy = -Math.cos(radians) * speed * elapsedTime;
 		
 		boolean arriveX = false, arriveY = false;
 		
@@ -292,8 +277,7 @@ public class Sprite implements java.io.Serializable {
 					arriveX = true;
 				}
 				
-			}
-			else {
+			} else {
 				// moving left
 				if (this.x + vx <= xs) {
 					vx = xs - this.x; // snap
@@ -301,8 +285,7 @@ public class Sprite implements java.io.Serializable {
 				}
 			}
 			
-		}
-		else if (this.x == xs) {
+		} else if (this.x == xs) {
 			arriveX = true;
 		}
 		
@@ -315,8 +298,7 @@ public class Sprite implements java.io.Serializable {
 					arriveY = true;
 				}
 				
-			}
-			else {
+			} else {
 				// moving up
 				if (this.y + vy <= ys) {
 					vy = ys - this.y; // snap
@@ -324,8 +306,7 @@ public class Sprite implements java.io.Serializable {
 				}
 			}
 			
-		}
-		else if (this.y == ys) {
+		} else if (this.y == ys) {
 			arriveY = true;
 		}
 		
@@ -403,13 +384,11 @@ public class Sprite implements java.io.Serializable {
 	 * <p>
 	 * 
 	 * The difference between {@link #setX(double)} with this method : <br>
-	 * <code>setX(double)</code> changes the sprite old position (oldX = xs),
-	 * while using <code>forceX(double)</code> <b>the old position is n ot
-	 * changed</b>.
+	 * <code>setX(double)</code> changes the sprite old position (oldX = xs), while using <code>forceX(double)</code>
+	 * <b>the old position is n ot changed</b>.
 	 * <p>
 	 * 
-	 * This method is used on collision check to move the sprite, but still keep
-	 * the sprite old position value.
+	 * This method is used on collision check to move the sprite, but still keep the sprite old position value.
 	 */
 	public void forceX(double xs) {
 		this.x = xs;
@@ -420,13 +399,11 @@ public class Sprite implements java.io.Serializable {
 	 * <p>
 	 * 
 	 * The difference between {@link #setY(double)} with this method : <br>
-	 * <code>setY(double)</code> changes the sprite old position (oldY = ys),
-	 * while using <code>forceY(double)</code> <b>the old position is n ot
-	 * changed</b>.
+	 * <code>setY(double)</code> changes the sprite old position (oldY = ys), while using <code>forceY(double)</code>
+	 * <b>the old position is n ot changed</b>.
 	 * <p>
 	 * 
-	 * This method is used on collision check to move the sprite, but still keep
-	 * the sprite old position value.
+	 * This method is used on collision check to move the sprite, but still keep the sprite old position value.
 	 */
 	public void forceY(double ys) {
 		this.y = ys;
@@ -447,16 +424,14 @@ public class Sprite implements java.io.Serializable {
 	}
 	
 	/**
-	 * Returns sprite <code>x</code> coordinate before the sprite moving to
-	 * the current position.
+	 * Returns sprite <code>x</code> coordinate before the sprite moving to the current position.
 	 */
 	public double getOldX() {
 		return this.oldX;
 	}
 	
 	/**
-	 * Returns sprite <code>y</code> coordinate before the sprite moving to
-	 * the current position.
+	 * Returns sprite <code>y</code> coordinate before the sprite moving to the current position.
 	 */
 	public double getOldY() {
 		return this.oldY;
@@ -467,9 +442,8 @@ public class Sprite implements java.io.Serializable {
 	/** ************************************************************************* */
 	
 	/**
-	 * Sets the speed of this sprite, the speed is based on actual time in
-	 * milliseconds, 1 means the sprite is moving as far as 1000 (1x1000ms)
-	 * pixels in a second. Negative value (-1) means the sprite moving backward.
+	 * Sets the speed of this sprite, the speed is based on actual time in milliseconds, 1 means the sprite is moving as
+	 * far as 1000 (1x1000ms) pixels in a second. Negative value (-1) means the sprite moving backward.
 	 */
 	public void setSpeed(double vx, double vy) {
 		this.horizontalSpeed = vx;
@@ -477,20 +451,18 @@ public class Sprite implements java.io.Serializable {
 	}
 	
 	/**
-	 * Sets horizontal speed of the sprite, the speed is based on actual time in
-	 * milliseconds, 1 means the sprite is moving as far as 1000 (1x1000ms)
-	 * pixels in a second to the right, while negative value (-1) means the
-	 * sprite is moving to the left.
+	 * Sets horizontal speed of the sprite, the speed is based on actual time in milliseconds, 1 means the sprite is
+	 * moving as far as 1000 (1x1000ms) pixels in a second to the right, while negative value (-1) means the sprite is
+	 * moving to the left.
 	 */
 	public void setHorizontalSpeed(double vx) {
 		this.horizontalSpeed = vx;
 	}
 	
 	/**
-	 * Sets vertical speed of the sprite, the speed is based on actual time in
-	 * milliseconds, 1 means the sprite is moving as far as 1000 (1x1000ms)
-	 * pixels in a second to the bottom, while negative value (-1) means the
-	 * sprite is moving to the top.
+	 * Sets vertical speed of the sprite, the speed is based on actual time in milliseconds, 1 means the sprite is
+	 * moving as far as 1000 (1x1000ms) pixels in a second to the bottom, while negative value (-1) means the sprite is
+	 * moving to the top.
 	 */
 	public void setVerticalSpeed(double vy) {
 		this.verticalSpeed = vy;
@@ -517,12 +489,10 @@ public class Sprite implements java.io.Serializable {
 	}
 	
 	/**
-	 * Accelerates sprite horizontal speed by <code>accel</code> and limit the
-	 * speed to <code>maxSpeed</code>.
+	 * Accelerates sprite horizontal speed by <code>accel</code> and limit the speed to <code>maxSpeed</code>.
 	 * <p>
 	 * 
-	 * This is used to create momentum speed (slowly increase/decrease the
-	 * sprite speed).
+	 * This is used to create momentum speed (slowly increase/decrease the sprite speed).
 	 * <p>
 	 * 
 	 * For example :
@@ -538,8 +508,7 @@ public class Sprite implements java.io.Serializable {
 	 * 	// moving left
 	 * 	s.addHorizontalSpeed(elapsedTime, -0.002, -4);
 	 * 	// momentum stop
-	 * 	s.addHorizontalSpeed(elapsedTime, (s.getHorizontalSpeed() &gt; 0) ? -0.002
-	 * 	        : 0.002, 0);
+	 * 	s.addHorizontalSpeed(elapsedTime, (s.getHorizontalSpeed() &gt; 0) ? -0.002 : 0.002, 0);
 	 * }
 	 * </pre>
 	 */
@@ -555,8 +524,7 @@ public class Sprite implements java.io.Serializable {
 				this.horizontalSpeed = maxSpeed;
 			}
 			
-		}
-		else {
+		} else {
 			if (this.horizontalSpeed > maxSpeed) {
 				this.horizontalSpeed = maxSpeed;
 			}
@@ -564,12 +532,10 @@ public class Sprite implements java.io.Serializable {
 	}
 	
 	/**
-	 * Accelerates sprite vertical speed by <code>accel</code> and limit the
-	 * speed to <code>maxSpeed</code>.
+	 * Accelerates sprite vertical speed by <code>accel</code> and limit the speed to <code>maxSpeed</code>.
 	 * <p>
 	 * 
-	 * This is used to create momentum speed (slowly increase/decrease the
-	 * sprite speed).
+	 * This is used to create momentum speed (slowly increase/decrease the sprite speed).
 	 * <p>
 	 * 
 	 * For example :
@@ -585,8 +551,7 @@ public class Sprite implements java.io.Serializable {
 	 * 	// moving up
 	 * 	s.addVerticalSpeed(elapsedTime, -0.002, -4);
 	 * 	// momentum stop
-	 * 	s.addVerticalSpeed(elapsedTime,
-	 * 	        (s.getVerticalSpeed() &gt; 0) ? -0.002 : 0.002, 0);
+	 * 	s.addVerticalSpeed(elapsedTime, (s.getVerticalSpeed() &gt; 0) ? -0.002 : 0.002, 0);
 	 * }
 	 * </pre>
 	 */
@@ -602,8 +567,7 @@ public class Sprite implements java.io.Serializable {
 				this.verticalSpeed = maxSpeed;
 			}
 			
-		}
-		else {
+		} else {
 			if (this.verticalSpeed > maxSpeed) {
 				this.verticalSpeed = maxSpeed;
 			}
@@ -614,8 +578,7 @@ public class Sprite implements java.io.Serializable {
 	 * Returns horizontal speed of the sprite.
 	 * <p>
 	 * 
-	 * Positive means the sprite is moving to right, and negative means the
-	 * sprite is moving to left.
+	 * Positive means the sprite is moving to right, and negative means the sprite is moving to left.
 	 */
 	public double getHorizontalSpeed() {
 		return this.horizontalSpeed;
@@ -625,8 +588,7 @@ public class Sprite implements java.io.Serializable {
 	 * Returns vertical speed of the sprite.
 	 * <p>
 	 * 
-	 * Positive means the sprite is moving to bottom, and negative means the
-	 * sprite is moving to top.
+	 * Positive means the sprite is moving to bottom, and negative means the sprite is moving to top.
 	 */
 	public double getVerticalSpeed() {
 		return this.verticalSpeed;
@@ -651,35 +613,29 @@ public class Sprite implements java.io.Serializable {
 	}
 	
 	/**
-	 * Returns the center of the sprite in <code>x</code> coordinate (x +
-	 * (width/2)).
+	 * Returns the center of the sprite in <code>x</code> coordinate (x + (width/2)).
 	 */
 	public double getCenterX() {
 		return this.x + (this.width / 2);
 	}
 	
 	/**
-	 * Returns the center of the sprite in <code>y</code> coordinate (y +
-	 * (height/2)).
+	 * Returns the center of the sprite in <code>y</code> coordinate (y + (height/2)).
 	 */
 	public double getCenterY() {
 		return this.y + (this.height / 2);
 	}
 	
 	/**
-	 * Returns whether the screen is still on background screen area in
-	 * specified offset.
+	 * Returns whether the screen is still on background screen area in specified offset.
 	 */
 	public boolean isOnScreen(int leftOffset, int topOffset, int rightOffset, int bottomOffset) {
 		Sprite.screenX = this.x - this.background.getX();
 		Sprite.screenY = this.y - this.background.getY();
 		
-		return (Sprite.screenX + this.width > -leftOffset
-		        && Sprite.screenY + this.height > -topOffset
-		        && Sprite.screenX < this.background.getClip().width
-		                + rightOffset && Sprite.screenY < this.background
-		        .getClip().height
-		        + bottomOffset);
+		return (Sprite.screenX + this.width > -leftOffset && Sprite.screenY + this.height > -topOffset
+				&& Sprite.screenX < this.background.getClip().width + rightOffset && Sprite.screenY < this.background
+				.getClip().height + bottomOffset);
 	}
 	
 	/**
@@ -704,8 +660,7 @@ public class Sprite implements java.io.Serializable {
 	 * Updates sprite movement.
 	 */
 	protected void updateMovement(long elapsedTime) {
-		this.move(this.horizontalSpeed * elapsedTime, this.verticalSpeed
-		        * elapsedTime);
+		this.move(this.horizontalSpeed * elapsedTime, this.verticalSpeed * elapsedTime);
 	}
 	
 	/** ************************************************************************* */
@@ -715,17 +670,17 @@ public class Sprite implements java.io.Serializable {
 	/**
 	 * Renders this sprite to specified graphics context.
 	 * 
-	 * @param g graphics context
+	 * @param g
+	 *            graphics context
 	 */
 	public void render(Graphics2D g) {
 		Sprite.screenX = this.x - this.background.getX();
 		Sprite.screenY = this.y - this.background.getY();
 		
 		// check whether the sprite is still on screen rendering area
-		if (Sprite.screenX + this.width <= 0
-		        || Sprite.screenY + this.height <= 0
-		        || Sprite.screenX > this.background.getClip().width
-		        || Sprite.screenY > this.background.getClip().height) {
+		if (Sprite.screenX + this.width <= 0 || Sprite.screenY + this.height <= 0
+				|| Sprite.screenX > this.background.getClip().width
+				|| Sprite.screenY > this.background.getClip().height) {
 			return;
 		}
 		
@@ -736,12 +691,14 @@ public class Sprite implements java.io.Serializable {
 	}
 	
 	/**
-	 * Renders sprite image to specified graphics context and specified
-	 * location.
+	 * Renders sprite image to specified graphics context and specified location.
 	 * 
-	 * @param g graphics context
-	 * @param x screen x-coordinate
-	 * @param y screen y-coordinate
+	 * @param g
+	 *            graphics context
+	 * @param x
+	 *            screen x-coordinate
+	 * @param y
+	 *            screen y-coordinate
 	 */
 	public void render(Graphics2D g, int x, int y) {
 		g.drawImage(this.image, x, y, null);
@@ -792,9 +749,8 @@ public class Sprite implements java.io.Serializable {
 	 * Sets the layer of this sprite.
 	 * <p>
 	 * 
-	 * Layer is used for z-order rendering. Use this along with
-	 * {@link PlayField#setComparator(Comparator)} or
-	 * {@link BasicSpriteGroup#setComparator(Comparator)} for that purpose.
+	 * Layer is used for z-order rendering. Use this along with a {@link Comparator} in a compatible {@link PlayField}
+	 * or {@link SpriteGroup} in order to compare {@link Sprite} instances for rendering using the z-index.
 	 * 
 	 * @see #getLayer()
 	 */
@@ -810,16 +766,15 @@ public class Sprite implements java.io.Serializable {
 	}
 	
 	/**
-	 * Sets active state of this sprite, only active sprite will be updated and
-	 * rendered and check for collision.
+	 * Sets active state of this sprite, only active sprite will be updated and rendered and check for collision.
 	 * <p>
 	 * 
-	 * Inactive sprite is same as dead sprite, it won't be updated nor rendered,
-	 * and only wait to be disposed (if the sprite is not immutable).
+	 * Inactive sprite is same as dead sprite, it won't be updated nor rendered, and only wait to be disposed (if the
+	 * sprite is not immutable).
 	 * <p>
 	 * 
-	 * The proper way to remove a sprite from the game, is by setting sprite
-	 * active state to false (Sprite.setActive(false)).
+	 * The proper way to remove a sprite from the game, is by setting sprite active state to false
+	 * (Sprite.setActive(false)).
 	 * 
 	 * @see #setImmutable(boolean)
 	 */
@@ -834,28 +789,20 @@ public class Sprite implements java.io.Serializable {
 		return this.immutable;
 	}
 	
-	// REVIEW-HIGH: Rename to reusable. 
+	// REVIEW-HIGH: Rename to reusable.
 	/**
-	 * Sets immutable state of this sprite, immutable sprite means the sprite
-	 * won't be removed from its group even though the sprite is not active.
+	 * Sets immutable state of this sprite, immutable sprite means the sprite won't be removed from its group even
+	 * though the sprite is not active.
 	 * <p>
 	 * 
-	 * This state is used for optimization by reusing inactive sprite rather
-	 * than making new sprite each time.
+	 * This state is used for optimization by reusing inactive sprite rather than making new sprite each time.
 	 * <p>
 	 * 
-	 * Usually used for many, small, short live, and frequently used sprites
-	 * such as projectile in shooter game. Thus rather than making a new sprite
-	 * for every projectile that can cause performance degrade, the inactive
-	 * projectiles can be reuse again and again.
+	 * Usually used for many, small, short live, and frequently used sprites such as projectile in shooter game. Thus
+	 * rather than making a new sprite for every projectile that can cause performance degrade, the inactive projectiles
+	 * can be reuse again and again.
 	 * <p>
 	 * 
-	 * <b>WARNING:</b> Immutable sprite won't be disposed by Java garbage
-	 * collector until the sprite is manually removed from its group using
-	 * {@link com.golden.gamedev.object.BasicSpriteGroup#removeImmutableSprites()}.
-	 * 
-	 * @see com.golden.gamedev.object.BasicSpriteGroup#getInactiveSprite()
-	 * @see com.golden.gamedev.object.BasicSpriteGroup#removeImmutableSprites()
 	 * @see #setActive(boolean)
 	 */
 	public void setImmutable(boolean b) {
@@ -866,21 +813,19 @@ public class Sprite implements java.io.Serializable {
 	 * Returns the distance of this sprite from the specified sprite.
 	 * <p>
 	 * 
-	 * Used this method to check whether the specified sprite is in this sprite
-	 * range area or not.
+	 * Used this method to check whether the specified sprite is in this sprite range area or not.
 	 * <p>
 	 * 
 	 * This method can be used for :
 	 * <ul>
 	 * <li>Determining sprite attack range.</li>
 	 * <li>Sprite aura that affecting surrounding unit.</li>
-	 * <li>Activating this sprite to chase player whenever the player come
-	 * closer to certain distance of this sprite.</li>
+	 * <li>Activating this sprite to chase player whenever the player come closer to certain distance of this sprite.</li>
 	 * </ul>
 	 */
 	public double getDistance(Sprite other) {
 		return Math.sqrt(Math.pow(this.getCenterX() - other.getCenterX(), 2)
-		        + Math.pow(this.getCenterY() - other.getCenterY(), 2));
+				+ Math.pow(this.getCenterY() - other.getCenterY(), 2));
 	}
 	
 	// private static int garbagecount = 0;

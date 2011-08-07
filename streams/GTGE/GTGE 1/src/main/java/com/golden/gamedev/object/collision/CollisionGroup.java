@@ -21,7 +21,7 @@ import java.util.List;
 
 import com.golden.gamedev.object.PlayField;
 import com.golden.gamedev.object.Sprite;
-import com.golden.gamedev.object.BasicSpriteGroup;
+import com.golden.gamedev.object.SpriteGroup;
 
 /**
  * Basic collision check, with calculation of some collision events, such as collision side, and sprite return position.
@@ -36,7 +36,7 @@ import com.golden.gamedev.object.BasicSpriteGroup;
  * 
  * To get more precise sprite position after collision use {@link PreciseCollisionGroup} instead.
  * 
- * @see PlayField#addCollisionGroup(BasicSpriteGroup, BasicSpriteGroup, CollisionManager)
+ * @see PlayField#addCollisionGroup(SpriteGroup, SpriteGroup, CollisionManager)
  */
 public abstract class CollisionGroup extends BasicCollisionGroup {
 	

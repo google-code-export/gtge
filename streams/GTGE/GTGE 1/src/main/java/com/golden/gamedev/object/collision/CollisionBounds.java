@@ -25,7 +25,7 @@ import org.apache.commons.lang.Validate;
 
 import com.golden.gamedev.object.Background;
 import com.golden.gamedev.object.Sprite;
-import com.golden.gamedev.object.BasicSpriteGroup;
+import com.golden.gamedev.object.SpriteGroup;
 import com.golden.gamedev.object.collision.CollisionManager.CollisionListener;
 import static com.golden.gamedev.object.collision.CollisionManager.CollisionSide.*;
 
@@ -101,7 +101,7 @@ public abstract class CollisionBounds implements CollisionManager {
 	}
 	
 	@Override
-	public void checkCollision(final BasicSpriteGroup first, final BasicSpriteGroup second) {
+	public void checkCollision(final SpriteGroup first, final SpriteGroup second) {
 		if (!first.isActive()) {
 			// the group is not active, no need to check collision
 			return;
